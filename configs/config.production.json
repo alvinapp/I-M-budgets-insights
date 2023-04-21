@@ -1,0 +1,8 @@
+{
+  "ENVIRONMENT": "production",
+  "API_URL": "https://finance.app.alvinapp.com",
+  "TOKEN": null,
+  "IDENTIFIER": null,
+  "HOST": "https://mdv.app.alvinapp.com",
+  "PORT": "443"
+}

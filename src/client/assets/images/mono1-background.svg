@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="362px" height="271px" viewBox="0 0 362 271" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>8194709D-3D0D-4AAD-A702-2E12652AABD5</title>
+    <defs>
+        <linearGradient x1="100%" y1="21.9129186%" x2="-31.9707878%" y2="81.4378658%" id="linearGradient-1">
+            <stop stop-color="#1490C0" offset="0%"></stop>
+            <stop stop-color="#81C7E2" offset="41.9961505%"></stop>
+            <stop stop-color="#C9F1FF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Stanbic/Kwara-Demo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0.5" opacity="0.146542504">
+        <g id="Feature-background-sm" fill="url(#linearGradient-1)" transform="translate(-0.000000, 0.000000)">
+            <path d="M361.577158,238.672501 L361.577158,0 C273.605621,0.0856720442 153.455496,0.202651798 1.12678462,0.350961051 L1.26217745e-29,271 C49.6606727,255.878519 22.6917396,262.802509 39.8803045,261.298995 C129.795243,253.433982 332.027899,271 361.577158,238.672501 Z" id="BG"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Poppins:wght@300;500;600&family=Work+Sans:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>Book a flight</title>
+  </head>
+  <body>
+    <script src=<%= WIDGET_SCRIPT_SRC %>></script>
+    <script>
+      window.addEventListener("load", (_) =>
+        Widget.init({
+          publicKey: "",
+          identifier: "",
+          styleUrl: "",
+        })
+      );
+    </script>
+  </body>
+</html>

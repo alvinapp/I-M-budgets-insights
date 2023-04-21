@@ -1,0 +1,8 @@
+{
+  "ENVIRONMENT": "development",
+  "API_URL": "http://localhost:5000",
+  "TOKEN": null,
+  "IDENTIFIER": "user@alvinapp.com",
+  "HOST": null,
+  "PORT": null
+}
