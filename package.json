@@ -1,11 +1,10 @@
 {
-  "name": "book-a-flight",
+  "name": "budgets-and-insights",
   "version": "1.0.0",
   "sideEffects": [
     "*.css"
   ],
   "main": "index.js",
-  "license": "MIT",
   "scripts": {
     "dev-client": "webpack-dev-server --config ./webpack.config.client.js --mode development --allowed-hosts all --env config=configs/config.development.json",
     "dev-server": "webpack-dev-server --config ./webpack.config.server.js --mode development --allowed-hosts all --env config=configs/config.development.json",
@@ -113,6 +112,5 @@
     "use-long-press": "^2.0.2",
     "zustand": "^4.1.0"
   },
-  "repository": "https://github.com/alvinapp/book-a-flight.git",
-  "author": "Samuel Gichu <kibochas@gmail.com>"
+  "repository": "git@github.com:alvinapp/budgets-and-insights-ui.git"
 }

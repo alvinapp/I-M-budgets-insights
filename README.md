@@ -1,1 +1,53 @@
-# Book a flight
+# Budgets and Insights UI
+
+The Budgets and Insights UI app.
+## Developer Guide
+
+### Local Setup
+
+Install dependencies with npm `npm i --legacy-peer-deps`.
+
+
+## Integration Guide
+
+### Prerequisites
+
+1. First create an account with us on Alvin Enterprise Dashboard to obtain a public key and email that will be used to authenticate you for an embeddable widget.
+2. Congrats!! Now that you have your account ready, its time to load the MDV embeddable widget into your mobile app. In our case we shall embed the widget into your app through a webview.
+   
+### Android app integration
+   
+   1. To load the webview url in your app, you should append the public key and email obtained after you register an account on the enterprise dashboard,
+      as parameters like this -> http://example-url/?publicKey=xxxxxx&email=example@gmail.com
+
+   2. Initialize the webview inside your app as shown below.
+      
+        ```kotlin
+        class MainActivity : AppCompatActivity() {
+
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                setContentView(R.layout.activity_main)
+
+                val myWebView = findViewById<View>(R.id.mdv_web_view) as WebView
+                myWebView.webChromeClient = object : WebChromeClient() {
+                    override fun onConsoleMessage(message: ConsoleMessage): Boolean {
+                        Log.d(
+                            "SampleApp", "${message.message()} -- From line " +
+                                    "${message.lineNumber()} of ${message.sourceId()}"
+                        )
+                        return true
+                    }
+                }
+                val webSettings = myWebView.settings
+                webSettings.javaScriptEnabled = true
+                webSettings.loadWithOverviewMode = true
+                webSettings.useWideViewPort = true
+                webSettings.cacheMode = WebSettings.LOAD_DEFAULT
+                val url = Uri.parse("http://52.72.25.150").buildUpon()
+                    .appendQueryParameter("publicKey", "xxxxxxxx")
+                    .appendQueryParameter("email", "example@gmail.com").build().toString()
+                myWebView.loadUrl(url)
+            }
+        }
+        ```
