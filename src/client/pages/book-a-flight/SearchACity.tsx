@@ -34,6 +34,7 @@ import useFlightStore from "client/store/flightStore";
 import { capitalize } from "client/utils/Formatters";
 import { SearchDropDown } from "../components/SearchDropDown";
 import { Toast } from "react-toastify/dist/components";
+
 const SearchAFlight = () => {
   const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useState(0);
@@ -140,7 +141,7 @@ const SearchAFlight = () => {
           <img src={overlay} className="absolute object-cover w-screen h-72" />
           <div className="absolute top-16 left-0 right-0 flex flex-col items-center">
             <div className="font-workSans font-semibold text-xl text-white tracking-subtitle">
-              Book a flight
+              Budget
             </div>
           </div>
         </div>

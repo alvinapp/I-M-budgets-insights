@@ -1,9 +1,7 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Route, Routes } from "react-router-dom";
-import io from "socket.io-client";
-import useUserStore from "./store/userStore";
 import "./index.css";
 import "./style.scss";
 import { TailSpin } from "react-loader-spinner";
@@ -21,6 +19,9 @@ const ViewBookedFlightDetails = lazy(
 );
 const BookingSuccess = lazy(
   () => import("./pages/book-a-flight/BookingSuccess")
+);
+const OnboardingStart = lazy(
+  () => import("./pages/onboarding/OnboardingStart")
 );
 const App = () => {
   const queryClient = new QueryClient();
@@ -45,7 +46,8 @@ const App = () => {
             }
           >
             <Routes>
-              <Route path="/" element={<SearchAFlight />} />
+              <Route path="/" element={<OnboardingStart />} />
+              {/* <Route path="/" element={<SearchAFlight />} /> */}
               <Route path="/confirm-booking" element={<ConfirmBooking />} />
               <Route path="/search-results" element={<SearchResults />} />
               <Route path="/booking-success" element={<BookingSuccess />} />
@@ -53,6 +55,7 @@ const App = () => {
                 path="/view-flight-details"
                 element={<ViewBookedFlightDetails />}
               />
+              <Route path="/onboard-start" element={<OnboardingStart />} />
             </Routes>
           </Suspense>
           <ToastContainer />
