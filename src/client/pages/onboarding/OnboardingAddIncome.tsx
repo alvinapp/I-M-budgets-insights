@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
 import MainButton from "../components/MainButton";
-import splashImage from "../../assets/images/splash-1.png";
 
-const OnboardingStart = () => {
+const OnboardingAddIncome = () => {
   const navigate = useNavigate();
 
   return (
@@ -12,30 +11,24 @@ const OnboardingStart = () => {
         <div className="relative">
           <div className="absolute top-16 left-0 right-0 flex flex-col items-center">
             <div className="font-workSans font-semibold text-xl tracking-subtitle">
-              Setup Monthly Budget
+              What's your monthly net income?
             </div>
           </div>
         </div>
         <div className="flex flex-col mx-9 absolute top-28 left-0 right-0">
-        <div className="flex flex-row justify-center mt-4">
-          <div className="w-96 h-96 bg-cover bg-local bg-center" style={{ backgroundImage: `url(${splashImage})` }}>
-          </div>
-        </div>
-          <div className="mt-45 flex flex-row justify-center mx-4">
-            <div className="font-workSans text-2xl text-center font-semibold">
-              Unlock easy spend tracking and savings.
-            </div>
-          </div>
           <div className="text-xxxs font-poppins tracking-longtext text-center mt-4">
-            Set individual savings schedules or fun savings rules for each goal you have.
+            We need to use this as a base calculation for your overall monthly budget.
+            You can always modify later.
+            <br></br>
+            <a href="/404-not-found">Learn More</a>
           </div>
       </div>
       </div>
       <div className="fixed bottom-0 left-0 right-0 mx-3.5">
         <MainButton
-          title="Start Budgeting"
+          title="Continue"
           click={() => {
-            navigate("/onboard-add-income");
+            navigate("/onboard-split-income");
           }}
         />
       </div>
@@ -43,4 +36,4 @@ const OnboardingStart = () => {
   );
 };
 
-export default OnboardingStart;
+export default OnboardingAddIncome;
