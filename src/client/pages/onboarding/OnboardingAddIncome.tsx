@@ -22,9 +22,7 @@ const OnboardingAddIncome = () => {
           <div className="font-workSans font-semibold text-xl tracking-subtitle">
             What's your monthly net income?
           </div>
-        </div>
-        <div className="flex flex-col mt-4 mx-10 items-left">
-          <div className="text-xxxs font-poppins tracking-longtext">
+          <div className="text-xxs font-poppins tracking-longtext mt-4">
             We need to use this as a base calculation for your overall monthly budget.
             You can always modify later.
             <br></br>

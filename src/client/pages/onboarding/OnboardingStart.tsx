@@ -26,7 +26,7 @@ const OnboardingStart = () => {
               Unlock easy spend tracking and savings.
             </div>
           </div>
-          <div className="text-xxxs font-poppins tracking-longtext text-center mt-4">
+          <div className="text-xxs font-poppins tracking-longtext text-center mt-4">
             Set individual savings schedules or fun savings rules for each goal you have.
           </div>
       </div>
