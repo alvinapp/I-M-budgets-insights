@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
 import MainButton from "../components/MainButton";
 import NavBar from "../components/NavBar";
 import ArrowBackButton from "../components/ArrowBack";
 
 const OnboardingAddIncome = () => {
   const navigate = useNavigate();
+  const budgetSettingsStore = useBudgetSettingsStore();
+  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(budgetSettingsStore.monthlyIncome);
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
@@ -36,6 +40,8 @@ const OnboardingAddIncome = () => {
             id="monthlyNetIncome"
             className="block w-full border-0 border-transparent border-b-2 border-b-neutral-800 py-4 pl-7 pr-20 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
             placeholder="0"
+            value={monthlyIncomeValue}
+            onChange={((e) => setMonthlyIncomeValue(Number(e.target.value)))}
           />
         </div>
       </div>
@@ -45,6 +51,7 @@ const OnboardingAddIncome = () => {
           title="Continue"
           isDisabled={false}
           click={() => {
+            budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
             navigate("/onboard-split-income");
           }}
         />

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
 import MainButton from "../components/MainButton";
 import NavBar from "../components/NavBar";
 import ArrowBackButton from "../components/ArrowBack";
@@ -8,9 +9,13 @@ import ReactSlider from "react-slider";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
-  const [essentialsAmount, setEssentialsAmount] = useState(50);
-  const [wantsAmount, setWantsAmount] = useState(30);
-  const [savingsAmount, setsavingsAmount] = useState(20);
+  const budgetSettingsStore = useBudgetSettingsStore();
+  const { monthlyIncome, currency, incomeSplit } = budgetSettingsStore;
+
+  const [essentialsRatio, setEssentialsRatio] = useState(incomeSplit.essentials);
+  const [wantsRatio, setWantsRatio] = useState(incomeSplit.wants);
+  const [savingsRatio, setSavingsRatio] = useState(incomeSplit.savings);
+
   const generateSliderValues = (length = 100) => new Array(length).fill(1).map((_, i) => i+1);
 
   return (
@@ -37,10 +42,12 @@ const OnboardingSplitIncome = () => {
         <div className="flex flex-col mt-12 mx-10 px-40 items-center">
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="justify-self-start font-semibold">Essentials</div>
-            <div className="justify-self-end font-semibold">{essentialsAmount} Naira</div>
+            <div className="justify-self-end font-semibold">
+              {essentialsRatio / 100 * monthlyIncome} {currency}
+            </div>
             <div className="col-span-2">
               <ReactSlider
-                  defaultValue={50}
+                  value={essentialsRatio}
                   className="horizontal-slider"
                   marks={generateSliderValues()}
                   markClassName="example-mark"
@@ -52,17 +59,19 @@ const OnboardingSplitIncome = () => {
                     <div {...props}>{`${state.valueNow}%`}</div>
                   )}
                   onChange={(value) => {
-                    setEssentialsAmount(value);
+                    setEssentialsRatio(value);
                   }}
                 />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 w-full mt-16">
             <div className="justify-self-start font-semibold">Wants</div>
-            <div className="justify-self-end font-semibold">{wantsAmount} Naira</div>
+            <div className="justify-self-end font-semibold">
+              {wantsRatio / 100 * monthlyIncome} {currency}
+            </div>
             <div className="col-span-2">
               <ReactSlider
-                  defaultValue={30}
+                  value={wantsRatio}
                   className="horizontal-slider"
                   marks={generateSliderValues()}
                   markClassName="example-mark"
@@ -74,17 +83,19 @@ const OnboardingSplitIncome = () => {
                     <div {...props}>{`${state.valueNow}%`}</div>
                   )}
                   onChange={(value) => {
-                    setWantsAmount(value);
+                    setWantsRatio(value);
                   }}
                 />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 w-full mt-16">
             <div className="justify-self-start font-semibold">Savings</div>
-            <div className="justify-self-end font-semibold">{savingsAmount} Naira</div>
+            <div className="justify-self-end font-semibold">
+              {savingsRatio / 100 * monthlyIncome} {currency}
+            </div>
             <div className="col-span-2">
               <ReactSlider
-                  defaultValue={20}
+                  value={savingsRatio}
                   className="horizontal-slider"
                   marks={generateSliderValues()}
                   markClassName="example-mark"
@@ -96,7 +107,7 @@ const OnboardingSplitIncome = () => {
                     <div {...props}>{`${state.valueNow}%`}</div>
                   )}
                   onChange={(value) => {
-                    setsavingsAmount(value);
+                    setSavingsRatio(value);
                   }}
                 />
             </div>
@@ -109,6 +120,11 @@ const OnboardingSplitIncome = () => {
           title="Continue"
           isDisabled={false}
           click={() => {
+            budgetSettingsStore.setIncomeSplit({
+              essentials: essentialsRatio,
+              wants: wantsRatio,
+              savings: savingsRatio,
+            });
             navigate("/onboard-split-income");
           }}
         />
