@@ -9,7 +9,6 @@ import { ToastContainer } from "react-toastify";
 
 declare var AppConfig: AppConfig;
 
-const SearchAFlight = lazy(() => import("./pages/book-a-flight/SearchACity"));
 const ConfirmBooking = lazy(
   () => import("./pages/book-a-flight/ConfirmBooking")
 );
@@ -23,6 +22,13 @@ const BookingSuccess = lazy(
 const OnboardingStart = lazy(
   () => import("./pages/onboarding/OnboardingStart")
 );
+const OnboardingAddIncome = lazy(
+  () => import("./pages/onboarding/OnboardingAddIncome")
+);
+const OnboardingSplitIncome = lazy(
+  () => import("./pages/onboarding/OnboardingSplitIncome")
+);
+
 const App = () => {
   const queryClient = new QueryClient();
 
@@ -47,7 +53,6 @@ const App = () => {
           >
             <Routes>
               <Route path="/" element={<OnboardingStart />} />
-              {/* <Route path="/" element={<SearchAFlight />} /> */}
               <Route path="/confirm-booking" element={<ConfirmBooking />} />
               <Route path="/search-results" element={<SearchResults />} />
               <Route path="/booking-success" element={<BookingSuccess />} />
@@ -56,6 +61,8 @@ const App = () => {
                 element={<ViewBookedFlightDetails />}
               />
               <Route path="/onboard-start" element={<OnboardingStart />} />
+              <Route path="/onboard-add-income" element={<OnboardingAddIncome />} />
+              <Route path="/onboard-split-income" element={<OnboardingSplitIncome />} />
             </Routes>
           </Suspense>
           <ToastContainer />
