@@ -125,7 +125,7 @@ const OnboardingSplitIncome = () => {
               wants: wantsRatio,
               savings: savingsRatio,
             });
-            navigate("/onboard-split-income");
+            navigate("/onboard-success");
           }}
         />
       </div>

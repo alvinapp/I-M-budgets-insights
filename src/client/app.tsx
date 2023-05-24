@@ -9,16 +9,6 @@ import { ToastContainer } from "react-toastify";
 
 declare var AppConfig: AppConfig;
 
-const ConfirmBooking = lazy(
-  () => import("./pages/book-a-flight/ConfirmBooking")
-);
-const SearchResults = lazy(() => import("./pages/book-a-flight/SearchResults"));
-const ViewBookedFlightDetails = lazy(
-  () => import("./pages/book-a-flight/ViewBookedFlightDetails")
-);
-const BookingSuccess = lazy(
-  () => import("./pages/book-a-flight/BookingSuccess")
-);
 const OnboardingStart = lazy(
   () => import("./pages/onboarding/OnboardingStart")
 );
@@ -27,6 +17,9 @@ const OnboardingAddIncome = lazy(
 );
 const OnboardingSplitIncome = lazy(
   () => import("./pages/onboarding/OnboardingSplitIncome")
+);
+const OnboardingSuccess = lazy(
+  () => import("./pages/onboarding/OnboardingSuccess")
 );
 
 const App = () => {
@@ -53,16 +46,10 @@ const App = () => {
           >
             <Routes>
               <Route path="/" element={<OnboardingStart />} />
-              <Route path="/confirm-booking" element={<ConfirmBooking />} />
-              <Route path="/search-results" element={<SearchResults />} />
-              <Route path="/booking-success" element={<BookingSuccess />} />
-              <Route
-                path="/view-flight-details"
-                element={<ViewBookedFlightDetails />}
-              />
               <Route path="/onboard-start" element={<OnboardingStart />} />
               <Route path="/onboard-add-income" element={<OnboardingAddIncome />} />
               <Route path="/onboard-split-income" element={<OnboardingSplitIncome />} />
+              <Route path="/onboard-success" element={<OnboardingSuccess />} />
             </Routes>
           </Suspense>
           <ToastContainer />
