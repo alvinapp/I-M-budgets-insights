@@ -9,7 +9,9 @@ import ArrowBackButton from "../components/ArrowBack";
 const OnboardingAddIncome = () => {
   const navigate = useNavigate();
   const budgetSettingsStore = useBudgetSettingsStore();
-  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(budgetSettingsStore.monthlyIncome);
+  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
+    budgetSettingsStore.monthlyIncome
+  );
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
@@ -27,8 +29,8 @@ const OnboardingAddIncome = () => {
             What's your monthly net income?
           </div>
           <div className="text-xxs font-poppins tracking-longtext mt-4">
-            We need to use this as a base calculation for your overall monthly budget.
-            You can always modify later.
+            We need to use this as a base calculation for your overall monthly
+            budget. You can always modify later.
             <br></br>
             <a href="/404-not-found">Learn More</a>
           </div>
@@ -41,7 +43,7 @@ const OnboardingAddIncome = () => {
             className="block w-full border-0 border-transparent border-b-2 border-b-neutral-800 py-4 pl-7 pr-20 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
             placeholder="0"
             value={monthlyIncomeValue}
-            onChange={((e) => setMonthlyIncomeValue(Number(e.target.value)))}
+            onChange={(e) => setMonthlyIncomeValue(Number(e.target.value))}
           />
         </div>
       </div>

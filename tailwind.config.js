@@ -11,6 +11,7 @@ module.exports = {
           info: "var(--color-text-info)",
           secondary: "var(--color-text-secondary)",
           neutral: "var(--color-text-neutral)",
+          neutral2: "var(--color-text-neutral2)",
           success: "var(--color-text-success)",
           successSecondary: "var(--color-text-success-secondary)",
           successNeutral: "var(--color-text-success-neutral)",
@@ -132,6 +133,8 @@ module.exports = {
         button: "0 2px 4px -1px #9BC1D0, 0 8px 16px -1px #9BC1D0",
         input: "0 1px 6px -0.5px #9BC1D0",
         knob: "0 2px 6px 0 #C3C3C3;",
+        budgetButton:
+          "inset 0 1px 0 0 rgba(255,255,255,0.1), 0 1px 8px -1px #C3C3C3",
       },
     },
     fontSize: {

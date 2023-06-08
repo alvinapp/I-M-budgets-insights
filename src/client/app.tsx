@@ -6,6 +6,7 @@ import "./index.css";
 import "./style.scss";
 import { TailSpin } from "react-loader-spinner";
 import { ToastContainer } from "react-toastify";
+import { BudgetSettings } from "./pages/budgets/BudgetSettings";
 
 declare var AppConfig: AppConfig;
 
@@ -45,11 +46,18 @@ const App = () => {
             }
           >
             <Routes>
-              <Route path="/" element={<OnboardingStart />} />
+              <Route path="/" element={<BudgetSettings />} />
               <Route path="/onboard-start" element={<OnboardingStart />} />
-              <Route path="/onboard-add-income" element={<OnboardingAddIncome />} />
-              <Route path="/onboard-split-income" element={<OnboardingSplitIncome />} />
+              <Route
+                path="/onboard-add-income"
+                element={<OnboardingAddIncome />}
+              />
+              <Route
+                path="/onboard-split-income"
+                element={<OnboardingSplitIncome />}
+              />
               <Route path="/onboard-success" element={<OnboardingSuccess />} />
+              <Route path="/budget-settings" element={<BudgetSettings />} />
             </Routes>
           </Suspense>
           <ToastContainer />
