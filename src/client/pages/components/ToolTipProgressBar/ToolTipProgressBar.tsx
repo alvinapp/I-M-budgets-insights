@@ -19,7 +19,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     const progress = (currentDay / daysInMonth) * 100;
 
     const progressStyle = {
-        backgroundColor: progressColor,
+        background: "linear-gradient(65.42deg, rgba(8,127,162,0.54) 0%, rgba(193,138,76,0.37) 52.44%, rgba(89,182,81,0.49) 100%)",
         width: `${progress}%`,
     };
 
