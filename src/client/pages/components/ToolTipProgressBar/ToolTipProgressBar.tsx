@@ -3,12 +3,12 @@ import './TooltipProgressBar.css';
 
 interface TooltipProgressBarProps {
     backgroundColor?: string;
-    progressPercent?: number;
+    progressPercent: number;
 }
 
 const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     backgroundColor = '#E7EDF3',
-    progressPercent = 20,
+    progressPercent,
 }) => {
     const date = new Date();
     const currentDay = date.getDate();
@@ -36,7 +36,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
 
     return (
         <div className="row">
-            <div className="font-poppins text-xs text-skin-subtitle tracking-longest_text">{monthStart.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</div>
+            <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">{monthStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
             <div className="tooltip-progress-bar" style={{ backgroundColor }}>
                 <div className="tooltip-progress-bar-progress" style={progressStyle}></div>
                 <div className="dotted-divider-container" style={{ left: `calc(${Math.ceil(progress)}%)` }}>
@@ -46,7 +46,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
                     Today
                 </div>
             </div>
-            <div className="font-poppins text-xs text-skin-subtitle tracking-longest_text">{monthEnd.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</div>
+            <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">{monthEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
         </div>
     );
 };
