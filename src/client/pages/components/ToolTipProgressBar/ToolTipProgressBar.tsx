@@ -26,12 +26,12 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     const tooltipStyle = {
         left: `calc(${progress}% - 2em)`,
         transform: 'scale(0.8)',
-        backgroundColor: 'black',
+        background: 'black',
         height: '30px',
         width: '60px',
         fontFamlily: 'Poppins',
         fontSize: '14px',
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.8)',
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
     };
 
     return (
