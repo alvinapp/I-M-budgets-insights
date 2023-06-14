@@ -39,7 +39,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                             </div>
                         </div>
                         <div className="flex flex-row">
-                            <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">
+                            <div className="font-poppins text-xs text-skin-subtitle tracking-longest_text">
                                 {progressString[index]}
                             </div>
                         </div>

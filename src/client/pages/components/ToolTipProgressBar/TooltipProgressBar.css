@@ -4,7 +4,8 @@
     width: 100%;
 }
 
-.month-start, .month-end {
+.month-start,
+.month-end {
     white-space: nowrap;
     font-family: 'Poppins', sans-serif;
     font-size: 0.8rem;
@@ -28,7 +29,7 @@
 
 .tooltip {
     position: absolute;
-    bottom: calc(100% + 1px); /* reduce this value */
+    bottom: calc(100% + 1px);
     left: 50%;
     transform: translateX(-50%);
     background-color: #000000;
@@ -50,4 +51,17 @@
     border-width: 5px;
     border-style: solid;
     border-color: #020202 transparent transparent transparent;
+}
+
+.dotted-divider-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    width: 2px;
+}
+
+.dotted-divider {
+    height: 100%;
+    border-left: 2px dashed rgba(0, 0, 0, 0.5);
 }
