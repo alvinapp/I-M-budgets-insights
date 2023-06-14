@@ -13,6 +13,7 @@ import useCategoriesStore from "client/store/categoriesStore";
 import { Category } from "client/models/Categories";
 import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
 import MainButton from "../components/MainButton";
+import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
 
 export const BudgetSettings = () => {
   const configuration = useConfigurationStore((state: any) => state as IConfig);
@@ -56,6 +57,7 @@ export const BudgetSettings = () => {
             </div>
           </div>
         </div>
+        <MacroProgressBarsContainer ratios="50/30/20" />
         <div className="shadow-card px-4 pt-5 pb-3 mt-10 rounded-lg">
           <BudgetDisplay
             title="Essentials"
