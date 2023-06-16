@@ -13,6 +13,11 @@ import useCategoriesStore from "client/store/categoriesStore";
 import { Category } from "client/models/Categories";
 import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
 import MainButton from "../components/MainButton";
+import MacroPieChart from "../components/MacroPieChart";
+import MacroPieChartLegend from "../components/MacroPieChartLegend";
+import MacroPieChartWithLegend from "../components/MacroPieChartWithLegend";
+import CashFlowPieChart from "../components/CashFlowPieChart";
+import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
 import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
 import { GeneralInfoCard } from "../components/budget/GeneralInfoCard";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
@@ -81,7 +86,13 @@ export const BudgetSettings = () => {
             </div>
           </div>
         </div>
-        <div className="shadow-card px-4 pt-5 rounded-lg">
+        <CashFlowPieChart dimensions={190} doughnutThickness={14} values={{
+          moneyIn: 1000000,
+          moneyOut: 500000,
+        }}
+          percentageChange={5}
+        />
+        <div className="shadow-card px-4 pt-5 pb-3 mt-10 rounded-lg">
           <BudgetDisplay
             title="Essentials"
             budgetAmount={150000}
