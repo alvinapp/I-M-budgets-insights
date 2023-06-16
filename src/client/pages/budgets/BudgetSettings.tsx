@@ -14,7 +14,7 @@ import { Category } from "client/models/Categories";
 import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
 import MainButton from "../components/MainButton";
 import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
-import { GenralInfoCard } from "../components/budget/GenralInfoCard";
+import { GeneralInfoCard } from "../components/budget/GeneralInfoCard";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 
 export const BudgetSettings = () => {
@@ -50,7 +50,7 @@ export const BudgetSettings = () => {
       />
       <div className="flex flex-col mx-3.5">
         <div className="mb-3 mt-7">
-          <GenralInfoCard
+          <GeneralInfoCard
             iconBg="bg-skin-successWithOpacity"
             icon={<FiBriefcase />}
             title="Monthly net income"
@@ -59,7 +59,7 @@ export const BudgetSettings = () => {
             currencySymbol={currencySymbol}
           />
         </div>
-        <GenralInfoCard
+        <GeneralInfoCard
           iconBg="bg-skin-secondary3WithOpacity"
           icon={<FiPieChart />}
           title="Budget split"

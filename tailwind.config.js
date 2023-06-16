@@ -12,6 +12,7 @@ module.exports = {
           secondary: "var(--color-text-secondary)",
           neutral: "var(--color-text-neutral)",
           neutral2: "var(--color-text-neutral2)",
+          accent: "var(--color-text-accent)",
           success: "var(--color-text-success)",
           successSecondary: "var(--color-text-success-secondary)",
           successNeutral: "var(--color-text-success-neutral)",
@@ -24,6 +25,8 @@ module.exports = {
           inputDisabled: "var(--color-text-input-disabled)",
           iconTertiary: "var(--color-text-icon-tertiary)",
           iconSecondary: "var(--color-text-icon-secondary)",
+          alvinBrown: "var(-color-text-alvin-brown)",
+          alvinBrownFaded: "var(--color-text-alvin-brown-faded)",
         },
       },
       backgroundColor: {

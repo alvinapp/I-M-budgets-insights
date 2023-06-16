@@ -10,7 +10,7 @@ type GeneralInfoCardProps = {
   caption?: string;
   currencySymbol?: string;
 };
-export const GenralInfoCard = ({
+export const GeneralInfoCard = ({
   title,
   icon,
   iconBg,

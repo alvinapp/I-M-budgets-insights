@@ -17,6 +17,7 @@
     --color-text-info: #3783a1;
     --color-text-neutral: #6f89a5;
     --color-text-neutral2: #27253a;
+    --color-text-accent: #d0ddea;
     --color-text-success: #297a22;
     --color-text-success-secondary: #85c17f;
     --color-text-success-neutral: #d6ead4;
@@ -29,6 +30,8 @@
     --color-text-input-disabled: #9db1c6;
     --color-text-icon-secondary: #555466;
     --color-text-icon-tertiary: #8b714f;
+    --color-text-alvin-brown: #6f5a3f;
+    --color-text-alvin-brown-faded: #b9aa95;
     --color-button-primary: #056489;
     --color-button-neutral: #6f89a5;
     --color-background-base: #ffffff;

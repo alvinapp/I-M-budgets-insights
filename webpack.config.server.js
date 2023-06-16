@@ -35,7 +35,7 @@ const webPackConfig = (env) => {
         server: [resolve("./src/server")],
         assets: [resolve("./src/client/assets")],
       },
-      extensions: [".js", ".jsx", ".ts", ".tsx"],
+      extensions: [" ",".js", ".jsx", ".ts", ".tsx"],
       fallback: {
         path: false,
         buffer: false,
