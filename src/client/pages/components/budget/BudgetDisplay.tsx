@@ -35,7 +35,9 @@ export const BudgetDisplay = ({
         <div className="flex flex-col justify-end items-end">
           <div className="flex flex-row">
             <div className="relative">
-              <div className="absolute right-0 -top-4">{currencySymbol}</div>
+              <div className="absolute -right-1 -top-3 font-workSans font-semibold text-sm text-skin-neutral2">
+                {currencySymbol}
+              </div>
               <div className="font-workSans font-semibold text-lg text-skin-neutral2">
                 {budgetAmount?.toLocaleString("en-US")}
               </div>
@@ -64,7 +66,7 @@ export const BudgetDisplay = ({
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <div className="relative">
-                  <div className="absolute -right-1 -top-4">
+                  <div className="absolute -right-1 -top-3 font-workSans font-semibold text-sm text-skin-neutral2">
                     {currencySymbol}
                   </div>
                   <div className="font-workSans font-semibold text-lg text-skin-neutral2">
@@ -88,7 +90,7 @@ export const BudgetDisplay = ({
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <div className="relative">
-                  <div className="absolute -right-1 -top-4">
+                  <div className="absolute -right-1 -top-3  font-workSans font-semibold text-sm text-skin-neutral2">
                     {currencySymbol}
                   </div>
                   <div className="font-workSans font-semibold text-lg text-skin-neutral2">

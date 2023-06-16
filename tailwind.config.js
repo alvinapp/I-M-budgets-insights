@@ -36,6 +36,8 @@ module.exports = {
             "var(--color-background-secondary1-withOpacity)",
           secondary2WithOpacity:
             "var(--color-background-secondary2-withOpacity)",
+          secondary3WithOpacity:
+            "var(--color-background-secondary2-withOpacity)",
           success: "var(--color-background-success)",
           successNeutral: "var(--color-background-success-neutral)",
           successWithOpacity:

@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import ArrowBackButton from "../components/ArrowBack";
 import NavBar from "../components/NavBar";
 import NavBarTitle from "../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
 import CloseButton from "../components/CloseButton";
-import { FiPieChart } from "react-icons/fi";
+import { FiBriefcase, FiPieChart } from "react-icons/fi";
 import { BudgetDisplay } from "../components/budget/BudgetDisplay";
 import { useQuery } from "react-query";
 import { getCategories } from "client/api/categories";
@@ -14,6 +14,8 @@ import { Category } from "client/models/Categories";
 import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
 import MainButton from "../components/MainButton";
 import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
+import { GenralInfoCard } from "../components/budget/GenralInfoCard";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
 
 export const BudgetSettings = () => {
   const configuration = useConfigurationStore((state: any) => state as IConfig);
@@ -30,11 +32,16 @@ export const BudgetSettings = () => {
     (element: Category) => element.macro_type?.name === "Essentials"
   );
   const navigate = useNavigate();
+  const currencySymbol = useCurrencySettingsStore(
+    (state: any) => state.currencySymbol
+  );
+  const [selectedEssesntialId, setSelectedEssentialId] = useState();
+  const [selectedWantsId, setSelectedWantsId] = useState();
   return (
     <div className="h-screen w-screen">
       <NavBar
         children={
-          <div className="flex flex-row items-center justify-between border border-b-1 pt-6 pb-2">
+          <div className="flex flex-row items-center justify-between border border-b-1 pt-4 pb-2">
             <CloseButton onClick={() => navigate(-1)} />
             <NavBarTitle title="Add Category Budgets" />
             <div className="h-6 w-6 rounded-full"></div>
@@ -42,9 +49,26 @@ export const BudgetSettings = () => {
         }
       />
       <div className="flex flex-col mx-3.5">
-        <div className="mb-4 mt-5 flex flex-row w-full items-center">
+        <div className="mb-3 mt-7">
+          <GenralInfoCard
+            iconBg="bg-skin-successWithOpacity"
+            icon={<FiBriefcase />}
+            title="Monthly net income"
+            subtitle="When set, this will be used as the base calculation for your overall budget split."
+            caption="300,000"
+            currencySymbol={currencySymbol}
+          />
+        </div>
+        <GenralInfoCard
+          iconBg="bg-skin-secondary3WithOpacity"
+          icon={<FiPieChart />}
+          title="Budget split"
+          subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
+          caption="50/30/20"
+        />
+        <div className="mb-4 mt-5 flex flex-row w-full items-center justify-center">
           <div className="flex flex-col">
-            <div className="w-44">
+            <div className="w-36">
               <div className="border"></div>
             </div>
           </div>
@@ -52,13 +76,12 @@ export const BudgetSettings = () => {
             <FiPieChart size="1.5rem" color="#555466" />
           </div>
           <div className="flex flex-col">
-            <div className="w-44">
+            <div className="w-36">
               <div className="border"></div>
             </div>
           </div>
         </div>
-        <MacroProgressBarsContainer ratios="50/30/20" />
-        <div className="shadow-card px-4 pt-5 pb-3 mt-10 rounded-lg">
+        <div className="shadow-card px-4 pt-5 rounded-lg">
           <BudgetDisplay
             title="Essentials"
             budgetAmount={150000}
@@ -85,11 +108,22 @@ export const BudgetSettings = () => {
           <div className="flex flex-col">
             {essentialsCategories && essentialsCategories.length > 0 ? (
               essentialsCategories.map((category: Category, i: any) => {
+                const isSelected = i === selectedEssesntialId;
                 return (
                   <BudgetSettingCard
                     key={i}
                     category={category?.name}
                     emoji={category?.emoji}
+                    amount={categoriesStore.categoryAmount}
+                    selected={isSelected}
+                    increment={() => {
+                      setSelectedEssentialId(i);
+                      categoriesStore.incrementCategoryAmount();
+                    }}
+                    decrement={() => {
+                      setSelectedEssentialId(i);
+                      categoriesStore.decrementCategoryAmount();
+                    }}
                   />
                 );
               })
@@ -125,11 +159,22 @@ export const BudgetSettings = () => {
           <div className="flex flex-col">
             {wantsCategories && wantsCategories.length > 0 ? (
               wantsCategories.map((category: Category, i: any) => {
+                const isSelected = i === selectedWantsId;
                 return (
                   <BudgetSettingCard
                     key={i}
                     category={category?.name}
                     emoji={category?.emoji}
+                    amount={categoriesStore.categoryAmount}
+                    selected={isSelected}
+                    increment={() => {
+                      setSelectedWantsId(i);
+                      categoriesStore.incrementCategoryAmount();
+                    }}
+                    decrement={() => {
+                      setSelectedWantsId(i);
+                      categoriesStore.decrementCategoryAmount();
+                    }}
                   />
                 );
               })
@@ -158,7 +203,17 @@ export const BudgetSettings = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <BudgetSettingCard category="Create a goal" emoji="🎯" />
+            <BudgetSettingCard
+              category="Create a goal"
+              emoji="🎯"
+              amount={categoriesStore.categoryAmount}
+              increment={() => {
+                categoriesStore.incrementCategoryAmount();
+              }}
+              decrement={() => {
+                categoriesStore.decrementCategoryAmount();
+              }}
+            />
           </div>
         </div>
         <div className="flex flex-row mt-18 justify-center items-center">

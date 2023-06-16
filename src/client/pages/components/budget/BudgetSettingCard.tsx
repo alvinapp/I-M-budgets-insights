@@ -6,14 +6,16 @@ type BudgetSettingCardProps = {
   emoji?: string;
   increment?: any;
   decrement?: any;
-  numberOfPeople?: number;
+  amount?: number;
+  selected?: boolean;
 };
 export const BudgetSettingCard = ({
   category,
   emoji,
-  numberOfPeople = 0,
+  amount = 0,
   increment,
   decrement,
+  selected = false,
 }: BudgetSettingCardProps) => {
   const handleIncrement = (event: any) => {
     event.stopPropagation();
@@ -42,7 +44,7 @@ export const BudgetSettingCard = ({
       <div className="flex-col">
         <div className="flex flex-col justify-center">
           <div className="rounded-full shadow-budgetButton flex justify-center items-center flex-row px-3 py-3">
-            {numberOfPeople > 0 ? (
+            {selected && amount > 0 ? (
               <div className="flex flex-row items-center">
                 <FiMinus
                   color="#04506E"
@@ -50,7 +52,7 @@ export const BudgetSettingCard = ({
                   onClick={handleDecrement}
                 />
                 <div className="font-poppins font-semibold text-xs mx-2">
-                  {numberOfPeople}
+                  {amount}
                 </div>
               </div>
             ) : (
