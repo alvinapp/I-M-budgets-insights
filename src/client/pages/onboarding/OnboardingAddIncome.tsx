@@ -33,7 +33,7 @@ const OnboardingAddIncome = () => {
             <a href="/404-not-found">Learn More</a>
           </div>
         </div>
-        <div className="flex flex-col mt-48 mx-10 px-40 items-center">
+        <div className="flex flex-col mt-32 mx-10 items-center">
           <input
             type="number"
             name="monthly-net-income"
