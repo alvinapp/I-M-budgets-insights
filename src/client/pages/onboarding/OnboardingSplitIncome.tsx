@@ -43,7 +43,7 @@ const OnboardingSplitIncome = () => {
             <br></br>
           </div>
         </div>
-        <div className="flex flex-col mt-12 mx-10 px-40 items-center">
+        <div className="flex flex-col mt-12 mx-10 text-sm">
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="justify-self-start font-semibold">Essentials</div>
             <div className="justify-self-end font-semibold">
@@ -119,7 +119,7 @@ const OnboardingSplitIncome = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 mx-3.5">
+      <div className="fixed bottom-0 left-0 right-0 mx-3.5 text-sm">
         <MainButton
           title="Continue"
           isDisabled={false}
