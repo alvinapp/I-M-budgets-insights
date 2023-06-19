@@ -77,8 +77,8 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
 
     const renderLimitLine = (value: number, label: string) => (
         <g>
-            <line x1="40" y1={graphHeight - 50 - value * scaleFactor} x2={graphWidth} y2={graphHeight - 50 - value * scaleFactor} stroke="black" strokeDasharray="4" />
-            <text x={2} y={graphHeight - 50 - value * scaleFactor + 5} textAnchor="start" fontSize="13" fill='#878787' fontFamily='Poppins'>{formatNumber(value)}</text>
+            <line x1="34" y1={graphHeight - 50 - value * scaleFactor} x2={graphWidth} y2={graphHeight - 50 - value * scaleFactor} stroke="black" strokeDasharray="4" />
+            <text x={2} y={graphHeight - 50 - value * scaleFactor + 5} textAnchor="start" fontSize="11" fill='#878787' fontFamily='Poppins'>{formatNumber(value)}</text>
             <text x={graphWidth - 10} y={graphHeight - 50 - value * scaleFactor - 5} textAnchor="end" fontSize="12" fontFamily='Poppins' fill="#c5c5c5">{label}</text>
         </g>
     );
@@ -106,10 +106,10 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 {renderLimitLine(budgetLimit, 'Budget Limit')}
 
                 {/* Month Labels */}
-                <text x={graphWidth * 0.2 + 22} y={graphHeight - 30} textAnchor="middle" fontSize="12" fontWeight="bold" fontFamily='Poppins'>
+                <text x={graphWidth * 0.2 + 22} y={graphHeight - 35} textAnchor="middle" fontSize="10" fontWeight="bold" fontFamily='Poppins'>
                     {getMonthNames()[0]}
                 </text>
-                <text x={graphWidth * 0.39 + 22} y={graphHeight - 30} textAnchor="middle" fontSize="12" fontWeight="bold" fontFamily='Poppins'>
+                <text x={graphWidth * 0.39 + 22} y={graphHeight - 35} textAnchor="middle" fontSize="10" fontWeight="bold" fontFamily='Poppins'>
                     {getMonthNames()[1]}
                 </text>
                 {/* Change Container */}
