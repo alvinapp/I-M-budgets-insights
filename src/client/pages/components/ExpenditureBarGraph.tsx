@@ -32,25 +32,38 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
         return [previousMonth, currentMonth];
     };
 
-    const renderStackedBar = (positionFactor: number, essentials: number, wants: number) => {
+    const renderStackedBar = (positionFactor: number, essentials: number, wants: number, showTooltip = false) => {
         const x = graphWidth * positionFactor;
         const essentialsHeight = essentials * scaleFactor;
         const wantsHeight = wants * scaleFactor;
-
+        const totalHeight = essentialsHeight + wantsHeight;
+    
         const renderBar = (height: number, color: string) => (
             <>
                 <rect x={x - 1} y={graphHeight - 50 - height - 1} width="48" height={height + 2} fill="rgba(205, 224, 231, 0.3)" rx="10" ry="10" />
                 <rect x={x} y={graphHeight - 50 - height} width="46" height={height} fill={color} rx="10" ry="10" />
             </>
         );
-
+    
         return (
             <g>
                 {essentials > wants ? renderBar(essentialsHeight, "url(#essentialsGradient)") : renderBar(wantsHeight, '#fab362')}
                 {essentials > wants ? renderBar(wantsHeight, '#fab362') : renderBar(essentialsHeight, "url(#essentialsGradient)")}
+                {showTooltip && (
+                    <>
+                        {/* Tooltip */}
+                        <rect x={x + 1} y={graphHeight - totalHeight - 15} width="47" height="20" fill="#101a25" stroke="#101a25" strokeWidth="1" rx="5" ry="5" />
+                        {/* pointing tip below the tooltip */}
+                        <polygon points={`${x + 26},${graphHeight - totalHeight + 10} ${x + 15},${graphHeight - totalHeight - 1} ${x + 36},${graphHeight - totalHeight}`} fill="#101a25" stroke="#101a25" strokeWidth="1" />
+                        <text x={x + 23} y={graphHeight - totalHeight - 3} textAnchor="middle" fill='#f6f6f7' fontSize="10" fontFamily='Poppins'>Today</text>
+                        {/* Text showing total value */}
+                        <text x={x + 20} y={graphHeight - totalHeight + 20} textAnchor="middle" fontSize="10" fontFamily='Poppins'>{formatNumber(essentials + wants)}</text>
+                    </>
+                )}
             </g>
         );
     };
+    
 
     const renderChangeContainer = () => {
         const totalPrevMonth = previousMonth.essentials + previousMonth.wants;
@@ -94,10 +107,10 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 </defs>
 
                 {/* Stacked Bars for previous month */}
-                {renderStackedBar(0.2, previousMonth.essentials, previousMonth.wants)}
+                {renderStackedBar(0.2, previousMonth.essentials, previousMonth.wants, false)}
 
                 {/* Stacked Bars for current month */}
-                {renderStackedBar(0.39, currentMonth.essentials, currentMonth.wants)}
+                {renderStackedBar(0.39, currentMonth.essentials, currentMonth.wants, true)}
 
                 {/* Expense Limit */}
                 {renderLimitLine(expenseLimit, 'Expense Limit')}
