@@ -120,3 +120,13 @@ export const capitalize = (s: any) => {
   if (typeof s !== "string") return "";
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
+
+export const formatNumber = (num: any) => {
+  if (num > 1000000) {
+    return (num / 1000000).toFixed(0).replace(/\.0$/, "") + "m";
+  } else if (num > 1000) {
+    return (num / 1000).toFixed(0).replace(/\.0$/, "") + "k";
+  } else {
+    return num;
+  }
+}
