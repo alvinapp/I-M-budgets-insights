@@ -57,7 +57,7 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                         <polygon points={`${x + 26},${graphHeight - totalHeight + 10} ${x + 15},${graphHeight - totalHeight - 1} ${x + 36},${graphHeight - totalHeight}`} fill="#101a25" stroke="#101a25" strokeWidth="1" />
                         <text x={x + 23} y={graphHeight - totalHeight - 3} textAnchor="middle" fill='#f6f6f7' fontSize="10" fontFamily='Poppins'>Today</text>
                         {/* Text showing total value */}
-                        <text x={x + 20} y={graphHeight - totalHeight + 20} textAnchor="middle" fontSize="10" fontFamily='Poppins'>{formatNumber(essentials + wants)}</text>
+                        <text x={x + 20} y={graphHeight - totalHeight + 20} textAnchor="middle" fontSize="10" fontFamily='Poppins'>-{(essentials + wants).toLocaleString("en-US")}</text>
                     </>
                 )}
             </g>
@@ -74,11 +74,11 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
         return (
             <g>
                 {/* Grey circular container */}
-                <circle cx={graphWidth - 143} cy={graphHeight - 75} r="13" fill="#D3D3D3" stroke="black" strokeWidth="1" />
+                <circle cx={graphWidth - 143} cy={graphHeight - 75} r="13" fill="#dddddd" stroke="#565656" strokeWidth="1" />
 
                 {/* Conditionally render the arrow icon */}
                 <g transform={`translate(${graphWidth - 155}, ${graphHeight - 87}) scale(1.5)`}>
-                    {isIncrease ? <FiArrowUpRight /> : <FiArrowDownRight />}
+                    {isIncrease ? <FiArrowUpRight color="#565656" strokeWidth="1" /> : <FiArrowDownRight color="#565656" strokeWidth="1" />}
                 </g>
 
                 {/* Change percentage text */}
