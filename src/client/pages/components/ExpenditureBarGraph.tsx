@@ -36,7 +36,11 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
         const x = graphWidth * positionFactor;
         const essentialsHeight = essentials * scaleFactor;
         const wantsHeight = wants * scaleFactor;
-        const totalHeight = essentialsHeight + wantsHeight;
+        const highestBarHeight = Math.max(essentialsHeight, wantsHeight);
+    
+        const tooltipHeight = 20;
+        const tooltipPadding = 5;
+        const tooltipPosY = graphHeight - highestBarHeight - tooltipHeight - tooltipPadding - 60; // adjust the Y position
     
         const renderBar = (height: number, color: string) => (
             <>
@@ -52,18 +56,19 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 {showTooltip && (
                     <>
                         {/* Tooltip */}
-                        <rect x={x + 1} y={graphHeight - totalHeight - 15} width="47" height="20" fill="#101a25" stroke="#101a25" strokeWidth="1" rx="5" ry="5" />
-                        {/* pointing tip below the tooltip */}
-                        <polygon points={`${x + 26},${graphHeight - totalHeight + 10} ${x + 15},${graphHeight - totalHeight - 1} ${x + 36},${graphHeight - totalHeight}`} fill="#101a25" stroke="#101a25" strokeWidth="1" />
-                        <text x={x + 23} y={graphHeight - totalHeight - 3} textAnchor="middle" fill='#f6f6f7' fontSize="10" fontFamily='Poppins'>Today</text>
+                        <rect x={x + 1} y={tooltipPosY} width="47" height={tooltipHeight} fill="#101a25" stroke="#101a25" strokeWidth="1" rx="5" ry="5" />
+                        {/* Pointing tip below the tooltip */}
+                        <polygon points={`${x + 23},${tooltipPosY + tooltipHeight + 5} ${x + 19},${tooltipPosY + tooltipHeight} ${x + 27},${tooltipPosY + tooltipHeight}`} fill="#101a25" stroke="#101a25" strokeWidth="1" />
+                        {/* Tooltip Text */}
+                        <text x={x + 23} y={tooltipPosY + tooltipHeight / 2 + 3} textAnchor="middle" fill='#f6f6f7' fontSize="10" fontFamily='Poppins'>Today</text>
                         {/* Text showing total value */}
-                        <text x={x + 20} y={graphHeight - totalHeight + 20} textAnchor="middle" fontSize="10" fontFamily='Poppins'>-{(essentials + wants).toLocaleString("en-US")}</text>
+                        <text x={x + 20} y={tooltipPosY + tooltipHeight + 13} textAnchor="middle" fontSize="10" fontFamily='Poppins'>-{(essentials + wants).toLocaleString("en-US")}</text>
                     </>
                 )}
             </g>
         );
     };
-    
+
 
     const renderChangeContainer = () => {
         const totalPrevMonth = previousMonth.essentials + previousMonth.wants;
