@@ -1,6 +1,7 @@
 import { formatNumber } from 'client/utils/Formatters';
 import { FiArrowUpRight, FiArrowDownRight } from 'react-icons/fi';
 import React, { useEffect, useState } from 'react';
+import GraphLegend from './GraphLegend';
 
 interface BarGraphProps {
     previousMonth: { essentials: number, wants: number },
@@ -133,6 +134,11 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 {/* Change Container */}
                 {renderChangeContainer()}
             </svg>
+            <div className='space-x-1' style={{ display: 'flex', justifyContent: 'space-between', margin: '0px 10px 2px 10px' }}>
+                <GraphLegend color="#0b84a6" label="Essentials spend" />
+                <GraphLegend color="#c18a4c" label="Wants spend" />
+                <GraphLegend color="#f99e36" label="Over limit" />
+            </div>
         </div>
     );
 };
