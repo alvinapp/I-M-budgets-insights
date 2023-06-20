@@ -25,7 +25,7 @@ module.exports = {
           inputDisabled: "var(--color-text-input-disabled)",
           iconTertiary: "var(--color-text-icon-tertiary)",
           iconSecondary: "var(--color-text-icon-secondary)",
-          alvinBrown: "var(-color-text-alvin-brown)",
+          alvinBrown: "var(--color-text-alvin-brown)",
           alvinBrownFaded: "var(--color-text-alvin-brown-faded)",
         },
       },

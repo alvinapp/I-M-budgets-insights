@@ -83,6 +83,13 @@ export const CategoryViewCard = ({
           >
             {spentAmount}
           </div>
+          <div
+            className={`font-poppins text-xs ${
+              fadedColor ?? "text-skin-base"
+            } font-semibold mr-1`}
+          >
+            of
+          </div>
           <div className="relative mr-1">
             <div
               className={`absolute -right-1 -top-1.5 font-poppins text-xxxxxs ${

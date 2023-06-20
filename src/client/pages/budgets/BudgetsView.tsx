@@ -13,6 +13,7 @@ import { CategoryCardHeader } from "../components/budget/CategoryCardHeader";
 import { essentials, savings, wants } from "client/utils/MockData";
 import { CategoryViewCard } from "../components/budget/CategoryViewCard";
 import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
+import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
 
 export const BudgetsView = () => {
   const navigate = useNavigate();
@@ -21,10 +22,10 @@ export const BudgetsView = () => {
   );
   return (
     <div className="h-screen w-screen">
-      <div className="px-3.5">
+      <div className="px-3.5 flex flex-col">
         <NavBar
           children={
-            <div className="flex flex-row items-center justify-between mt-10 mb-2">
+            <div className="flex flex-row items-center justify-between mt-6">
               <NavBarTitle title="Budget" fontSize="text-2xl" />
               <div className="h-6 w-6 rounded-full">
                 {/* <FiSettings color="#4E6783" size="1.25rem" /> */}
@@ -32,9 +33,13 @@ export const BudgetsView = () => {
             </div>
           }
         />
+        <div className="mt-6">
+          <HorizontalDateToggle />
+        </div>
       </div>
-      <div className="flex flex-col mx-3.5">
-        <div className="flex flex-row mt-4 items-center justify-between">
+      <div className="border border-skin-accent mt-2"></div>
+      <div className="flex flex-col mx-3.5  mt-8">
+        <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
             amount={160300}
             subtitle="Available budget spend"
@@ -133,7 +138,7 @@ export const BudgetsView = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
+        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3 mb-8">
           <CategoryCardHeader
             title="Savings"
             amount={15500}
