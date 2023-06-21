@@ -4,15 +4,15 @@ import React, { useEffect, useState } from 'react';
 import GraphLegend from './GraphLegend';
 
 interface BarGraphProps {
-    previousMonth: { essentials: number, wants: number },
-    currentMonth: { essentials: number, wants: number },
-    expenseLimit: number,
+    previousMonth: { essentials:{spent:number,expenseLimit:number}, wants: {spent:number,expenseLimit:number} },
+    currentMonth: { essentials: {spent:number,expenseLimit:number}, wants: {spent:number,expenseLimit:number} },
     budgetLimit: number,
 }
 
-const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMonth, expenseLimit, budgetLimit }) => {
+const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMonth, budgetLimit }) => {
     const [graphWidth, setGraphWidth] = useState(window.innerWidth - 23);
     const graphHeight = 200;
+    const expenseLimit = currentMonth.essentials.expenseLimit + currentMonth.wants.expenseLimit;
     const maxLimit = Math.max(expenseLimit, budgetLimit);
     const scaleFactor = (graphHeight - 70) / maxLimit;
     const barSpacing = graphWidth * 0.2;
@@ -33,27 +33,28 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
         return [previousMonth, currentMonth];
     };
 
-    const renderStackedBar = (positionFactor: number, essentials: number, wants: number, showTooltip = false) => {
+    const renderStackedBar = (positionFactor: number, essentialsSpent: number, wantsSpent: number, showTooltip = false) => {
         const x = graphWidth * positionFactor;
-        const essentialsHeight = essentials * scaleFactor;
-        const wantsHeight = wants * scaleFactor;
-        const highestBarHeight = Math.max(essentialsHeight, wantsHeight);
+        const totalSpent = essentialsSpent + wantsSpent;
+        const essentialsHeight = essentialsSpent * scaleFactor;
+        const wantsHeight = wantsSpent * scaleFactor;
+        const totalHeight = totalSpent * scaleFactor;
+        const overlap = 15; // units of overlap for a seamless transition
     
         const tooltipHeight = 20;
         const tooltipPadding = 5;
-        const tooltipPosY = graphHeight - highestBarHeight - tooltipHeight - tooltipPadding - 60; // adjust the Y position
+        const tooltipPosY = graphHeight - totalHeight - tooltipHeight - tooltipPadding - 60; // adjust the Y position
     
-        const renderBar = (height: number, color: string) => (
-            <>
-                <rect x={x - 1} y={graphHeight - 50 - height - 1} width="48" height={height + 2} fill="rgba(205, 224, 231, 0.3)" rx="10" ry="10" />
-                <rect x={x} y={graphHeight - 50 - height} width="46" height={height} fill={color} rx="10" ry="10" />
-            </>
+        const renderBarSegment = (offsetY: number, height: number, color: string) => (
+            <rect x={x} y={graphHeight - 50 - height - offsetY} width="46" height={height} fill={color} rx="10" ry="10" />
         );
     
         return (
             <g>
-                {essentials > wants ? renderBar(essentialsHeight, "url(#essentialsGradient)") : renderBar(wantsHeight, '#fab362')}
-                {essentials > wants ? renderBar(wantsHeight, '#fab362') : renderBar(essentialsHeight, "url(#essentialsGradient)")}
+                {/* Wants segment of the bar */}
+                {wantsSpent > 0 && renderBarSegment(essentialsHeight, wantsHeight, '#c18a4c')}
+                {/* Essentials segment of the bar */}
+                {essentialsSpent > 0 && renderBarSegment(0, essentialsHeight + (wantsSpent > 0 ? overlap : 0), "url(#essentialsGradient)")}
                 {showTooltip && (
                     <>
                         {/* Tooltip */}
@@ -63,17 +64,17 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                         {/* Tooltip Text */}
                         <text x={x + 23} y={tooltipPosY + tooltipHeight / 2 + 3} textAnchor="middle" fill='#f6f6f7' fontSize="10" fontFamily='Poppins'>Today</text>
                         {/* Text showing total value */}
-                        <text x={x + 20} y={tooltipPosY + tooltipHeight + 13} textAnchor="middle" fontSize="10" fontFamily='Poppins'>-{(essentials + wants).toLocaleString("en-US")}</text>
+                        <text x={x + 20} y={tooltipPosY + tooltipHeight + 13} textAnchor="middle" fontSize="10" fontFamily='Poppins'>-{totalSpent.toLocaleString("en-US")}</text>
                     </>
                 )}
             </g>
         );
-    };
+    };  
 
 
     const renderChangeContainer = () => {
-        const totalPrevMonth = previousMonth.essentials + previousMonth.wants;
-        const totalCurrMonth = currentMonth.essentials + currentMonth.wants;
+        const totalPrevMonth = previousMonth.essentials.spent + previousMonth.wants.spent;
+        const totalCurrMonth = currentMonth.essentials.spent + currentMonth.wants.spent;
         const changePercentage = ((totalCurrMonth - totalPrevMonth) / totalPrevMonth) * 100;
         const isIncrease = changePercentage >= 0;
 
@@ -113,10 +114,10 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 </defs>
 
                 {/* Stacked Bars for previous month */}
-                {renderStackedBar(0.2, previousMonth.essentials, previousMonth.wants, false)}
+                {renderStackedBar(0.2, previousMonth.essentials.spent, previousMonth.wants.spent, false)}
 
                 {/* Stacked Bars for current month */}
-                {renderStackedBar(0.39, currentMonth.essentials, currentMonth.wants, true)}
+                {renderStackedBar(0.39, currentMonth.essentials.spent, currentMonth.wants.spent, true)}
 
                 {/* Expense Limit */}
                 {renderLimitLine(expenseLimit, 'Expense Limit')}
