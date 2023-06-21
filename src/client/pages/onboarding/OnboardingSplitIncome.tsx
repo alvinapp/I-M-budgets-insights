@@ -6,9 +6,16 @@ import MainButton from "../components/MainButton";
 import NavBar from "../components/NavBar";
 import ArrowBackButton from "../components/ArrowBack";
 import ReactSlider from "react-slider";
+import { useConfigurationStore, IConfig } from "client/store/configuration";
+import { setIncome, completeOnboarding } from "client/api/users";
+import { GoalMacroType, setMacro } from "client/api/goals";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
+  const configuration = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
+
   const budgetSettingsStore = useBudgetSettingsStore();
   const { monthlyIncome, currency, incomeSplit } = budgetSettingsStore;
 
@@ -17,6 +24,34 @@ const OnboardingSplitIncome = () => {
   const [savingsRatio, setSavingsRatio] = useState(incomeSplit.savings);
 
   const generateSliderValues = (length = 100) => new Array(length).fill(1).map((_, i) => i+1);
+  const calculateIncomeAmount = (incomeRatio: number) => Math.floor(incomeRatio / 100 * monthlyIncome);
+
+  const saveOnboardingData = async () => {
+    await setIncome({ incomeAmount: monthlyIncome, configuration });
+
+    const macros: [GoalMacroType, number][] = [
+      ["Essentials", essentialsRatio],
+      ["Wants", wantsRatio],
+      ["Savings", savingsRatio],
+    ];
+
+    for (let i = 0; i < macros.length; i++) {
+      const [macroType, macroRatio] = macros[i];
+      await setMacro({ 
+        goalMacro: {
+          name: `${macroType} Total`,
+          type_name: macroType,
+          amount: calculateIncomeAmount(macroRatio),
+          percentage: 0,
+          share: macroRatio,
+          reset_micros: false,
+        }, 
+        configuration,
+      });
+    }
+
+    await completeOnboarding({ completionTime: new Date(), configuration });
+  };
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
@@ -43,7 +78,7 @@ const OnboardingSplitIncome = () => {
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="justify-self-start font-semibold">Essentials</div>
             <div className="justify-self-end font-semibold">
-              {essentialsRatio / 100 * monthlyIncome} {currency}
+              {calculateIncomeAmount(essentialsRatio)} {currency}
             </div>
             <div className="col-span-2">
               <ReactSlider
@@ -67,7 +102,7 @@ const OnboardingSplitIncome = () => {
           <div className="grid grid-cols-2 gap-4 w-full mt-16">
             <div className="justify-self-start font-semibold">Wants</div>
             <div className="justify-self-end font-semibold">
-              {wantsRatio / 100 * monthlyIncome} {currency}
+              {calculateIncomeAmount(wantsRatio)} {currency}
             </div>
             <div className="col-span-2">
               <ReactSlider
@@ -91,7 +126,7 @@ const OnboardingSplitIncome = () => {
           <div className="grid grid-cols-2 gap-4 w-full mt-16">
             <div className="justify-self-start font-semibold">Savings</div>
             <div className="justify-self-end font-semibold">
-              {savingsRatio / 100 * monthlyIncome} {currency}
+              {calculateIncomeAmount(savingsRatio)} {currency}
             </div>
             <div className="col-span-2">
               <ReactSlider
@@ -125,6 +160,7 @@ const OnboardingSplitIncome = () => {
               wants: wantsRatio,
               savings: savingsRatio,
             });
+            saveOnboardingData();
             navigate("/onboard-success");
           }}
         />

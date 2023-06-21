@@ -1,10 +1,36 @@
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
 
 import MainButton from "../components/MainButton";
 import splashImage from "../../assets/images/splash-1.png";
+import getToken from "client/api/token";
+import { useConfigurationStore, IConfig } from "client/store/configuration";
+import useUserStore from "client/store/userStore";
+import { showCustomToast } from "client/utils/Toast";
 
 const OnboardingStart = () => {
   const navigate = useNavigate();
+
+  const configurations = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
+  const setToken = useConfigurationStore((state: any) => state.setToken);
+  const setUser = useUserStore((state: any) => state.setUser);
+
+  const authenticateUser = async () => {
+    const response = await getToken(configurations);
+    if (response?.user) {
+      setUser(response.user);
+      setToken(response.token);
+    } else {
+      navigate("/");
+      showCustomToast({ message: "The sdk key is invalid" });
+    }
+  };
+
+  const { data } = useQuery(["token"], () => authenticateUser, {
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
