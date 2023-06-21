@@ -36,14 +36,14 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
     const renderStackedBar = (positionFactor: number, essentialsSpent: number, wantsSpent: number, showTooltip = false) => {
         const x = graphWidth * positionFactor;
         const totalSpent = essentialsSpent + wantsSpent;
-        const essentialsHeight = essentialsSpent * scaleFactor;
-        const wantsHeight = wantsSpent * scaleFactor;
-        const totalHeight = totalSpent * scaleFactor;
-        const overlap = 15; // units of overlap for a seamless transition
+        const essentialsHeight = Math.min(essentialsSpent, expenseLimit) * scaleFactor;
+        const wantsHeight = Math.min(wantsSpent, Math.max(0, expenseLimit - essentialsSpent)) * scaleFactor;
+        const exceededHeight = Math.max(0, totalSpent - expenseLimit) * scaleFactor;
+        const overlap = 15; // Overlap between segments for smooth transition
     
         const tooltipHeight = 20;
         const tooltipPadding = 5;
-        const tooltipPosY = graphHeight - totalHeight - tooltipHeight - tooltipPadding - 60; // adjust the Y position
+        const tooltipPosY = graphHeight - (essentialsHeight + wantsHeight + exceededHeight) - tooltipHeight - tooltipPadding - 60;
     
         const renderBarSegment = (offsetY: number, height: number, color: string) => (
             <rect x={x} y={graphHeight - 50 - height - offsetY} width="46" height={height} fill={color} rx="10" ry="10" />
@@ -51,10 +51,12 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
     
         return (
             <g>
+                {/* Exceeded segment of the bar */}
+                {exceededHeight > 0 && renderBarSegment(essentialsHeight + wantsHeight - overlap, exceededHeight + overlap, '#f99e36')}
                 {/* Wants segment of the bar */}
-                {wantsSpent > 0 && renderBarSegment(essentialsHeight, wantsHeight, '#c18a4c')}
+                {wantsHeight > 0 && renderBarSegment(essentialsHeight - overlap, wantsHeight + overlap, '#c18a4c')}
                 {/* Essentials segment of the bar */}
-                {essentialsSpent > 0 && renderBarSegment(0, essentialsHeight + (wantsSpent > 0 ? overlap : 0), "url(#essentialsGradient)")}
+                {essentialsHeight > 0 && renderBarSegment(0, essentialsHeight + (wantsHeight > 0 ? overlap : 0), "url(#essentialsGradient)")}
                 {showTooltip && (
                     <>
                         {/* Tooltip */}
@@ -69,7 +71,8 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 )}
             </g>
         );
-    };  
+    };
+      
 
 
     const renderChangeContainer = () => {
