@@ -15,6 +15,7 @@ module.exports = {
           accent: "var(--color-text-accent)",
           accent1: "var(--color-text-accent1)",
           accent2: "var(--color-text-accent2)",
+          accent3: "var(--color-text-accent3)",
           success: "var(--color-text-success)",
           successSecondary: "var(--color-text-success-secondary)",
           successNeutral: "var(--color-text-success-neutral)",

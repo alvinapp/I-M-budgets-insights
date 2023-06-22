@@ -43,7 +43,7 @@ export const ExpenditureComparisonCard = ({
           <div className="flex flex-col">
             <div
               className={`font-bold font-poppins text-xs ${
-                percentage < 0 ? "text-skin-successAccent" : "text-skin-accent1"
+                percentage < 0 ? "text-skin-successAccent" : "text-skin-accent3"
               } tracking-widest`}
             >
               {`${percentage > 0 ? "+" : ""}${percentage}%`}
