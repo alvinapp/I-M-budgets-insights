@@ -1,15 +1,16 @@
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
 type AmountViewProps = {
-  amount?: number;
+  amount: number;
   caption?: string;
+  flex?: string;
 };
-export const AmountView = ({ amount, caption }: AmountViewProps) => {
+export const AmountView = ({ amount, caption, flex }: AmountViewProps) => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
   return (
-    <div className="flex flex-col items-start">
+    <div className={`flex flex-col ${flex ?? "items-start"}`}>
       <div className="relative">
         <div className="absolute -top-1 -right-1 font-workSans text-xxxxxs text-skin-neutral2 font-semibold">
           {currencySymbol}

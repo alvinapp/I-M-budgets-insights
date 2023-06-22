@@ -238,3 +238,63 @@ export const expenditureList = [
     spent: 1000,
   },
 ];
+export const expenditureCompareList = [
+  {
+    id: 0,
+    name: "Rent / Mortgage",
+    macro_type: {
+      id: 1,
+      name: "Essentials",
+    },
+    icon_name: "rent",
+    emoji: "🏠",
+    percentage: -10,
+  },
+  {
+    id: 1,
+    name: "Groceries",
+    macro_type: {
+      id: 1,
+      name: "Essentials",
+    },
+    icon_name: "groceries",
+    emoji: "📚",
+    percentage: 5,
+  },
+  {
+    id: 2,
+    name: "Health",
+    macro_type: {
+      id: 1,
+      name: "Essentials",
+    },
+    icon_name: "health",
+    extern_id: 5,
+    emoji: "💚",
+    percentage: 1,
+  },
+  {
+    id: 3,
+    name: "Bills & Fees",
+    macro_type: {
+      id: 1,
+      name: "Essentials",
+    },
+    icon_name: "bills",
+    extern_id: 1,
+    emoji: "💳",
+    percentage: -12,
+  },
+  {
+    id: 4,
+    name: "Data & WiFi",
+    macro_type: {
+      id: 1,
+      name: "Essentials",
+    },
+    icon_name: "datawifi",
+    extern_id: 2,
+    emoji: "🌐",
+    percentage: 2,
+  },
+];

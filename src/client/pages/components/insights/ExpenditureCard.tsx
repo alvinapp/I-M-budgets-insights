@@ -35,12 +35,12 @@ export const ExpenditureCard = ({
         </div>
       </div>
       <div className="flex flex-col">
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center justify-end">
           <div className="flex flex-col relative mr-8 items-end">
-            <div className="absolute -top-2 -right-1 font-bold font-poppins text-xxxs text-skin-base">
+            <div className="absolute -top-2 -right-1 font-bold font-poppins text-xxxs text-skin-neutral">
               {currencySymbol}
             </div>
-            <div className="font-bold font-poppins text-xs text-skin-base tracking-widest">
+            <div className="font-bold font-poppins text-xs text-skin-neutral tracking-widest">
               {budget}
             </div>
           </div>

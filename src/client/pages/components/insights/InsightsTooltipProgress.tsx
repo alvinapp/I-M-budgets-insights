@@ -55,7 +55,7 @@ const InsightsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
           })}
         </div>
       </div>
-      <div className="flex flex-row mt-2.5">
+      <div className="flex flex-row mt-2.5 w-full">
         <div className="tooltip-progress-bar" style={{ backgroundColor }}>
           <div
             className="tooltip-progress-bar-progress"

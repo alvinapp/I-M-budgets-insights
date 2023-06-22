@@ -16,6 +16,9 @@ import TabFilter from "../components/TabFilter";
 import { MySpend } from "../components/insights/MySpend";
 import { OthersSpend } from "../components/insights/OthersSpend";
 import { ExpenditureCard } from "../components/insights/ExpenditureCard";
+import ExpenditureBarGraph from "../components/ExpenditureBarGraph";
+import SavingsBarGraph from "../components/SavingsBarGraph";
+import CashFlowPieChart from "../components/CashFlowPieChart";
 
 const InsightsView = () => {
   const currencySymbol = useCurrencySettingsStore(
@@ -45,8 +48,8 @@ const InsightsView = () => {
         />
       </div>
       <div className="flex-grow h-px bg-skin-accent3"></div>
-      <div className="flex flex-col mt-2 mx-3.5">
-        <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-col mt-7 mx-3.5">
+        <div className="flex flex-row items-center justify-between mr-5">
           <AvailableBudgetContainer
             amount={160300}
             subtitle="Current total spending"
@@ -56,6 +59,51 @@ const InsightsView = () => {
             tabs={insightsToggleTabs}
             activeTab={toggleTabId}
             onClick={(tab: any) => setToggleTabId(tab.id)}
+          />
+        </div>
+        <div className="flex flex-row mt-4 mb-6 mr-5">
+          {toggleTabId === 0 ? (
+            <ExpenditureBarGraph
+              previousMonth={{
+                essentials: {
+                  spent: 350000,
+                  expenseLimit: 400000,
+                },
+                wants: {
+                  spent: 350000,
+                  expenseLimit: 200000,
+                },
+              }}
+              currentMonth={{
+                essentials: {
+                  spent: 250000,
+                  expenseLimit: 400000,
+                },
+                wants: {
+                  spent: 250000,
+                  expenseLimit: 200000,
+                },
+              }}
+              budgetLimit={800000}
+            />
+          ) : (
+            <SavingsBarGraph
+              previousMonthSavings={198000}
+              currentMonthSavings={163000}
+              savingsTarget={150000}
+              budgetLimit={350000}
+            />
+          )}
+        </div>
+        <div className="flex flex-row">
+          <CashFlowPieChart
+            dimensions={190}
+            doughnutThickness={14}
+            values={{
+              moneyIn: 1000000,
+              moneyOut: 500000,
+            }}
+            percentageChange={5}
           />
         </div>
         <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">

@@ -86,12 +86,6 @@ export const BudgetSettings = () => {
             </div>
           </div>
         </div>
-        <CashFlowPieChart dimensions={190} doughnutThickness={14} values={{
-          moneyIn: 1000000,
-          moneyOut: 500000,
-        }}
-          percentageChange={5}
-        />
         <div className="shadow-card px-4 pt-5 pb-3 mt-10 rounded-lg">
           <BudgetDisplay
             title="Essentials"

@@ -19,7 +19,7 @@ export const MySpend = ({}) => {
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
         <AmountView caption="Spent" amount={160300} />
-        <AmountView caption="Planned budget" amount={300000} />
+        <AmountView caption="Planned budget" amount={300000} flex="items-end" />
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
       <div className="flex flex-row items-center justify-between mb-6">
