@@ -4,7 +4,7 @@ import MacroProgressBar from "./MacroProgressBar";
 interface MacroProgressBarsContainerProps {
   ratios: string; // format like "50/30/20"
   budgetAmount: { [key: string]: number };
-  progressPercentage: { [key: string]: number };
+  progressPercentage?: { [key: string]: number };
 }
 
 const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({

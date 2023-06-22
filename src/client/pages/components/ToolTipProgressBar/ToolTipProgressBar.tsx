@@ -29,7 +29,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   };
 
   const tooltipStyle = {
-    left: `calc(${progress}% - 2em)`,
+    left: `calc(${progress}% - 2.1em)`,
     transform: "scale(0.8)",
     background: "black",
     height: "30px",
@@ -54,7 +54,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
         ></div>
         <div
           className="dotted-divider-container"
-          style={{ left: `calc(${Math.ceil(progress)}%)` }}
+          style={{ left: `calc(${progress}%)` }}
         >
           <div className="dotted-divider"></div>
         </div>
