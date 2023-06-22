@@ -14,8 +14,7 @@ import { essentials, savings, wants } from "client/utils/MockData";
 import { CategoryViewCard } from "../components/budget/CategoryViewCard";
 import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
 import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
-
-export const BudgetsView = () => {
+const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
@@ -37,7 +36,7 @@ export const BudgetsView = () => {
           <HorizontalDateToggle />
         </div>
       </div>
-      <div className="border border-skin-accent mt-2"></div>
+      <div className="flex-grow h-px bg-skin-accent3"></div>
       <div className="flex flex-col mx-3.5  mt-8">
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
@@ -175,3 +174,4 @@ export const BudgetsView = () => {
     </div>
   );
 };
+export default BudgetsView;

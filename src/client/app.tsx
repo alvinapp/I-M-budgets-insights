@@ -7,7 +7,6 @@ import "./style.scss";
 import { TailSpin } from "react-loader-spinner";
 import { ToastContainer } from "react-toastify";
 import { BudgetSettings } from "./pages/budgets/BudgetSettings";
-import { BudgetsView } from "./pages/budgets/BudgetsView";
 
 declare var AppConfig: AppConfig;
 
@@ -23,6 +22,9 @@ const OnboardingSplitIncome = lazy(
 const OnboardingSuccess = lazy(
   () => import("./pages/onboarding/OnboardingSuccess")
 );
+const BudgetsView = lazy(() => import("./pages/budgets/BudgetsView"));
+
+const InsightsView = lazy(() => import("./pages/insights/InsightsView"));
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -47,7 +49,7 @@ const App = () => {
             }
           >
             <Routes>
-              <Route path="/" element={<BudgetsView />} />
+              <Route path="/" element={<InsightsView />} />
               <Route path="/onboard-start" element={<OnboardingStart />} />
               <Route
                 path="/onboard-add-income"
@@ -60,6 +62,7 @@ const App = () => {
               <Route path="/onboard-success" element={<OnboardingSuccess />} />
               <Route path="/budget-settings" element={<BudgetSettings />} />
               <Route path="/budgets-view" element={<BudgetsView />} />
+              <Route path="/budgets-view" element={<InsightsView />} />
             </Routes>
           </Suspense>
           <ToastContainer />

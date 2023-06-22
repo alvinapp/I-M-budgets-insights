@@ -51,6 +51,7 @@ module.exports = {
           warningWithOpacity: "var(--color-background-warning-withOpacity)",
           accent: "var(--color-background-accent)",
           accent2: "var(--color-background-accent2)",
+          accent3: "var(--color-background-accent3)",
           accent2WithOpacity: "var(--color-background-accent2-withOpacity)",
           neutral: "var(--color-background-neutral)",
           tertiary: "var(--color-background-tertiary)",
