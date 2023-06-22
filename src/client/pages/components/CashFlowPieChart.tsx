@@ -34,7 +34,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   let cumulativePercentage = 0;
 
   return (
-    <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col">
+    <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full">
       <div className="flex flex-row justify-start items-center pl-3.5">
         <h2 className="font-workSans text-base font-semibold">Cash flow</h2>
         <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>

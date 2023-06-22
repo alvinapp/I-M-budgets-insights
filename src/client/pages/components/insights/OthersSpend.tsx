@@ -4,6 +4,7 @@ import { AmountView } from "./AmountView";
 import InsightsTooltipProgressBar from "./InsightsTooltipProgress";
 import { ExpenditureComparisonCard } from "./ExpenditureComparisonCard";
 import { expenditureCompareList } from "client/utils/MockData";
+import MacroPieChartWithLegend from "../MacroPieChartWithLegend";
 type OthersSpendProps = {
   spentBudget?: number;
   plannedBudget?: number;
@@ -27,6 +28,19 @@ export const OthersSpend = ({
         <AmountView caption="Planned budget" amount={300000} flex="items-end" />
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
+      <div className="flex flex-row">
+        <MacroPieChartWithLegend
+          dimensions={190}
+          doughnutThickness={12}
+          values={{
+            wants: 120000,
+            essentials: 90000,
+            savings: 60000,
+            unallocated: 40000,
+          }}
+        />
+      </div>
+      <div className="flex-grow h-px bg-skin-accent3 mt-4.5 mb-6"></div>
       <div className="flex flex-row items-center justify-between mb-6">
         <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide">
           Categories
