@@ -3,13 +3,14 @@ import React from "react";
 type NavBarTitleProps = {
   title?: string;
   titleColor?: string;
+  fontSize?: string;
 };
-const NavBarTitle = ({ title, titleColor }: NavBarTitleProps) => {
+const NavBarTitle = ({ title, titleColor, fontSize }: NavBarTitleProps) => {
   return (
     <div
-      className={`tracking-title font-workSans font-semibold text-base ${
+      className={`tracking-title font-workSans font-semibold ${
         titleColor != null ? titleColor : "text-black"
-      }`}
+      } ${fontSize ?? "text-base"}`}
     >
       {title}
     </div>

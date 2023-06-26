@@ -11,6 +11,11 @@ module.exports = {
           info: "var(--color-text-info)",
           secondary: "var(--color-text-secondary)",
           neutral: "var(--color-text-neutral)",
+          neutral2: "var(--color-text-neutral2)",
+          accent: "var(--color-text-accent)",
+          accent1: "var(--color-text-accent1)",
+          accent2: "var(--color-text-accent2)",
+          accent3: "var(--color-text-accent3)",
           success: "var(--color-text-success)",
           successSecondary: "var(--color-text-success-secondary)",
           successNeutral: "var(--color-text-success-neutral)",
@@ -23,6 +28,8 @@ module.exports = {
           inputDisabled: "var(--color-text-input-disabled)",
           iconTertiary: "var(--color-text-icon-tertiary)",
           iconSecondary: "var(--color-text-icon-secondary)",
+          alvinBrown: "var(--color-text-alvin-brown)",
+          alvinBrownFaded: "var(--color-text-alvin-brown-faded)",
         },
       },
       backgroundColor: {
@@ -35,6 +42,8 @@ module.exports = {
             "var(--color-background-secondary1-withOpacity)",
           secondary2WithOpacity:
             "var(--color-background-secondary2-withOpacity)",
+          secondary3WithOpacity:
+            "var(--color-background-secondary2-withOpacity)",
           success: "var(--color-background-success)",
           successNeutral: "var(--color-background-success-neutral)",
           successWithOpacity:
@@ -45,7 +54,10 @@ module.exports = {
           warningWithOpacity: "var(--color-background-warning-withOpacity)",
           accent: "var(--color-background-accent)",
           accent2: "var(--color-background-accent2)",
+          accent3: "var(--color-background-accent3)",
+          accent4: "var(--color-background-accent4)",
           accent2WithOpacity: "var(--color-background-accent2-withOpacity)",
+          accent4WithOpacity: "var(--color-background-accent4-withOpacity)",
           neutral: "var(--color-background-neutral)",
           tertiary: "var(--color-background-tertiary)",
           input: "var(--color-background-input)",
@@ -132,9 +144,12 @@ module.exports = {
         button: "0 2px 4px -1px #9BC1D0, 0 8px 16px -1px #9BC1D0",
         input: "0 1px 6px -0.5px #9BC1D0",
         knob: "0 2px 6px 0 #C3C3C3;",
+        budgetButton:
+          "inset 0 1px 0 0 rgba(255,255,255,0.1), 0 1px 8px -1px #C3C3C3",
       },
     },
     fontSize: {
+      xxxxxs: ".555rem",
       xxxxs: ".619rem",
       xxxs: ".625rem",
       xxs: ".655rem",

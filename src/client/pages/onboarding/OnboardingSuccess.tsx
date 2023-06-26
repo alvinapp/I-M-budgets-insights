@@ -9,7 +9,9 @@ const OnboardingSuccess = () => {
   const budgetSettingsStore = useBudgetSettingsStore();
   const { incomeSplit } = budgetSettingsStore;
 
-  const [essentialsRatio, setEssentialsRatio] = useState(incomeSplit.essentials);
+  const [essentialsRatio, setEssentialsRatio] = useState(
+    incomeSplit.essentials
+  );
   const [wantsRatio, setWantsRatio] = useState(incomeSplit.wants);
   const [savingsRatio, setSavingsRatio] = useState(incomeSplit.savings);
 
@@ -21,9 +23,9 @@ const OnboardingSuccess = () => {
             Great Job!
           </div>
           <div className="text-xxs font-poppins tracking-longtext mt-4">
-            This looks like a very balanced budget and a great roadmap for you 
-            to hit your financial goals. We will notify you whenever you overspend in a 
-            category so that you can stay on track.
+            This looks like a very balanced budget and a great roadmap for you
+            to hit your financial goals. We will notify you whenever you
+            overspend in a category so that you can stay on track.
             <br></br>
           </div>
         </div>
