@@ -61,7 +61,7 @@ const InsightsView = () => {
             onClick={(tab: any) => setToggleTabId(tab.id)}
           />
         </div>
-        <div className="flex flex-row mt-4 mb-6 mr-5">
+        <div className="flex flex-row mt-4 mb-6">
           {toggleTabId === 0 ? (
             <ExpenditureBarGraph
               previousMonth={{
