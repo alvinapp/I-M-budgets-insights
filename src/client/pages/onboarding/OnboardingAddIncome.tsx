@@ -1,17 +1,18 @@
 import { useState } from "react";
+import { FiBriefcase } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
 import MainButton from "../components/MainButton";
 import NavBar from "../components/NavBar";
 import ArrowBackButton from "../components/ArrowBack";
+import MonthlyIncomeInput from "../components/onboarding/MonthlyIncomeInput";
 
 const OnboardingAddIncome = () => {
   const navigate = useNavigate();
   const budgetSettingsStore = useBudgetSettingsStore();
-  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
-    budgetSettingsStore.monthlyIncome
-  );
+  const { currency } = budgetSettingsStore;
+  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(budgetSettingsStore.monthlyIncome);
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
@@ -24,27 +25,28 @@ const OnboardingAddIncome = () => {
       />
 
       <div className="h-1/4">
-        <div className="flex flex-col mt-14 mx-10 items-left">
-          <div className="font-workSans font-semibold text-xl tracking-subtitle">
+        <div className="flex flex-col mt-6 mx-10 items-left">
+          <FiBriefcase height="16.67px" width="18.33px" fill="#33982A" />
+          <div className="font-workSans font-semibold text-xl tracking-subtitle mt-4">
             What's your monthly net income?
           </div>
-          <div className="text-xxs font-poppins tracking-longtext mt-4">
-            We need to use this as a base calculation for your overall monthly
-            budget. You can always modify later.
+          <div className="text-xs font-poppins text-[#878787] tracking-longtext mt-4">
+            We need to use this as a base calculation for your overall monthly budget.
+            You can always modify later.
             <br></br>
             <a href="/404-not-found">Learn More</a>
           </div>
         </div>
         <div className="flex flex-col mt-32 mx-10 items-center">
-          <input
-            type="number"
-            name="monthly-net-income"
-            id="monthlyNetIncome"
-            className="block w-full border-0 border-transparent border-b-2 border-b-neutral-800 py-4 pl-7 pr-20 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-            placeholder="0"
+          <MonthlyIncomeInput
             value={monthlyIncomeValue}
-            onChange={(e) => setMonthlyIncomeValue(Number(e.target.value))}
+            maxValue={Number.MAX_SAFE_INTEGER}
+            currencySymbol={currency}
+            onChange={setMonthlyIncomeValue}
           />
+          <div className="text-[10px] font-poppins text-[#B0B0B0] text-center mt-1">
+            *equals your overall monthly budget
+          </div>
         </div>
       </div>
 

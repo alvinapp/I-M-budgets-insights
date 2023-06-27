@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FiPieChart } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
@@ -67,7 +68,8 @@ const OnboardingSplitIncome = () => {
 
       <div className="h-3/4">
         <div className="flex flex-col mt-4 mx-10 items-left">
-          <div className="font-workSans font-semibold text-xl tracking-subtitle">
+          <FiPieChart height={"18.33px"} width={"18.33px"} fill="#555466" />
+          <div className="font-workSans font-semibold text-xl tracking-subtitle mt-4">
             Whoop! Here is your recommended budget split.
           </div>
           <div className="text-xxs font-poppins tracking-longtext mt-4">
