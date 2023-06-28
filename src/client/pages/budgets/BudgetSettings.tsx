@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ArrowBackButton from "../components/ArrowBack";
 import NavBar from "../components/NavBar";
 import NavBarTitle from "../components/NavBarTitle";
@@ -13,22 +13,31 @@ import useCategoriesStore from "client/store/categoriesStore";
 import { Category } from "client/models/Categories";
 import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
 import MainButton from "../components/MainButton";
-import MacroPieChart from "../components/MacroPieChart";
-import MacroPieChartLegend from "../components/MacroPieChartLegend";
-import MacroPieChartWithLegend from "../components/MacroPieChartWithLegend";
-import CashFlowPieChart from "../components/CashFlowPieChart";
-import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
-import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
 import { GeneralInfoCard } from "../components/budget/GeneralInfoCard";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 
 export const BudgetSettings = () => {
   const configuration = useConfigurationStore((state: any) => state as IConfig);
   const categoriesStore = useCategoriesStore((state: any) => state);
-  const { isFetching: fetchingCategories } = useQuery("fetch-categories", () =>
-    getCategories({ configuration: configuration }).then((result) => {
-      categoriesStore.setCategories(result);
-    })
+  const { isFetching: fetchingCategories } = useQuery(
+    "fetch-categories",
+    () =>
+      getCategories({ configuration: configuration }).then((result) => {
+        categoriesStore.setCategories(result);
+        result
+          .filter(
+            (element: Category) => element.macro_type?.name === "Essentials"
+          )
+          .map((essentials: any, i: any) =>
+            setEssentialsMapState(new Map(essentialsMapState.set(i, 0)))
+          );
+        result
+          .filter((element: Category) => element.macro_type?.name === "Wants")
+          .map((wants: any, i: any) =>
+            setWantsMapState(new Map(essentialsMapState.set(i, 0)))
+          );
+      }),
+    { refetchOnWindowFocus: false }
   );
   const wantsCategories = categoriesStore.categories?.filter(
     (element: Category) => element.macro_type?.name === "Wants"
@@ -42,6 +51,14 @@ export const BudgetSettings = () => {
   );
   const [selectedEssesntialId, setSelectedEssentialId] = useState();
   const [selectedWantsId, setSelectedWantsId] = useState();
+  const [essentialsMapState, setEssentialsMapState] = useState(new Map());
+  const [wantsMapState, setWantsMapState] = useState(new Map());
+  const updateEssentialsMap = (key: any, value: any) => {
+    setEssentialsMapState((map) => new Map(map.set(key, value)));
+  };
+  const updateWantsMap = (key: any, value: any) => {
+    setWantsMapState((map) => new Map(map.set(key, value)));
+  };
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -71,22 +88,14 @@ export const BudgetSettings = () => {
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
           caption="50/30/20"
         />
-        <div className="mb-4 mt-5 flex flex-row w-full items-center justify-center">
-          <div className="flex flex-col">
-            <div className="w-36">
-              <div className="border"></div>
-            </div>
-          </div>
+        <div className="mb-4 mt-5 flex flex-row items-center justify-center px-3.5">
+          <div className="flex-grow h-px bg-skin-accent3"></div>
           <div className="flex flex-col">
             <FiPieChart size="1.5rem" color="#555466" />
           </div>
-          <div className="flex flex-col">
-            <div className="w-36">
-              <div className="border"></div>
-            </div>
-          </div>
+          <div className="flex-grow h-px bg-skin-accent3"></div>
         </div>
-        <div className="shadow-card px-4 pt-5 pb-3 mt-10 rounded-lg">
+        <div className="shadow-card px-4 pt-5 pb-3 rounded-lg">
           <BudgetDisplay
             title="Essentials"
             budgetAmount={150000}
@@ -114,20 +123,21 @@ export const BudgetSettings = () => {
             {essentialsCategories && essentialsCategories.length > 0 ? (
               essentialsCategories.map((category: Category, i: any) => {
                 const isSelected = i === selectedEssesntialId;
+                const amount = essentialsMapState.get(i);
                 return (
                   <BudgetSettingCard
                     key={i}
                     category={category?.name}
                     emoji={category?.emoji}
-                    amount={categoriesStore.categoryAmount}
+                    amount={amount}
                     selected={isSelected}
                     increment={() => {
                       setSelectedEssentialId(i);
-                      categoriesStore.incrementCategoryAmount();
+                      updateEssentialsMap(i, amount + 500);
                     }}
                     decrement={() => {
                       setSelectedEssentialId(i);
-                      categoriesStore.decrementCategoryAmount();
+                      updateEssentialsMap(i, amount - 500);
                     }}
                   />
                 );
@@ -165,20 +175,23 @@ export const BudgetSettings = () => {
             {wantsCategories && wantsCategories.length > 0 ? (
               wantsCategories.map((category: Category, i: any) => {
                 const isSelected = i === selectedWantsId;
+                const amount = wantsMapState.get(i);
                 return (
                   <BudgetSettingCard
                     key={i}
                     category={category?.name}
                     emoji={category?.emoji}
-                    amount={categoriesStore.categoryAmount}
+                    amount={amount}
                     selected={isSelected}
                     increment={() => {
                       setSelectedWantsId(i);
-                      categoriesStore.incrementCategoryAmount();
+                      // categoriesStore.incrementCategoryAmount();
+                      updateWantsMap(i, amount + 500);
                     }}
                     decrement={() => {
                       setSelectedWantsId(i);
-                      categoriesStore.decrementCategoryAmount();
+                      // categoriesStore.decrementCategoryAmount();
+                      updateWantsMap(i, amount - 500);
                     }}
                   />
                 );
