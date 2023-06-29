@@ -23,7 +23,7 @@ export const MonthlyIncomeInput = ({
       </div>
       <div className="relative px-2 flex flex-row justify-center items-center">
         <input
-          className="bg-transparent font-workSans text-4xl tracking-title text-skin-base text-center font-semibold w-full border-b-2 border-b-skin-primary border-l-0 border-r-0 border-t-0 focus:border-t-0 focus:border-r-0 focus:border-l-0"
+          className="bg-transparent font-workSans text-4xl tracking-title text-skin-base text-center font-semibold w-full border-b-2 border-b-skin-primary border-l-0 border-r-0 border-t-0 focus:ring-0 focus:outline-0 focus:border-b-skin-primary"
           type="number"
           value={value}
           min={0}

@@ -49,7 +49,7 @@ const BookingSuccess = () => {
         </div>
       </div>
       <div className="absolute bottom-10 left-0 right-0 flex justify-center mx-3.5">
-        <SuccessButton loading={true} />
+        <SuccessButton click={() => navigate("/budget-settings")} />
       </div>
     </div>
   );

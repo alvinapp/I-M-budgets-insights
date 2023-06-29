@@ -49,7 +49,7 @@ const App = () => {
             }
           >
             <Routes>
-              <Route path="/" element={<OnboardingSuccess />} />
+              <Route path="/" element={<OnboardingStart />} />
               <Route path="/onboard-start" element={<OnboardingStart />} />
               <Route
                 path="/onboard-add-income"
@@ -62,7 +62,7 @@ const App = () => {
               <Route path="/onboard-success" element={<OnboardingSuccess />} />
               <Route path="/budget-settings" element={<BudgetSettings />} />
               <Route path="/budgets-view" element={<BudgetsView />} />
-              <Route path="/budgets-view" element={<InsightsView />} />
+              <Route path="/insights-view" element={<InsightsView />} />
             </Routes>
           </Suspense>
           <ToastContainer />

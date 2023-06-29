@@ -170,7 +170,7 @@ const OnboardingSplitIncome = () => {
               wants: wantsRatio,
               savings: savingsRatio,
             });
-            saveOnboardingData();
+            // saveOnboardingData();
             navigate("/onboard-success");
           }}
         />

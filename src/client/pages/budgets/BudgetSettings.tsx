@@ -227,7 +227,7 @@ export const BudgetSettings = () => {
           </div>
         </div>
         <div className="mt-2">
-          <MainButton title="All set" isDisabled={true} />
+          <MainButton title="All set" click={() => navigate("/budgets-view")} />
         </div>
       </div>
     </div>
