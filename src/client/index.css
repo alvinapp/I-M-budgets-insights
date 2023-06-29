@@ -16,6 +16,11 @@
     --color-text-secondary: #4e6783;
     --color-text-info: #3783a1;
     --color-text-neutral: #6f89a5;
+    --color-text-neutral2: #27253a;
+    --color-text-accent: #d0ddea;
+    --color-text-accent1: #cbc95f;
+    --color-text-accent2: #f2f2f2;
+    --color-text-accent3: #cbc95f;
     --color-text-success: #297a22;
     --color-text-success-secondary: #85c17f;
     --color-text-success-neutral: #d6ead4;
@@ -28,6 +33,8 @@
     --color-text-input-disabled: #9db1c6;
     --color-text-icon-secondary: #555466;
     --color-text-icon-tertiary: #8b714f;
+    --color-text-alvin-brown: #6f5a3f;
+    --color-text-alvin-brown-faded: #b9aa95;
     --color-button-primary: #056489;
     --color-button-neutral: #6f89a5;
     --color-background-base: #ffffff;
@@ -44,9 +51,15 @@
     --color-background-secondary-withOpacity: rgba(205, 224, 231, 0.3);
     --color-background-secondary1-withOpacity: rgba(205, 224, 231, 0.1);
     --color-background-secondary2-withOpacity: rgba(205, 224, 231, 0.2);
+    --color-background-secondary3-withOpacity: rgba(213, 212, 217, 0.2);
     --color-background-accent: #d0ddea;
+    --color-background-accent3: #e7e7e7;
+    --color-background-accent4: #cbc95f;
+    --color-background-accent4WithOpacity: rgba(203, 201, 95, 0.2);
+    --color-background-accent3WithOpacity: rgba(231, 231, 231, 0.42);
     --color-background-neutral: #6f89a5;
     --color-background-tertiary: #f2f5f8;
+    --color-background-tertiaryWithOpacity: rgb(213, 212, 217, 0.2);
     --color-background-input: #e6e9ed;
     --color-background-input-button: #e7edf3;
     --color-background-divider: #d3d3d3;

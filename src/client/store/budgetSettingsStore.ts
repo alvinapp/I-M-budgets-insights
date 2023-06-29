@@ -13,9 +13,9 @@ interface BudgetSettings {
 }
 
 type IBudgetSettingsStore = BudgetSettings & {
-  setMonthlyIncome: ((amount: number) => void);
-  setIncomeSplit: ((split: IncomeSplit) => void);
-}
+  setMonthlyIncome: (amount: number) => void;
+  setIncomeSplit: (split: IncomeSplit) => void;
+};
 
 const useBudgetSettingsStore = create<IBudgetSettingsStore>((set) => ({
   currency: "₦",

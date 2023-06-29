@@ -1,5 +1,5 @@
 import React from "react";
-import { FiChevronLeft } from "react-icons/fi";
+import { FiArrowLeft, FiChevronLeft } from "react-icons/fi";
 type BackButtonProps = {
   onClick?: () => void;
   background?: string;
@@ -10,7 +10,7 @@ const BackButton = ({ onClick, background }: BackButtonProps) => {
       className={`rounded-full p-3 flex items-center justify-center focus:outline-none focus:rounded-full ${background}`}
       onClick={onClick}
     >
-      <FiChevronLeft color="#6F89A5" size="1.4375rem" />
+      <FiArrowLeft color="#4E6783" size="1.5rem" />
       <i data-feather="chevron-left"></i>
     </button>
   );

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FiPieChart } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
@@ -19,12 +20,16 @@ const OnboardingSplitIncome = () => {
   const budgetSettingsStore = useBudgetSettingsStore();
   const { monthlyIncome, currency, incomeSplit } = budgetSettingsStore;
 
-  const [essentialsRatio, setEssentialsRatio] = useState(incomeSplit.essentials);
+  const [essentialsRatio, setEssentialsRatio] = useState(
+    incomeSplit.essentials
+  );
   const [wantsRatio, setWantsRatio] = useState(incomeSplit.wants);
   const [savingsRatio, setSavingsRatio] = useState(incomeSplit.savings);
 
-  const generateSliderValues = (length = 100) => new Array(length).fill(1).map((_, i) => i+1);
-  const calculateIncomeAmount = (incomeRatio: number) => Math.floor(incomeRatio / 100 * monthlyIncome);
+  const generateSliderValues = (length = 100) =>
+    new Array(length).fill(1).map((_, i) => i + 1);
+  const calculateIncomeAmount = (incomeRatio: number) =>
+    Math.floor((incomeRatio / 100) * monthlyIncome);
 
   const saveOnboardingData = async () => {
     await setIncome({ incomeAmount: monthlyIncome, configuration });
@@ -37,7 +42,7 @@ const OnboardingSplitIncome = () => {
 
     for (let i = 0; i < macros.length; i++) {
       const [macroType, macroRatio] = macros[i];
-      await setMacro({ 
+      await setMacro({
         goalMacro: {
           name: `${macroType} Total`,
           type_name: macroType,
@@ -45,7 +50,7 @@ const OnboardingSplitIncome = () => {
           percentage: 0,
           share: macroRatio,
           reset_micros: false,
-        }, 
+        },
         configuration,
       });
     }
@@ -62,19 +67,24 @@ const OnboardingSplitIncome = () => {
           </div>
         }
       />
+      <div className="flex-grow h-px bg-skin-accent3"></div>
 
-      <div className="h-3/4">
-        <div className="flex flex-col mt-4 mx-10 items-left">
-          <div className="font-workSans font-semibold text-xl tracking-subtitle">
-            Whoop! Here is your recommended budget split.
-          </div>
-          <div className="text-xxs font-poppins tracking-longtext mt-4">
-            The best practice for budgeting is 50% of your income for Essentials, 30% for Wants,
-            then 20% for Savings. However, you can personalize your budget split below.
+      <div className="flex flex-col mt-3 items-left">
+        <div className="rounded-full h-11 w-11 bg-skin-tertiaryWithOpacity flex justify-center items-center mx-3.5">
+          <FiPieChart color="#555466" />
+        </div>
+        <div className="font-workSans font-semibold text-xl tracking-title mt-1.5 mx-3.5">
+          Whoop! Here is your recommended budget split.
+        </div>
+        <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
+          <div className="text-xs font-poppins text-skin-subtitle tracking-wide mt-6 font-medium mx-3.5">
+            The best practice for budgeting is 50% of your income for
+            Essentials, 30% for Wants, then 20% for Savings. However, you can
+            personalize your budget split below.
             <br></br>
           </div>
         </div>
-        <div className="flex flex-col mt-12 mx-10 text-sm">
+        <div className="flex flex-col mt-12 mx-6">
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="justify-self-start font-semibold">Essentials</div>
             <div className="justify-self-end font-semibold">
@@ -82,21 +92,21 @@ const OnboardingSplitIncome = () => {
             </div>
             <div className="col-span-2">
               <ReactSlider
-                  value={essentialsRatio}
-                  className="horizontal-slider"
-                  marks={generateSliderValues()}
-                  markClassName="example-mark"
-                  min={0}
-                  max={100}
-                  thumbClassName="example-thumb"
-                  trackClassName="example-track"
-                  renderThumb={(props, state) => (
-                    <div {...props}>{`${state.valueNow}%`}</div>
-                  )}
-                  onChange={(value) => {
-                    setEssentialsRatio(value);
-                  }}
-                />
+                value={essentialsRatio}
+                className="horizontal-slider"
+                marks={generateSliderValues()}
+                markClassName="example-mark"
+                min={0}
+                max={100}
+                thumbClassName="example-thumb"
+                trackClassName="example-track"
+                renderThumb={(props, state) => (
+                  <div {...props}>{`${state.valueNow}%`}</div>
+                )}
+                onChange={(value) => {
+                  setEssentialsRatio(value);
+                }}
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 w-full mt-16">
@@ -106,21 +116,21 @@ const OnboardingSplitIncome = () => {
             </div>
             <div className="col-span-2">
               <ReactSlider
-                  value={wantsRatio}
-                  className="horizontal-slider"
-                  marks={generateSliderValues()}
-                  markClassName="example-mark"
-                  min={0}
-                  max={100}
-                  thumbClassName="example-thumb"
-                  trackClassName="example-track"
-                  renderThumb={(props, state) => (
-                    <div {...props}>{`${state.valueNow}%`}</div>
-                  )}
-                  onChange={(value) => {
-                    setWantsRatio(value);
-                  }}
-                />
+                value={wantsRatio}
+                className="horizontal-slider"
+                marks={generateSliderValues()}
+                markClassName="example-mark"
+                min={0}
+                max={100}
+                thumbClassName="example-thumb"
+                trackClassName="example-track"
+                renderThumb={(props, state) => (
+                  <div {...props}>{`${state.valueNow}%`}</div>
+                )}
+                onChange={(value) => {
+                  setWantsRatio(value);
+                }}
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 w-full mt-16">
@@ -130,21 +140,21 @@ const OnboardingSplitIncome = () => {
             </div>
             <div className="col-span-2">
               <ReactSlider
-                  value={savingsRatio}
-                  className="horizontal-slider"
-                  marks={generateSliderValues()}
-                  markClassName="example-mark"
-                  min={0}
-                  max={100}
-                  thumbClassName="example-thumb"
-                  trackClassName="example-track"
-                  renderThumb={(props, state) => (
-                    <div {...props}>{`${state.valueNow}%`}</div>
-                  )}
-                  onChange={(value) => {
-                    setSavingsRatio(value);
-                  }}
-                />
+                value={savingsRatio}
+                className="horizontal-slider"
+                marks={generateSliderValues()}
+                markClassName="example-mark"
+                min={0}
+                max={100}
+                thumbClassName="example-thumb"
+                trackClassName="example-track"
+                renderThumb={(props, state) => (
+                  <div {...props}>{`${state.valueNow}%`}</div>
+                )}
+                onChange={(value) => {
+                  setSavingsRatio(value);
+                }}
+              />
             </div>
           </div>
         </div>

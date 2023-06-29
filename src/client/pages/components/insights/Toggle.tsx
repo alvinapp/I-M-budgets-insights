@@ -1,17 +1,18 @@
 import React from "react";
-import TabButton from "client/pages/components/TabButton";
-type TabFilterProps = {
+import { ToggleButton } from "./ToggleButton";
+
+type ToggleProps = {
   tabs?: Array<any>;
   activeTab?: any;
   onClick?: (tab: any) => void;
 };
-const TabFilter = ({ tabs, activeTab, onClick }: TabFilterProps) => {
+const Toggle = ({ tabs, activeTab, onClick }: ToggleProps) => {
   return (
-    <div className="flex flex-row justify-between items-center w-full">
+    <div className="flex flex-row justify-between items-center rounded-3xl bg-skin-accent px-1 py-0.5">
       {tabs?.map((element: any, i) => {
         const isActive = element.id == activeTab;
         return (
-          <TabButton
+          <ToggleButton
             label={element.name}
             key={i}
             children={element.icon}
@@ -27,4 +28,4 @@ const TabFilter = ({ tabs, activeTab, onClick }: TabFilterProps) => {
     </div>
   );
 };
-export default TabFilter;
+export default Toggle;
