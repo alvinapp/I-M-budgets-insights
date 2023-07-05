@@ -15,26 +15,79 @@ import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
 import MainButton from "../components/MainButton";
 import { GeneralInfoCard } from "../components/budget/GeneralInfoCard";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import { saveBudget } from "client/api/budget";
+import getToken from "client/api/token";
+import { showCustomToast } from "client/utils/Toast";
+import useUserStore from "client/store/userStore";
+import { error } from "console";
 
 export const BudgetSettings = () => {
-  const configuration = useConfigurationStore((state: any) => state as IConfig);
+  const configurations = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
   const categoriesStore = useCategoriesStore((state: any) => state);
+  const setToken = useConfigurationStore((state: any) => state.setToken);
+  const setUser = useUserStore((state: any) => state.setUser);
+  const { data } = useQuery(
+    ["token"],
+    () =>
+      getToken(configurations).then((res) => {
+        if (typeof res.user !== "undefined") {
+          setUser(res.user);
+          setToken(res.token);
+        } else {
+          navigate("/");
+          showCustomToast({ message: "The sdk key is invalid" });
+        }
+      }),
+    { refetchOnWindowFocus: false }
+  );
   const { isFetching: fetchingCategories } = useQuery(
     "fetch-categories",
     () =>
-      getCategories({ configuration: configuration }).then((result) => {
+      getCategories({ configuration: configurations }).then((result) => {
         categoriesStore.setCategories(result);
         result
           .filter(
             (element: Category) => element.macro_type?.name === "Essentials"
           )
           .map((essentials: any, i: any) =>
-            setEssentialsMapState(new Map(essentialsMapState.set(i, 0)))
+            setEssentialsMapState(
+              new Map(
+                essentialsMapState.set(`data${i}`, {
+                  amount: 0,
+                  contribution_amount: 0,
+                  percentage: 0,
+                  category_id: 0,
+                  name: "",
+                  pseudo_name: "",
+                  extern_id: 0,
+                  order: 0,
+                  contribution_at: "",
+                  is_contribute_customized: true,
+                })
+              )
+            )
           );
         result
           .filter((element: Category) => element.macro_type?.name === "Wants")
           .map((wants: any, i: any) =>
-            setWantsMapState(new Map(essentialsMapState.set(i, 0)))
+            setWantsMapState(
+              new Map(
+                essentialsMapState.set(`data${i}`, {
+                  amount: 0,
+                  contribution_amount: 0,
+                  percentage: 0,
+                  category_id: 0,
+                  name: "",
+                  pseudo_name: "",
+                  extern_id: 0,
+                  order: 0,
+                  contribution_at: "",
+                  is_contribute_customized: true,
+                })
+              )
+            )
           );
       }),
     { refetchOnWindowFocus: false }
@@ -53,12 +106,46 @@ export const BudgetSettings = () => {
   const [selectedWantsId, setSelectedWantsId] = useState();
   const [essentialsMapState, setEssentialsMapState] = useState(new Map());
   const [wantsMapState, setWantsMapState] = useState(new Map());
-  const updateEssentialsMap = (key: any, value: any) => {
-    setEssentialsMapState((map) => new Map(map.set(key, value)));
+  const updateEssentialsMap = (i: number, data: any) => {
+    setEssentialsMapState((map) => new Map(map.set(`data${i}`, data)));
   };
-  const updateWantsMap = (key: any, value: any) => {
-    setWantsMapState((map) => new Map(map.set(key, value)));
+  const updateWantsMap = (i: number, data: any) => {
+    setWantsMapState((map) => new Map(map.set(`data${i}`, data)));
   };
+  //essentials
+  const essentialsList = Array.from(essentialsMapState, ([key, value]) => {
+    return { [key]: value };
+  }).map((element: any, i: number) => {
+    return element[`data${i}`];
+  });
+
+  //wants
+  const wantsList = Array.from(wantsMapState, ([key, value]) => {
+    return { [key]: value };
+  }).map((element: any, i: number) => {
+    return element[`data${i}`];
+  });
+  //savings
+  const { isFetching: savingBudgetDetails, refetch: saveBudgetInfo } = useQuery(
+    "save-budget",
+    () =>
+      saveBudget({
+        configuration: configurations,
+        data: {
+          macrotype_entries: [
+            {
+              macrotype_name: "Essentials",
+              data: essentialsList,
+            },
+            {
+              macrotype_name: "Wants",
+              data: wantsList,
+            },
+          ],
+        },
+      }),
+    { refetchOnWindowFocus: false, enabled: false }
+  );
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -123,21 +210,43 @@ export const BudgetSettings = () => {
             {essentialsCategories && essentialsCategories.length > 0 ? (
               essentialsCategories.map((category: Category, i: any) => {
                 const isSelected = i === selectedEssesntialId;
-                const amount = essentialsMapState.get(i);
+                const data = essentialsMapState.get(`data${i}`);
                 return (
                   <BudgetSettingCard
                     key={i}
                     category={category?.name}
                     emoji={category?.emoji}
-                    amount={amount}
+                    amount={data?.amount}
                     selected={isSelected}
                     increment={() => {
                       setSelectedEssentialId(i);
-                      updateEssentialsMap(i, amount + 500);
+                      updateEssentialsMap(i, {
+                        amount: data?.amount + 500,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: "",
+                        extern_id: 0,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      });
                     }}
                     decrement={() => {
                       setSelectedEssentialId(i);
-                      updateEssentialsMap(i, amount - 500);
+                      updateEssentialsMap(i, {
+                        amount: data?.amount - 500,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: 0,
+                        name: "",
+                        pseudo_name: "",
+                        extern_id: 0,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      });
                     }}
                   />
                 );
@@ -175,23 +284,45 @@ export const BudgetSettings = () => {
             {wantsCategories && wantsCategories.length > 0 ? (
               wantsCategories.map((category: Category, i: any) => {
                 const isSelected = i === selectedWantsId;
-                const amount = wantsMapState.get(i);
+                const data = wantsMapState.get(`data${i}`);
                 return (
                   <BudgetSettingCard
                     key={i}
                     category={category?.name}
                     emoji={category?.emoji}
-                    amount={amount}
+                    amount={data?.amount}
                     selected={isSelected}
                     increment={() => {
                       setSelectedWantsId(i);
                       // categoriesStore.incrementCategoryAmount();
-                      updateWantsMap(i, amount + 500);
+                      updateWantsMap(i, {
+                        amount: data?.amount + 500,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: "",
+                        extern_id: 0,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      });
                     }}
                     decrement={() => {
                       setSelectedWantsId(i);
                       // categoriesStore.decrementCategoryAmount();
-                      updateWantsMap(i, amount - 500);
+                      updateWantsMap(i, {
+                        amount: data?.amount - 500,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: 0,
+                        name: "",
+                        pseudo_name: "",
+                        extern_id: 0,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      });
                     }}
                   />
                 );
@@ -240,7 +371,16 @@ export const BudgetSettings = () => {
           </div>
         </div>
         <div className="mt-2">
-          <MainButton title="All set" isDisabled={true} />
+          <MainButton
+            title="All set"
+            // isDisabled={true}
+            loading={savingBudgetDetails}
+            click={() => {
+              saveBudgetInfo().then((res) => {
+                console.log(res);
+              });
+            }}
+          />
         </div>
       </div>
     </div>
