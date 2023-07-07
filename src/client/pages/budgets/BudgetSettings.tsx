@@ -126,7 +126,11 @@ export const BudgetSettings = () => {
     return element[`data${i}`];
   });
   //savings
+  const essentialBudgetAmount = 150000;
   const [allocatedEssentials, setAllocatedEssentials] = useState(0);
+  const wantsBudgetAmount = 90000;
+  const [allocatedWants, setAllocatedWants] = useState(0);
+
   const { isFetching: savingBudgetDetails, refetch: saveBudgetInfo } = useQuery(
     "save-budget",
     () =>
@@ -186,12 +190,15 @@ export const BudgetSettings = () => {
         <div className="shadow-card px-4 pt-5 pb-3 rounded-lg">
           <BudgetDisplay
             title="Essentials"
-            budgetAmount={150000}
+            budgetAmount={essentialBudgetAmount}
             percentageOfBudgetCaption="50% of overall budget"
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={150000}
-            allocatedAmount={0}
+            unallocatedAmount={essentialBudgetAmount - allocatedEssentials}
+            allocatedAmount={allocatedEssentials}
+            progressPercentage={
+              (allocatedEssentials / essentialBudgetAmount) * 100
+            }
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-poppins text-xs tracking-wide">
@@ -221,8 +228,12 @@ export const BudgetSettings = () => {
                     selected={isSelected}
                     increment={() => {
                       setSelectedEssentialId(i);
+                      setAllocatedEssentials(
+                        allocatedEssentials + categoriesStore.incrementalAmount
+                      );
                       updateEssentialsMap(i, {
-                        amount: data?.amount + 500,
+                        amount:
+                          data?.amount + categoriesStore.incrementalAmount,
                         contribution_amount: 0,
                         percentage: 0,
                         category_id: category?.id,
@@ -236,8 +247,15 @@ export const BudgetSettings = () => {
                     }}
                     decrement={() => {
                       setSelectedEssentialId(i);
+                      setAllocatedEssentials(
+                        allocatedEssentials > 0
+                          ? allocatedEssentials -
+                              categoriesStore.incrementalAmount
+                          : 0
+                      );
                       updateEssentialsMap(i, {
-                        amount: data?.amount - 500,
+                        amount:
+                          data?.amount - categoriesStore.incrementalAmount,
                         contribution_amount: 0,
                         percentage: 0,
                         category_id: 0,
@@ -260,12 +278,13 @@ export const BudgetSettings = () => {
         <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
           <BudgetDisplay
             title="Wants"
-            budgetAmount={90000}
+            budgetAmount={wantsBudgetAmount}
             percentageOfBudgetCaption="30% of overall budget"
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={90000}
-            allocatedAmount={0}
+            unallocatedAmount={wantsBudgetAmount - allocatedWants}
+            allocatedAmount={allocatedWants}
+            progressPercentage={(allocatedWants / wantsBudgetAmount) * 100}
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-poppins text-xs tracking-wide">
@@ -295,9 +314,12 @@ export const BudgetSettings = () => {
                     selected={isSelected}
                     increment={() => {
                       setSelectedWantsId(i);
-                      // categoriesStore.incrementCategoryAmount();
+                      setAllocatedWants(
+                        allocatedWants + categoriesStore.incrementalAmount
+                      );
                       updateWantsMap(i, {
-                        amount: data?.amount + 500,
+                        amount:
+                          data?.amount + categoriesStore.incrementalAmount,
                         contribution_amount: 0,
                         percentage: 0,
                         category_id: category?.id,
@@ -311,9 +333,12 @@ export const BudgetSettings = () => {
                     }}
                     decrement={() => {
                       setSelectedWantsId(i);
-                      // categoriesStore.decrementCategoryAmount();
+                      setAllocatedWants(
+                        allocatedWants - categoriesStore.incrementalAmount
+                      );
                       updateWantsMap(i, {
-                        amount: data?.amount - 500,
+                        amount:
+                          data?.amount - categoriesStore.incrementalAmount,
                         contribution_amount: 0,
                         percentage: 0,
                         category_id: 0,
