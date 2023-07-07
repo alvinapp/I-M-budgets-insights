@@ -19,6 +19,7 @@ import { ExpenditureCard } from "../components/insights/ExpenditureCard";
 import ExpenditureBarGraph from "../components/ExpenditureBarGraph";
 import SavingsBarGraph from "../components/SavingsBarGraph";
 import CashFlowPieChart from "../components/CashFlowPieChart";
+import { useNavigate } from "react-router-dom";
 
 const InsightsView = () => {
   const currencySymbol = useCurrencySettingsStore(
@@ -26,6 +27,7 @@ const InsightsView = () => {
   );
   const [toggleTabId, setToggleTabId] = useState(0);
   const [budgetSpendTabId, setBudgetSpendTabId] = useState(0);
+  const navigate = useNavigate();
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -35,7 +37,7 @@ const InsightsView = () => {
               <div className="flex flex-col">
                 <div className="flex flex-row items-center">
                   <div className="mr-3">
-                    <BackButton />
+                    <BackButton onClick={() => navigate(-1)} />
                   </div>
                   <NavBarTitle title="Insights" fontSize="text-2xl" />
                 </div>

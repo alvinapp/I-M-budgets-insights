@@ -36,7 +36,7 @@ const BudgetsView = () => {
           <HorizontalDateToggle />
         </div>
       </div>
-      <div className="flex-grow h-px bg-skin-accent3"></div>
+      <div className="flex-grow h-px bg-skin-accent3 mt-3"></div>
       <div className="flex flex-col mx-3.5  mt-8">
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
@@ -45,7 +45,7 @@ const BudgetsView = () => {
             currencySymbol={currencySymbol}
           />
           <div className="flex flex-col justify-center">
-            <InsightsButton />
+            <InsightsButton onClick={() => navigate("/insights-view")} />
           </div>
         </div>
         <div className="mt-11">

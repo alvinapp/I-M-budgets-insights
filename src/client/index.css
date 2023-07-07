@@ -56,8 +56,10 @@
     --color-background-accent3: #e7e7e7;
     --color-background-accent4: #cbc95f;
     --color-background-accent4WithOpacity: rgba(203, 201, 95, 0.2);
+    --color-background-accent3WithOpacity: rgba(231, 231, 231, 0.42);
     --color-background-neutral: #6f89a5;
     --color-background-tertiary: #f2f5f8;
+    --color-background-tertiaryWithOpacity: rgb(213, 212, 217, 0.2);
     --color-background-input: #e6e9ed;
     --color-background-input-button: #e7edf3;
     --color-background-divider: #d3d3d3;
