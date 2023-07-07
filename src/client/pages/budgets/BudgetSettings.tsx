@@ -126,6 +126,7 @@ export const BudgetSettings = () => {
     return element[`data${i}`];
   });
   //savings
+  const [allocatedEssentials, setAllocatedEssentials] = useState(0);
   const { isFetching: savingBudgetDetails, refetch: saveBudgetInfo } = useQuery(
     "save-budget",
     () =>
