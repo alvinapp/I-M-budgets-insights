@@ -90,6 +90,41 @@ const OnboardingSplitIncome = () => {
     await completeOnboarding({ completionTime: new Date(), configuration });
   };
 
+  const postAllMacros = async () => {
+    try {
+      await setIncome({ incomeAmount: monthlyIncome, configuration });
+
+      const macros: [GoalMacroType, number][] = [
+        ["Essentials", essentialsRatio],
+        ["Wants", wantsRatio],
+        ["Savings", savingsRatio],
+      ];
+
+      for (let i = 0; i < macros.length; i++) {
+        const [macroType, macroRatio] = macros[i];
+        await setMacro({
+          goalMacro: {
+            name: `${macroType}`,
+            type_name: macroType,
+            amount: calculateIncomeAmount(macroRatio),
+            percentage: 0,
+            share: macroRatio,
+            reset_micros: false,
+          },
+          configuration,
+        });
+      }
+
+      await completeOnboarding({ completionTime: new Date(), configuration });
+
+      // Redirect to success page
+      navigate("/onboard-success");
+    } catch (error) {
+      console.error(error);
+      // Handle the error
+    }
+  };
+
   const handleSliderChange = (newValue: number, type: string) => {
     const totalRatio = 100;
     const oldValue = type === 'essentials' ? essentialsRatio : type === 'wants' ? wantsRatio : savingsRatio;
@@ -333,8 +368,8 @@ const OnboardingSplitIncome = () => {
               wants: wantsRatio,
               savings: savingsRatio,
             });
-            // saveOnboardingData();
-            navigate("/onboard-success");
+            postAllMacros();
+            // navigate("/onboard-success");
           }}
         />
       </div>

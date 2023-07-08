@@ -32,7 +32,7 @@ export const completeOnboarding = async ({
   configuration: IConfig;
 }) => {
   try {
-    const res = await putData({
+    const res = await postData({
       endpoint: "/users/onboarded",
       token: configuration.token,
       data: { at: completionTime },
