@@ -6,6 +6,7 @@ type SuccessButonProps = {
   click?: () => void;
   isDisabled?: boolean;
   loading?: boolean;
+  style?: React.CSSProperties;
 };
 
 const SuccessButton = ({
@@ -13,6 +14,7 @@ const SuccessButton = ({
   click,
   isDisabled = false,
   loading = false,
+  style,
 }: SuccessButonProps) => {
   return (
     <button
@@ -21,6 +23,7 @@ const SuccessButton = ({
       }`}
       disabled={isDisabled}
       onClick={loading ? () => {} : click}
+      style={style}
     >
       <div className="flex flex-row justify-center items-center">
         <div className={`${loading ? "mr-3" : ""}`}>{title}</div>

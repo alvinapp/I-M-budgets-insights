@@ -12,9 +12,7 @@ const OnboardingAddIncome = () => {
   const navigate = useNavigate();
   const budgetSettingsStore = useBudgetSettingsStore();
   const { currency } = budgetSettingsStore;
-  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
-    budgetSettingsStore.monthlyIncome
-  );
+  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(budgetSettingsStore.monthlyIncome || 300000);
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
