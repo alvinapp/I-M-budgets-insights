@@ -31,7 +31,7 @@ const OnboardingSplitIncome = () => {
   const [debouncedRatio, setDebouncedRatio] = useState({ essentialsRatio, wantsRatio, savingsRatio });
 
   const setDebouncedRatioDebounced = useRef(
-    debounce((newRatio) => setDebouncedRatio(newRatio), 300) // 300ms delay
+    debounce((newRatio) => setDebouncedRatio(newRatio), 300)
   ).current;
 
   useEffect(() => {
