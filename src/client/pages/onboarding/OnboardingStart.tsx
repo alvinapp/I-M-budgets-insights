@@ -24,6 +24,9 @@ const OnboardingStart = () => {
 const authenticateUser = async () => {
   const response = await getToken(configurations);
   if (response?.user) {
+    if (response?.user.is_onboarded) {
+      navigate("/budgets-view");
+    }
     setUser(response.user);
     setToken(response.token);
   } else {
