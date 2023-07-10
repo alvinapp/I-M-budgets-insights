@@ -47,48 +47,36 @@ export const BudgetSettings = () => {
     () =>
       getCategories({ configuration: configurations }).then((result) => {
         categoriesStore.setCategories(result);
-        result
-          .filter(
-            (element: Category) => element.macro_type?.name === "Essentials"
-          )
-          .map((essentials: any, i: any) =>
-            setEssentialsMapState(
-              new Map(
-                essentialsMapState.set(`data${i}`, {
-                  amount: 0,
-                  contribution_amount: 0,
-                  percentage: 0,
-                  category_id: 0,
-                  name: "",
-                  pseudo_name: "",
-                  extern_id: 0,
-                  order: 0,
-                  contribution_at: "",
-                  is_contribute_customized: true,
-                })
-              )
-            )
-          );
-        result
+        const essentialsData = result
+          .filter((element: Category) => element.macro_type?.name === "Essentials")
+          .map((essentials: any, i: any) => ({
+            amount: 0,
+            contribution_amount: 0,
+            percentage: 0,
+            category_id: essentials.id, // I've set category_id to the actual value
+            name: essentials.name,
+            pseudo_name: essentials.name + " " + essentials.emoji,
+            extern_id: essentials.id,
+            order: 0,
+            contribution_at: "",
+            is_contribute_customized: true,
+          }));
+        const wantsData = result
           .filter((element: Category) => element.macro_type?.name === "Wants")
-          .map((wants: any, i: any) =>
-            setWantsMapState(
-              new Map(
-                essentialsMapState.set(`data${i}`, {
-                  amount: 0,
-                  contribution_amount: 0,
-                  percentage: 0,
-                  category_id: 0,
-                  name: "",
-                  pseudo_name: "",
-                  extern_id: 0,
-                  order: 0,
-                  contribution_at: "",
-                  is_contribute_customized: true,
-                })
-              )
-            )
-          );
+          .map((wants: any, i: any) => ({
+            amount: 0,
+            contribution_amount: 0,
+            percentage: 0,
+            category_id: wants.id, // Set category_id to the actual value here too
+            name: wants.name,
+            pseudo_name: wants.name + " " + wants.emoji,
+            extern_id: wants.id,
+            order: 0,
+            contribution_at: "",
+            is_contribute_customized: true,
+          }));
+        setEssentialsMapState(new Map(essentialsData.map((data: any, i: any) => [`data${i}`, data])));
+        setWantsMapState(new Map(wantsData.map((data: any, i: any) => [`data${i}`, data])));
       }),
     { refetchOnWindowFocus: false }
   );
@@ -238,8 +226,8 @@ export const BudgetSettings = () => {
                         percentage: 0,
                         category_id: category?.id,
                         name: category?.name,
-                        pseudo_name: "",
-                        extern_id: 0,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
                         order: 0,
                         contribution_at: "",
                         is_contribute_customized: true,
@@ -258,10 +246,10 @@ export const BudgetSettings = () => {
                           data?.amount - categoriesStore.incrementalAmount,
                         contribution_amount: 0,
                         percentage: 0,
-                        category_id: 0,
-                        name: "",
-                        pseudo_name: "",
-                        extern_id: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
                         order: 0,
                         contribution_at: "",
                         is_contribute_customized: true,
@@ -324,8 +312,8 @@ export const BudgetSettings = () => {
                         percentage: 0,
                         category_id: category?.id,
                         name: category?.name,
-                        pseudo_name: "",
-                        extern_id: 0,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
                         order: 0,
                         contribution_at: "",
                         is_contribute_customized: true,
@@ -341,10 +329,10 @@ export const BudgetSettings = () => {
                           data?.amount - categoriesStore.incrementalAmount,
                         contribution_amount: 0,
                         percentage: 0,
-                        category_id: 0,
-                        name: "",
-                        pseudo_name: "",
-                        extern_id: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
                         order: 0,
                         contribution_at: "",
                         is_contribute_customized: true,
