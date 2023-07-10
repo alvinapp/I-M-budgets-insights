@@ -1,7 +1,7 @@
 import { IConfig } from "client/store/configuration";
-import { postData } from "./api";
+import { fetchData, postData } from "./api";
 import * as Sentry from "@sentry/browser";
-//Fetch all categories
+//save category budgets
 export const saveBudget = async ({
   configuration,
   data,
@@ -15,6 +15,27 @@ export const saveBudget = async ({
       token: configuration.token,
       publicKey: configuration.publicKey,
       data: data,
+    });
+    return res;
+  } catch (reason: any) {
+    Sentry.captureException(reason);
+    console.debug(reason);
+    return Promise.reject(reason);
+  }
+};
+
+export const fetchBudgetCategories = async ({
+  configuration,
+  macrogoal_id,
+}: {
+  configuration: IConfig;
+  macrogoal_id: number;
+}) => {
+  try {
+    const res = await fetchData({
+      endpoint: `/goals/macros/${macrogoal_id}/micros/`,
+      token: configuration.token,
+      publicKey: configuration.publicKey,
     });
     return res;
   } catch (reason: any) {
