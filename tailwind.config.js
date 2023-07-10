@@ -46,6 +46,8 @@ module.exports = {
             "var(--color-background-secondary2-withOpacity)",
           success: "var(--color-background-success)",
           successNeutral: "var(--color-background-success-neutral)",
+          successNeutralWithOpacity:
+            "var( --color-background-success-neutral-withOpacity)",
           successWithOpacity:
             "var(--color-background-success-neutral-withOpacity)",
           successSecondary: "var(--color-background-success-secondary)",
@@ -57,9 +59,11 @@ module.exports = {
           accent3: "var(--color-background-accent3)",
           accent4: "var(--color-background-accent4)",
           accent2WithOpacity: "var(--color-background-accent2-withOpacity)",
+          accent3WithOpacity: "var(--color-background-accent3-withOpacity)",
           accent4WithOpacity: "var(--color-background-accent4-withOpacity)",
           neutral: "var(--color-background-neutral)",
           tertiary: "var(--color-background-tertiary)",
+          tertiaryWithOpacity: "var(--color-background-tertiaryWithOpacity)",
           input: "var(--color-background-input)",
           inputButton: "var(--color-background-input-button)",
           divider: "var(--color-background-divider)",
@@ -126,12 +130,10 @@ module.exports = {
         tab_text: "0.00625em",
       },
       backgroundImage: {
-        cardOverlay: "url('client/assets/images/background-overlay.webp')",
-        connectSuccessBg: "url('client/assets/images/connect-success-bg.svg')",
-        overviewBg: "url('client/assets/images/savings/overviewbg.svg')",
-        curvedBg: "url('client/assets/images/savings/monthly-income-bg.svg')",
-        bottomSheetFooterBg:
-          "url('client/assets/images/savings/bottom-sheet-bg.svg')",
+        addIncomeBg:
+          "url('client/assets/images/budgets-insights/addincomebg.svg')",
+        splitBudgetBg:
+          "url('client/assets/images/budgets-insights/budgetsplitbg.svg')",
       },
       backgroundSize: {
         auto: "auto",

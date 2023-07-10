@@ -80,7 +80,7 @@ const BudgetsView = () => {
             currencySymbol={currencySymbol}
           />
           <div className="flex flex-col justify-center">
-            <InsightsButton />
+            <InsightsButton onClick={() => navigate("/insights-view")} />
           </div>
         </div>
         <div className="mt-11">

@@ -48,7 +48,9 @@ export const BudgetSettings = () => {
       getCategories({ configuration: configurations }).then((result) => {
         categoriesStore.setCategories(result);
         const essentialsData = result
-          .filter((element: Category) => element.macro_type?.name === "Essentials")
+          .filter(
+            (element: Category) => element.macro_type?.name === "Essentials"
+          )
           .map((essentials: any, i: any) => ({
             amount: 0,
             contribution_amount: 0,
@@ -75,8 +77,12 @@ export const BudgetSettings = () => {
             contribution_at: "",
             is_contribute_customized: true,
           }));
-        setEssentialsMapState(new Map(essentialsData.map((data: any, i: any) => [`data${i}`, data])));
-        setWantsMapState(new Map(wantsData.map((data: any, i: any) => [`data${i}`, data])));
+        setEssentialsMapState(
+          new Map(essentialsData.map((data: any, i: any) => [`data${i}`, data]))
+        );
+        setWantsMapState(
+          new Map(wantsData.map((data: any, i: any) => [`data${i}`, data]))
+        );
       }),
     { refetchOnWindowFocus: false }
   );
