@@ -44,7 +44,7 @@ export const BudgetSettingCard = ({
       <div className="flex-col">
         <div className="flex flex-col justify-center">
           <div className="rounded-full shadow-budgetButton flex justify-center items-center flex-row px-3 py-3">
-            {selected && amount > 0 ? (
+            {amount > 0 ? (
               <div className="flex flex-row items-center">
                 <FiMinus
                   color="#04506E"

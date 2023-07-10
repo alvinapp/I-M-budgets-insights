@@ -14,10 +14,45 @@ import { essentials, savings, wants } from "client/utils/MockData";
 import { CategoryViewCard } from "../components/budget/CategoryViewCard";
 import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
 import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
+import { useQuery } from "react-query";
+import { fetchBudgetCategories } from "client/api/budget";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import getToken from "client/api/token";
+import useUserStore from "client/store/userStore";
+import { showCustomToast } from "client/utils/Toast";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
+  );
+  const setToken = useConfigurationStore((state: any) => state.setToken);
+  const setUser = useUserStore((state: any) => state.setUser);
+  const config = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
+  //Remove this query for token and make sure its on the first page of this package
+  const { data } = useQuery(
+    ["token"],
+    () =>
+      getToken(config).then((res) => {
+        if (typeof res.user !== "undefined") {
+          setUser(res.user);
+          setToken(res.token);
+        } else {
+          navigate("/");
+          showCustomToast({ message: "The sdk key is invalid" });
+        }
+      }),
+    { refetchOnWindowFocus: false }
+  );
+  const { isFetching: fetchingEssentailsBudget } = useQuery(
+    "essentials-budgets",
+    () =>
+      fetchBudgetCategories({
+        configuration: config,
+        macrogoal_id: 1,
+      }).then((result) => console.log(result)),
+    { enabled: !!config.token }
   );
   return (
     <div className="h-screen w-screen">

@@ -3,6 +3,7 @@ import { create } from "zustand";
 interface CategoryStoreState {
   categories: Array<Category>;
   categoryAmount: number;
+  incrementalAmount: number;
 }
 type ICategoryStore = CategoryStoreState & {
   setCategories: (data: Array<Category>) => void;
@@ -12,6 +13,7 @@ type ICategoryStore = CategoryStoreState & {
 const useCategoriesStore = create<ICategoryStore>((set) => ({
   categories: [],
   categoryAmount: 0,
+  incrementalAmount: 500,
   setCategories: (data: Array<Category>) => {
     return set((state: CategoryStoreState) => {
       const result: CategoryStoreState = {
@@ -23,13 +25,13 @@ const useCategoriesStore = create<ICategoryStore>((set) => ({
   },
   incrementCategoryAmount: () => {
     return set((state: CategoryStoreState) => ({
-      categoryAmount: state.categoryAmount + 500,
+      categoryAmount: state.categoryAmount + state.incrementalAmount,
     }));
   },
 
   decrementCategoryAmount: () => {
     return set((state: CategoryStoreState) => ({
-      categoryAmount: state.categoryAmount - 500,
+      categoryAmount: state.categoryAmount - state.incrementalAmount,
     }));
   },
 }));
