@@ -49,7 +49,7 @@ const App = () => {
             }
           >
             <Routes>
-              <Route path="/" element={<BudgetsView />} />
+              <Route path="/" element={<OnboardingStart />} />
               <Route path="/onboard-start" element={<OnboardingStart />} />
               <Route
                 path="/onboard-add-income"
