@@ -43,6 +43,15 @@ const useBudgetSettingsStore = create<IBudgetSettingsStore>((set) => ({
       return result;
     });
   },
+  getIncomeSplit: () => {
+    return set((state: BudgetSettings) => {
+      const result: BudgetSettings = {
+        ...state,
+        incomeSplit: state.incomeSplit,
+      };
+      return result;
+    });
+  },
 }));
 
 export {

@@ -7,14 +7,38 @@ import MainButton from "../components/MainButton";
 import NavBar from "../components/NavBar";
 import ArrowBackButton from "../components/ArrowBack";
 import MonthlyIncomeInput from "../components/onboarding/MonthlyIncomeInput";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import { useMutation, useQuery } from "react-query";
+import { postData } from "client/api/api";
 
 const OnboardingAddIncome = () => {
   const navigate = useNavigate();
   const budgetSettingsStore = useBudgetSettingsStore();
+  const [loading, setLoading] = useState(false);
   const { currency } = budgetSettingsStore;
-  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
-    budgetSettingsStore.monthlyIncome
-  );
+  const configuration = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
+  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(budgetSettingsStore.monthlyIncome || 300000);
+
+  const postIncome = async (amount: number) => {
+    setLoading(true);
+    try {
+      const response = await postData({
+        endpoint: "/users/income",
+        token: configuration.token,
+        data: { amount },
+      });
+      console.log(response);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
+
+  const { mutate: addIncome } = useMutation(postIncome);
+  
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
@@ -57,15 +81,17 @@ const OnboardingAddIncome = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 mx-3.5">
-        <MainButton
-          title="Continue"
-          isDisabled={false}
-          click={() => {
-            budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
-            navigate("/onboard-split-income");
-          }}
-        />
-      </div>
+      <MainButton
+        title="Continue"
+        isDisabled={false}
+        loading={loading}
+        click={() => {
+          budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
+          addIncome(monthlyIncomeValue);
+          navigate("/onboard-split-income");
+        }}
+      />
+    </div>
     </div>
   );
 };

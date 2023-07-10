@@ -81,6 +81,7 @@
     "@mono.co/connect.js": "^0.2.2",
     "@ramonak/react-progress-bar": "^5.0.3",
     "@sentry/browser": "^7.9.0",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/react-datepicker": "^4.8.0",
     "@types/react-html-parser": "^2.0.2",
     "@types/react-lottie": "^1.2.6",

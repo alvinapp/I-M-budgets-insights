@@ -1,5 +1,5 @@
 import { IConfig } from "client/store/configuration";
-import { putData } from "./api";
+import { postData } from "./api";
 import * as Sentry from "@sentry/browser";
 
 export type GoalMacroType = "Wants" | "Essentials" | "Savings";
@@ -21,7 +21,7 @@ export const setMacro = async ({
   configuration: IConfig;
 }) => {
   try {
-    const res = await putData({
+    const res = await postData({
       endpoint: "/goals/macros",
       token: configuration.token,
       data: goalMacro,
