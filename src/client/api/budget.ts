@@ -26,14 +26,12 @@ export const saveBudget = async ({
 
 export const fetchBudgetCategories = async ({
   configuration,
-  macrogoal_id,
 }: {
   configuration: IConfig;
-  macrogoal_id: number;
 }) => {
   try {
     const res = await fetchData({
-      endpoint: `/goals/macros/${macrogoal_id}/micros/`,
+      endpoint: `/goals/batch_micros/`,
       token: configuration.token,
       publicKey: configuration.publicKey,
     });

@@ -4,6 +4,7 @@ interface CategoryStoreState {
   categories: Array<Category>;
   categoryAmount: number;
   incrementalAmount: number;
+  categoryBudgets: Array<any>;
 }
 type ICategoryStore = CategoryStoreState & {
   setCategories: (data: Array<Category>) => void;
@@ -14,6 +15,16 @@ const useCategoriesStore = create<ICategoryStore>((set) => ({
   categories: [],
   categoryAmount: 0,
   incrementalAmount: 500,
+  categoryBudgets: [],
+  setCategoryBudgets: (budgets: Array<any>) => {
+    return set((state: CategoryStoreState) => {
+      const result: CategoryStoreState = {
+        ...state,
+        categoryBudgets: budgets,
+      };
+      return result;
+    });
+  },
   setCategories: (data: Array<Category>) => {
     return set((state: CategoryStoreState) => {
       const result: CategoryStoreState = {

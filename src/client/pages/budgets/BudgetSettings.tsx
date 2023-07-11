@@ -145,6 +145,7 @@ export const BudgetSettings = () => {
       }),
     { refetchOnWindowFocus: false, enabled: false }
   );
+  const navigator = useNavigate();
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -397,7 +398,7 @@ export const BudgetSettings = () => {
             loading={savingBudgetDetails}
             click={() => {
               saveBudgetInfo().then((res) => {
-                console.log(res);
+                navigator("/budgets-view");
               });
             }}
           />

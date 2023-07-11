@@ -20,6 +20,12 @@ import { IConfig, useConfigurationStore } from "client/store/configuration";
 import getToken from "client/api/token";
 import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
+import useCategoriesStore from "client/store/categoriesStore";
+import {
+  calculateBudgetAmount,
+  calculateBudgetExpense,
+  checkNAN,
+} from "client/utils/Formatters";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -27,6 +33,7 @@ const BudgetsView = () => {
   );
   const setToken = useConfigurationStore((state: any) => state.setToken);
   const setUser = useUserStore((state: any) => state.setUser);
+  const categoryStore = useCategoriesStore((state: any) => state);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -50,10 +57,30 @@ const BudgetsView = () => {
     () =>
       fetchBudgetCategories({
         configuration: config,
-        macrogoal_id: 1,
-      }).then((result) => console.log(result)),
+      }).then((result) => {
+        categoryStore.setCategoryBudgets(result);
+      }),
     { enabled: !!config.token }
   );
+  const essentialTotalBudgetAmount = calculateBudgetAmount(
+    categoryStore.categoryBudgets[0]?.data
+  );
+  const wantsTotalBudgetAmount = calculateBudgetAmount(
+    categoryStore.categoryBudgets[1]?.data
+  );
+  const savingsTotalBudgetAmount = calculateBudgetAmount(
+    categoryStore.categoryBudgets[2]?.data
+  );
+  const essentialTotalExpenses = calculateBudgetExpense(
+    categoryStore.categoryBudgets[0]?.data
+  );
+  const wantsTotalExpenses = calculateBudgetExpense(
+    categoryStore.categoryBudgets[1]?.data
+  );
+  const savingsTotalExpenses = calculateBudgetExpense(
+    categoryStore.categoryBudgets[2]?.data
+  );
+  console.log(savingsTotalExpenses / savingsTotalBudgetAmount);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -75,7 +102,11 @@ const BudgetsView = () => {
       <div className="flex flex-col mx-3.5  mt-8">
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
-            amount={160300}
+            amount={
+              essentialTotalBudgetAmount +
+              wantsTotalBudgetAmount +
+              savingsTotalBudgetAmount
+            }
             subtitle="Available budget spend"
             currencySymbol={currencySymbol}
           />
@@ -90,14 +121,18 @@ const BudgetsView = () => {
           <MacroProgressBarsContainer
             ratios="50/30/20"
             budgetAmount={{
-              wantsBudget: 150000,
-              essentialsBudget: 90000,
-              savingsBudget: 60000,
+              wantsBudget: essentialTotalBudgetAmount,
+              essentialsBudget: wantsTotalBudgetAmount,
+              savingsBudget: savingsTotalBudgetAmount,
             }}
             progressPercentage={{
-              wantsProgress: 50,
-              essentialsProgress: 30,
-              savingsProgress: 40,
+              wantsProgress:
+                checkNAN(essentialTotalExpenses / essentialTotalBudgetAmount) *
+                100,
+              essentialsProgress:
+                checkNAN(wantsTotalExpenses / wantsTotalBudgetAmount) * 100,
+              savingsProgress:
+                checkNAN(savingsTotalExpenses / savingsTotalBudgetAmount) * 100,
             }}
           />
         </div>
@@ -111,98 +146,101 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
           <CategoryCardHeader
             title="Essentials"
-            amount={52020}
+            amount={essentialTotalBudgetAmount}
             caption="Available"
             currencySymbol={currencySymbol}
           />
           <div className="mt-6 flex flex-col">
-            {essentials && essentials.length > 0 ? (
-              essentials.map((essential: any, i: any) => {
-                return (
-                  <CategoryViewCard
-                    key={i}
-                    category={essential.name}
-                    progressPercentage={essential.percentage}
-                    icon={essential.emoji}
-                    amount={essential.amount}
-                    budgetAmount={essential.budget}
-                    spentAmount={essential.spent}
-                    iconBg="bg-skin-secondaryWithOpacity"
-                    baseBgColor="#D0DDEA"
-                    bgColor="#056489"
-                    primaryColor="text-skin-primary"
-                    fadedColor="text-skin-neutral"
-                  />
-                );
-              })
-            ) : (
-              <div></div>
-            )}
+            {categoryStore.categoryBudgets[0]?.data &&
+            categoryStore.categoryBudgets[0]?.data.length > 0
+              ? categoryStore.categoryBudgets[0]?.data.map(
+                  (essential: any, i: any) => {
+                    return (
+                      <CategoryViewCard
+                        key={i}
+                        category={essential?.name}
+                        progressPercentage={essential?.percentage}
+                        icon={essential.category?.emoji}
+                        amount={essential?.amount}
+                        budgetAmount={essential.amount}
+                        spentAmount={essential?.expenses}
+                        iconBg="bg-skin-secondaryWithOpacity"
+                        baseBgColor="#D0DDEA"
+                        bgColor="#056489"
+                        primaryColor="text-skin-primary"
+                        fadedColor="text-skin-neutral"
+                      />
+                    );
+                  }
+                )
+              : null}
           </div>
         </div>
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
           <CategoryCardHeader
             title="Wants"
-            amount={9950}
+            amount={wantsTotalBudgetAmount}
             caption="Available"
             currencySymbol={currencySymbol}
           />
           <div className="mt-6 flex flex-col">
-            {wants && wants.length > 0 ? (
-              wants.map((want: any, i: any) => {
-                return (
-                  <CategoryViewCard
-                    key={i}
-                    category={want.name}
-                    progressPercentage={want.percentage}
-                    icon={want.emoji}
-                    amount={want.amount}
-                    budgetAmount={want.budget}
-                    spentAmount={want.spent}
-                    iconBg="bg-skin-secondary3WithOpacity"
-                    baseBgColor="#E8E3DC"
-                    bgColor="#A28D72"
-                    primaryColor="text-skin-alvinBrown"
-                    fadedColor="text-skin-alvinBrownFaded"
-                  />
-                );
-              })
-            ) : (
-              <div></div>
-            )}
+            {categoryStore.categoryBudgets[1]?.data &&
+            categoryStore.categoryBudgets[1]?.data.length > 0
+              ? categoryStore.categoryBudgets[1]?.data.map(
+                  (want: any, i: any) => {
+                    return (
+                      <CategoryViewCard
+                        key={i}
+                        category={want?.name}
+                        progressPercentage={want?.percentage}
+                        icon={want.category?.emoji}
+                        amount={want?.amount}
+                        budgetAmount={want?.amount}
+                        spentAmount={want?.expenses}
+                        iconBg="bg-skin-secondary3WithOpacity"
+                        baseBgColor="#E8E3DC"
+                        bgColor="#A28D72"
+                        primaryColor="text-skin-alvinBrown"
+                        fadedColor="text-skin-alvinBrownFaded"
+                      />
+                    );
+                  }
+                )
+              : null}
           </div>
         </div>
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3 mb-8">
           <CategoryCardHeader
             title="Savings"
-            amount={15500}
+            amount={savingsTotalBudgetAmount}
             caption="Available"
             currencySymbol={currencySymbol}
           />
           <div className="mt-6 flex flex-col">
-            {savings && savings.length > 0 ? (
-              savings.map((savings: any, i: any) => {
-                return (
-                  <CategoryViewCard
-                    key={i}
-                    category={savings.name}
-                    progressPercentage={savings.percentage}
-                    icon={savings.emoji}
-                    amount={savings.amount}
-                    budgetAmount={savings.budget}
-                    spentAmount={savings.spent}
-                    iconBg="bg-skin-secondaryWithOpacity"
-                    baseBgColor="#D6EAD4"
-                    bgColor="#33982A"
-                    primaryColor="text-skin-success"
-                    fadedColor="text-skin-successSecondary"
-                    caption="saved"
-                  />
-                );
-              })
-            ) : (
-              <div></div>
-            )}
+            {categoryStore.categoryBudgets[2]?.data &&
+            categoryStore.categoryBudgets[2]?.data.length > 0
+              ? categoryStore.categoryBudgets[2]?.data.map(
+                  (savings: any, i: any) => {
+                    return (
+                      <CategoryViewCard
+                        key={i}
+                        category={savings?.name}
+                        progressPercentage={savings?.percentage}
+                        icon={savings.category?.emoji}
+                        amount={savings?.amount}
+                        budgetAmount={savings.amount}
+                        spentAmount={savings.expenses}
+                        iconBg="bg-skin-secondaryWithOpacity"
+                        baseBgColor="#D6EAD4"
+                        bgColor="#33982A"
+                        primaryColor="text-skin-success"
+                        fadedColor="text-skin-successSecondary"
+                        caption="saved"
+                      />
+                    );
+                  }
+                )
+              : null}
           </div>
         </div>
       </div>
