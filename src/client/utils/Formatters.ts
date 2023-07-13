@@ -130,20 +130,3 @@ export const formatNumber = (num: any) => {
     return num;
   }
 };
-
-export const calculateBudgetAmount = (list: Array<any>) => {
-  let sum = 0;
-
-  for (const value of list ?? []) {
-    sum += value?.amount;
-  }
-  return sum;
-};
-export const calculateBudgetExpense = (list: Array<any>) => {
-  let sum = 0;
-
-  for (const value of list ?? []) {
-    sum += value?.expenses;
-  }
-  return sum;
-};

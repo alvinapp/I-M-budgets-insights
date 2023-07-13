@@ -42,3 +42,22 @@ export const fetchBudgetCategories = async ({
     return Promise.reject(reason);
   }
 };
+
+export const fetchMacros = async ({
+  configuration,
+}: {
+  configuration: IConfig;
+}) => {
+  try {
+    const res = await fetchData({
+      endpoint: `/goals/macros/`,
+      token: configuration.token,
+      publicKey: configuration.publicKey,
+    });
+    return res;
+  } catch (reason: any) {
+    Sentry.captureException(reason);
+    console.debug(reason);
+    return Promise.reject(reason);
+  }
+};

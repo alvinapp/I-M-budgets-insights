@@ -21,11 +21,7 @@ import getToken from "client/api/token";
 import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
 import useCategoriesStore from "client/store/categoriesStore";
-import {
-  calculateBudgetAmount,
-  calculateBudgetExpense,
-  checkNAN,
-} from "client/utils/Formatters";
+import { checkNAN } from "client/utils/Formatters";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -38,20 +34,20 @@ const BudgetsView = () => {
     (state: any) => state.configuration
   ) as IConfig;
   //Remove this query for token and make sure its on the first page of this package
-  const { data } = useQuery(
-    ["token"],
-    () =>
-      getToken(config).then((res) => {
-        if (typeof res.user !== "undefined") {
-          setUser(res.user);
-          setToken(res.token);
-        } else {
-          navigate("/");
-          showCustomToast({ message: "The sdk key is invalid" });
-        }
-      }),
-    { refetchOnWindowFocus: false }
-  );
+  // const { data } = useQuery(
+  //   ["token"],
+  //   () =>
+  //     getToken(config).then((res) => {
+  //       if (typeof res.user !== "undefined") {
+  //         setUser(res.user);
+  //         setToken(res.token);
+  //       } else {
+  //         navigate("/");
+  //         showCustomToast({ message: "The sdk key is invalid" });
+  //       }
+  //     }),
+  //   { refetchOnWindowFocus: false }
+  // );
   const { isFetching: fetchingEssentailsBudget } = useQuery(
     "essentials-budgets",
     () =>
@@ -62,25 +58,15 @@ const BudgetsView = () => {
       }),
     { enabled: !!config.token }
   );
-  const essentialTotalBudgetAmount = calculateBudgetAmount(
-    categoryStore.categoryBudgets[0]?.data
-  );
-  const wantsTotalBudgetAmount = calculateBudgetAmount(
-    categoryStore.categoryBudgets[1]?.data
-  );
-  const savingsTotalBudgetAmount = calculateBudgetAmount(
-    categoryStore.categoryBudgets[2]?.data
-  );
-  const essentialTotalExpenses = calculateBudgetExpense(
-    categoryStore.categoryBudgets[0]?.data
-  );
-  const wantsTotalExpenses = calculateBudgetExpense(
-    categoryStore.categoryBudgets[1]?.data
-  );
-  const savingsTotalExpenses = calculateBudgetExpense(
-    categoryStore.categoryBudgets[2]?.data
-  );
-  console.log(savingsTotalExpenses / savingsTotalBudgetAmount);
+  const essentialTotalBudgetAmount =
+    categoryStore.categoryBudgets[0]?.total_amount;
+  const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
+  const savingsTotalBudgetAmount =
+    categoryStore.categoryBudgets[2]?.total_amount;
+  const essentialTotalExpenses =
+    categoryStore.categoryBudgets[0]?.total_expense;
+  const wantsTotalExpenses = categoryStore.categoryBudgets[1]?.total_expense;
+  const savingsTotalExpenses = categoryStore.categoryBudgets[2]?.total_expense;
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -102,11 +88,11 @@ const BudgetsView = () => {
       <div className="flex flex-col mx-3.5  mt-8">
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
-            amount={
+            amount={checkNAN(
               essentialTotalBudgetAmount +
-              wantsTotalBudgetAmount +
-              savingsTotalBudgetAmount
-            }
+                wantsTotalBudgetAmount +
+                savingsTotalBudgetAmount
+            )}
             subtitle="Available budget spend"
             currencySymbol={currencySymbol}
           />
@@ -119,11 +105,11 @@ const BudgetsView = () => {
         </div>
         <div className="mt-2">
           <MacroProgressBarsContainer
-            ratios="50/30/20"
+            ratios={`${categoryStore.categoryBudgets[0]?.percentage}/${categoryStore.categoryBudgets[1]?.percentage}/${categoryStore.categoryBudgets[2]?.percentage}`}
             budgetAmount={{
-              wantsBudget: essentialTotalBudgetAmount,
-              essentialsBudget: wantsTotalBudgetAmount,
-              savingsBudget: savingsTotalBudgetAmount,
+              wantsBudget: essentialTotalExpenses,
+              essentialsBudget: wantsTotalExpenses,
+              savingsBudget: savingsTotalExpenses,
             }}
             progressPercentage={{
               wantsProgress:

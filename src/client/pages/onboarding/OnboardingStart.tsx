@@ -21,19 +21,19 @@ const OnboardingStart = () => {
   const setToken = useConfigurationStore((state: any) => state.setToken);
   const setUser = useUserStore((state) => state.setUser);
 
-const authenticateUser = async () => {
-  const response = await getToken(configurations);
-  if (response?.user) {
-    if (response?.user.is_onboarded) {
-      navigate("/budgets-view");
+  const authenticateUser = async () => {
+    const response = await getToken(configurations);
+    if (response?.user) {
+      if (response?.user.is_onboarded) {
+        navigate("/budgets-view");
+      }
+      setUser(response.user);
+      setToken(response.token);
+    } else {
+      navigate("/");
+      showCustomToast({ message: "The sdk key is invalid" });
     }
-    setUser(response.user);
-    setToken(response.token);
-  } else {
-    navigate("/");
-    showCustomToast({ message: "The sdk key is invalid" });
-  }
-};
+  };
 
   const { data } = useQuery(["token"], () => authenticateUser, {
     refetchOnWindowFocus: false,
