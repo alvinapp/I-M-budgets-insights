@@ -8,6 +8,8 @@ type BudgetSettingCardProps = {
   decrement?: any;
   amount?: number;
   selected?: boolean;
+  addValue: (e: any) => void;
+  maxValue: number;
 };
 export const BudgetSettingCard = ({
   category,
@@ -16,6 +18,8 @@ export const BudgetSettingCard = ({
   increment,
   decrement,
   selected = false,
+  addValue,
+  maxValue,
 }: BudgetSettingCardProps) => {
   const handleIncrement = (event: any) => {
     event.stopPropagation();
@@ -52,7 +56,18 @@ export const BudgetSettingCard = ({
                   onClick={handleDecrement}
                 />
                 <div className="font-poppins font-semibold text-xs mx-2">
-                  {amount}
+                  <input
+                    className="bg-transparent font-workSans text-xs tracking-title text-skin-base text-center font-semibold border-l-0 border-r-0 border-t-0 focus:ring-0 focus:outline-0 focus:border-b-skin-primary w-20 h-5"
+                    type="number"
+                    value={amount}
+                    min={0}
+                    max={maxValue}
+                    onChange={(e) => {
+                      if (parseInt(e.target.value) > 0) {
+                        addValue(parseInt(e.target.value));
+                      }
+                    }}
+                  />
                 </div>
               </div>
             ) : (

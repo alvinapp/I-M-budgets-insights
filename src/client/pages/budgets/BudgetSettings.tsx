@@ -93,6 +93,7 @@ export const BudgetSettings = () => {
     "fetch-macros",
     () =>
       fetchMacros({ configuration: configurations }).then((res) => {
+        console.log(res);
         categoriesStore.setMacros(res);
       }),
     { refetchOnWindowFocus: false, enabled: !!configurations.token }
@@ -261,6 +262,21 @@ export const BudgetSettings = () => {
                     emoji={category?.emoji}
                     amount={data?.amount}
                     selected={isSelected}
+                    maxValue={Number.MAX_SAFE_INTEGER}
+                    addValue={(e) =>
+                      updateEssentialsMap(i, {
+                        amount: e,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      })
+                    }
                     increment={() => {
                       setSelectedEssentialId(i);
                       setAllocatedEssentials(
@@ -345,10 +361,25 @@ export const BudgetSettings = () => {
                   return (
                     <BudgetSettingCard
                       key={i}
+                      maxValue={Number.MAX_SAFE_INTEGER}
                       category={category?.name}
                       emoji={category?.emoji}
                       amount={data?.amount}
                       selected={isSelected}
+                      addValue={(e) =>
+                        updateWantsMap(i, {
+                          amount: e,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        })
+                      }
                       increment={() => {
                         setSelectedWantsId(i);
                         setAllocatedWants(

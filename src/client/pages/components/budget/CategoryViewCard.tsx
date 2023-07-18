@@ -81,7 +81,7 @@ export const CategoryViewCard = ({
               primaryColor ?? "text-skin-base"
             } font-semibold mr-1`}
           >
-            {spentAmount}
+            {spentAmount?.toLocaleString("en-us")}
           </div>
           <div
             className={`font-poppins text-xs ${
@@ -103,7 +103,7 @@ export const CategoryViewCard = ({
                 fadedColor ?? "text-skin-base"
               } font-semibold`}
             >
-              {budgetAmount}
+              {budgetAmount?.toLocaleString("en-us")}
             </div>
           </div>
           <div
