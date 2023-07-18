@@ -41,7 +41,7 @@ export const ExpenditureCard = ({
               {currencySymbol}
             </div>
             <div className="font-bold font-poppins text-xs text-skin-neutral tracking-widest">
-              {budget}
+              {budget?.toLocaleString()}
             </div>
           </div>
           <div className="flex flex-col relative items-end">
@@ -49,7 +49,7 @@ export const ExpenditureCard = ({
               {currencySymbol}
             </div>
             <div className="font-bold font-poppins text-xs text-skin-base tracking-widest">
-              {spent}
+              {spent?.toLocaleString()}
             </div>
           </div>
         </div>

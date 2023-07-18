@@ -73,6 +73,7 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({ previousMonthSavings, curren
         const tooltipHeight = 20;
         const tooltipPadding = 5;
         const tooltipPosY = graphHeight - savingsHeight - tooltipHeight - tooltipPadding - 60;
+        if(savings === 0) return null;
     
         return (
             <g>
@@ -106,6 +107,10 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({ previousMonthSavings, curren
         // const changePercentage = ((currentMonthSavings - previousMonthSavings) / previousMonthSavings) * 100;
         const changePercentage = predictHighestPossibleGrowth(previousMonthSavings, currentMonthSavings);
         const isIncrease = changePercentage >= 0;
+        console.log("currentMonthSavings", currentMonthSavings);
+        if (currentMonthSavings === 0) {
+            return <div></div>;
+        }
 
         return (
             <g>
@@ -149,7 +154,7 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({ previousMonthSavings, curren
 
                 {/* Month Labels */}
                 <text x={graphWidth * 0.2 + 22} y={graphHeight - 35} textAnchor="middle" fontSize="10" fontWeight="bold" fontFamily='Poppins'>
-                    {getMonthNames()[0]}
+                    {previousMonthSavings>0?getMonthNames()[0]:''}
                 </text>
                 <text x={graphWidth * 0.39 + 22} y={graphHeight - 35} textAnchor="middle" fontSize="10" fontWeight="bold" fontFamily='Poppins'>
                     {getMonthNames()[1]}

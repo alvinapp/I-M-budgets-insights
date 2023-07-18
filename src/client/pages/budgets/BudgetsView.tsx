@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBar from "../components/NavBar";
 import CloseButton from "../components/CloseButton";
 import NavBarTitle from "../components/NavBarTitle";
@@ -22,6 +22,8 @@ import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
 import useCategoriesStore from "client/store/categoriesStore";
 import { checkNAN } from "client/utils/Formatters";
+import useMacroGoalsStore from "client/store/macroGoalStore";
+import { getMacros } from "client/api/macros";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -30,6 +32,8 @@ const BudgetsView = () => {
   const setToken = useConfigurationStore((state: any) => state.setToken);
   const setUser = useUserStore((state: any) => state.setUser);
   const categoryStore = useCategoriesStore((state: any) => state);
+  const macroGoalStore = useMacroGoalsStore((state: any) => state);
+  console.log("macroGoalStore", macroGoalStore.macroGoals);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -58,6 +62,13 @@ const BudgetsView = () => {
       }),
     { enabled: !!config.token }
   );
+  useEffect(() => {
+    const fetchMacroGoalsData = async () => {
+      const { data } = await getMacros({ configuration: config });
+      macroGoalStore.setMacros(data.map((item: any) => item.goals).flat());
+    };
+    fetchMacroGoalsData();
+  }, []);
   const essentialTotalBudgetAmount =
     categoryStore.categoryBudgets[0]?.total_amount;
   const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
