@@ -26,14 +26,31 @@ export const saveBudget = async ({
 
 export const fetchBudgetCategories = async ({
   configuration,
-  macrogoal_id,
 }: {
   configuration: IConfig;
-  macrogoal_id: number;
 }) => {
   try {
     const res = await fetchData({
-      endpoint: `/goals/macros/${macrogoal_id}/micros/`,
+      endpoint: `/goals/batch_micros/`,
+      token: configuration.token,
+      publicKey: configuration.publicKey,
+    });
+    return res;
+  } catch (reason: any) {
+    Sentry.captureException(reason);
+    console.debug(reason);
+    return Promise.reject(reason);
+  }
+};
+
+export const fetchMacros = async ({
+  configuration,
+}: {
+  configuration: IConfig;
+}) => {
+  try {
+    const res = await fetchData({
+      endpoint: `/goals/macros/`,
       token: configuration.token,
       publicKey: configuration.publicKey,
     });

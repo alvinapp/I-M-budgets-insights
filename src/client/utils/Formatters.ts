@@ -129,4 +129,4 @@ export const formatNumber = (num: any) => {
   } else {
     return num;
   }
-}
+};

@@ -1,11 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TooltipProgressBar from "../ToolTipProgressBar/ToolTipProgressBar";
 import { AmountView } from "./AmountView";
 import InsightsTooltipProgressBar from "./InsightsTooltipProgress";
 import { expenditureList } from "client/utils/MockData";
 import { ExpenditureCard } from "./ExpenditureCard";
-type MySpendProps = {};
-export const MySpend = ({}) => {
+import MacroPieChartWithLegend from "../MacroPieChartWithLegend";
+import useMicroGoalsStore from "client/store/microGoalStore";
+import { fetchMicroGoalTotals } from "client/api/micros";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+
+type MySpendProps = {
+  spent: number;
+  budget: number;
+  wantsSpend: number;
+  essentialsSpend: number;
+  savingsSpend: number;
+  unallocatedSpend: number;
+};
+export const MySpend = ({
+  spent,
+  budget,
+  wantsSpend,
+  essentialsSpend,
+  savingsSpend,
+  unallocatedSpend,
+}: MySpendProps) => {
+  const microGoals = useMicroGoalsStore((state) => state.microGoals);
+  const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
+  const config = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
+
+  useEffect(() => {
+    const fetchMicroGoalTotalsData = async () => {
+      const data = await fetchMicroGoalTotals({ configuration: config });
+      setMicroGoals(data);
+    };
+
+    fetchMicroGoalTotalsData();
+  }, []);
+  
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -15,11 +49,25 @@ export const MySpend = ({}) => {
         </div>
       </div>
       <div className="mt-2.5 flex flex-row">
-        <InsightsTooltipProgressBar progressPercent={25} />
+        <InsightsTooltipProgressBar progressPercent={0} />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
-        <AmountView caption="Spent" amount={160300} />
-        <AmountView caption="Planned budget" amount={300000} flex="items-end" />
+        <AmountView caption="Spent" amount={spent} />
+        <AmountView caption="Planned budget" amount={budget} flex="items-end" />
+      </div>
+      <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
+      <div className="flex flex-row items-center justify-center w-full h-full -ml-5">
+        <MacroPieChartWithLegend
+          dimensions={190}
+          doughnutThickness={14}
+          showComparison={false}
+          values={{
+            wants: wantsSpend,
+            essentials: essentialsSpend,
+            savings: savingsSpend,
+            unallocated: unallocatedSpend,
+          }}
+        />
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
       <div className="flex flex-row items-center justify-between mb-6">
@@ -38,16 +86,16 @@ export const MySpend = ({}) => {
         </div>
       </div>
       <div className="flex flex-col">
-        {expenditureList && expenditureList.length > 0
-          ? expenditureList.map((expenditure, i: number) => {
+        {microGoals && microGoals.length > 0
+          ? microGoals.slice(0, 5).map((microGoal, i: number) => {
               return (
                 <ExpenditureCard
-                  transactions={expenditure.transactions}
-                  icon={expenditure.emoji}
-                  budget={expenditure.budget}
-                  spent={expenditure.spent}
+                  transactions={microGoal.number_of_transactions}
+                  icon={microGoal.emoji}
+                  budget={microGoal.amount} 
+                  spent={microGoal.total_transactions}
                   key={i}
-                  category={expenditure.name}
+                  category={microGoal.name}
                 />
               );
             })

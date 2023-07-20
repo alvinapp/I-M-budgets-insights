@@ -19,7 +19,9 @@ const OnboardingAddIncome = () => {
   const configuration = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
-  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(budgetSettingsStore.monthlyIncome || 300000);
+  const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
+    budgetSettingsStore.monthlyIncome || 300000
+  );
 
   const postIncome = async (amount: number) => {
     setLoading(true);
@@ -29,7 +31,6 @@ const OnboardingAddIncome = () => {
         token: configuration.token,
         data: { amount },
       });
-      console.log(response);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -38,7 +39,6 @@ const OnboardingAddIncome = () => {
   };
 
   const { mutate: addIncome } = useMutation(postIncome);
-  
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
@@ -81,17 +81,17 @@ const OnboardingAddIncome = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 mx-3.5">
-      <MainButton
-        title="Continue"
-        isDisabled={false}
-        loading={loading}
-        click={() => {
-          budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
-          addIncome(monthlyIncomeValue);
-          navigate("/onboard-split-income");
-        }}
-      />
-    </div>
+        <MainButton
+          title="Continue"
+          isDisabled={false}
+          loading={loading}
+          click={() => {
+            budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
+            addIncome(monthlyIncomeValue);
+            navigate("/onboard-split-income");
+          }}
+        />
+      </div>
     </div>
   );
 };
