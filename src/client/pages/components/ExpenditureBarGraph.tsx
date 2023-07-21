@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import GraphLegend from './GraphLegend';
 
 interface BarGraphProps {
-    previousMonth: { essentials:{spent:number,expenseLimit:number}, wants: {spent:number,expenseLimit:number} },
-    currentMonth: { essentials: {spent:number,expenseLimit:number}, wants: {spent:number,expenseLimit:number} },
+    previousMonth: { essentials: { spent: number, expenseLimit: number }, wants: { spent: number, expenseLimit: number } },
+    currentMonth: { essentials: { spent: number, expenseLimit: number }, wants: { spent: number, expenseLimit: number } },
     budgetLimit: number,
 }
 
@@ -39,16 +39,20 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
         const essentialsHeight = Math.min(essentialsSpent, expenseLimit) * scaleFactor;
         const wantsHeight = Math.min(wantsSpent, Math.max(0, expenseLimit - essentialsSpent)) * scaleFactor;
         const exceededHeight = Math.max(0, totalSpent - expenseLimit) * scaleFactor;
-        const overlap = 15; // Overlap between segments for smooth transition
-    
+        const overlap = 15; // Overlap between the bars}
         const tooltipHeight = 20;
         const tooltipPadding = 5;
-        const tooltipPosY = graphHeight - (essentialsHeight + wantsHeight + exceededHeight) - tooltipHeight - tooltipPadding - 60;
-    
-        const renderBarSegment = (offsetY: number, height: number, color: string) => (
-            <rect x={x} y={graphHeight - 50 - height - offsetY} width="46" height={height} fill={color} rx="10" ry="10" />
-        );
-    
+        const maxHeight = Math.max(essentialsHeight + wantsHeight + exceededHeight, 0);
+        const tooltipPosY = graphHeight - maxHeight - tooltipHeight - tooltipPadding - 60 - overlap;
+
+        const renderBarSegment = (offsetY: number, height: number, color: string) => {
+            offsetY = Math.max(offsetY, 0);
+            if ((offsetY + height) > graphHeight - 50) {
+                offsetY = graphHeight - 50 - height;
+            }
+            return <rect x={x} y={graphHeight - 50 - height - offsetY} width="46" height={height} fill={color} rx="10" ry="10" />
+        };
+
         return (
             <g>
                 {/* Exceeded segment of the bar */}
@@ -57,7 +61,7 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 {wantsHeight > 0 && renderBarSegment(essentialsHeight - overlap, wantsHeight + overlap, '#c18a4c')}
                 {/* Essentials segment of the bar */}
                 {essentialsHeight > 0 && renderBarSegment(0, essentialsHeight + (wantsHeight > 0 ? overlap : 0), "url(#essentialsGradient)")}
-                {showTooltip && (
+                {showTooltip && totalSpent > 0?(
                     <>
                         {/* Tooltip */}
                         <rect x={x + 1} y={tooltipPosY} width="47" height={tooltipHeight} fill="#101a25" stroke="#101a25" strokeWidth="1" rx="5" ry="5" />
@@ -68,11 +72,11 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                         {/* Text showing total value */}
                         <text x={x + 20} y={tooltipPosY + tooltipHeight + 13} textAnchor="middle" fontSize="10" fontFamily='Poppins'>-{totalSpent.toLocaleString("en-US")}</text>
                     </>
-                )}
+                ):null}
             </g>
         );
     };
-      
+
 
 
     const renderChangeContainer = () => {
@@ -81,19 +85,23 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
         const changePercentage = ((totalCurrMonth - totalPrevMonth) / totalPrevMonth) * 100;
         const isIncrease = changePercentage >= 0;
 
+        if (totalPrevMonth === 0) {
+            return <div></div>;
+        }
+
         return (
             <g>
                 {/* Grey circular container */}
-                <circle cx={graphWidth - 143} cy={graphHeight - 75} r="13" fill="#dddddd" stroke="#565656" strokeWidth="1" />
+                <circle cx={graphWidth - 145} cy={graphHeight - 75} r="13" fill="#dddddd" stroke="#565656" strokeWidth="1" />
 
                 {/* Conditionally render the arrow icon */}
-                <g transform={`translate(${graphWidth - 155}, ${graphHeight - 87}) scale(1.5)`}>
+                <g transform={`translate(${graphWidth - 157}, ${graphHeight - 87}) scale(1.5)`}>
                     {isIncrease ? <FiArrowUpRight color="#565656" strokeWidth="1" /> : <FiArrowDownRight color="#565656" strokeWidth="1" />}
                 </g>
 
                 {/* Change percentage text */}
-                <text x={graphWidth - 127} y={graphHeight - 72} textAnchor="start" fontSize="11" fontWeight={"bold"} fontFamily='Poppins'>{Math.abs(changePercentage).toFixed(0)}%</text>
-                <text x={graphWidth - 103} y={graphHeight - 72} textAnchor="start" fontSize="10" fontFamily='Poppins'>change this month</text>
+                <text x={graphWidth - 130} y={graphHeight - 72} textAnchor="start" fontSize="11" fontWeight={"bold"} fontFamily='Poppins'>{Math.abs(changePercentage).toFixed(0)}%</text>
+                <text x={graphWidth - 102} y={graphHeight - 72} textAnchor="start" fontSize="10" fontFamily='Poppins'>change this month</text>
             </g>
         );
     };
@@ -129,9 +137,9 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 {renderLimitLine(budgetLimit, 'Budget Limit')}
 
                 {/* Month Labels */}
-                <text x={graphWidth * 0.2 + 22} y={graphHeight - 35} textAnchor="middle" fontSize="10" fontWeight="bold" fontFamily='Poppins'>
+                {(previousMonth.essentials.spent + previousMonth.wants.spent) > 0 ? <text x={graphWidth * 0.2 + 22} y={graphHeight - 35} textAnchor="middle" fontSize="10" fontWeight="bold" fontFamily='Poppins'>
                     {getMonthNames()[0]}
-                </text>
+                </text> : <></>}
                 <text x={graphWidth * 0.39 + 22} y={graphHeight - 35} textAnchor="middle" fontSize="10" fontWeight="bold" fontFamily='Poppins'>
                     {getMonthNames()[1]}
                 </text>

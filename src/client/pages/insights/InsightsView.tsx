@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBarTitle from "../components/NavBarTitle";
 import BackButton from "../components/BackButton";
 import NavBar from "../components/NavBar";
@@ -20,11 +20,62 @@ import ExpenditureBarGraph from "../components/ExpenditureBarGraph";
 import SavingsBarGraph from "../components/SavingsBarGraph";
 import CashFlowPieChart from "../components/CashFlowPieChart";
 import { useNavigate } from "react-router-dom";
+import { getCashFlow } from "client/api/transactions";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import useUserStore from "client/store/userStore";
+import useCategoriesStore from "client/store/categoriesStore";
+import useMacroGoalsStore from "client/store/macroGoalStore";
 
 const InsightsView = () => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
+  const config = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
+  const userStore = useUserStore((state: any) => state);
+  const macroGoalStore = useMacroGoalsStore((state: any) => state);
+
+  console.log('macroGoalStore', macroGoalStore.macroGoals[0].range_expense)
+
+  interface ICashFlowData {
+    total_credit?: number;
+    total_debit?: number;
+    total_change?: number;
+  }
+
+  const [cashFlowData, setCashFlowData] = useState<ICashFlowData | null>(null);
+  const {
+    total_credit: moneyIn = 0,
+    total_debit: moneyOut = 0,
+    total_change: netCashFlow = 0
+  } = cashFlowData || {};
+  const categoryStore = useCategoriesStore((state: any) => state);
+
+  const essentialTotalBudgetAmount =
+    categoryStore.categoryBudgets[0]?.total_amount;
+  const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
+  const savingsTotalBudgetAmount =
+    categoryStore.categoryBudgets[2]?.total_amount;
+    const previousEssentialTotalExpenses = macroGoalStore.macroGoals[0].range_expense.last_month_total;
+  const essentialTotalExpenses =
+  macroGoalStore.macroGoals[0].range_expense.this_month_total;
+  const wantsTotalExpenses = macroGoalStore.macroGoals[1].range_expense.this_month_total;
+  const previousWantsTotalExpenses = macroGoalStore.macroGoals[1].range_expense.last_month_total;
+  const savingsTotalExpenses = macroGoalStore.macroGoals[2].range_expense.this_month_total;
+  const previousSavingsTotalExpenses = macroGoalStore.macroGoals[2].range_expense.last_month_total;
+
+  const totalBudgetAmount = essentialTotalBudgetAmount + wantsTotalBudgetAmount + savingsTotalBudgetAmount;
+  const totalExpenses = essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
+
+  useEffect(() => {
+    const fetchCashFlowData = async () => {
+      const data = await getCashFlow({ configuration: config });
+      setCashFlowData(data);
+    };
+    fetchCashFlowData();
+  }, []);
+
   const [toggleTabId, setToggleTabId] = useState(0);
   const [budgetSpendTabId, setBudgetSpendTabId] = useState(0);
   const navigate = useNavigate();
@@ -52,11 +103,14 @@ const InsightsView = () => {
       <div className="flex-grow h-px bg-skin-accent3"></div>
       <div className="flex flex-col mt-7 mx-3.5">
         <div className="flex flex-row items-center justify-between mr-5">
-          <AvailableBudgetContainer
-            amount={160300}
+          {toggleTabId == 0 ? <AvailableBudgetContainer
+            amount={100000}
             subtitle="Current total spending"
             currencySymbol={currencySymbol}
-          />
+          /> : <AvailableBudgetContainer
+            amount={163000}
+            subtitle="Current total savings"
+            currencySymbol={currencySymbol} />}
           <Toggle
             tabs={insightsToggleTabs}
             activeTab={toggleTabId}
@@ -68,32 +122,32 @@ const InsightsView = () => {
             <ExpenditureBarGraph
               previousMonth={{
                 essentials: {
-                  spent: 350000,
-                  expenseLimit: 400000,
+                  spent: previousEssentialTotalExpenses,
+                  expenseLimit: essentialTotalBudgetAmount,
                 },
                 wants: {
-                  spent: 350000,
-                  expenseLimit: 200000,
+                  spent: previousWantsTotalExpenses,
+                  expenseLimit: wantsTotalBudgetAmount,
                 },
               }}
               currentMonth={{
                 essentials: {
-                  spent: 250000,
-                  expenseLimit: 400000,
+                  spent: essentialTotalExpenses,
+                  expenseLimit: essentialTotalBudgetAmount,
                 },
                 wants: {
-                  spent: 250000,
-                  expenseLimit: 200000,
+                  spent: wantsTotalExpenses,
+                  expenseLimit: wantsTotalBudgetAmount,
                 },
               }}
-              budgetLimit={800000}
+              budgetLimit={userStore.user.income}
             />
           ) : (
             <SavingsBarGraph
-              previousMonthSavings={198000}
-              currentMonthSavings={163000}
-              savingsTarget={150000}
-              budgetLimit={350000}
+              previousMonthSavings={previousSavingsTotalExpenses}
+              currentMonthSavings={savingsTotalExpenses}
+              savingsTarget={savingsTotalBudgetAmount}
+              budgetLimit={userStore.user.income}
             />
           )}
         </div>
@@ -102,10 +156,10 @@ const InsightsView = () => {
             dimensions={190}
             doughnutThickness={14}
             values={{
-              moneyIn: 1000000,
-              moneyOut: 500000,
+              moneyIn: cashFlowData?.total_credit || 0,
+              moneyOut: cashFlowData?.total_debit || 0,
             }}
-            percentageChange={5}
+            percentageChange={cashFlowData?.total_change || 0}
           />
         </div>
         <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
@@ -120,7 +174,25 @@ const InsightsView = () => {
             />
           </div>
           <div className="flex flex-row mt-6 mx-2">
-            {budgetSpendTabId === 0 ? <MySpend /> : <OthersSpend />}
+            {budgetSpendTabId === 0 ? <MySpend spent={
+              totalExpenses
+            } budget={
+              totalBudgetAmount
+            }
+            wantsSpend={wantsTotalExpenses}
+            savingsSpend={savingsTotalExpenses}
+            essentialsSpend={essentialTotalExpenses}
+            unallocatedSpend={500}
+            /> : <OthersSpend spentBudget={
+              totalExpenses
+            } plannedBudget={
+              totalBudgetAmount
+            }
+            wantsSpend={wantsTotalExpenses}
+            savingsSpend={savingsTotalExpenses}
+            essentialsSpend={essentialTotalExpenses}
+            unallocatedSpend={0}
+            />}
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import PercentageItem from "./PercentageItem";
+import { checkNAN } from "client/utils/Formatters";
 
 interface CashFlowPieChartProps {
   dimensions: number;
@@ -25,7 +26,8 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
 }) => {
   const { moneyIn, moneyOut } = values;
   const total = moneyIn + moneyOut;
-
+  const moneyOutPercentage = total>0?Math.round((moneyOut / total) * 100).toFixed(0):0;
+  const moneyInPercentage = total>0?Math.round((moneyIn / total) * 100).toFixed(0):0;
   const radius = dimensions / 2;
   const strokeWidth = doughnutThickness;
   const normalizedRadius = radius - strokeWidth * 2;
@@ -139,7 +141,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                     className="font-poppins text-s tracking-wide font-bold"
                     style={{ marginLeft: "4px", color: "#565656" }}
                   >
-                    {percentageChange}%
+                    {percentageChange.toFixed(1)}%
                   </span>
                   {/* percentage change */}
                 </div>
@@ -164,7 +166,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                   {"₦"}
                 </div>
                 <div className="font-workSans text-2xl font-semibold text-skin-neutral2">
-                  {(moneyIn + moneyOut).toLocaleString("en-US")}
+                  {(checkNAN(moneyIn + moneyOut)).toLocaleString("en-US")}
                 </div>
               </div>
             </div>
@@ -178,14 +180,14 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             <PercentageItem
               color="#66be5f"
               percentage={Number(
-                Math.round((moneyIn / total) * 100).toFixed(0)
+                moneyOutPercentage
               )}
               label="Money in"
             />
             <PercentageItem
               color="#F99E36"
               percentage={Number(
-                Math.round((moneyOut / total) * 100).toFixed(0)
+                moneyInPercentage
               )}
               label="Money out"
             />

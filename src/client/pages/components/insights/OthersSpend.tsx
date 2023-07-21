@@ -1,17 +1,25 @@
 import React from "react";
 import TooltipProgressBar from "../ToolTipProgressBar/ToolTipProgressBar";
 import { AmountView } from "./AmountView";
-import InsightsTooltipProgressBar from "./InsightsTooltipProgress";
 import { ExpenditureComparisonCard } from "./ExpenditureComparisonCard";
 import { expenditureCompareList } from "client/utils/MockData";
 import MacroPieChartWithLegend from "../MacroPieChartWithLegend";
+import InsightsVsTooltipProgressBar from "./VsProgress/InsightsVsTooltipProgress";
 type OthersSpendProps = {
-  spentBudget?: number;
-  plannedBudget?: number;
+  spentBudget: number;
+  plannedBudget: number;
+  wantsSpend: number;
+  essentialsSpend: number;
+  savingsSpend: number;
+  unallocatedSpend: number;
 };
 export const OthersSpend = ({
   spentBudget,
   plannedBudget,
+  wantsSpend,
+  essentialsSpend,
+  savingsSpend,
+  unallocatedSpend,
 }: OthersSpendProps) => {
   return (
     <div className="flex flex-col">
@@ -21,22 +29,46 @@ export const OthersSpend = ({
         </div>
       </div>
       <div className="mt-2.5 flex flex-row">
-        <InsightsTooltipProgressBar progressPercent={25} />
+      <InsightsVsTooltipProgressBar othersProgressSpend={0} myProgressSpend={51} />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
-        <AmountView caption="Spent" amount={160300} />
-        <AmountView caption="Planned budget" amount={300000} flex="items-end" />
+        <div className="flex flex-row items-start">
+          <div style={{
+            width: 10,
+            height: 10,
+            marginTop: 10,
+            borderRadius: 4,
+            backgroundColor: "#cac969",
+            marginRight: 5,
+          }}>
+          </div>
+          <AmountView caption="Other's avg spend" amount={137200} />
+        </div>
+        <div className="flex flex-row items-start">
+          <div style={{
+            width: 10,
+            height: 10,
+            marginTop: 10,
+            borderRadius: 4,
+            backgroundColor: "#6f89a5",
+            marginRight: 5,
+          }}>
+          </div>
+          <AmountView caption="My spend" amount={spentBudget}/>
+        </div>
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
-      <div className="flex flex-row">
+      <div className="flex flex-row -ml-8">
         <MacroPieChartWithLegend
           dimensions={190}
-          doughnutThickness={12}
+          doughnutThickness={14}
+          showComparison={true}
+          showUnallocated={false}
           values={{
-            wants: 120000,
-            essentials: 90000,
-            savings: 60000,
-            unallocated: 40000,
+            wants: wantsSpend,
+            essentials: essentialsSpend,
+            savings: savingsSpend,
+            unallocated: unallocatedSpend,
           }}
         />
       </div>

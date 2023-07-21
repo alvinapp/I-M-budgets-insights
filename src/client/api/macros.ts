@@ -1,5 +1,5 @@
 import { IConfig } from "client/store/configuration";
-import { postData, putData } from "./api";
+import { fetchData, postData, putData } from "./api";
 import * as Sentry from "@sentry/browser";
 
 export const setMacros = async ({
@@ -29,3 +29,21 @@ export const setMacros = async ({
     return Promise.reject(reason);
   }
 };
+
+export const getMacros = async ({
+  configuration,
+}: {
+  configuration: IConfig;
+}) => {
+  try {
+    const res = await fetchData({
+      endpoint: "/goals/macros",
+      token: configuration.token,
+    });
+    return res;
+  } catch (reason: any) {
+    Sentry.captureException(reason);
+    console.debug(reason);
+    return Promise.reject(reason);
+  }
+}
