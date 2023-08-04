@@ -33,7 +33,6 @@ const BudgetsView = () => {
   const setUser = useUserStore((state: any) => state.setUser);
   const categoryStore = useCategoriesStore((state: any) => state);
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
-  console.log("macroGoalStore", macroGoalStore.macroGoals);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;

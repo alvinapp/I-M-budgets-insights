@@ -36,8 +36,6 @@ const InsightsView = () => {
   const userStore = useUserStore((state: any) => state);
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
 
-  console.log("macroGoalStore", macroGoalStore.macroGoals[0].range_expense);
-
   interface ICashFlowData {
     total_credit?: number;
     total_debit?: number;
