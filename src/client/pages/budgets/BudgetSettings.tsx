@@ -93,7 +93,6 @@ export const BudgetSettings = () => {
     "fetch-macros",
     () =>
       fetchMacros({ configuration: configurations }).then((res) => {
-        console.log(res);
         categoriesStore.setMacros(res);
       }),
     { refetchOnWindowFocus: false, enabled: !!configurations.token }

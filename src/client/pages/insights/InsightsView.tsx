@@ -36,8 +36,6 @@ const InsightsView = () => {
   const userStore = useUserStore((state: any) => state);
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
 
-  console.log('macroGoalStore', macroGoalStore.macroGoals[0].range_expense)
-
   interface ICashFlowData {
     total_credit?: number;
     total_debit?: number;
@@ -48,7 +46,7 @@ const InsightsView = () => {
   const {
     total_credit: moneyIn = 0,
     total_debit: moneyOut = 0,
-    total_change: netCashFlow = 0
+    total_change: netCashFlow = 0,
   } = cashFlowData || {};
   const categoryStore = useCategoriesStore((state: any) => state);
 
@@ -57,16 +55,25 @@ const InsightsView = () => {
   const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
   const savingsTotalBudgetAmount =
     categoryStore.categoryBudgets[2]?.total_amount;
-    const previousEssentialTotalExpenses = macroGoalStore.macroGoals[0].range_expense.last_month_total;
+  const previousEssentialTotalExpenses =
+    macroGoalStore.macroGoals[0].range_expense.last_month_total;
   const essentialTotalExpenses =
-  macroGoalStore.macroGoals[0].range_expense.this_month_total;
-  const wantsTotalExpenses = macroGoalStore.macroGoals[1].range_expense.this_month_total;
-  const previousWantsTotalExpenses = macroGoalStore.macroGoals[1].range_expense.last_month_total;
-  const savingsTotalExpenses = macroGoalStore.macroGoals[2].range_expense.this_month_total;
-  const previousSavingsTotalExpenses = macroGoalStore.macroGoals[2].range_expense.last_month_total;
+    macroGoalStore.macroGoals[0].range_expense.this_month_total;
+  const wantsTotalExpenses =
+    macroGoalStore.macroGoals[1].range_expense.this_month_total;
+  const previousWantsTotalExpenses =
+    macroGoalStore.macroGoals[1].range_expense.last_month_total;
+  const savingsTotalExpenses =
+    macroGoalStore.macroGoals[2].range_expense.this_month_total;
+  const previousSavingsTotalExpenses =
+    macroGoalStore.macroGoals[2].range_expense.last_month_total;
 
-  const totalBudgetAmount = essentialTotalBudgetAmount + wantsTotalBudgetAmount + savingsTotalBudgetAmount;
-  const totalExpenses = essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
+  const totalBudgetAmount =
+    essentialTotalBudgetAmount +
+    wantsTotalBudgetAmount +
+    savingsTotalBudgetAmount;
+  const totalExpenses =
+    essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
 
   useEffect(() => {
     const fetchCashFlowData = async () => {
@@ -103,14 +110,19 @@ const InsightsView = () => {
       <div className="flex-grow h-px bg-skin-accent3"></div>
       <div className="flex flex-col mt-7 mx-3.5">
         <div className="flex flex-row items-center justify-between mr-5">
-          {toggleTabId == 0 ? <AvailableBudgetContainer
-            amount={100000}
-            subtitle="Current total spending"
-            currencySymbol={currencySymbol}
-          /> : <AvailableBudgetContainer
-            amount={163000}
-            subtitle="Current total savings"
-            currencySymbol={currencySymbol} />}
+          {toggleTabId == 0 ? (
+            <AvailableBudgetContainer
+              amount={100000}
+              subtitle="Current total spending"
+              currencySymbol={currencySymbol}
+            />
+          ) : (
+            <AvailableBudgetContainer
+              amount={163000}
+              subtitle="Current total savings"
+              currencySymbol={currencySymbol}
+            />
+          )}
           <Toggle
             tabs={insightsToggleTabs}
             activeTab={toggleTabId}
@@ -174,25 +186,25 @@ const InsightsView = () => {
             />
           </div>
           <div className="flex flex-row mt-6 mx-2">
-            {budgetSpendTabId === 0 ? <MySpend spent={
-              totalExpenses
-            } budget={
-              totalBudgetAmount
-            }
-            wantsSpend={wantsTotalExpenses}
-            savingsSpend={savingsTotalExpenses}
-            essentialsSpend={essentialTotalExpenses}
-            unallocatedSpend={500}
-            /> : <OthersSpend spentBudget={
-              totalExpenses
-            } plannedBudget={
-              totalBudgetAmount
-            }
-            wantsSpend={wantsTotalExpenses}
-            savingsSpend={savingsTotalExpenses}
-            essentialsSpend={essentialTotalExpenses}
-            unallocatedSpend={0}
-            />}
+            {budgetSpendTabId === 0 ? (
+              <MySpend
+                spent={totalExpenses}
+                budget={totalBudgetAmount}
+                wantsSpend={wantsTotalExpenses}
+                savingsSpend={savingsTotalExpenses}
+                essentialsSpend={essentialTotalExpenses}
+                unallocatedSpend={500}
+              />
+            ) : (
+              <OthersSpend
+                spentBudget={totalExpenses}
+                plannedBudget={totalBudgetAmount}
+                wantsSpend={wantsTotalExpenses}
+                savingsSpend={savingsTotalExpenses}
+                essentialsSpend={essentialTotalExpenses}
+                unallocatedSpend={0}
+              />
+            )}
           </div>
         </div>
       </div>
