@@ -57,6 +57,7 @@ const BudgetsView = () => {
       fetchBudgetCategories({
         configuration: config,
       }).then((result) => {
+        console.log(result)
         categoryStore.setCategoryBudgets(result);
       }),
     { enabled: !!config.token }
@@ -84,8 +85,8 @@ const BudgetsView = () => {
           children={
             <div className="flex flex-row items-center justify-between mt-6">
               <NavBarTitle title="Budget" fontSize="text-2xl" />
-              <div className="h-6 w-6 rounded-full">
-                {/* <FiSettings color="#4E6783" size="1.25rem" /> */}
+              <div className="h-6 w-6 rounded-full" onClick={()=>navigate('/edit-budgets')}>
+                <FiSettings color="#4E6783" size="1.25rem" />
               </div>
             </div>
           }

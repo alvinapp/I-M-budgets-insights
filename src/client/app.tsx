@@ -25,6 +25,7 @@ const OnboardingSuccess = lazy(
 const BudgetsView = lazy(() => import("./pages/budgets/BudgetsView"));
 
 const InsightsView = lazy(() => import("./pages/insights/InsightsView"));
+const EditBudgetSettings = lazy(()=>import("./pages/budgets/edit-settings/EditBudgetSettings"));
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -63,6 +64,7 @@ const App = () => {
               <Route path="/budget-settings" element={<BudgetSettings />} />
               <Route path="/budgets-view" element={<BudgetsView />} />
               <Route path="/insights-view" element={<InsightsView />} />
+              <Route path="/edit-budgets" element={<EditBudgetSettings />} />
             </Routes>
           </Suspense>
           <ToastContainer />
