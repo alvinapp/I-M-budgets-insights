@@ -3,17 +3,17 @@ import { FiPieChart } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
-import MainButton from "../components/MainButton";
-import NavBar from "../components/NavBar";
-import ArrowBackButton from "../components/ArrowBack";
+import MainButton from "../../components/MainButton";
+import NavBar from "../../components/NavBar";
+import ArrowBackButton from "../../components/ArrowBack";
 import ReactSlider from "react-slider";
 import { useConfigurationStore, IConfig } from "client/store/configuration";
 import { setIncome, completeOnboarding } from "client/api/users";
 import { GoalMacroType, setMacro } from "client/api/goals";
-import SliderThumbComponent from "../components/SliderThumbComponent";
+import SliderThumbComponent from "../../components/SliderThumbComponent";
 import debounce from 'lodash.debounce';
 
-const OnboardingSplitIncome = () => {
+const EditSplitIncome = () => {
   const navigate = useNavigate();
   const configuration = useConfigurationStore(
     (state: any) => state.configuration
@@ -118,7 +118,7 @@ const OnboardingSplitIncome = () => {
       await completeOnboarding({ completionTime: new Date(), configuration });
 
       // Redirect to success page
-      navigate("/onboard-success");
+      navigate(-1);
     } catch (error) {
       console.error(error);
       // Handle the error
@@ -369,7 +369,6 @@ const OnboardingSplitIncome = () => {
               savings: savingsRatio,
             });
             postAllMacros();
-            navigate("/onboard-success");
           }}
         />
       </div>
@@ -377,4 +376,4 @@ const OnboardingSplitIncome = () => {
   );
 };
 
-export default OnboardingSplitIncome;
+export default EditSplitIncome;

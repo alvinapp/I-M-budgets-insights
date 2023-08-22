@@ -7,6 +7,7 @@ import "./style.scss";
 import { TailSpin } from "react-loader-spinner";
 import { ToastContainer } from "react-toastify";
 import { BudgetSettings } from "./pages/budgets/BudgetSettings";
+import ViewInfo from "./pages/budgets/ViewInfo";
 
 declare var AppConfig: AppConfig;
 
@@ -25,8 +26,9 @@ const OnboardingSuccess = lazy(
 const BudgetsView = lazy(() => import("./pages/budgets/BudgetsView"));
 
 const InsightsView = lazy(() => import("./pages/insights/InsightsView"));
-const EditBudgetSettings = lazy(()=>import("./pages/budgets/edit-settings/EditBudgetSettings"));
-
+const EditBudgetSettings = lazy(() => import("./pages/budgets/edit-settings/EditBudgetSettings"));
+const EditMonthlyIncome = lazy(() => import("./pages/budgets/edit-settings/EditMonthlyIncome"));
+const EditSplitIncome = lazy(() => import("./pages/budgets/edit-settings/EditSplitIncome"));
 const App = () => {
   const queryClient = new QueryClient();
 
@@ -65,6 +67,9 @@ const App = () => {
               <Route path="/budgets-view" element={<BudgetsView />} />
               <Route path="/insights-view" element={<InsightsView />} />
               <Route path="/edit-budgets" element={<EditBudgetSettings />} />
+              <Route path="/edit-monthly-income" element={<EditMonthlyIncome />} />
+              <Route path="/edit-split-income" element={<EditSplitIncome />} />
+              <Route path="/view-info" element={<ViewInfo />} />
             </Routes>
           </Suspense>
           <ToastContainer />

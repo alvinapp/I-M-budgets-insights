@@ -5,11 +5,9 @@ interface MacroStoreState {
   macroGoals: Array<Macro>;
 }
 
-type IMacroStore = MacroStoreState & {
-  setMacros: (data: Array<Macro>) => void;
-};
 
-const useMacrosStore = create<IMacroStore>((set) => ({
+
+const useMacrosStore = create((set) => ({
   macroGoals: [],
 
   setMacros: (data: Array<Macro>) => {

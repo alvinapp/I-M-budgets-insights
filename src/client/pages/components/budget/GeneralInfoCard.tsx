@@ -9,6 +9,7 @@ type GeneralInfoCardProps = {
   subtitle?: string;
   caption?: string;
   currencySymbol?: string;
+  onClick?:()=>void;
 };
 export const GeneralInfoCard = ({
   title,
@@ -17,9 +18,10 @@ export const GeneralInfoCard = ({
   subtitle,
   caption,
   currencySymbol,
+  onClick
 }: GeneralInfoCardProps) => {
   return (
-    <div className="flex flex-col shadow-card p-4 rounded-lg">
+    <div className="flex flex-col shadow-card p-4 rounded-lg" onClick={onClick}>
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
