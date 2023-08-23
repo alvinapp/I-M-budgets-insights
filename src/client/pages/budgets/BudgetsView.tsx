@@ -56,6 +56,7 @@ const BudgetsView = () => {
       fetchBudgetCategories({
         configuration: config,
       }).then((result) => {
+        console.log(result)
         categoryStore.setCategoryBudgets(result);
       }),
     { enabled: !!config.token }
@@ -63,9 +64,7 @@ const BudgetsView = () => {
   useEffect(() => {
     const fetchMacroGoalsData = async () => {
       const { data } = await getMacros({ configuration: config });
-      console.log(data);
       const result = data?.map((item: any) => item.goals).flat();
-      console.log(result);
       macroGoalStore.setMacros(result && result.length > 0 ? result : []);
     };
     fetchMacroGoalsData();

@@ -138,11 +138,11 @@ const EditBudgetSettings = () => {
   const wantsGoals = wantslMacro?.goals ?? [];
   const savingsGoals = savingsMacro?.goals ?? [];
   const essentialBudgetAmount = essentialGoals[0]?.amount ?? "";
-  const [allocatedEssentials, setAllocatedEssentials] = useState(categoriesStore.categoryBudgets[0] && categoriesStore.categoryBudgets[0].length > 0 ? categoriesStore?.categoryBudgets[0].total_amount : 0);
+  const [allocatedEssentials, setAllocatedEssentials] = useState(typeof categoriesStore.categoryBudgets[0] !== undefined ? categoriesStore?.categoryBudgets[0].total_amount : 0);
   const wantsBudgetAmount = wantsGoals[0]?.amount ?? "";
-  const [allocatedWants, setAllocatedWants] = useState(categoriesStore.categoryBudgets[1] && categoriesStore.categoryBudgets[1].length > 0 ? categoriesStore?.categoryBudgets[1]?.total_amount : 0);
+  const [allocatedWants, setAllocatedWants] = useState(typeof categoriesStore.categoryBudgets[1] !== undefined ? categoriesStore?.categoryBudgets[1]?.total_amount : 0);
   const savingsBudgetAmount = savingsGoals[0]?.amount ?? "";
-  const [allocatedSavings, setAllocatedSavings] = useState(categoriesStore.categoryBudgets[2] && categoriesStore.categoryBudgets[2].length > 0 ? categoriesStore?.categoryBudgets[2].total_amount : 0);
+  const [allocatedSavings, setAllocatedSavings] = useState(typeof categoriesStore.categoryBudgets[2] !== undefined ? categoriesStore?.categoryBudgets[2].total_amount : 0);
   const [addSavings, setAddSavings] = useState(false);
   const [savingsList, setSavingsList] = useState([{}]);
   const budgetStore = useBudgetSettingsStore((state: any) => state);
