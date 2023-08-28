@@ -20,7 +20,7 @@ const OnboardingAddIncome = () => {
     (state: any) => state.configuration
   ) as IConfig;
   const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
-    budgetSettingsStore.monthlyIncome || 300000
+    budgetSettingsStore.monthlyIncome || 50000
   );
 
   const postIncome = async (amount: number) => {

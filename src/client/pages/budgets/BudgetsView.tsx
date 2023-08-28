@@ -101,8 +101,7 @@ const BudgetsView = () => {
           <AvailableBudgetContainer
             amount={checkNAN(
               essentialTotalBudgetAmount +
-              wantsTotalBudgetAmount +
-              savingsTotalBudgetAmount
+              wantsTotalBudgetAmount
             )}
             subtitle="Available budget spend"
             currencySymbol={currencySymbol}
@@ -112,7 +111,7 @@ const BudgetsView = () => {
           </div>
         </div>
         <div className="mt-11">
-          <TooltipProgressBar progressPercent={25} />
+          <TooltipProgressBar progressPercent={0} />
         </div>
         <div className="mt-2">
           <MacroProgressBarsContainer
