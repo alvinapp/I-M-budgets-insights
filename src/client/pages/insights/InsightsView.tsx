@@ -112,13 +112,13 @@ const InsightsView = () => {
         <div className="flex flex-row items-center justify-between mr-5">
           {toggleTabId == 0 ? (
             <AvailableBudgetContainer
-              amount={100000}
+              amount={essentialTotalExpenses + wantsTotalExpenses}
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
             />
           ) : (
             <AvailableBudgetContainer
-              amount={163000}
+              amount={savingsTotalExpenses}
               subtitle="Current total savings"
               currencySymbol={currencySymbol}
             />
@@ -193,7 +193,7 @@ const InsightsView = () => {
                 wantsSpend={wantsTotalExpenses}
                 savingsSpend={savingsTotalExpenses}
                 essentialsSpend={essentialTotalExpenses}
-                unallocatedSpend={500}
+                unallocatedSpend={userStore.user.income - totalBudgetAmount}
               />
             ) : (
               <OthersSpend

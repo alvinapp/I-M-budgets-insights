@@ -3,24 +3,27 @@ import { FiBriefcase } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
-import MainButton from "../components/MainButton";
-import NavBar from "../components/NavBar";
-import ArrowBackButton from "../components/ArrowBack";
-import MonthlyIncomeInput from "../components/onboarding/MonthlyIncomeInput";
+import MainButton from "../../components/MainButton";
+import NavBar from "../../components/NavBar";
+import ArrowBackButton from "../../components/ArrowBack";
+import MonthlyIncomeInput from "../../components/onboarding/MonthlyIncomeInput";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import { useMutation, useQuery } from "react-query";
 import { postData } from "client/api/api";
+import useUserStore from "client/store/userStore";
 
-const OnboardingAddIncome = () => {
+const EditMonthlyIncome = () => {
   const navigate = useNavigate();
   const budgetSettingsStore = useBudgetSettingsStore();
+  const userStore = useUserStore((state: any) => state);
   const [loading, setLoading] = useState(false);
   const { currency } = budgetSettingsStore;
+  console.log(userStore.user.income)
   const configuration = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
   const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
-    budgetSettingsStore.monthlyIncome || 50000
+    userStore.user.income
   );
 
   const postIncome = async (amount: number) => {
@@ -32,6 +35,7 @@ const OnboardingAddIncome = () => {
         data: { amount },
       });
       setLoading(false);
+      return response;
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -88,7 +92,7 @@ const OnboardingAddIncome = () => {
           click={() => {
             budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
             addIncome(monthlyIncomeValue);
-            navigate("/onboard-split-income");
+            // navigate("/onboard-split-income");
           }}
         />
       </div>
@@ -96,4 +100,4 @@ const OnboardingAddIncome = () => {
   );
 };
 
-export default OnboardingAddIncome;
+export default EditMonthlyIncome ;
