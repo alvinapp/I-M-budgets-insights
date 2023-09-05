@@ -25,6 +25,13 @@ import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
 import useCategoriesStore from "client/store/categoriesStore";
 import useMacroGoalsStore from "client/store/macroGoalStore";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import InsightsFilters from "./InsightsFilters";
+import useAccountStore from "client/store/accountStore";
+import Accounts from "client/models/Accounts";
+import Account from "client/models/Account";
+import { useQuery } from "react-query";
+import getAccounts from "client/api/account";
 
 const InsightsView = () => {
   const currencySymbol = useCurrencySettingsStore(
@@ -74,7 +81,8 @@ const InsightsView = () => {
     savingsTotalBudgetAmount;
   const totalExpenses =
     essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
-
+  const accountStore = useAccountStore((state: any) => state);
+  const accounts = accountStore.accounts as Accounts;
   useEffect(() => {
     const fetchCashFlowData = async () => {
       const data = await getCashFlow({ configuration: config });
@@ -86,6 +94,19 @@ const InsightsView = () => {
   const [toggleTabId, setToggleTabId] = useState(0);
   const [budgetSpendTabId, setBudgetSpendTabId] = useState(0);
   const navigate = useNavigate();
+  const [filter, openFilter] = useState(false);
+  const filterAccountBy = useAccountStore((state: any) => state.filterBy);
+  const filteredAccount = useAccountStore(
+    (state: any) => state.filter
+  ) as Account;
+  const { data: fetchedAccounts } = useQuery(
+    "fetch-accounts",
+    () =>
+      getAccounts(config).then((accounts) => {
+        accountStore.init(accounts || []);
+      }),
+    { refetchOnWindowFocus: false }
+  );
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -100,7 +121,10 @@ const InsightsView = () => {
                   <NavBarTitle title="Insights" fontSize="text-2xl" />
                 </div>
               </div>
-              <div className="h-6 w-6 rounded-full flex justify-center items-center">
+              <div
+                className="h-6 w-6 rounded-full flex justify-center items-center"
+                onClick={() => openFilter(true)}
+              >
                 <FiFilter color="#4E6783" size="1.5rem" />
               </div>
             </div>
@@ -208,6 +232,25 @@ const InsightsView = () => {
           </div>
         </div>
       </div>
+      <BottomSheet
+        onDismiss={() => {
+          openFilter(false);
+        }}
+        open={filter}
+        style={{
+          borderRadius: 24,
+        }}
+        children={
+          <InsightsFilters
+            accounts={accounts}
+            activeAccount={filteredAccount}
+            onClick={(account: Account) => {
+              filterAccountBy(account);
+            }}
+          />
+        }
+        defaultSnap={400}
+      ></BottomSheet>
     </div>
   );
 };

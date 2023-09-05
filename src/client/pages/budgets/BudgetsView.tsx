@@ -56,7 +56,6 @@ const BudgetsView = () => {
       fetchBudgetCategories({
         configuration: config,
       }).then((result) => {
-        console.log(result)
         categoryStore.setCategoryBudgets(result);
       }),
     { enabled: !!config.token }
@@ -85,7 +84,10 @@ const BudgetsView = () => {
           children={
             <div className="flex flex-row items-center justify-between mt-6">
               <NavBarTitle title="Budget" fontSize="text-2xl" />
-              <div className="h-6 w-6 rounded-full" onClick={() => navigate('/edit-budgets')}>
+              <div
+                className="h-6 w-6 rounded-full"
+                onClick={() => navigate("/edit-budgets")}
+              >
                 <img src={settings} />
               </div>
             </div>
@@ -100,8 +102,7 @@ const BudgetsView = () => {
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
             amount={checkNAN(
-              essentialTotalBudgetAmount +
-              wantsTotalBudgetAmount
+              essentialTotalBudgetAmount + wantsTotalBudgetAmount
             )}
             subtitle="Available budget spend"
             currencySymbol={currencySymbol}
@@ -148,27 +149,27 @@ const BudgetsView = () => {
           />
           <div className="mt-6 flex flex-col">
             {categoryStore.categoryBudgets[0]?.data &&
-              categoryStore.categoryBudgets[0]?.data.length > 0
+            categoryStore.categoryBudgets[0]?.data.length > 0
               ? categoryStore.categoryBudgets[0]?.data.map(
-                (essential: any, i: any) => {
-                  return (
-                    <CategoryViewCard
-                      key={i}
-                      category={essential?.name}
-                      progressPercentage={essential?.percentage}
-                      icon={essential.category?.emoji}
-                      amount={essential?.amount}
-                      budgetAmount={essential.amount}
-                      spentAmount={essential?.expenses}
-                      iconBg="bg-skin-secondaryWithOpacity"
-                      baseBgColor="#D0DDEA"
-                      bgColor="#056489"
-                      primaryColor="text-skin-primary"
-                      fadedColor="text-skin-neutral"
-                    />
-                  );
-                }
-              )
+                  (essential: any, i: any) => {
+                    return (
+                      <CategoryViewCard
+                        key={i}
+                        category={essential?.name}
+                        progressPercentage={essential?.percentage}
+                        icon={essential.category?.emoji}
+                        amount={essential?.amount}
+                        budgetAmount={essential.amount}
+                        spentAmount={essential?.expenses}
+                        iconBg="bg-skin-secondaryWithOpacity"
+                        baseBgColor="#D0DDEA"
+                        bgColor="#056489"
+                        primaryColor="text-skin-primary"
+                        fadedColor="text-skin-neutral"
+                      />
+                    );
+                  }
+                )
               : null}
           </div>
         </div>
@@ -181,27 +182,27 @@ const BudgetsView = () => {
           />
           <div className="mt-6 flex flex-col">
             {categoryStore.categoryBudgets[1]?.data &&
-              categoryStore.categoryBudgets[1]?.data.length > 0
+            categoryStore.categoryBudgets[1]?.data.length > 0
               ? categoryStore.categoryBudgets[1]?.data.map(
-                (want: any, i: any) => {
-                  return (
-                    <CategoryViewCard
-                      key={i}
-                      category={want?.name}
-                      progressPercentage={want?.percentage}
-                      icon={want.category?.emoji}
-                      amount={want?.amount}
-                      budgetAmount={want?.amount}
-                      spentAmount={want?.expenses}
-                      iconBg="bg-skin-secondary3WithOpacity"
-                      baseBgColor="#E8E3DC"
-                      bgColor="#A28D72"
-                      primaryColor="text-skin-alvinBrown"
-                      fadedColor="text-skin-alvinBrownFaded"
-                    />
-                  );
-                }
-              )
+                  (want: any, i: any) => {
+                    return (
+                      <CategoryViewCard
+                        key={i}
+                        category={want?.name}
+                        progressPercentage={want?.percentage}
+                        icon={want.category?.emoji}
+                        amount={want?.amount}
+                        budgetAmount={want?.amount}
+                        spentAmount={want?.expenses}
+                        iconBg="bg-skin-secondary3WithOpacity"
+                        baseBgColor="#E8E3DC"
+                        bgColor="#A28D72"
+                        primaryColor="text-skin-alvinBrown"
+                        fadedColor="text-skin-alvinBrownFaded"
+                      />
+                    );
+                  }
+                )
               : null}
           </div>
         </div>
@@ -214,28 +215,28 @@ const BudgetsView = () => {
           />
           <div className="mt-6 flex flex-col">
             {categoryStore.categoryBudgets[2]?.data &&
-              categoryStore.categoryBudgets[2]?.data.length > 0
+            categoryStore.categoryBudgets[2]?.data.length > 0
               ? categoryStore.categoryBudgets[2]?.data.map(
-                (savings: any, i: any) => {
-                  return (
-                    <CategoryViewCard
-                      key={i}
-                      category={savings?.name}
-                      progressPercentage={savings?.percentage}
-                      icon={savings.category?.emoji}
-                      amount={savings?.amount}
-                      budgetAmount={savings.amount}
-                      spentAmount={savings.expenses}
-                      iconBg="bg-skin-secondaryWithOpacity"
-                      baseBgColor="#D6EAD4"
-                      bgColor="#33982A"
-                      primaryColor="text-skin-success"
-                      fadedColor="text-skin-successSecondary"
-                      caption="saved"
-                    />
-                  );
-                }
-              )
+                  (savings: any, i: any) => {
+                    return (
+                      <CategoryViewCard
+                        key={i}
+                        category={savings?.name}
+                        progressPercentage={savings?.percentage}
+                        icon={savings.category?.emoji}
+                        amount={savings?.amount}
+                        budgetAmount={savings.amount}
+                        spentAmount={savings.expenses}
+                        iconBg="bg-skin-secondaryWithOpacity"
+                        baseBgColor="#D6EAD4"
+                        bgColor="#33982A"
+                        primaryColor="text-skin-success"
+                        fadedColor="text-skin-successSecondary"
+                        caption="saved"
+                      />
+                    );
+                  }
+                )
               : null}
           </div>
         </div>

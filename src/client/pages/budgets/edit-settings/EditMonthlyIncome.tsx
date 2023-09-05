@@ -18,7 +18,6 @@ const EditMonthlyIncome = () => {
   const userStore = useUserStore((state: any) => state);
   const [loading, setLoading] = useState(false);
   const { currency } = budgetSettingsStore;
-  console.log(userStore.user.income)
   const configuration = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -100,4 +99,4 @@ const EditMonthlyIncome = () => {
   );
 };
 
-export default EditMonthlyIncome ;
+export default EditMonthlyIncome;
