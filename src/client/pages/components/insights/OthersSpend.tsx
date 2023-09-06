@@ -5,6 +5,7 @@ import { ExpenditureComparisonCard } from "./ExpenditureComparisonCard";
 import { expenditureCompareList } from "client/utils/MockData";
 import MacroPieChartWithLegend from "../MacroPieChartWithLegend";
 import InsightsVsTooltipProgressBar from "./VsProgress/InsightsVsTooltipProgress";
+import { calculateSpending } from "client/utils/Formatters";
 type OthersSpendProps = {
   spentBudget: number;
   plannedBudget: number;
@@ -21,6 +22,8 @@ export const OthersSpend = ({
   savingsSpend,
   unallocatedSpend,
 }: OthersSpendProps) => {
+  const expenditureProgress = calculateSpending(spentBudget, plannedBudget)
+  const othersAverageProgress = calculateSpending(59850, plannedBudget)
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -29,7 +32,7 @@ export const OthersSpend = ({
         </div>
       </div>
       <div className="mt-2.5 flex flex-row">
-      <InsightsVsTooltipProgressBar othersProgressSpend={0} myProgressSpend={51} />
+        <InsightsVsTooltipProgressBar othersProgressSpend={expenditureProgress.expenditureProgress} myProgressSpend={othersAverageProgress.expenditureProgress} />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
         <div className="flex flex-row items-start">
@@ -42,7 +45,7 @@ export const OthersSpend = ({
             marginRight: 5,
           }}>
           </div>
-          <AmountView caption="Other's avg spend" amount={137200} />
+          <AmountView caption="Other's avg spend" amount={59850} />
         </div>
         <div className="flex flex-row items-start">
           <div style={{
@@ -54,7 +57,7 @@ export const OthersSpend = ({
             marginRight: 5,
           }}>
           </div>
-          <AmountView caption="My spend" amount={spentBudget}/>
+          <AmountView caption="My spend" amount={spentBudget} />
         </div>
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
@@ -86,15 +89,15 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
-              return (
-                <ExpenditureComparisonCard
-                  icon={expenditure.emoji}
-                  key={i}
-                  category={expenditure.name}
-                  percentage={expenditure.percentage}
-                />
-              );
-            })
+            return (
+              <ExpenditureComparisonCard
+                icon={expenditure.emoji}
+                key={i}
+                category={expenditure.name}
+                percentage={expenditure.percentage}
+              />
+            );
+          })
           : null}
       </div>
     </div>

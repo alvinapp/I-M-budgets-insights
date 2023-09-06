@@ -21,7 +21,7 @@ import getToken from "client/api/token";
 import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
 import useCategoriesStore from "client/store/categoriesStore";
-import { checkNAN } from "client/utils/Formatters";
+import { calculateSpending, checkNAN } from "client/utils/Formatters";
 import useMacroGoalsStore from "client/store/macroGoalStore";
 import { getMacros } from "client/api/macros";
 import settings from "client/assets/images/budgets-insights/Settings.svg";
@@ -78,6 +78,14 @@ const BudgetsView = () => {
     categoryStore.categoryBudgets[0]?.total_expense;
   const wantsTotalExpenses = categoryStore.categoryBudgets[1]?.total_expense;
   const savingsTotalExpenses = categoryStore.categoryBudgets[2]?.total_expense;
+  // calculate total budget
+  const totalBudget = essentialTotalBudgetAmount + wantsTotalBudgetAmount + savingsTotalBudgetAmount
+  const totalExpenditure = essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses
+  const expenditureProgress = calculateSpending(totalExpenditure, totalBudget)
+  console.log(
+    "Expenditure progress",
+    expenditureProgress
+  )
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -100,8 +108,8 @@ const BudgetsView = () => {
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
             amount={checkNAN(
-              essentialTotalBudgetAmount +
-              wantsTotalBudgetAmount
+              (essentialTotalBudgetAmount + wantsTotalBudgetAmount) -
+              (essentialTotalExpenses + wantsTotalExpenses)
             )}
             subtitle="Available budget spend"
             currencySymbol={currencySymbol}
@@ -111,7 +119,7 @@ const BudgetsView = () => {
           </div>
         </div>
         <div className="mt-11">
-          <TooltipProgressBar progressPercent={0} />
+          <TooltipProgressBar progressPercent={expenditureProgress.expenditureProgress} progressTooltip={expenditureProgress.expectedExpenditureProgress} />
         </div>
         <div className="mt-2">
           <MacroProgressBarsContainer
@@ -142,7 +150,7 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
           <CategoryCardHeader
             title="Essentials"
-            amount={essentialTotalBudgetAmount}
+            amount={checkNAN(essentialTotalBudgetAmount - essentialTotalExpenses)}
             caption="Available"
             currencySymbol={currencySymbol}
           />
@@ -155,7 +163,7 @@ const BudgetsView = () => {
                     <CategoryViewCard
                       key={i}
                       category={essential?.name}
-                      progressPercentage={essential?.percentage}
+                      progressPercentage={essential?.expenses / essential?.amount * 100}
                       icon={essential.category?.emoji}
                       amount={essential?.amount}
                       budgetAmount={essential.amount}
@@ -175,7 +183,7 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
           <CategoryCardHeader
             title="Wants"
-            amount={wantsTotalBudgetAmount}
+            amount={checkNAN(wantsTotalBudgetAmount - wantsTotalExpenses)}
             caption="Available"
             currencySymbol={currencySymbol}
           />
@@ -188,7 +196,7 @@ const BudgetsView = () => {
                     <CategoryViewCard
                       key={i}
                       category={want?.name}
-                      progressPercentage={want?.percentage}
+                      progressPercentage={want?.expenses / want?.amount * 100}
                       icon={want.category?.emoji}
                       amount={want?.amount}
                       budgetAmount={want?.amount}
@@ -208,8 +216,8 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3 mb-8">
           <CategoryCardHeader
             title="Savings"
-            amount={savingsTotalBudgetAmount}
-            caption="Available"
+            amount={checkNAN(savingsTotalExpenses)}
+            caption="Saved"
             currencySymbol={currencySymbol}
           />
           <div className="mt-6 flex flex-col">
@@ -221,7 +229,7 @@ const BudgetsView = () => {
                     <CategoryViewCard
                       key={i}
                       category={savings?.name}
-                      progressPercentage={savings?.percentage}
+                      progressPercentage={savings.expenses / savings?.amount * 100}
                       icon={savings.category?.emoji}
                       amount={savings?.amount}
                       budgetAmount={savings.amount}
