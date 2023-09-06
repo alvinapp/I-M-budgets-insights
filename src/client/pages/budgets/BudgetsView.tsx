@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import NavBar from "../components/NavBar";
 import CloseButton from "../components/CloseButton";
 import NavBarTitle from "../components/NavBarTitle";
@@ -68,24 +68,41 @@ const BudgetsView = () => {
       macroGoalStore.setMacros(result && result.length > 0 ? result : []);
     };
     fetchMacroGoalsData();
-  }, []);
-  const essentialTotalBudgetAmount =
-    categoryStore.categoryBudgets[0]?.total_amount;
-  const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
-  const savingsTotalBudgetAmount =
-    categoryStore.categoryBudgets[2]?.total_amount;
-  const essentialTotalExpenses =
-    categoryStore.categoryBudgets[0]?.total_expense;
-  const wantsTotalExpenses = categoryStore.categoryBudgets[1]?.total_expense;
-  const savingsTotalExpenses = categoryStore.categoryBudgets[2]?.total_expense;
-  // calculate total budget
-  const totalBudget = essentialTotalBudgetAmount + wantsTotalBudgetAmount + savingsTotalBudgetAmount
-  const totalExpenditure = essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses
-  const expenditureProgress = calculateSpending(totalExpenditure, totalBudget)
-  console.log(
-    "Expenditure progress",
+  }, [config]);
+
+  const {
+    essentialTotalBudgetAmount,
+    wantsTotalBudgetAmount,
+    savingsTotalBudgetAmount,
+    essentialTotalExpenses,
+    wantsTotalExpenses,
+    savingsTotalExpenses,
+    totalBudget,
+    totalExpenditure,
     expenditureProgress
-  )
+  } = useMemo(() => {
+    const essentialTotalBudgetAmount = categoryStore.categoryBudgets[0]?.total_amount;
+    const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
+    const savingsTotalBudgetAmount = categoryStore.categoryBudgets[2]?.total_amount;
+    const essentialTotalExpenses = categoryStore.categoryBudgets[0]?.total_expense;
+    const wantsTotalExpenses = categoryStore.categoryBudgets[1]?.total_expense;
+    const savingsTotalExpenses = categoryStore.categoryBudgets[2]?.total_expense;
+
+    const totalBudget = essentialTotalBudgetAmount + wantsTotalBudgetAmount + savingsTotalBudgetAmount;
+    const totalExpenditure = essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
+
+    return {
+      essentialTotalBudgetAmount,
+      wantsTotalBudgetAmount,
+      savingsTotalBudgetAmount,
+      essentialTotalExpenses,
+      wantsTotalExpenses,
+      savingsTotalExpenses,
+      totalBudget,
+      totalExpenditure,
+      expenditureProgress: calculateSpending(totalExpenditure, totalBudget)
+    };
+  }, [categoryStore.categoryBudgets]);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">

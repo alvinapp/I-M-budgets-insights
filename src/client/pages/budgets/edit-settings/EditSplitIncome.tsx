@@ -63,37 +63,8 @@ const EditSplitIncome = () => {
   const calculateIncomeAmount = (incomeRatio: number) =>
     Math.floor((incomeRatio / 100) * monthlyIncome);
 
-  const saveOnboardingData = async () => {
-    await setIncome({ incomeAmount: monthlyIncome, configuration });
-
-    const macros: [GoalMacroType, number][] = [
-      ["Essentials", essentialsRatio],
-      ["Wants", wantsRatio],
-      ["Savings", savingsRatio],
-    ];
-
-    for (let i = 0; i < macros.length; i++) {
-      const [macroType, macroRatio] = macros[i];
-      await setMacro({
-        goalMacro: {
-          name: `${macroType} Total`,
-          type_name: macroType,
-          amount: calculateIncomeAmount(macroRatio),
-          percentage: 0,
-          share: macroRatio,
-          reset_micros: false,
-        },
-        configuration,
-      });
-    }
-
-    await completeOnboarding({ completionTime: new Date(), configuration });
-  };
-
   const postAllMacros = async () => {
     try {
-      await setIncome({ incomeAmount: monthlyIncome, configuration });
-
       const macros: [GoalMacroType, number][] = [
         ["Essentials", essentialsRatio],
         ["Wants", wantsRatio],
@@ -114,11 +85,7 @@ const EditSplitIncome = () => {
           configuration,
         });
       }
-
-      await completeOnboarding({ completionTime: new Date(), configuration });
-
-      // Redirect to success page
-      navigate(-1);
+      navigate('/edit-budgets');
     } catch (error) {
       console.error(error);
       // Handle the error
@@ -362,6 +329,7 @@ const EditSplitIncome = () => {
         <MainButton
           title="Continue"
           isDisabled={false}
+          // loading={}
           click={() => {
             budgetSettingsStore.setIncomeSplit({
               essentials: essentialsRatio,
