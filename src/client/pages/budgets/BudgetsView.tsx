@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import NavBar from "../components/NavBar";
 import CloseButton from "../components/CloseButton";
 import NavBarTitle from "../components/NavBarTitle";
@@ -50,17 +50,37 @@ const BudgetsView = () => {
   //     }),
   //   { refetchOnWindowFocus: false }
   // );
-  const { isFetching: fetchingEssentailsBudget } = useQuery(
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Calculate the start_date as the first day of the current month
+  const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+  const formattedStartDate = `${startOfMonth.getFullYear()}-${(startOfMonth.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-01`;
+
+  // Calculate the end_date as the last day of the current month
+  const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+  const formattedEndDate = `${endOfMonth.getFullYear()}-${(endOfMonth.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${endOfMonth.getDate()}`;
+
+  const { isFetching: fetchingEssentialsBudget, refetch } = useQuery(
     "essentials-budgets",
     () =>
       fetchBudgetCategories({
         configuration: config,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
       }).then((result) => {
-        console.log(result)
+        console.log(result);
         categoryStore.setCategoryBudgets(result);
       }),
     { enabled: !!config.token }
   );
+
+  useEffect(() => {
+    refetch();
+  }, [currentMonth]);
   useEffect(() => {
     const fetchMacroGoalsData = async () => {
       const { data } = await getMacros({ configuration: config });
@@ -103,6 +123,22 @@ const BudgetsView = () => {
       expenditureProgress: calculateSpending(totalExpenditure, totalBudget)
     };
   }, [categoryStore.categoryBudgets]);
+  const handlePreviousMonthClick = () => {
+    const previousMonth = new Date(currentMonth);
+    previousMonth.setMonth(currentMonth.getMonth() - 1);
+
+    setCurrentMonth(previousMonth);
+  };
+
+  const handleNextMonthClick = () => {
+    const nextMonth = new Date(currentMonth);
+    nextMonth.setMonth(currentMonth.getMonth() + 1);
+
+    setCurrentMonth(nextMonth);
+  };
+
+  // Format the current month for display
+  const month = currentMonth.toLocaleString("default", { month: "long" });
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -117,7 +153,11 @@ const BudgetsView = () => {
           }
         />
         <div className="mt-6">
-          <HorizontalDateToggle />
+          <HorizontalDateToggle
+            onPreviousMonthClick={handlePreviousMonthClick}
+            onNextMonthClick={handleNextMonthClick}
+            monthName={month}
+          />
         </div>
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-3"></div>
@@ -136,7 +176,7 @@ const BudgetsView = () => {
           </div>
         </div>
         <div className="mt-11">
-          <TooltipProgressBar progressPercent={expenditureProgress.expenditureProgress} progressTooltip={expenditureProgress.expectedExpenditureProgress} />
+          <TooltipProgressBar progressPercent={expenditureProgress.expenditureProgress} progressTooltip={expenditureProgress.expectedExpenditureProgress} activeMonth={currentMonth} />
         </div>
         <div className="mt-2">
           <MacroProgressBarsContainer

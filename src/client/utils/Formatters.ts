@@ -149,10 +149,14 @@ export const calculateSpending = (totalExpenditure: any, totalBudget: any) => {
   const monthProgress = checkNAN((currentDay / daysInMonth) * 100);
 
   // Calculate the percentage of actual expenditure progress in terms of total budget
-  const expenditureProgress = checkNAN((totalExpenditure / totalBudget) * 100);
+  let expenditureProgress = checkNAN((totalExpenditure / totalBudget) * 100);
 
   // Calculate the percentage of expected expenditure progress in terms of total budget
   const expectedExpenditureProgress = checkNAN((expectedExpenditure / totalBudget) * 100);
+  if (expenditureProgress > 100) {
+    expenditureProgress = 100;
+  }
+  
 
   return {
     expectedExpenditure,

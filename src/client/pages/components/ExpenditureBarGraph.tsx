@@ -10,12 +10,15 @@ interface BarGraphProps {
 }
 
 const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMonth, budgetLimit }) => {
+    const monthNameOffset = 20;
     const [graphWidth, setGraphWidth] = useState(window.innerWidth - 23);
     const graphHeight = 200;
+    const graphEffectiveHeight = graphHeight - monthNameOffset;
     const expenseLimit = currentMonth.essentials.expenseLimit + currentMonth.wants.expenseLimit;
     const maxLimit = Math.max(expenseLimit, budgetLimit);
     const scaleFactor = (graphHeight - 70) / maxLimit;
     const barSpacing = graphWidth * 0.2;
+    const absoluteMaxHeight = budgetLimit + 100;
 
     useEffect(() => {
         const handleResize = () => {
@@ -61,7 +64,7 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                 {wantsHeight > 0 && renderBarSegment(essentialsHeight - overlap, wantsHeight + overlap, '#c18a4c')}
                 {/* Essentials segment of the bar */}
                 {essentialsHeight > 0 && renderBarSegment(0, essentialsHeight + (wantsHeight > 0 ? overlap : 0), "url(#essentialsGradient)")}
-                {showTooltip && totalSpent > 0?(
+                {showTooltip && totalSpent > 0 ? (
                     <>
                         {/* Tooltip */}
                         <rect x={x + 1} y={tooltipPosY} width="47" height={tooltipHeight} fill="#101a25" stroke="#101a25" strokeWidth="1" rx="5" ry="5" />
@@ -72,7 +75,7 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({ previousMonth, currentMo
                         {/* Text showing total value */}
                         <text x={x + 20} y={tooltipPosY + tooltipHeight + 13} textAnchor="middle" fontSize="10" fontFamily='Poppins'>-{totalSpent.toLocaleString("en-US")}</text>
                     </>
-                ):null}
+                ) : null}
             </g>
         );
     };

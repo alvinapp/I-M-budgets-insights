@@ -5,12 +5,14 @@ interface TooltipProgressBarProps {
   backgroundColor?: string;
   progressPercent: number;
   progressTooltip: number;
+  activeMonth: Date;
 }
 
 const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   backgroundColor = "#E7EDF3",
   progressPercent,
-  progressTooltip
+  progressTooltip,
+  activeMonth,
 }) => {
   const date = new Date();
   const currentDay = date.getDate();
@@ -19,8 +21,8 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     date.getMonth() + 1,
     0
   ).getDate();
-  const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
-  const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const monthStart = new Date(activeMonth.getFullYear(), activeMonth.getMonth(), 1);
+  const monthEnd = new Date(activeMonth.getFullYear(), activeMonth.getMonth() + 1, 0);
 
   const progress = (currentDay / daysInMonth) * 100;
 
@@ -36,7 +38,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     background: "black",
     height: "30px",
     width: "60px",
-    fontFamlily: "Poppins",
+    fontFamily: "Poppins",
     fontSize: "14px",
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   };
