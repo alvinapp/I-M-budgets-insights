@@ -180,13 +180,6 @@ const EditBudgetSettings = () => {
     },
     { refetchOnWindowFocus: false, enabled: false }
   );
-
-  console.log(
-    "****************",
-    budgetSettingsStore.monthlyIncome,
-    typeof budgetSettingsStore.monthlyIncome,
-    "****************"
-  )
   return (
     <div className="h-screen w-screen">
       <NavBar

@@ -72,7 +72,6 @@ const BudgetsView = () => {
         start_date: formattedStartDate,
         end_date: formattedEndDate,
       }).then((result) => {
-        console.log(result);
         categoryStore.setCategoryBudgets(result);
       }),
     { enabled: !!config.token }

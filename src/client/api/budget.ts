@@ -35,12 +35,6 @@ export const fetchBudgetCategories = async ({
 }) => {
   try {
     let res;
-    console.log(
-      "start_date",
-      start_date,
-      "end_date",
-      end_date,
-    )
     if (start_date && end_date) {
       res = await fetchData({
       endpoint: `/goals/batch_micros/?start_date=${start_date}&end_date=${end_date}`,
