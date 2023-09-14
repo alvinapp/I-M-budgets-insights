@@ -4,11 +4,15 @@ import "./TooltipProgressBar.css";
 interface TooltipProgressBarProps {
   backgroundColor?: string;
   progressPercent: number;
+  progressTooltip: number;
+  activeMonth: Date;
 }
 
 const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   backgroundColor = "#E7EDF3",
   progressPercent,
+  progressTooltip,
+  activeMonth,
 }) => {
   const date = new Date();
   const currentDay = date.getDate();
@@ -17,8 +21,8 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     date.getMonth() + 1,
     0
   ).getDate();
-  const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
-  const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const monthStart = new Date(activeMonth.getFullYear(), activeMonth.getMonth(), 1);
+  const monthEnd = new Date(activeMonth.getFullYear(), activeMonth.getMonth() + 1, 0);
 
   const progress = (currentDay / daysInMonth) * 100;
 
@@ -29,12 +33,12 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   };
 
   const tooltipStyle = {
-    left: `calc(${progress}% - 2.1em)`,
+    left: `calc(${progressTooltip}% - 2.1em)`,
     transform: "scale(0.8)",
     background: "black",
     height: "30px",
     width: "60px",
-    fontFamlily: "Poppins",
+    fontFamily: "Poppins",
     fontSize: "14px",
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   };
@@ -54,7 +58,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
         ></div>
         <div
           className="dotted-divider-container"
-          style={{ left: `calc(${progress}%)` }}
+          style={{ left: `calc(${progressTooltip}%)` }}
         >
           <div className="dotted-divider"></div>
         </div>

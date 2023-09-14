@@ -34,6 +34,15 @@ const useBudgetSettingsStore = create<IBudgetSettingsStore>((set) => ({
       return result;
     });
   },
+  getMonthlyIncome: () => {
+    return set((state: BudgetSettings) => {
+      const result: BudgetSettings = {
+        ...state,
+        monthlyIncome: state.monthlyIncome,
+      };
+      return result;
+    });
+  }, 
   setIncomeSplit: (split: IncomeSplit) => {
     return set((state: BudgetSettings) => {
       const result: BudgetSettings = {

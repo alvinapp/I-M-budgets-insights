@@ -18,7 +18,6 @@ const EditMonthlyIncome = () => {
   const userStore = useUserStore((state: any) => state);
   const [loading, setLoading] = useState(false);
   const { currency } = budgetSettingsStore;
-  console.log(userStore.user.income)
   const configuration = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -34,7 +33,9 @@ const EditMonthlyIncome = () => {
         token: configuration.token,
         data: { amount },
       });
+      budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
       setLoading(false);
+      navigate(-1);
       return response;
     } catch (error) {
       console.error(error);
@@ -90,9 +91,7 @@ const EditMonthlyIncome = () => {
           isDisabled={false}
           loading={loading}
           click={() => {
-            budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
             addIncome(monthlyIncomeValue);
-            // navigate("/onboard-split-income");
           }}
         />
       </div>
@@ -100,4 +99,4 @@ const EditMonthlyIncome = () => {
   );
 };
 
-export default EditMonthlyIncome ;
+export default EditMonthlyIncome;

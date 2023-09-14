@@ -26,8 +26,8 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
 }) => {
   const { moneyIn, moneyOut } = values;
   const total = moneyIn + moneyOut;
-  const moneyOutPercentage = total>0?Math.round((moneyOut / total) * 100).toFixed(0):0;
-  const moneyInPercentage = total>0?Math.round((moneyIn / total) * 100).toFixed(0):0;
+  const moneyOutPercentage = total > 0 ? Math.round((moneyOut / total) * 100).toFixed(1) : 0;
+  const moneyInPercentage = total > 0 ? Math.round((moneyIn / total) * 100).toFixed(1) : 0;
   const radius = dimensions / 2;
   const strokeWidth = doughnutThickness;
   const normalizedRadius = radius - strokeWidth * 2;
@@ -180,14 +180,14 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             <PercentageItem
               color="#66be5f"
               percentage={Number(
-                moneyOutPercentage
+                moneyInPercentage
               )}
               label="Money in"
             />
             <PercentageItem
               color="#F99E36"
               percentage={Number(
-                moneyInPercentage
+                moneyOutPercentage
               )}
               label="Money out"
             />

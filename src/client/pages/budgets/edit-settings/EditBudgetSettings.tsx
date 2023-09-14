@@ -30,6 +30,7 @@ const EditBudgetSettings = () => {
   const categoriesStore = useCategoriesStore((state: any) => state);
   const setToken = useConfigurationStore((state: any) => state.setToken);
   const userStore = useUserStore((state: any) => state);
+  const budgetSettingsStore = useBudgetSettingsStore();
   const setUser = userStore.setUser;
   const { data } = useQuery(
     ["token"],
@@ -146,26 +147,37 @@ const EditBudgetSettings = () => {
   const budgetStore = useBudgetSettingsStore((state: any) => state);
   const { isFetching: savingBudgetDetails, refetch: saveBudgetInfo } = useQuery(
     "save-budget",
-    () =>
-      saveBudget({
+    () => {
+      const macrotypeEntries = [];
+
+      if (essentialsList.some(item => Object.keys(item).length > 0)) {
+        macrotypeEntries.push({
+          macrotype_name: "Essentials",
+          data: essentialsList,
+        });
+      }
+
+      if (wantsList.some(item => Object.keys(item).length > 0)) {
+        macrotypeEntries.push({
+          macrotype_name: "Wants",
+          data: wantsList,
+        });
+      }
+
+      if (savingsList.some(item => Object.keys(item).length > 0)) {
+        macrotypeEntries.push({
+          macrotype_name: "Savings",
+          data: savingsList,
+        });
+      }
+
+      return saveBudget({
         configuration: configurations,
         data: {
-          macrotype_entries: [
-            {
-              macrotype_name: "Essentials",
-              data: essentialsList,
-            },
-            {
-              macrotype_name: "Wants",
-              data: wantsList,
-            },
-            {
-              macrotype_name: "Savings",
-              data: savingsList,
-            },
-          ],
+          macrotype_entries: macrotypeEntries,
         },
-      }),
+      });
+    },
     { refetchOnWindowFocus: false, enabled: false }
   );
   return (
@@ -188,7 +200,7 @@ const EditBudgetSettings = () => {
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
-            caption={`${typeof userStore.user.income === undefined
+            caption={`${budgetSettingsStore.monthlyIncome !== 0 ? budgetSettingsStore.monthlyIncome : typeof userStore.user.income === undefined
               ? ""
               : userStore.user.income
               }`}
