@@ -58,7 +58,7 @@ export const CategoryViewCard = ({
           </div>
           <div className="flex flex-col">
             <div className="relative">
-              <div className="absolute right-0 -top-2 font-poppins font-semibold text-xxxxxs text-skin-base ">
+              <div className="absolute -right-1 -top-2 font-poppins font-semibold text-xxxxxs text-skin-base ">
                 {currencySymbol ?? ""}
               </div>
               <div className="font-poppins text-xs text-skin-base font-semibold">
