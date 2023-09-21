@@ -37,7 +37,7 @@ export const AddBudgetCard = ({
             Add more budgets
           </div>
         </div>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center mt-1">
           <div className="relative">
             <div
               className={`absolute -right-1 -top-1.5 font-poppins text-xxxxxs ${
