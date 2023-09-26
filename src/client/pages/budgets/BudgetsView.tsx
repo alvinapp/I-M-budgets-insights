@@ -178,7 +178,17 @@ const BudgetsView = () => {
               <NavBarTitle title="Budget" fontSize="text-2xl" />
               <div
                 className="h-6 w-6 rounded-full"
-                onClick={() => navigate("/edit-budgets")}
+                onClick={() => {
+                  if (
+                    categoryStore.categoryBudgets[0]?.data.length === 0 &&
+                    categoryStore.categoryBudgets[1]?.data.length === 0 &&
+                    categoryStore.categoryBudgets[2]?.data.length === 0
+                  ) {
+                    navigate("/empty-budgets");
+                  } else {
+                    navigate("/edit-budgets");
+                  }
+                }}
               >
                 <img src={settings} />
               </div>

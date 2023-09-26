@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import ArrowBackButton from "../components/ArrowBack";
-import NavBar from "../components/NavBar";
-import NavBarTitle from "../components/NavBarTitle";
+import ArrowBackButton from "../../components/ArrowBack";
+import NavBar from "../../components/NavBar";
+import NavBarTitle from "../../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
-import CloseButton from "../components/CloseButton";
+import CloseButton from "../../components/CloseButton";
 import { FiBriefcase, FiPieChart } from "react-icons/fi";
-import { BudgetDisplay } from "../components/budget/BudgetDisplay";
+import { BudgetDisplay } from "../../components/budget/BudgetDisplay";
 import { useQuery } from "react-query";
 import { getCategories } from "client/api/categories";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useCategoriesStore from "client/store/categoriesStore";
 import { Category } from "client/models/Categories";
-import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
-import MainButton from "../components/MainButton";
-import { GeneralInfoCard } from "../components/budget/GeneralInfoCard";
+import { BudgetSettingCard } from "../../components/budget/BudgetSettingCard";
+import MainButton from "../../components/MainButton";
+import { GeneralInfoCard } from "../../components/budget/GeneralInfoCard";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { fetchMacros, saveBudget } from "client/api/budget";
 import getToken from "client/api/token";
@@ -21,10 +21,11 @@ import { showCustomToast } from "client/utils/Toast";
 import useUserStore from "client/store/userStore";
 import { error } from "console";
 import { config } from "process";
-import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
+import { SavingsSettingCard } from "../../components/budget/SavingsSettingCard";
 import { element } from "prop-types";
+import BackButton from "client/pages/components/BackButton";
 
-export const BudgetSettings = () => {
+export const EmptyBudgetSettings = () => {
   const configurations = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -153,37 +154,26 @@ export const BudgetSettings = () => {
   const [savingsList, setSavingsList] = useState([{}]);
   const { isFetching: savingBudgetDetails, refetch: saveBudgetInfo } = useQuery(
     "save-budget",
-    () => {
-      const macrotypeEntries = [];
-
-      if (essentialsList.some((item) => Object.keys(item).length > 0)) {
-        macrotypeEntries.push({
-          macrotype_name: "Essentials",
-          data: essentialsList,
-        });
-      }
-
-      if (wantsList.some((item) => Object.keys(item).length > 0)) {
-        macrotypeEntries.push({
-          macrotype_name: "Wants",
-          data: wantsList,
-        });
-      }
-
-      if (savingsList.some((item) => Object.keys(item).length > 0)) {
-        macrotypeEntries.push({
-          macrotype_name: "Savings",
-          data: savingsList,
-        });
-      }
-
-      return saveBudget({
+    () =>
+      saveBudget({
         configuration: configurations,
         data: {
-          macrotype_entries: macrotypeEntries,
+          macrotype_entries: [
+            {
+              macrotype_name: "Essentials",
+              data: essentialsList,
+            },
+            {
+              macrotype_name: "Wants",
+              data: wantsList,
+            },
+            {
+              macrotype_name: "Savings",
+              data: savingsList,
+            },
+          ],
         },
-      });
-    },
+      }),
     { refetchOnWindowFocus: false, enabled: false }
   );
   const allAddedCategoriesList = essentialsList.concat(wantsList);
@@ -195,7 +185,19 @@ export const BudgetSettings = () => {
       <NavBar
         children={
           <div className="flex flex-row items-center justify-between border border-b-1 pt-4 pb-2">
-            <CloseButton onClick={() => navigate(-1)} />
+            <BackButton
+              onClick={() => {
+                saveBudgetInfo().then((res) => {
+                  if (res) {
+                    navigate(-1);
+                  } else {
+                    showCustomToast({
+                      message: "Failed to save settings",
+                    });
+                  }
+                });
+              }}
+            />
             <NavBarTitle title="Add Category Budgets" />
             <div className="h-6 w-6 rounded-full"></div>
           </div>
@@ -499,44 +501,6 @@ export const BudgetSettings = () => {
                 })
               : null}
           </div>
-        </div>
-        <div className="flex flex-row mt-18 justify-center items-center">
-          <div className="font-poppins text-xs font-medium tracking-wide text-skin-neutral">
-            *Setup at least 3 categories
-          </div>
-        </div>
-        <div className="mt-2">
-          {listCheckForEntries.length >= 3 ? (
-            <MainButton
-              title="All set"
-              isDisabled={false}
-              loading={savingBudgetDetails}
-              click={() => {
-                saveBudgetInfo().then((res) => {
-                  if (res) {
-                    navigator("/budgets-view");
-                  } else {
-                    showCustomToast({ message: "Failed to save settings" });
-                  }
-                });
-              }}
-            />
-          ) : (
-            <MainButton
-              title="All set"
-              isDisabled={true}
-              loading={savingBudgetDetails}
-              click={() => {
-                saveBudgetInfo().then((res) => {
-                  if (res) {
-                    navigator("/budgets-view");
-                  } else {
-                    showCustomToast({ message: "Failed to save settings" });
-                  }
-                });
-              }}
-            />
-          )}
         </div>
       </div>
     </div>
