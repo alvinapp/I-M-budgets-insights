@@ -24,6 +24,7 @@ const EditMonthlyIncome = () => {
   const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
     userStore.user.income
   );
+  const [monthlyIncomeChange, setMonthlyIncomeChange] = useState(false);
 
   const postIncome = async (amount: number) => {
     setLoading(true);
@@ -50,7 +51,11 @@ const EditMonthlyIncome = () => {
       <NavBar
         children={
           <div className="flex flex-row items-center justify-between pt-6 pb-2 pr-6">
-            <ArrowBackButton onClick={() => navigate(-1)} />
+            <ArrowBackButton
+              onClick={() => {
+                navigate(-1);
+              }}
+            />
           </div>
         }
       />
@@ -78,7 +83,10 @@ const EditMonthlyIncome = () => {
           value={monthlyIncomeValue}
           maxValue={Number.MAX_SAFE_INTEGER}
           currencySymbol={currency}
-          onChange={setMonthlyIncomeValue}
+          onChange={(e) => {
+            setMonthlyIncomeChange(true);
+            setMonthlyIncomeValue(e);
+          }}
         />
         <div className="text-xxxs font-poppins text-[#B0B0B0] text-center mt-2.5 tracking-longest_text">
           *equals your overall monthly budget
@@ -86,14 +94,25 @@ const EditMonthlyIncome = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 mx-3.5">
-        <MainButton
-          title="Continue"
-          isDisabled={false}
-          loading={loading}
-          click={() => {
-            addIncome(monthlyIncomeValue);
-          }}
-        />
+        {monthlyIncomeChange ? (
+          <MainButton
+            title="Save"
+            isDisabled={false}
+            loading={loading}
+            click={() => {
+              addIncome(monthlyIncomeValue);
+            }}
+          />
+        ) : (
+          <MainButton
+            title="Save"
+            isDisabled={true}
+            loading={loading}
+            click={() => {
+              addIncome(monthlyIncomeValue);
+            }}
+          />
+        )}
       </div>
     </div>
   );
