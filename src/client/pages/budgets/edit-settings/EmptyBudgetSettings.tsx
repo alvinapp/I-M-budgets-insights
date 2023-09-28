@@ -4,7 +4,7 @@ import NavBar from "../../components/NavBar";
 import NavBarTitle from "../../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
 import CloseButton from "../../components/CloseButton";
-import { FiBriefcase, FiInfo, FiPieChart } from "react-icons/fi";
+import { FiBriefcase, FiPieChart } from "react-icons/fi";
 import { BudgetDisplay } from "../../components/budget/BudgetDisplay";
 import { useQuery } from "react-query";
 import { getCategories } from "client/api/categories";
@@ -19,18 +19,19 @@ import { fetchMacros, saveBudget } from "client/api/budget";
 import getToken from "client/api/token";
 import { showCustomToast } from "client/utils/Toast";
 import useUserStore from "client/store/userStore";
+import { error } from "console";
+import { config } from "process";
 import { SavingsSettingCard } from "../../components/budget/SavingsSettingCard";
+import { element } from "prop-types";
 import BackButton from "client/pages/components/BackButton";
-import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
 
-const EditBudgetSettings = () => {
+export const EmptyBudgetSettings = () => {
   const configurations = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
   const categoriesStore = useCategoriesStore((state: any) => state);
   const setToken = useConfigurationStore((state: any) => state.setToken);
   const userStore = useUserStore((state: any) => state);
-  const budgetSettingsStore = useBudgetSettingsStore();
   const setUser = userStore.setUser;
   const { data } = useQuery(
     ["token"],
@@ -46,58 +47,50 @@ const EditBudgetSettings = () => {
       }),
     { refetchOnWindowFocus: false }
   );
-  const mapCategoryToData = (category: any, index: number) => [
-    `data${index}`,
-    {
-      amount: category?.amount || 0,
-      contribution_amount: 0,
-      percentage: 0,
-      category_id: category?.category.id,
-      name: category?.name,
-      pseudo_name: category?.name + " " + category?.category.emoji,
-      extern_id: category?.category.id,
-      order: 0,
-      contribution_at: "",
-      is_contribute_customized: true,
-    },
-  ];
-
   const { isFetching: fetchingCategories } = useQuery(
     "fetch-categories",
     () =>
       getCategories({ configuration: configurations }).then((result) => {
         categoriesStore.setCategories(result);
-
-        const mapper = (type: string) => (category: any, index: number) =>
-          category.macro_type?.name === type
-            ? mapCategoryToData(category, index)
-            : null;
-
-        const essentialsData = result.map(mapper("Essentials")).filter(Boolean);
-        const wantsData = result.map(mapper("Wants")).filter(Boolean);
-
-        setEssentialsMapState(new Map(essentialsData));
-        setWantsMapState(new Map(wantsData));
+        const essentialsData = result
+          .filter(
+            (element: Category) => element.macro_type?.name === "Essentials"
+          )
+          .map((essentials: any, i: any) => ({
+            amount: 0,
+            contribution_amount: 0,
+            percentage: 0,
+            category_id: essentials.id, // I've set category_id to the actual value
+            name: essentials.name,
+            pseudo_name: essentials.name + " " + essentials.emoji,
+            extern_id: essentials.id,
+            order: 0,
+            contribution_at: "",
+            is_contribute_customized: true,
+          }));
+        const wantsData = result
+          .filter((element: Category) => element.macro_type?.name === "Wants")
+          .map((wants: any, i: any) => ({
+            amount: 0,
+            contribution_amount: 0,
+            percentage: 0,
+            category_id: wants.id, // Set category_id to the actual value here too
+            name: wants.name,
+            pseudo_name: wants.name + " " + wants.emoji,
+            extern_id: wants.id,
+            order: 0,
+            contribution_at: "",
+            is_contribute_customized: true,
+          }));
+        setEssentialsMapState(
+          new Map(essentialsData.map((data: any, i: any) => [`data${i}`, data]))
+        );
+        setWantsMapState(
+          new Map(wantsData.map((data: any, i: any) => [`data${i}`, data]))
+        );
       }),
     { refetchOnWindowFocus: false }
   );
-
-  useEffect(() => {
-    const initializeMapState = (index: number, setStateFn: Function) => {
-      if (
-        categoriesStore.categoryBudgets &&
-        categoriesStore.categoryBudgets.length > index
-      ) {
-        const initialData =
-          categoriesStore.categoryBudgets[index].data.map(mapCategoryToData);
-        setStateFn(new Map(initialData));
-      }
-    };
-
-    initializeMapState(0, setEssentialsMapState);
-    initializeMapState(1, setWantsMapState);
-  }, [categoriesStore.categoryBudgets]);
-
   const { isFetching: fetchingMacros } = useQuery(
     "fetch-macros",
     () =>
@@ -105,6 +98,15 @@ const EditBudgetSettings = () => {
         categoriesStore.setMacros(res);
       }),
     { refetchOnWindowFocus: false, enabled: !!configurations.token }
+  );
+  const wantsCategories = categoriesStore.categories?.filter(
+    (element: Category) => element.macro_type?.name === "Wants"
+  );
+  const essentialsCategories = categoriesStore.categories?.filter(
+    (element: Category) => element.macro_type?.name === "Essentials"
+  );
+  const savingsCategories = categoriesStore.categories?.filter(
+    (element: Category) => element.macro_type?.name === "Savings"
   );
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -133,6 +135,7 @@ const EditBudgetSettings = () => {
   }).map((element: any, i: number) => {
     return element[`data${i}`];
   });
+  //savings
   const navigator = useNavigate();
   const macroData = categoriesStore.macros?.data ?? [];
   const essentialMacro = macroData[0];
@@ -142,78 +145,61 @@ const EditBudgetSettings = () => {
   const wantsGoals = wantslMacro?.goals ?? [];
   const savingsGoals = savingsMacro?.goals ?? [];
   const essentialBudgetAmount = essentialGoals[0]?.amount ?? "";
-  const [allocatedEssentials, setAllocatedEssentials] = useState(
-    typeof categoriesStore.categoryBudgets[0] !== undefined
-      ? categoriesStore?.categoryBudgets[0].total_amount
-      : 0
-  );
+  const [allocatedEssentials, setAllocatedEssentials] = useState(0);
   const wantsBudgetAmount = wantsGoals[0]?.amount ?? "";
-  const [allocatedWants, setAllocatedWants] = useState(
-    typeof categoriesStore.categoryBudgets[1] !== undefined
-      ? categoriesStore?.categoryBudgets[1]?.total_amount
-      : 0
-  );
+  const [allocatedWants, setAllocatedWants] = useState(0);
   const savingsBudgetAmount = savingsGoals[0]?.amount ?? "";
-  const [allocatedSavings, setAllocatedSavings] = useState(
-    typeof categoriesStore.categoryBudgets[2] !== undefined
-      ? categoriesStore?.categoryBudgets[2].total_amount
-      : 0
-  );
+  const [allocatedSavings, setAllocatedSavings] = useState(0);
   const [addSavings, setAddSavings] = useState(false);
   const [savingsList, setSavingsList] = useState([{}]);
-  const budgetStore = useBudgetSettingsStore((state: any) => state);
   const { isFetching: savingBudgetDetails, refetch: saveBudgetInfo } = useQuery(
     "save-budget",
-    () => {
-      const macrotypeEntries = [];
-
-      if (essentialsList.some((item) => Object.keys(item).length > 0)) {
-        macrotypeEntries.push({
-          macrotype_name: "Essentials",
-          data: essentialsList,
-        });
-      }
-
-      if (wantsList.some((item) => Object.keys(item).length > 0)) {
-        macrotypeEntries.push({
-          macrotype_name: "Wants",
-          data: wantsList,
-        });
-      }
-
-      if (savingsList.some((item) => Object.keys(item).length > 0)) {
-        macrotypeEntries.push({
-          macrotype_name: "Savings",
-          data: savingsList,
-        });
-      }
-
-      return saveBudget({
+    () =>
+      saveBudget({
         configuration: configurations,
         data: {
-          macrotype_entries: macrotypeEntries,
+          macrotype_entries: [
+            {
+              macrotype_name: "Essentials",
+              data: essentialsList,
+            },
+            {
+              macrotype_name: "Wants",
+              data: wantsList,
+            },
+            {
+              macrotype_name: "Savings",
+              data: savingsList,
+            },
+          ],
         },
-      });
-    },
+      }),
     { refetchOnWindowFocus: false, enabled: false }
+  );
+  const allAddedCategoriesList = essentialsList.concat(wantsList);
+  const listCheckForEntries = allAddedCategoriesList.filter(
+    (element) => element.amount > 0
   );
   return (
     <div className="h-screen w-screen">
       <NavBar
         children={
-          <div className="flex flex-row items-center justify-between border border-b-1 pt-4 pb-2 pr-3.5">
+          <div className="flex flex-row items-center justify-between border border-b-1 pt-4 pb-2">
             <BackButton
               onClick={() => {
-                navigate(-1);
+                saveBudgetInfo().then((res) => {
+                  if (res) {
+                    navigate(-1);
+                  } else {
+                    showCustomToast({
+                      message: "Failed to save settings",
+                    });
+                  }
+                });
               }}
             />
             <NavBarTitle title="Add Category Budgets" />
-            <div
-              className="h-6 w-6 rounded-full flex items-center justify-center"
-              onClick={() => navigate("/view-info")}
-            >
-              <FiInfo color="#4E6783" size="1.5rem" />
-            </div>
+            <div className="h-6 w-6 rounded-full"></div>
           </div>
         }
       />
@@ -225,9 +211,7 @@ const EditBudgetSettings = () => {
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
             caption={`${
-              budgetSettingsStore.monthlyIncome !== 0
-                ? budgetSettingsStore.monthlyIncome
-                : typeof userStore.user.income === undefined
+              typeof userStore.user.income === undefined
                 ? ""
                 : userStore.user.income
             }`}
@@ -241,14 +225,11 @@ const EditBudgetSettings = () => {
           title="Budget split"
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
           caption={`${
-            typeof categoriesStore.macros?.budget_split === undefined
-              ? ""
-              : categoriesStore.macros?.budget_split
+            typeof categoriesStore.macros?.budget_split
+              ? categoriesStore.macros?.budget_split
+              : ""
           }`}
-          onClick={() => {
-            navigate("/edit-split-income");
-            budgetStore.setMonthlyIncome(userStore.user?.income);
-          }}
+          onClick={() => navigate("/onboard-split-income")}
         />
         <div className="mb-4 mt-5 flex flex-row items-center justify-center px-3.5">
           <div className="flex-grow h-px bg-skin-accent3"></div>
@@ -289,62 +270,76 @@ const EditBudgetSettings = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            {categoriesStore.categoryBudgets[0] &&
-            categoriesStore.categoryBudgets[0].data?.length > 0 ? (
-              categoriesStore.categoryBudgets[0].data.map(
-                (category: any, i: any) => {
-                  const data = essentialsMapState.get(`data${i}`);
-                  const initialAmount = category?.amount || 0;
-                  const adjustment = data?.amount || 0;
-
-                  return (
-                    <BudgetSettingCard
-                      key={i}
-                      category={category?.name}
-                      emoji={category?.category.emoji}
-                      amount={data?.amount}
-                      maxValue={Number.MAX_SAFE_INTEGER}
-                      addValue={(e) => {
-                        const difference = e - (initialAmount + adjustment);
-                        setAllocatedEssentials(
-                          allocatedEssentials + difference
-                        );
-                        updateEssentialsMap(i, {
-                          ...data,
-                          amount: e - initialAmount,
-                        });
-                        setAllocatedEssentials(
-                          allocatedEssentials + e - initialAmount
-                        );
-                      }}
-                      increment={() => {
-                        updateEssentialsMap(i, {
-                          ...data,
-                          amount:
-                            adjustment + categoriesStore.incrementalAmount,
-                        });
-                        setAllocatedEssentials(
-                          allocatedEssentials +
-                            categoriesStore.incrementalAmount
-                        );
-                      }}
-                      decrement={() => {
-                        updateEssentialsMap(i, {
-                          ...data,
-                          amount: Math.max(
-                            adjustment - categoriesStore.incrementalAmount,
-                            0
-                          ),
-                        });
-                        setAllocatedEssentials(
-                          allocatedEssentials -
-                            categoriesStore.incrementalAmount
-                        );
-                      }}
-                    />
-                  );
-                }
-              )
+            {essentialsCategories && essentialsCategories.length > 0 ? (
+              essentialsCategories.map((category: Category, i: any) => {
+                const isSelected = i === selectedEssesntialId;
+                const data = essentialsMapState.get(`data${i}`);
+                return (
+                  <BudgetSettingCard
+                    key={i}
+                    category={category?.name}
+                    emoji={category?.emoji}
+                    amount={data?.amount}
+                    selected={isSelected}
+                    maxValue={Number.MAX_SAFE_INTEGER}
+                    addValue={(e) =>
+                      updateEssentialsMap(i, {
+                        amount: e,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      })
+                    }
+                    increment={() => {
+                      setSelectedEssentialId(i);
+                      setAllocatedEssentials(
+                        allocatedEssentials + categoriesStore.incrementalAmount
+                      );
+                      updateEssentialsMap(i, {
+                        amount:
+                          data?.amount + categoriesStore.incrementalAmount,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      });
+                    }}
+                    decrement={() => {
+                      setSelectedEssentialId(i);
+                      setAllocatedEssentials(
+                        allocatedEssentials > 0
+                          ? allocatedEssentials -
+                              categoriesStore.incrementalAmount
+                          : 0
+                      );
+                      updateEssentialsMap(i, {
+                        amount:
+                          data?.amount - categoriesStore.incrementalAmount,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      });
+                    }}
+                  />
+                );
+              })
             ) : (
               <div></div>
             )}
@@ -378,55 +373,73 @@ const EditBudgetSettings = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            {categoriesStore.categoryBudgets[1] &&
-            categoriesStore.categoryBudgets[1].data?.length > 0
-              ? categoriesStore.categoryBudgets[1].data.map(
-                  (category: any, i: any) => {
-                    const data = wantsMapState.get(`data${i}`);
-                    const initialAmount = category?.amount || 0;
-                    const adjustment = data?.amount || 0;
-
-                    return (
-                      <BudgetSettingCard
-                        key={i}
-                        category={category?.name}
-                        emoji={category?.category.emoji}
-                        amount={data?.amount}
-                        maxValue={Number.MAX_SAFE_INTEGER}
-                        addValue={(e) => {
-                          const difference = e - (initialAmount + adjustment);
-                          updateWantsMap(i, {
-                            ...data,
-                            amount: e - initialAmount,
-                          });
-                          setAllocatedWants(allocatedWants + difference);
-                        }}
-                        increment={() => {
-                          updateWantsMap(i, {
-                            ...data,
-                            amount:
-                              adjustment + categoriesStore.incrementalAmount,
-                          });
-                          setAllocatedWants(
-                            allocatedWants + categoriesStore.incrementalAmount
-                          );
-                        }}
-                        decrement={() => {
-                          updateWantsMap(i, {
-                            ...data,
-                            amount: Math.max(
-                              adjustment - categoriesStore.incrementalAmount,
-                              0
-                            ),
-                          });
-                          setAllocatedWants(
-                            allocatedWants - categoriesStore.incrementalAmount
-                          );
-                        }}
-                      />
-                    );
-                  }
-                )
+            {wantsCategories && wantsCategories.length > 0
+              ? wantsCategories.map((category: Category, i: any) => {
+                  const isSelected = i === selectedWantsId;
+                  const data = wantsMapState.get(`data${i}`);
+                  return (
+                    <BudgetSettingCard
+                      key={i}
+                      maxValue={Number.MAX_SAFE_INTEGER}
+                      category={category?.name}
+                      emoji={category?.emoji}
+                      amount={data?.amount}
+                      selected={isSelected}
+                      addValue={(e) =>
+                        updateWantsMap(i, {
+                          amount: e,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        })
+                      }
+                      increment={() => {
+                        setSelectedWantsId(i);
+                        setAllocatedWants(
+                          allocatedWants + categoriesStore.incrementalAmount
+                        );
+                        updateWantsMap(i, {
+                          amount:
+                            data?.amount + categoriesStore.incrementalAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }}
+                      decrement={() => {
+                        setSelectedWantsId(i);
+                        setAllocatedWants(
+                          allocatedWants - categoriesStore.incrementalAmount
+                        );
+                        updateWantsMap(i, {
+                          amount:
+                            data?.amount - categoriesStore.incrementalAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }}
+                    />
+                  );
+                })
               : null}
           </div>
         </div>
@@ -453,9 +466,8 @@ const EditBudgetSettings = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            {categoriesStore.categoryBudgets[2] &&
-            categoriesStore.categoryBudgets[2].data?.length > 0
-              ? categoriesStore.categoryBudgets[2].data.map((category: any) => {
+            {savingsCategories && savingsCategories.length > 0
+              ? savingsCategories.map((category: any) => {
                   return (
                     <SavingsSettingCard
                       isAdded={addSavings}
@@ -470,11 +482,10 @@ const EditBudgetSettings = () => {
                             amount: savingsBudgetAmount,
                             contribution_amount: 0,
                             percentage: 0,
-                            category_id: category?.category.id,
+                            category_id: category?.id,
                             name: category?.name,
-                            pseudo_name:
-                              category?.name + " " + category?.category.emoji,
-                            extern_id: category?.category.id,
+                            pseudo_name: category?.name + " " + category?.emoji,
+                            extern_id: category?.id,
                             order: 0,
                             contribution_at: "",
                             is_contribute_customized: true,
@@ -491,23 +502,7 @@ const EditBudgetSettings = () => {
               : null}
           </div>
         </div>
-        <div className="flex flex-row mt-18 justify-center items-center">
-          <div className="font-poppins text-xs font-medium tracking-wide text-skin-neutral">
-            *Setup at least 3 categories
-          </div>
-        </div>
-        {/* <div className="mt-2">
-          <MainButton
-            title="All set"
-            // isDisabled={true}
-            loading={savingBudgetDetails}
-            click={() => {
-
-            }}
-          />
-        </div> */}
       </div>
     </div>
   );
 };
-export default EditBudgetSettings;

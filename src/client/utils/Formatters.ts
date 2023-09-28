@@ -130,3 +130,38 @@ export const formatNumber = (num: any) => {
     return num;
   }
 };
+
+export const calculateSpending = (totalExpenditure: any, totalBudget: any) => {
+  // Get current date
+  const today = new Date();
+  const currentDay = today.getDate();
+
+  // Calculate number of days in the current month
+  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+
+  // Calculate daily budget
+  const dailyBudget = totalBudget / daysInMonth;
+
+  // Calculate total budget that should be spent by the current day
+  const expectedExpenditure = checkNAN(dailyBudget * currentDay);
+
+  // Calculate the percentage of the month that has passed
+  const monthProgress = checkNAN((currentDay / daysInMonth) * 100);
+
+  // Calculate the percentage of actual expenditure progress in terms of total budget
+  let expenditureProgress = checkNAN((totalExpenditure / totalBudget) * 100);
+
+  // Calculate the percentage of expected expenditure progress in terms of total budget
+  const expectedExpenditureProgress = checkNAN((expectedExpenditure / totalBudget) * 100);
+  if (expenditureProgress > 100) {
+    expenditureProgress = 100;
+  }
+  
+
+  return {
+    expectedExpenditure,
+    monthProgress,
+    expenditureProgress,
+    expectedExpenditureProgress
+  };
+}
