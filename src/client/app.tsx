@@ -36,6 +36,7 @@ const EditMonthlyIncome = lazy(
 const EditSplitIncome = lazy(
   () => import("./pages/budgets/edit-settings/EditSplitIncome")
 );
+const CashFlow = lazy(() => import("./pages/insights/cashflow/Cashflow"));
 const App = () => {
   const queryClient = new QueryClient();
 
@@ -82,6 +83,7 @@ const App = () => {
               <Route path="/view-info" element={<ViewInfo />} />
               <Route path="/edit-split-income" element={<EditSplitIncome />} />
               <Route path="/empty-budgets" element={<EmptyBudgetSettings />} />
+              <Route path="/cashflow" element={<CashFlow />} />
             </Routes>
           </Suspense>
           <ToastContainer />

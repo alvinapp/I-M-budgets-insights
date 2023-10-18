@@ -3,11 +3,18 @@ type FilterButtonProps = {
   onClick?: () => void;
   isActive?: boolean;
   id?: string;
+  icon?: React.ReactNode;
 };
-const FilterButton = ({ label, onClick, isActive, id }: FilterButtonProps) => {
+const CashFlowFilterButton = ({
+  label,
+  onClick,
+  isActive,
+  id,
+  icon,
+}: FilterButtonProps) => {
   return (
     <button
-      className={`${
+      className={`flex flex-row ${
         isActive
           ? "bg-skin-secondaryWithOpacity rounded-full drop-shadow-lg"
           : " bg-skin-accent2 rounded-full"
@@ -15,6 +22,11 @@ const FilterButton = ({ label, onClick, isActive, id }: FilterButtonProps) => {
       onClick={onClick}
       id={`${id}`}
     >
+      <div
+        className={`mr-1 ${isActive ? "text-skin-primary" : "text-skin-base"}`}
+      >
+        {icon}
+      </div>
       <div
         className={`${
           isActive
@@ -27,4 +39,4 @@ const FilterButton = ({ label, onClick, isActive, id }: FilterButtonProps) => {
     </button>
   );
 };
-export default FilterButton;
+export default CashFlowFilterButton;
