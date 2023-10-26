@@ -6,6 +6,7 @@ import {
 } from "react-icons/fi";
 import PercentageItem from "./PercentageItem";
 import { checkNAN } from "client/utils/Formatters";
+import { useNavigate } from "react-router";
 
 interface CashFlowPieChartProps {
   dimensions: number;
@@ -25,6 +26,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   percentageChange,
 }) => {
   const { moneyIn, moneyOut } = values;
+  const navigate = useNavigate();
   const total = moneyIn + moneyOut;
   const moneyOutPercentage = total > 0 ? Math.round((moneyOut / total) * 100).toFixed(1) : 0;
   const moneyInPercentage = total > 0 ? Math.round((moneyIn / total) * 100).toFixed(1) : 0;
@@ -37,7 +39,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
 
   return (
     <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full">
-      <div className="flex flex-row justify-start items-center pl-3.5">
+      <div className="flex flex-row justify-start items-center pl-3.5" onClick={() => navigate("/cashflow")}>
         <h2 className="font-workSans text-base font-semibold">Cash flow</h2>
         <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>
           <FiChevronRight size="0.625rem" />

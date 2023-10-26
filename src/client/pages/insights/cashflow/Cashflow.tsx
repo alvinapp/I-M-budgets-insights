@@ -8,6 +8,8 @@ import { cashflowFilters } from "client/utils/MockData";
 import React, { useState } from "react";
 import { FiInfo } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import Graph from "../cashflowGraphs/Graph";
+import CashFlowRangeGraph from "../cashflowGraphs/CashFlowRangeGraph";
 
 const Cashflow = () => {
   const navigate = useNavigate();
@@ -16,6 +18,10 @@ const Cashflow = () => {
     name: "All accounts",
     icon: null,
   });
+  const earnedData = [330000, 261500, 318800];
+  const spentData = [87500, 150000, 97000];
+  const datalabels = ['Aug', 'Sep', 'Oct'];
+  const currencySymbol = '$';
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -32,7 +38,7 @@ const Cashflow = () => {
               </div>
               <div
                 className="h-6 w-6 rounded-full flex justify-center items-center"
-                onClick={() => {}}
+                onClick={() => { }}
               >
                 <FiInfo color="#101010" size="1.5rem" />
               </div>
@@ -60,6 +66,7 @@ const Cashflow = () => {
           })}
         </div>
         <TotalCashFlowView totalAmount={1170403} />
+        <Graph earned={912894} spent={-257509} />
         <div className="mt-6">
           <div className="flex flex-col rounded-lg bg-skin-base p-4 shadow-card">
             <div className="font-medium font-poppins text-tiny tracking-wide mb-4">
@@ -73,12 +80,18 @@ const Cashflow = () => {
             </div>
             <div className="flex flex-row">
               <div className="font-medium font-poppins text-tiny tracking-wide mr-2">
-                - You've made an average of
+                - You've spent an average of
               </div>
               <AmountDisplay amount={85836} />
             </div>
           </div>
         </div>
+        <CashFlowRangeGraph
+          earnedData={earnedData}
+          spentData={spentData}
+          datalabels={datalabels}
+          currencySymbol={currencySymbol}
+        />
       </div>
     </div>
   );
