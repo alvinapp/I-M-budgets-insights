@@ -173,7 +173,7 @@ input[type="number"] {
   height: 2.75rem;
   width: 2.75rem;
   text-align: center;
-  background-color: #056489;
+  background-color: linear-gradient(124.2deg, #144cbc 0%, #0131a1 100%);
   border-radius: 50%;
   outline: none;
   cursor: grab;
@@ -186,7 +186,7 @@ input[type="number"] {
   border-radius: 4px;
 }
 .example-track-0 {
-  background: #056489;
+  background: linear-gradient(124.2deg, #144cbc 0%, #0131a1 100%);
 }
 .barCompleted {
   background: #85c17f;

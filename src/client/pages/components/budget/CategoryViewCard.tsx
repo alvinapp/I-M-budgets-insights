@@ -72,6 +72,7 @@ export const CategoryViewCard = ({
           height="4px"
           baseBgColor={`${baseBgColor}`}
           bgColor={`${bgColor}`}
+          // bgColor="#0131a1"
           isLabelVisible={false}
         />
         <div className="flex flex-row mb-2.5 items-center"></div>

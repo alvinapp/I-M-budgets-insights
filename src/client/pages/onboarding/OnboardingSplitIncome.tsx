@@ -11,7 +11,7 @@ import { useConfigurationStore, IConfig } from "client/store/configuration";
 import { setIncome, completeOnboarding } from "client/api/users";
 import { GoalMacroType, setMacro } from "client/api/goals";
 import SliderThumbComponent from "../components/SliderThumbComponent";
-import debounce from 'lodash.debounce';
+import debounce from "lodash.debounce";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
@@ -28,7 +28,11 @@ const OnboardingSplitIncome = () => {
   const [wantsRatio, setWantsRatio] = useState(incomeSplit.wants);
   const [savingsRatio, setSavingsRatio] = useState(incomeSplit.savings);
   const [showPercentage, setShowPercentage] = useState(false);
-  const [debouncedRatio, setDebouncedRatio] = useState({ essentialsRatio, wantsRatio, savingsRatio });
+  const [debouncedRatio, setDebouncedRatio] = useState({
+    essentialsRatio,
+    wantsRatio,
+    savingsRatio,
+  });
 
   const setDebouncedRatioDebounced = useRef(
     debounce((newRatio) => setDebouncedRatio(newRatio), 300)
@@ -39,16 +43,22 @@ const OnboardingSplitIncome = () => {
   }, [essentialsRatio, wantsRatio, savingsRatio, setDebouncedRatioDebounced]);
 
   useEffect(() => {
-    const totalRatio = 100
-    const totalAllocated = debouncedRatio.essentialsRatio + debouncedRatio.wantsRatio + debouncedRatio.savingsRatio;
+    const totalRatio = 100;
+    const totalAllocated =
+      debouncedRatio.essentialsRatio +
+      debouncedRatio.wantsRatio +
+      debouncedRatio.savingsRatio;
 
     if (totalAllocated !== totalRatio) {
       const diff = totalRatio - totalAllocated;
 
       // Distribute the difference proportionally among the ratios
-      const essentialsAdjustment = debouncedRatio.essentialsRatio / totalAllocated * diff;
-      const wantsAdjustment = debouncedRatio.wantsRatio / totalAllocated * diff;
-      const savingsAdjustment = debouncedRatio.savingsRatio / totalAllocated * diff;
+      const essentialsAdjustment =
+        (debouncedRatio.essentialsRatio / totalAllocated) * diff;
+      const wantsAdjustment =
+        (debouncedRatio.wantsRatio / totalAllocated) * diff;
+      const savingsAdjustment =
+        (debouncedRatio.savingsRatio / totalAllocated) * diff;
 
       // Adjust the ratios
       setEssentialsRatio(debouncedRatio.essentialsRatio + essentialsAdjustment);
@@ -56,7 +66,6 @@ const OnboardingSplitIncome = () => {
       setSavingsRatio(debouncedRatio.savingsRatio + savingsAdjustment);
     }
   }, [debouncedRatio]);
-
 
   const generateSliderValues = (length = 100) =>
     new Array(length).fill(1).map((_, i) => i + 1);
@@ -127,20 +136,25 @@ const OnboardingSplitIncome = () => {
 
   const handleSliderChange = (newValue: number, type: string) => {
     const totalRatio = 100;
-    const oldValue = type === 'essentials' ? essentialsRatio : type === 'wants' ? wantsRatio : savingsRatio;
+    const oldValue =
+      type === "essentials"
+        ? essentialsRatio
+        : type === "wants"
+        ? wantsRatio
+        : savingsRatio;
     const change = newValue - oldValue;
 
     if (newValue === totalRatio) {
       switch (type) {
-        case 'essentials':
+        case "essentials":
           setWantsRatio(0);
           setSavingsRatio(0);
           break;
-        case 'wants':
+        case "wants":
           setEssentialsRatio(0);
           setSavingsRatio(0);
           break;
-        case 'savings':
+        case "savings":
           setEssentialsRatio(0);
           setWantsRatio(0);
           break;
@@ -154,15 +168,15 @@ const OnboardingSplitIncome = () => {
       const primaryRatio = (totalRatio - newValue) * 0.7;
       const secondaryRatio = (totalRatio - newValue) * 0.3;
       switch (type) {
-        case 'essentials':
+        case "essentials":
           setWantsRatio(primaryRatio);
           setSavingsRatio(secondaryRatio);
           break;
-        case 'wants':
+        case "wants":
           setEssentialsRatio(primaryRatio);
           setSavingsRatio(secondaryRatio);
           break;
-        case 'savings':
+        case "savings":
           setEssentialsRatio(primaryRatio);
           setWantsRatio(secondaryRatio);
           break;
@@ -172,18 +186,22 @@ const OnboardingSplitIncome = () => {
       return;
     }
 
-    const allocateChange = (primaryType: string, secondaryType: string, change: number) => {
+    const allocateChange = (
+      primaryType: string,
+      secondaryType: string,
+      change: number
+    ) => {
       const primaryChange = (change * 7) / 10;
       const secondaryChange = change - primaryChange;
 
       switch (primaryType) {
-        case 'essentials':
+        case "essentials":
           setEssentialsRatio(Math.max(essentialsRatio + primaryChange, 0));
           break;
-        case 'wants':
+        case "wants":
           setWantsRatio(Math.max(wantsRatio + primaryChange, 0));
           break;
-        case 'savings':
+        case "savings":
           setSavingsRatio(Math.max(savingsRatio + primaryChange, 0));
           break;
         default:
@@ -191,13 +209,13 @@ const OnboardingSplitIncome = () => {
       }
 
       switch (secondaryType) {
-        case 'essentials':
+        case "essentials":
           setEssentialsRatio(Math.max(essentialsRatio + secondaryChange, 0));
           break;
-        case 'wants':
+        case "wants":
           setWantsRatio(Math.max(wantsRatio + secondaryChange, 0));
           break;
-        case 'savings':
+        case "savings":
           setSavingsRatio(Math.max(savingsRatio + secondaryChange, 0));
           break;
         default:
@@ -206,27 +224,27 @@ const OnboardingSplitIncome = () => {
     };
 
     switch (type) {
-      case 'essentials':
+      case "essentials":
         if (change > 0) {
-          allocateChange('wants', 'savings', -change);
+          allocateChange("wants", "savings", -change);
         } else {
-          allocateChange('savings', 'wants', -change);
+          allocateChange("savings", "wants", -change);
         }
         setEssentialsRatio(newValue);
         break;
-      case 'wants':
+      case "wants":
         if (change > 0) {
-          allocateChange('essentials', 'savings', -change);
+          allocateChange("essentials", "savings", -change);
         } else {
-          allocateChange('savings', 'essentials', -change);
+          allocateChange("savings", "essentials", -change);
         }
         setWantsRatio(newValue);
         break;
-      case 'savings':
+      case "savings":
         if (change > 0) {
-          allocateChange('essentials', 'wants', -change);
+          allocateChange("essentials", "wants", -change);
         } else {
-          allocateChange('wants', 'essentials', -change);
+          allocateChange("wants", "essentials", -change);
         }
         setSavingsRatio(newValue);
         break;
@@ -270,7 +288,9 @@ const OnboardingSplitIncome = () => {
                   {currency ?? ""}
                 </div>
                 <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
-                  {calculateIncomeAmount(essentialsRatio)?.toLocaleString("en-us")}
+                  {calculateIncomeAmount(essentialsRatio)?.toLocaleString(
+                    "en-us"
+                  )}
                 </div>
               </div>
             </div>
@@ -284,12 +304,16 @@ const OnboardingSplitIncome = () => {
                 max={100}
                 thumbClassName="example-thumb"
                 trackClassName="example-track"
-                renderThumb={(props, state) =>
-                  <SliderThumbComponent valueNow={state.valueNow} props={props} showPercentage={showPercentage} />
-                }
+                renderThumb={(props, state) => (
+                  <SliderThumbComponent
+                    valueNow={state.valueNow}
+                    props={props}
+                    showPercentage={showPercentage}
+                  />
+                )}
                 onBeforeChange={() => setShowPercentage(true)}
                 onAfterChange={() => setShowPercentage(false)}
-                onChange={(value) => handleSliderChange(value, 'essentials')}
+                onChange={(value) => handleSliderChange(value, "essentials")}
               />
             </div>
           </div>
@@ -315,12 +339,16 @@ const OnboardingSplitIncome = () => {
                 max={100}
                 thumbClassName="example-thumb"
                 trackClassName="example-track"
-                renderThumb={(props, state) =>
-                  <SliderThumbComponent valueNow={state.valueNow} props={props} showPercentage={showPercentage} />
-                }
+                renderThumb={(props, state) => (
+                  <SliderThumbComponent
+                    valueNow={state.valueNow}
+                    props={props}
+                    showPercentage={showPercentage}
+                  />
+                )}
                 onBeforeChange={() => setShowPercentage(true)}
                 onAfterChange={() => setShowPercentage(false)}
-                onChange={(value) => handleSliderChange(value, 'wants')}
+                onChange={(value) => handleSliderChange(value, "wants")}
               />
             </div>
           </div>
@@ -346,12 +374,16 @@ const OnboardingSplitIncome = () => {
                 max={100}
                 thumbClassName="example-thumb"
                 trackClassName="example-track"
-                renderThumb={(props, state) =>
-                  <SliderThumbComponent valueNow={state.valueNow} props={props} showPercentage={showPercentage} />
-                }
+                renderThumb={(props, state) => (
+                  <SliderThumbComponent
+                    valueNow={state.valueNow}
+                    props={props}
+                    showPercentage={showPercentage}
+                  />
+                )}
                 onBeforeChange={() => setShowPercentage(true)}
                 onAfterChange={() => setShowPercentage(false)}
-                onChange={(value) => handleSliderChange(value, 'savings')}
+                onChange={(value) => handleSliderChange(value, "savings")}
               />
             </div>
           </div>

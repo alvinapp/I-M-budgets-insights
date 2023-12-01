@@ -276,10 +276,10 @@ const BudgetsView = () => {
                       budgetAmount={essential.amount}
                       spentAmount={essential?.expenses}
                       iconBg="bg-skin-secondaryWithOpacity"
-                      baseBgColor="#D0DDEA"
-                      bgColor="#056489"
-                      primaryColor="text-skin-primary"
-                      fadedColor="text-skin-neutral"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#0131A1"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
                     />
                   );
                 })
@@ -326,10 +326,10 @@ const BudgetsView = () => {
                       budgetAmount={want?.amount}
                       spentAmount={want?.expenses}
                       iconBg="bg-skin-secondary3WithOpacity"
-                      baseBgColor="#E8E3DC"
-                      bgColor="#A28D72"
-                      primaryColor="text-skin-alvinBrown"
-                      fadedColor="text-skin-alvinBrownFaded"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#6F89A5"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
                     />
                   );
                 })
@@ -378,10 +378,10 @@ const BudgetsView = () => {
                         budgetAmount={savings.amount}
                         spentAmount={savings.expenses}
                         iconBg="bg-skin-secondaryWithOpacity"
-                        baseBgColor="#D6EAD4"
-                        bgColor="#33982A"
-                        primaryColor="text-skin-success"
-                        fadedColor="text-skin-successSecondary"
+                        baseBgColor="#C8ECEF"
+                        bgColor="#1BBFCD"
+                        primaryColor="text-skin-base"
+                        fadedColor="text-skin-subtitle"
                         caption="saved"
                       />
                     );
