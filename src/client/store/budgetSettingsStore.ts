@@ -18,7 +18,7 @@ type IBudgetSettingsStore = BudgetSettings & {
 };
 
 const useBudgetSettingsStore = create<IBudgetSettingsStore>((set) => ({
-  currency: "₦",
+  currency: "KES",
   monthlyIncome: 0,
   incomeSplit: {
     essentials: 50,
@@ -42,7 +42,7 @@ const useBudgetSettingsStore = create<IBudgetSettingsStore>((set) => ({
       };
       return result;
     });
-  }, 
+  },
   setIncomeSplit: (split: IncomeSplit) => {
     return set((state: BudgetSettings) => {
       const result: BudgetSettings = {

@@ -6,21 +6,17 @@ type TotalCashFlowViewProps = {
 const TotalCashFlowView = ({ totalAmount }: TotalCashFlowViewProps) => {
   const currencySymbol = useCurrencySettingsStore((state: any) => state);
   return (
-    <div className="flex flex-row justify-start">
-      <div className="flex flex-col">
-        <div className="flex flex-row relative">
-          <div className="text-3xl tracking-title font-workSans font-semibold text-skin-base">
-            {totalAmount?.toLocaleString("en-us")}
-          </div>
-          <div className="font-workSans font-semibold text-xs absolute -right-6 top-2">
-            {currencySymbol.kenyanCurrency}
-          </div>
+    <div className="flex flex-col items-start">
+      <div className="relative">
+        <div className="font-workSans font-semibold text-xs absolute -right-6 top-1.5">
+          {currencySymbol.currencySymbol}
         </div>
-        <div className="flex flex-row">
-          <div className="font-poppins text-xs font-semibold text-skin-subtitle tracking-longtext">
-            Total cash flow
-          </div>
+        <div className="text-3xl tracking-title font-workSans font-semibold text-skin-base">
+          {totalAmount?.toLocaleString("en-us")}
         </div>
+      </div>
+      <div className="font-poppins text-xs font-medium text-skin-subtitle tracking-subtitle">
+        Total cash flow
       </div>
     </div>
   );

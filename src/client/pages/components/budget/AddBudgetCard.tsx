@@ -37,10 +37,10 @@ export const AddBudgetCard = ({
             Add more budgets
           </div>
         </div>
-        <div className="flex flex-row items-center mt-1">
+        <div className="flex flex-row items-center mt-2">
           <div className="relative">
             <div
-              className={`absolute -right-1 -top-1.5 font-poppins text-xxxxxs ${
+              className={`absolute -right-2.5 -top-2 font-poppins text-xxxxxs ${
                 fadedColor ?? "text-skin-base"
               } font-semibold`}
             >

@@ -7,6 +7,7 @@ import {
 import PercentageItem from "./PercentageItem";
 import { checkNAN } from "client/utils/Formatters";
 import { useNavigate } from "react-router";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
 
 interface CashFlowPieChartProps {
   dimensions: number;
@@ -28,18 +29,23 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   const { moneyIn, moneyOut } = values;
   const navigate = useNavigate();
   const total = moneyIn + moneyOut;
-  const moneyOutPercentage = total > 0 ? Math.round((moneyOut / total) * 100).toFixed(1) : 0;
-  const moneyInPercentage = total > 0 ? Math.round((moneyIn / total) * 100).toFixed(1) : 0;
+  const moneyOutPercentage =
+    total > 0 ? Math.round((moneyOut / total) * 100).toFixed(1) : 0;
+  const moneyInPercentage =
+    total > 0 ? Math.round((moneyIn / total) * 100).toFixed(1) : 0;
   const radius = dimensions / 2;
   const strokeWidth = doughnutThickness;
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
   let cumulativePercentage = 0;
-
+  const currencyStore = useCurrencySettingsStore((state: any) => state);
   return (
-    <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full">
-      <div className="flex flex-row justify-start items-center pl-3.5" onClick={() => navigate("/cashflow")}>
+    <div
+      className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full"
+      onClick={() => navigate("/cashflow")}
+    >
+      <div className="flex flex-row justify-start items-center pl-3.5">
         <h2 className="font-workSans text-base font-semibold">Cash flow</h2>
         <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>
           <FiChevronRight size="0.625rem" />
@@ -162,13 +168,13 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             <div className="flex flex-row">
               <div className="relative flex item-start">
                 <div
-                  className="absolute -right-1 -top-2 font-semibold"
+                  className="absolute -right-6 -top-2 font-semibold"
                   style={{ fontSize: "15px" }}
                 >
-                  {"₦"}
+                  {currencyStore.currencySymbol}
                 </div>
                 <div className="font-workSans text-2xl font-semibold text-skin-neutral2">
-                  {(checkNAN(moneyIn + moneyOut)).toLocaleString("en-US")}
+                  {checkNAN(moneyIn + moneyOut).toLocaleString("en-US")}
                 </div>
               </div>
             </div>
@@ -181,16 +187,12 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           <div className="flex flex-row items-start mt-5">
             <PercentageItem
               color="#66be5f"
-              percentage={Number(
-                moneyInPercentage
-              )}
+              percentage={Number(moneyInPercentage)}
               label="Money in"
             />
             <PercentageItem
               color="#F99E36"
-              percentage={Number(
-                moneyOutPercentage
-              )}
+              percentage={Number(moneyOutPercentage)}
               label="Money out"
             />
           </div>

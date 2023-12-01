@@ -1,5 +1,6 @@
 import React from "react";
 import MacroProgressBar from "./MacroProgressBar";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
 
 interface MacroProgressBarsContainerProps {
   ratios: string; // format like "50/30/20"
@@ -21,7 +22,8 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
   },
 }) => {
   const ratioArray = ratios.split("/").map(Number);
-  const currencySymbol = "₦";
+  const currencyStore = useCurrencySettingsStore((state: any) => state);
+  const currencySymbol = currencyStore.currencySymbol;
   const progressString = ["Essentials spend", "Wants spend", "Saved"];
 
   return (
@@ -52,7 +54,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
             <div className="flex flex-row">
               <div className="relative flex items-end">
                 <div
-                  className="absolute -right-1 -top-2"
+                  className="absolute -right-4 -top-1.5 text-xxxs font-workSans font-semibold"
                   style={{
                     color:
                       index === 0
@@ -60,13 +62,12 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                         : index === 1
                         ? "#c77e2b"
                         : "#117C07",
-                    fontSize: "80%",
                   }}
                 >
                   {currencySymbol}
                 </div>
                 <div
-                  className="font-workSans font-semibold text-l"
+                  className="font-workSans font-semibold text-lg"
                   style={{
                     color:
                       index === 0
