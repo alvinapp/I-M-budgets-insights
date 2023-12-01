@@ -12,7 +12,7 @@ export const AvailableBudgetContainer = ({
   return (
     <div className="flex flex-col items-start">
       <div className="relative">
-        <div className="absolute -right-3 top-2 font-workSans font-semibold text-sm text-skin-neutral2 ">
+        <div className="absolute -right-6 top-1.5 font-workSans font-semibold text-sm text-skin-neutral2 ">
           {currencySymbol ?? ""}
         </div>
         <div className="font-workSans text-4xl text-skin-neutral2 font-semibold">

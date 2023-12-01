@@ -10,7 +10,7 @@ const AmountDisplay = ({ amount }: AmountDisplayProps) => {
       <div className="font-medium font-poppins text-tiny tracking-wide">
         {amount.toLocaleString("en-us")}
       </div>
-      <div className="font-medium font-poppins text-xxxs tracking-wide absolute -top-2 -right-1">
+      <div className="font-medium font-poppins text-xxxs tracking-wide absolute -top-4 -right-3">
         {currency.currencySymbol}
       </div>
     </div>

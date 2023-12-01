@@ -5,11 +5,13 @@ import AmountDisplay from "client/pages/components/insights/AmountDisplay";
 import CashFlowFilterButton from "client/pages/components/insights/CashFlowFilterButton";
 import TotalCashFlowView from "client/pages/components/insights/TotalCashFlowView";
 import { cashflowFilters } from "client/utils/MockData";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiInfo } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import Graph from "../cashflowGraphs/Graph";
 import CashFlowRangeGraph from "../cashflowGraphs/CashFlowRangeGraph";
+import { getMicroDetailsViewData } from "client/api/transactions";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
 
 const Cashflow = () => {
   const navigate = useNavigate();
@@ -18,9 +20,50 @@ const Cashflow = () => {
     name: "All accounts",
     icon: null,
   });
-  const earnedData = [330000, 261500, 318800];
-  const spentData = [87500, 150000, 97000];
-  const datalabels = ['Aug', 'Sep', 'Oct'];
+  const [earnedData, setEarnedData] = useState([]);
+  const [totalEarned, setTotalEarned] = useState(0);
+  const [totalSpent, setTotalSpent] = useState(0);
+  const [spentData, setSpentData] = useState([]);
+  const [datalabels, setDatalabels] = useState([]);
+  const config = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
+
+  const fetchDataFromServer = async () => {
+    try {
+      const linkedAccountId = null;
+      const startDate = "2023-09-01";
+      const endDate = "2023-09-30";
+
+      const data = await getMicroDetailsViewData({
+        configuration: config,
+        linkedAccountId,
+        startDate,
+        endDate,
+      });
+
+      console.log(
+        "Fetching data from server:",
+        data.earningsData,
+        data.totalEarned,
+        data.totalSpent,
+        data.spentData,
+        data.datalabels
+      )
+
+      setEarnedData(data.earnedData);
+      setTotalEarned(data.totalEarned);
+      setTotalSpent(data.totalSpent);
+      setSpentData(data.spentData);
+      setDatalabels(data.datalabels);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataFromServer();
+  }, []);
   const currencySymbol = '$';
   return (
     <div className="h-screen w-screen">
@@ -58,6 +101,10 @@ const Cashflow = () => {
                 key={i}
                 isActive={isActive}
                 onClick={() => {
+                  console.log(
+                    "Active filter:",
+                    element.name,
+                  );
                   setActiveFilter(element);
                 }}
                 id={`${i}`}
@@ -65,24 +112,24 @@ const Cashflow = () => {
             );
           })}
         </div>
-        <TotalCashFlowView totalAmount={1170403} />
-        <Graph earned={912894} spent={-257509} />
+        <TotalCashFlowView totalAmount={totalEarned + totalSpent} />
+        <Graph earned={totalEarned} spent={totalSpent} />
         <div className="mt-6">
           <div className="flex flex-col rounded-lg bg-skin-base p-4 shadow-card">
             <div className="font-medium font-poppins text-tiny tracking-wide mb-4">
-              In the last 3months:
+              In the last {earnedData.length} months:
             </div>
             <div className="flex flex-row">
               <div className="font-medium font-poppins text-tiny tracking-wide mb-2 mr-1">
                 - You've made an average of
               </div>
-              <AmountDisplay amount={304298} />
+              <AmountDisplay amount={earnedData.reduce((a: number, b: number) => a + b, 0) / earnedData.length} />
             </div>
             <div className="flex flex-row">
               <div className="font-medium font-poppins text-tiny tracking-wide mr-2">
                 - You've spent an average of
               </div>
-              <AmountDisplay amount={85836} />
+              <AmountDisplay amount={spentData.reduce((a: number, b: number) => a + b, 0) / spentData.length} />
             </div>
           </div>
         </div>

@@ -23,18 +23,22 @@ const CashFlowRangeGraph = ({ earnedData, spentData, datalabels, currencySymbol 
         setLabels(datalabels);
     }, [earnedData, spentData, datalabels]);
 
+    const maxLabelsToShow = 12;
+    const step = Math.ceil(labels.length / maxLabelsToShow);
+    const truncatedLabels = labels.filter((label, index) => index % step === 0);
+
     const truncateNumber = (num: number): string => {
         if (num >= 1000000) {
-            return (num / 1000000).toFixed(0) + "m";
+            return (num / 1000000).toFixed(0) + "M";
         } else if (num >= 1000) {
-            return (num / 1000).toFixed(0) + "k";
+            return (num / 1000).toFixed(0) + "K";
         } else {
             return num.toString();
         }
     }
 
     const data: ChartData<'bar', number[], string> = {
-        labels: labels,
+        labels: truncatedLabels,
         datasets: [
             {
                 label: 'Earned',
