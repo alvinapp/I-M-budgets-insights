@@ -8,7 +8,7 @@ type ToggleProps = {
 };
 const Toggle = ({ tabs, activeTab, onClick }: ToggleProps) => {
   return (
-    <div className="flex flex-row justify-between items-center rounded-3xl bg-skin-accent px-1 py-0.5">
+    <div className="flex flex-row justify-between items-center rounded-3xl bg-[#F2F2F2] px-1 py-0.5">
       {tabs?.map((element: any, i) => {
         const isActive = element.id == activeTab;
         return (

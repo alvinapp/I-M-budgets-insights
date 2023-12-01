@@ -12,7 +12,8 @@
   :root {
     --color-text-base: #101010;
     --color-text-white: #ffffff;
-    --color-text-primary: #04506e;
+    /* --color-text-primary: #04506e; */
+    --color-text-primary: #0a3eaf;
     --color-text-secondary: #4e6783;
     --color-text-info: #3783a1;
     --color-text-neutral: #6f89a5;

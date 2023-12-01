@@ -291,7 +291,7 @@ const BudgetsView = () => {
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
-                  fadedColor="text-skin-neutral"
+                  fadedColor="text-skin-subtitle"
                   icon="🚀"
                   iconBg="bg-skin-secondaryWithOpacity"
                   budgetAmount={checkNAN(
@@ -341,7 +341,7 @@ const BudgetsView = () => {
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
-                  fadedColor="text-skin-alvinBrownFaded"
+                  fadedColor="text-skin-subtitle"
                   icon="🚀"
                   iconBg="bg-skin-secondaryWithOpacity"
                   budgetAmount={checkNAN(
