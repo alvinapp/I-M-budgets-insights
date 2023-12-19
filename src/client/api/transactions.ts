@@ -4,15 +4,33 @@ import * as Sentry from "@sentry/browser";
 //Fetch all transactions
 export const getCashFlow = async ({
   configuration,
+  start_date,
+  end_date,
 }: {
   configuration: IConfig;
+  start_date?: string;
+  end_date?: string;
 }) => {
   try {
-    const res = await fetchData({
-      endpoint: `/transactions/cash_flow/`,
-      token: configuration.token,
-      publicKey: configuration.publicKey,
-    });
+    let res;
+    if (start_date && end_date) {
+      res = await fetchData({
+        endpoint: `/transactions/cash_flow/?start_date=${start_date}&end_date=${end_date}`,
+        token: configuration.token,
+        publicKey: configuration.publicKey,
+      });
+    } else {
+      res = await fetchData({
+        endpoint: `/transactions/cash_flow/`,
+        token: configuration.token,
+        publicKey: configuration.publicKey,
+      });
+    }
+    // const res = await fetchData({
+    //   endpoint: `/transactions/cash_flow/`,
+    //   token: configuration.token,
+    //   publicKey: configuration.publicKey,
+    // });
     return res;
   } catch (reason: any) {
     Sentry.captureException(reason);

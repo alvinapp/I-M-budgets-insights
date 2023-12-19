@@ -32,7 +32,7 @@ export const MonthlyIncomeInput = ({
             onChange(parseInt(e.target.value));
           }}
         />
-        <div className="absolute right-12 -top-1 font-workSans text-xl tracking-title text-skin-base font-semibold">
+        <div className="absolute right-12 font-workSans text-xl tracking-title text-skin-base font-semibold" style={{ top: '-0.5rem', right: '3.3rem' }}>
           {currencySymbol}
         </div>
       </div>

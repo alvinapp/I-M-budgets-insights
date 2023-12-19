@@ -6,20 +6,26 @@ import { FiCalendar } from "react-icons/fi";
 import MainButton from "../components/MainButton";
 import { dateFilters } from "client/utils/MockData";
 import { useNavigate } from "react-router-dom";
+import useCashflowVariablesStore from "client/store/cashFlowStore";
 type InsightsFiltersProps = {
   accounts?: Array<Account>;
   activeAccount?: Account;
   onClick?: (account: Account) => void;
+  closeBottomSheet: () => void;
 };
 const InsightsFilters = ({
   accounts,
   activeAccount,
   onClick,
+  closeBottomSheet,
 }: InsightsFiltersProps) => {
   const [activeDateFilter, setActiveDateFilter] = useState({
     id: 0,
     name: "All time",
   });
+  const [activeAccountName, setActiveAccountName] = useState(
+    activeAccount?.name
+  );
   const uniqueAccounts: Account[] | undefined = Array.from(
     new Set(accounts?.map((account) => account.name))
   )
@@ -28,6 +34,68 @@ const InsightsFilters = ({
     })
     .filter((account) => account) as Account[];
   const navigate = useNavigate();
+  const isAllAccountsActive = !activeAccount;
+  const calculateDateRange = (selectedFilter: any) => {
+    const currentDate = new Date();
+    let startDate = new Date();
+    let endDate = new Date();
+
+    switch (selectedFilter.id) {
+      case 1: // This month
+        startDate.setDate(1);
+        break;
+      case 2: // Last month
+        startDate.setMonth(currentDate.getMonth() - 1, 1);
+        endDate.setDate(0); // Last day of last month
+        break;
+      case 3: // Last 3 months
+        startDate.setMonth(currentDate.getMonth() - 2, 1);
+        break;
+      case 4: // Last 6 months
+        startDate.setMonth(currentDate.getMonth() - 5, 1);
+        break;
+      // Handle additional cases as needed
+      default:
+        // Custom date or All time, use default values
+        startDate = new Date("2023-09-01");
+        endDate = new Date("2023-11-30");
+        break;
+    }
+
+    // Format dates as "YYYY-MM-DD"
+    const formattedStartDate = formatDate(startDate);
+    const formattedEndDate = formatDate(endDate);
+
+    console.log("Formatted startDate", formattedStartDate);
+    console.log("Formatted endDate", formattedEndDate);
+
+    return { formattedStartDate, formattedEndDate };
+  };
+
+  // Helper function to format a date as "YYYY-MM-DD"
+  const formatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+  const allAccounts: Account = {
+    id: -1,
+    account_id: 'all',
+    account_number: 'all',
+    name: 'All accounts',
+    type: 'all',
+    balance: 0,
+    is_linked: false,
+    created_on: 'N/A',
+    created_at: 'N/A',
+    source: 'N/A',
+    transactions: {
+      total_debit: 0,
+      total_credit: 0,
+    },
+  };
+  uniqueAccounts.unshift(allAccounts);
   return (
     <div className="flex flex-col mt-6 mx-4">
       <div className="flex flex-row justify-between items-center">
@@ -48,20 +116,30 @@ const InsightsFilters = ({
         </div>
       </div>
       <div className="py-3 flex flex-wrap items-center mb-4">
-        {uniqueAccounts?.map((element: Account, i) => {
-          const isActive = element.account_id === activeAccount?.account_id;
+        {[
+          ...uniqueAccounts.map((element: Account, i) => ({
+            label: element.name,
+            id: `${i}`,
+          })),
+        ].map((filter, i) => {
+          const isActive = filter.id === 'all'
+            ? isAllAccountsActive
+            : uniqueAccounts[parseInt(filter.id)].account_id === activeAccount?.account_id;
 
           return (
             <FilterButton
-              label={element.name}
+              label={filter.label}
               key={i}
-              isActive={isActive}
+              isActive={activeAccountName === filter.label || isActive}
               onClick={() => {
+                console.log("unique accounts", uniqueAccounts);
                 if (onClick) {
-                  onClick(element);
+                  const selectedAccount = uniqueAccounts[parseInt(filter.id)];
+                  onClick(selectedAccount);
+                  setActiveAccountName(selectedAccount.name);
                 }
               }}
-              id={`${i}`}
+              id={filter.id}
             />
           );
         })}
@@ -96,7 +174,17 @@ const InsightsFilters = ({
         })}
       </div>
       <div className="mb-6">
-        <MainButton title="Apply" click={() => navigate("/cashflow")} />
+        <MainButton title="Apply" click={() => {
+          const { formattedStartDate, formattedEndDate } =
+            calculateDateRange(activeDateFilter);
+          useCashflowVariablesStore.getState().setCashflowVariables({
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+            accountName: activeAccountName || "All accounts",
+            dateFilter: activeDateFilter.name,
+          });
+          closeBottomSheet();
+        }} />
       </div>
     </div>
   );

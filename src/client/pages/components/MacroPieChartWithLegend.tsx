@@ -4,18 +4,18 @@ import MacroPieChartLegend from './MacroPieChartLegend';
 import { checkNAN } from "client/utils/Formatters";
 
 interface Values {
-  wants: number;
-  essentials: number;
-  savings: number;
-  unallocated: number;
+    wants: number;
+    essentials: number;
+    savings: number;
+    unallocated: number;
 }
 
 interface MacroPieChartWithLegendProps {
-  dimensions: number;
-  doughnutThickness: number;
-  values: Values;
-  showComparison?: boolean;
-  showUnallocated?: boolean;
+    dimensions: number;
+    doughnutThickness: number;
+    values: Values;
+    showComparison?: boolean;
+    showUnallocated?: boolean;
 }
 
 const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({ dimensions, doughnutThickness, values, showComparison, showUnallocated }) => {
@@ -39,10 +39,10 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({ dimen
         <div className="flex flex-row items-center space-x-4">
             <MacroPieChart dimensions={dimensions} doughnutThickness={doughnutThickness} values={values} />
             <div className="flex flex-col justify-between space-y-2">
-                <MacroPieChartLegend color="#0c8eb0" text="Essentials" percentage={checkNAN(percentages.essentials)} showComparison={showComparison} />
-                <MacroPieChartLegend color="#c69155" text="Wants" percentage={checkNAN(percentages.wants)} showComparison={showComparison} />
-                <MacroPieChartLegend color="#3da134" text="Savings" percentage={checkNAN(percentages.savings)} showComparison={showComparison} />
-                <MacroPieChartLegend color="#cfddea" text="Unallocated" percentage={checkNAN(percentages.unallocated)} showComparison={showComparison} showUnallocated={showUnallocated}/>
+                <MacroPieChartLegend color="#0d44b5" text="Essentials" percentage={checkNAN(percentages.essentials)} showComparison={showComparison} />
+                <MacroPieChartLegend color="#9db2c6" text="Wants" percentage={checkNAN(percentages.wants)} showComparison={showComparison} />
+                <MacroPieChartLegend color="#0dacb9" text="Savings" percentage={checkNAN(percentages.savings)} showComparison={showComparison} />
+                <MacroPieChartLegend color="#d1ddea" text="Unallocated" percentage={checkNAN(percentages.unallocated)} showComparison={showComparison} showUnallocated={showUnallocated} />
             </div>
         </div>
     );

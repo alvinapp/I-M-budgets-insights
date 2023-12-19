@@ -140,8 +140,8 @@ const OnboardingSplitIncome = () => {
       type === "essentials"
         ? essentialsRatio
         : type === "wants"
-        ? wantsRatio
-        : savingsRatio;
+          ? wantsRatio
+          : savingsRatio;
     const change = newValue - oldValue;
 
     if (newValue === totalRatio) {
@@ -284,7 +284,7 @@ const OnboardingSplitIncome = () => {
             <div className="justify-self-start font-semibold">Essentials</div>
             <div className="justify-self-end font-semibold">
               <div className="relative">
-                <div className="absolute -right-3 -top-1.5 font-workSans font-semibold text-xs text-skin-neutral2 ">
+                <div className="absolute -right-3 font-workSans font-semibold text-xs text-skin-neutral2 " style={{ top: "-0.5rem" }}>
                   {currency ?? ""}
                 </div>
                 <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
@@ -321,7 +321,7 @@ const OnboardingSplitIncome = () => {
             <div className="justify-self-start font-semibold">Wants</div>
             <div className="justify-self-end font-semibold">
               <div className="relative">
-                <div className="absolute -right-3 -top-1.5 font-workSans font-semibold text-xs text-skin-neutral2 ">
+                <div className="absolute -right-3 font-workSans font-semibold text-xs text-skin-neutral2 " style={{ top: "-0.5rem" }}>
                   {currency ?? ""}
                 </div>
                 <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
@@ -356,7 +356,7 @@ const OnboardingSplitIncome = () => {
             <div className="justify-self-start font-semibold">Savings</div>
             <div className="justify-self-end font-semibold">
               <div className="relative">
-                <div className="absolute -right-3 -top-1.5 font-workSans font-semibold text-xs text-skin-neutral2 ">
+                <div className="absolute -right-3 font-workSans font-semibold text-xs text-skin-neutral2 " style={{ top: "-0.5rem" }}>
                   {currency ?? ""}
                 </div>
                 <div className="font-workSans text-lg text-skin-neutral2 font-semibold">

@@ -39,7 +39,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
       <div className="graphContainer">
         <div
           className="bar"
-          style={{ height: `${earnedHeight}%`, backgroundColor: "#0781a4" }}
+          style={{ height: `${earnedHeight}%`, backgroundColor: "#0d40b0" }}
         >
           <div className={`barValue${showEarnedValue ? " show" : ""}`}>
             + {earned.toLocaleString()}
@@ -47,7 +47,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
         </div>
         <div
           className="bar"
-          style={{ height: `${spentHeight}%`, backgroundColor: "#f3b167" }}
+          style={{ height: `${spentHeight}%`, backgroundColor: "#11b1bf" }}
         >
           <div className={`barValue${showSpentValue ? " show" : ""}`}>
             - {Math.abs(spent).toLocaleString()}
@@ -56,13 +56,13 @@ const Graph: FC<Props> = ({ earned, spent }) => {
       </div>
       <div className="legend">
         <div className="font-poppins text-xs text-skin-subtitle font-medium tracking-subtitle">
-          <span style={{ backgroundColor: "#0781a4" }}></span> Total earned
+          <span style={{ backgroundColor: "#0d40b0" }}></span> Total earned
         </div>
         <div
           style={{ marginLeft: "1rem" }}
           className="font-poppins text-xs text-skin-subtitle font-medium tracking-subtitle"
         >
-          <span style={{ backgroundColor: "#f3b167" }}></span> Total spent
+          <span style={{ backgroundColor: "#11b1bf" }}></span> Total spent
         </div>
       </div>
     </div>

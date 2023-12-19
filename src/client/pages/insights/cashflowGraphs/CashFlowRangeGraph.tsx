@@ -43,7 +43,7 @@ const CashFlowRangeGraph = ({ earnedData, spentData, datalabels, currencySymbol 
             {
                 label: 'Earned',
                 data: earnedBarData,
-                backgroundColor: '#0781a4',
+                backgroundColor: '#0d40b0',
                 hoverBorderColor: '#e7e7e7',
                 hoverBorderWidth: 3,
                 type: 'bar',
@@ -52,7 +52,7 @@ const CashFlowRangeGraph = ({ earnedData, spentData, datalabels, currencySymbol 
             {
                 label: 'Spent',
                 data: spentBarData,
-                backgroundColor: '#f3b167',
+                backgroundColor: '#11b1bf',
                 hoverBorderColor: '#e7e7e7',
                 hoverBorderWidth: 3,
                 type: 'bar',

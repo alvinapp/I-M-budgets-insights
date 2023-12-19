@@ -42,8 +42,8 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
               index === 0
                 ? "linear-gradient(124.2deg, #144CBC 0%, #0131A1 100%)"
                 : index === 1
-                ? "#6F89A5"
-                : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%);"
+                  ? "#6F89A5"
+                  : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
             }
             outsideLength={
               progressPercentage[Object.keys(progressPercentage)[index]]
@@ -55,27 +55,27 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
               <div className="relative flex items-end">
                 <div
                   className="absolute -right-4 -top-1.5 text-xxxs font-workSans font-semibold text-skin-base"
-                  /*  style={{
-                    color:
-                      index === 0
-                       / ? "#056489"
-                        : index === 1
-                       / ? "#c77e2b"
-                        : "#117C07",
-                  }}*/
+                /*  style={{
+                  color:
+                    index === 0
+                     / ? "#056489"
+                      : index === 1
+                     / ? "#c77e2b"
+                      : "#117C07",
+                }}*/
                 >
                   {currencySymbol}
                 </div>
                 <div
                   className="font-workSans font-semibold text-lg text-skin-base"
-                  /*  style={{
-                    color:
-                      index === 0
-                       / ? "#056489"
-                        : index === 1
-                       / ? "#c77e2b"
-                        : "#117C07",
-                  }} */
+                /*  style={{
+                  color:
+                    index === 0
+                     / ? "#056489"
+                      : index === 1
+                     / ? "#c77e2b"
+                      : "#117C07",
+                }} */
                 >
                   {budgetAmount[
                     Object.keys(budgetAmount)[index]

@@ -33,15 +33,17 @@ export const MySpend = ({
   ) as IConfig;
   const expenditureProgress = calculateSpending(spent, budget)
 
-  useEffect(() => {
-    const fetchMicroGoalTotalsData = async () => {
-      const data = await fetchMicroGoalTotals({ configuration: config });
-      setMicroGoals(data);
-    };
+  // useEffect(() => {
+  //   const fetchMicroGoalTotalsData = async () => {
+  //     const data = await fetchMicroGoalTotals({ configuration: config });
+  //     setMicroGoals(data);
+  //   };
 
-    fetchMicroGoalTotalsData();
-  }, []);
-
+  //   fetchMicroGoalTotalsData();
+  // }, []);
+  console.log("Microgoals data", microGoals);
+  const budgetColumnWidth = '120px';
+  const spentColumnWidth = '20%';
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -78,10 +80,10 @@ export const MySpend = ({
         </div>
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
-            <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide mr-8">
+            <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide items-end" style={{ width: budgetColumnWidth }}>
               Budget
             </div>
-            <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide">
+            <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide items-end" style={{ width: spentColumnWidth }}>
               Spent
             </div>
           </div>

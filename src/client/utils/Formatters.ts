@@ -137,7 +137,11 @@ export const calculateSpending = (totalExpenditure: any, totalBudget: any) => {
   const currentDay = today.getDate();
 
   // Calculate number of days in the current month
-  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  const daysInMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    0
+  ).getDate();
 
   // Calculate daily budget
   const dailyBudget = totalBudget / daysInMonth;
@@ -152,16 +156,52 @@ export const calculateSpending = (totalExpenditure: any, totalBudget: any) => {
   let expenditureProgress = checkNAN((totalExpenditure / totalBudget) * 100);
 
   // Calculate the percentage of expected expenditure progress in terms of total budget
-  const expectedExpenditureProgress = checkNAN((expectedExpenditure / totalBudget) * 100);
+  const expectedExpenditureProgress = checkNAN(
+    (expectedExpenditure / totalBudget) * 100
+  );
   if (expenditureProgress > 100) {
     expenditureProgress = 100;
   }
-  
 
   return {
     expectedExpenditure,
     monthProgress,
     expenditureProgress,
-    expectedExpenditureProgress
+    expectedExpenditureProgress,
   };
+};
+
+export const navigateWithProps = (
+  history: any,
+  targetRoute: any,
+  props: any
+) => {
+  history.push(targetRoute, props);
+};
+
+export function calculateMacroTypeTotals(data: any[]) {
+  // const totals = {};
+
+  // Iterate through the data array
+  const totals: { [key: string]: number } = {};
+
+  for (const item of data) {
+    const { macro_name, total_transactions } = item;
+
+    // If the macroType already exists in the totals object, add the amount to it
+    if (totals[macro_name]) {
+      totals[macro_name] += total_transactions;
+    } else {
+      // If the macroType doesn't exist, initialize it with the amount
+      totals[macro_name] = total_transactions;
+    }
+  }
+
+  // Convert the totals object into an array of objects
+  const result = Object.entries(totals).map(([macroType, total]) => ({
+    macroType,
+    total,
+  }));
+
+  return result;
 }

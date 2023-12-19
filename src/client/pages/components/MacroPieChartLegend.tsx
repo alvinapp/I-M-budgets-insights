@@ -9,7 +9,7 @@ interface MacroPieChartLegendProps {
   showUnallocated?: boolean;
 }
 
-const MacroPieChartLegend: React.FC<MacroPieChartLegendProps> = ({ color, text, percentage, showUnallocated = true, showComparison = false}) => {
+const MacroPieChartLegend: React.FC<MacroPieChartLegendProps> = ({ color, text, percentage, showUnallocated = true, showComparison = false }) => {
   const percentageChange = Math.floor(Math.random() * 100) - 50;
   if (!showUnallocated) {
     return <div></div>;
@@ -19,9 +19,9 @@ const MacroPieChartLegend: React.FC<MacroPieChartLegendProps> = ({ color, text, 
       width: 'fit-content'
     }}>
       <div className="rounded-full bg-skin-neutral h-3 w-3" style={{
-        backgroundColor: color,
+        background: color,
       }}></div>
-      <div className='font-poppins text-xs text-skin-base tracking-longest_text'>{text} ({percentage}%) {percentage!== 0 && showComparison ?<RandomExpenditureComparisonCard percentage={percentageChange}/>: null}</div>
+      <div className='font-poppins text-xs text-skin-base tracking-longest_text'>{text} ({percentage}%) {percentage !== 0 && showComparison ? <RandomExpenditureComparisonCard percentage={percentageChange} /> : null}</div>
     </div>
   );
 };

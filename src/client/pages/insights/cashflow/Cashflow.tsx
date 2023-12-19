@@ -7,7 +7,7 @@ import TotalCashFlowView from "client/pages/components/insights/TotalCashFlowVie
 import { cashflowFilters } from "client/utils/MockData";
 import React, { useEffect, useState } from "react";
 import { FiInfo } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Graph from "../cashflowGraphs/Graph";
 import CashFlowRangeGraph from "../cashflowGraphs/CashFlowRangeGraph";
 import { getMicroDetailsViewData } from "client/api/transactions";
@@ -15,16 +15,17 @@ import { IConfig, useConfigurationStore } from "client/store/configuration";
 
 const Cashflow = () => {
   const navigate = useNavigate();
-  const [activeFilter, setActiveFilter] = useState({
-    id: 0,
-    name: "All accounts",
-    icon: null,
-  });
-  const [earnedData, setEarnedData] = useState([]);
+  const [earnedData, setEarnedData] = useState<number[]>([]);
   const [totalEarned, setTotalEarned] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
-  const [spentData, setSpentData] = useState([]);
+  const [spentData, setSpentData] = useState<number[]>([]);
   const [datalabels, setDatalabels] = useState([]);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
+  const accountName = searchParams.get("accountName");
+  const dateFilter = searchParams.get("dateFilter");
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -32,8 +33,6 @@ const Cashflow = () => {
   const fetchDataFromServer = async () => {
     try {
       const linkedAccountId = null;
-      const startDate = "2023-09-01";
-      const endDate = "2023-09-30";
 
       const data = await getMicroDetailsViewData({
         configuration: config,
@@ -44,11 +43,11 @@ const Cashflow = () => {
 
       console.log(
         "Fetching data from server:",
-        data.earningsData,
-        data.totalEarned,
-        data.totalSpent,
-        data.spentData,
-        data.datalabels
+        "data.earnedData", data.earnedData,
+        "data.totalEarned", data.totalEarned,
+        "data.totalSpent", data.totalSpent,
+        "data.spentData", data.spentData,
+        "data.datalabels", data.datalabels
       )
 
       setEarnedData(data.earnedData);
@@ -92,20 +91,22 @@ const Cashflow = () => {
       <div className="flex-grow h-px bg-skin-accent3 mb-1"></div>
       <div className="flex flex-col mx-3.5">
         <div className="py-3 flex flex-wrap items-center mb-3">
-          {cashflowFilters?.map((element: any, i: any) => {
-            const isActive = element.id === activeFilter.id;
+          {cashflowFilters?.map((element: any, i: number) => {
+            const label = i === 0 ? accountName : i === 1 ? dateFilter : element.name ?? "All accounts";
             return (
               <CashFlowFilterButton
-                label={element.name}
+                label={label}
                 icon={element.icon}
                 key={i}
-                isActive={isActive}
+                isActive={false}
                 onClick={() => {
                   console.log(
                     "Active filter:",
                     element.name,
                   );
-                  setActiveFilter(element);
+                  if (i === 2) {
+                    console.log("Launch filter bottom sheet");
+                  }
                 }}
                 id={`${i}`}
               />

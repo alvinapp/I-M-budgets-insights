@@ -8,6 +8,7 @@ import PercentageItem from "./PercentageItem";
 import { checkNAN } from "client/utils/Formatters";
 import { useNavigate } from "react-router";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import useCashflowVariablesStore from "client/store/cashFlowStore";
 
 interface CashFlowPieChartProps {
   dimensions: number;
@@ -26,7 +27,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   values,
   percentageChange,
 }) => {
-  const { moneyIn, moneyOut } = values;
+  let { moneyIn, moneyOut } = values;
   const navigate = useNavigate();
   const total = moneyIn + moneyOut;
   const moneyOutPercentage =
@@ -40,10 +41,12 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
 
   let cumulativePercentage = 0;
   const currencyStore = useCurrencySettingsStore((state: any) => state);
+  const cashflowVariables = useCashflowVariablesStore.getState().cashflowVariables;
+  console.log("cashflowVariables", cashflowVariables);
   return (
     <div
       className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full"
-      onClick={() => navigate("/cashflow")}
+      onClick={() => navigate(`/cashflow?startDate=${cashflowVariables.startDate}&endDate=${cashflowVariables.endDate}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter}`)}
     >
       <div className="flex flex-row justify-start items-center pl-3.5">
         <h2 className="font-workSans text-base font-semibold">Cash flow</h2>
@@ -66,7 +69,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             {["moneyIn", "moneyOut"].map((type, index) => {
               const percentage = (values[type] / total) * 100;
               const color =
-                type === "moneyIn" ? "url(#moneyInGradient)" : "#F99E36";
+                type === "moneyIn" ? "#0099A6" : "#F99E36";
 
               const startX =
                 normalizedRadius *
@@ -169,7 +172,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
               <div className="relative flex item-start">
                 <div
                   className="absolute -right-6 -top-2 font-semibold"
-                  style={{ fontSize: "15px" }}
+                  style={{ fontSize: "12px" }}
                 >
                   {currencyStore.currencySymbol}
                 </div>
@@ -186,7 +189,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           </div>
           <div className="flex flex-row items-start mt-5">
             <PercentageItem
-              color="#66be5f"
+              color="#0099A6"
               percentage={Number(moneyInPercentage)}
               label="Money in"
             />

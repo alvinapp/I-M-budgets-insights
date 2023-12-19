@@ -304,10 +304,10 @@ export const dateFilters = [
   { id: 2, name: "Last month" },
   { id: 3, name: "Last 3 month" },
   { id: 4, name: "Last 6 months" },
-  { id: 4, name: "Custom date" },
+  // { id: 5, name: "Custom date" },
 ];
 export const cashflowFilters = [
   { id: 0, name: "All accounts", icon: null },
   { id: 1, name: "Last 3 month", icon: <FiCalendar /> },
-  { id: 2, name: "Clear", icon: null },
+  // { id: 2, name: "Clear", icon: null },
 ];

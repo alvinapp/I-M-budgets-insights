@@ -23,7 +23,7 @@ export const OthersSpend = ({
   unallocatedSpend,
 }: OthersSpendProps) => {
   const expenditureProgress = calculateSpending(spentBudget, plannedBudget);
-  const othersAverageProgress = calculateSpending(59850, plannedBudget);
+  const othersAverageProgress = calculateSpending(319850, plannedBudget);
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -49,7 +49,7 @@ export const OthersSpend = ({
               marginRight: 5,
             }}
           ></div>
-          <AmountView caption="Other's avg spend" amount={59850} />
+          <AmountView caption="Other's avg spend" amount={319850} />
         </div>
         <div className="flex flex-row items-start">
           <div
@@ -94,15 +94,15 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
-              return (
-                <ExpenditureComparisonCard
-                  icon={expenditure.emoji}
-                  key={i}
-                  category={expenditure.name}
-                  percentage={expenditure.percentage}
-                />
-              );
-            })
+            return (
+              <ExpenditureComparisonCard
+                icon={expenditure.emoji}
+                key={i}
+                category={expenditure.name}
+                percentage={expenditure.percentage}
+              />
+            );
+          })
           : null}
       </div>
     </div>
