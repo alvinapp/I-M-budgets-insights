@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import { BudgetSettings } from "./pages/budgets/BudgetSettings";
 import ViewInfo from "./pages/budgets/ViewInfo";
 import { EmptyBudgetSettings } from "./pages/budgets/edit-settings/EmptyBudgetSettings";
+import CustomLoader from "./pages/components/Loader/CustomLoader";
 
 declare var AppConfig: AppConfig;
 
@@ -46,16 +47,8 @@ const App = () => {
         <div className="overflow-x-hidden w-screen">
           <Suspense
             fallback={
-              <div className="flex flex-col w-screen h-screen justify-center items-center">
-                <TailSpin
-                  height="40"
-                  width="40"
-                  color="#056489"
-                  ariaLabel="tail-spin-loading"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                />
+              <div className="h-screen w-screen flex justify-center items-center">
+                <CustomLoader />
               </div>
             }
           >
