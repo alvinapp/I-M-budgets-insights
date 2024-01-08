@@ -66,9 +66,6 @@ const InsightsFilters = ({
     const formattedStartDate = formatDate(startDate);
     const formattedEndDate = formatDate(endDate);
 
-    console.log("Formatted startDate", formattedStartDate);
-    console.log("Formatted endDate", formattedEndDate);
-
     return { formattedStartDate, formattedEndDate };
   };
 
@@ -81,15 +78,15 @@ const InsightsFilters = ({
   };
   const allAccounts: Account = {
     id: -1,
-    account_id: 'all',
-    account_number: 'all',
-    name: 'All accounts',
-    type: 'all',
+    account_id: "all",
+    account_number: "all",
+    name: "All accounts",
+    type: "all",
     balance: 0,
     is_linked: false,
-    created_on: 'N/A',
-    created_at: 'N/A',
-    source: 'N/A',
+    created_on: "N/A",
+    created_at: "N/A",
+    source: "N/A",
     transactions: {
       total_debit: 0,
       total_credit: 0,
@@ -122,9 +119,11 @@ const InsightsFilters = ({
             id: `${i}`,
           })),
         ].map((filter, i) => {
-          const isActive = filter.id === 'all'
-            ? isAllAccountsActive
-            : uniqueAccounts[parseInt(filter.id)].account_id === activeAccount?.account_id;
+          const isActive =
+            filter.id === "all"
+              ? isAllAccountsActive
+              : uniqueAccounts[parseInt(filter.id)].account_id ===
+                activeAccount?.account_id;
 
           return (
             <FilterButton
@@ -132,7 +131,6 @@ const InsightsFilters = ({
               key={i}
               isActive={activeAccountName === filter.label || isActive}
               onClick={() => {
-                console.log("unique accounts", uniqueAccounts);
                 if (onClick) {
                   const selectedAccount = uniqueAccounts[parseInt(filter.id)];
                   onClick(selectedAccount);
@@ -174,17 +172,20 @@ const InsightsFilters = ({
         })}
       </div>
       <div className="mb-6">
-        <MainButton title="Apply" click={() => {
-          const { formattedStartDate, formattedEndDate } =
-            calculateDateRange(activeDateFilter);
-          useCashflowVariablesStore.getState().setCashflowVariables({
-            startDate: formattedStartDate,
-            endDate: formattedEndDate,
-            accountName: activeAccountName || "All accounts",
-            dateFilter: activeDateFilter.name,
-          });
-          closeBottomSheet();
-        }} />
+        <MainButton
+          title="Apply"
+          click={() => {
+            const { formattedStartDate, formattedEndDate } =
+              calculateDateRange(activeDateFilter);
+            useCashflowVariablesStore.getState().setCashflowVariables({
+              startDate: formattedStartDate,
+              endDate: formattedEndDate,
+              accountName: activeAccountName || "All accounts",
+              dateFilter: activeDateFilter.name,
+            });
+            closeBottomSheet();
+          }}
+        />
       </div>
     </div>
   );

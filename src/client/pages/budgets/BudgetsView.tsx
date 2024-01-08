@@ -77,7 +77,9 @@ const BudgetsView = () => {
     0
   );
   const navigateToInsightsView = () => {
-    navigate(`/insights-view?startDate=${formattedStartDate}&endDate=${formattedEndDate}`);
+    navigate(
+      `/insights-view?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
+    );
   };
   const formattedEndDate = `${endOfMonth.getFullYear()}-${(
     endOfMonth.getMonth() + 1
@@ -93,7 +95,6 @@ const BudgetsView = () => {
         start_date: formattedStartDate,
         end_date: formattedEndDate,
       }).then((result) => {
-        console.log("Essentials Budgets", result);
         categoryStore.setCategoryBudgets(result);
       }),
     { enabled: !!config.token }
@@ -234,19 +235,18 @@ const BudgetsView = () => {
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
             amount={checkNAN(
-              Math.max(0, essentialTotalBudgetAmount +
-                wantsTotalBudgetAmount -
-                (essentialTotalExpenses + wantsTotalExpenses))
+              Math.max(
+                0,
+                essentialTotalBudgetAmount +
+                  wantsTotalBudgetAmount -
+                  (essentialTotalExpenses + wantsTotalExpenses)
+              )
             )}
             subtitle="Available budget spend"
             currencySymbol={currencySymbol}
           />
           <div className="flex flex-col justify-center">
-            <InsightsButton
-              onClick={() =>
-                navigateToInsightsView()
-              }
-            />
+            <InsightsButton onClick={() => navigateToInsightsView()} />
           </div>
         </div>
         <div className="mt-11">
@@ -288,8 +288,8 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
           <CategoryCardHeader
             title="Essentials"
-            amount={checkNAN(Math.max(0,
-              essentialTotalBudgetAmount - essentialTotalExpenses)
+            amount={checkNAN(
+              Math.max(0, essentialTotalBudgetAmount - essentialTotalExpenses)
             )}
             caption="Available"
             currencySymbol={currencySymbol}
@@ -297,30 +297,30 @@ const BudgetsView = () => {
           <div className="mt-6 flex flex-col">
             {essentialBudgets && essentialBudgets.length > 0
               ? essentialBudgets?.map((essential: any, i: any) => {
-                return (
-                  <CategoryViewCard
-                    key={i}
-                    category={essential?.name}
-                    progressPercentage={checkNAN(
-                      (essential?.expenses / essential?.amount) * 100
-                    )}
-                    icon={essential.category?.emoji}
-                    amount={essential?.amount}
-                    budgetAmount={essential.amount}
-                    spentAmount={essential?.expenses}
-                    iconBg="bg-skin-secondaryWithOpacity"
-                    baseBgColor="#E7EDF3"
-                    bgColor="#0131A1"
-                    primaryColor="text-skin-base"
-                    fadedColor="text-skin-subtitle"
-                  />
-                );
-              })
+                  return (
+                    <CategoryViewCard
+                      key={i}
+                      category={essential?.name}
+                      progressPercentage={checkNAN(
+                        (essential?.expenses / essential?.amount) * 100
+                      )}
+                      icon={essential.category?.emoji}
+                      amount={essential?.amount}
+                      budgetAmount={essential.amount}
+                      spentAmount={essential?.expenses}
+                      iconBg="bg-skin-secondaryWithOpacity"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#0131A1"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
+                    />
+                  );
+                })
               : null}
           </div>
           <div className="flex flex-col">
             {essentialBudgets?.length !==
-              categoryStore.categoryBudgets[0]?.data.length ? (
+            categoryStore.categoryBudgets[0]?.data.length ? (
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
@@ -329,7 +329,7 @@ const BudgetsView = () => {
                   iconBg="bg-skin-secondaryWithOpacity"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[0]?.amount -
-                    categoryStore.categoryBudgets[0]?.total_amount
+                      categoryStore.categoryBudgets[0]?.total_amount
                   )}
                   onClick={() => navigate("/edit-budgets")}
                 />
@@ -340,37 +340,39 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
           <CategoryCardHeader
             title="Wants"
-            amount={checkNAN(Math.max(0, wantsTotalBudgetAmount - wantsTotalExpenses))}
+            amount={checkNAN(
+              Math.max(0, wantsTotalBudgetAmount - wantsTotalExpenses)
+            )}
             caption="Available"
             currencySymbol={currencySymbol}
           />
           <div className="mt-6 flex flex-col">
             {wantsBudgets && wantsBudgets.length > 0
               ? wantsBudgets.map((want: any, i: any) => {
-                return (
-                  <CategoryViewCard
-                    key={i}
-                    category={want?.name}
-                    progressPercentage={checkNAN(
-                      (want?.expenses / want?.amount) * 100
-                    )}
-                    icon={want.category?.emoji}
-                    amount={want?.amount}
-                    budgetAmount={want?.amount}
-                    spentAmount={want?.expenses}
-                    iconBg="bg-skin-secondary3WithOpacity"
-                    baseBgColor="#E7EDF3"
-                    bgColor="#6F89A5"
-                    primaryColor="text-skin-base"
-                    fadedColor="text-skin-subtitle"
-                  />
-                );
-              })
+                  return (
+                    <CategoryViewCard
+                      key={i}
+                      category={want?.name}
+                      progressPercentage={checkNAN(
+                        (want?.expenses / want?.amount) * 100
+                      )}
+                      icon={want.category?.emoji}
+                      amount={want?.amount}
+                      budgetAmount={want?.amount}
+                      spentAmount={want?.expenses}
+                      iconBg="bg-skin-secondary3WithOpacity"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#6F89A5"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
+                    />
+                  );
+                })
               : null}
           </div>
           <div className="flex flex-col">
             {wantsBudgets?.length !==
-              categoryStore.categoryBudgets[1]?.data.length ? (
+            categoryStore.categoryBudgets[1]?.data.length ? (
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
@@ -379,7 +381,7 @@ const BudgetsView = () => {
                   iconBg="bg-skin-secondaryWithOpacity"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[1]?.amount -
-                    categoryStore.categoryBudgets[1]?.total_amount
+                      categoryStore.categoryBudgets[1]?.total_amount
                   )}
                   onClick={() => navigate("/edit-budgets")}
                 />
@@ -396,30 +398,30 @@ const BudgetsView = () => {
           />
           <div className="mt-6 flex flex-col">
             {categoryStore.categoryBudgets[2]?.data &&
-              categoryStore.categoryBudgets[2]?.data.length > 0
+            categoryStore.categoryBudgets[2]?.data.length > 0
               ? categoryStore.categoryBudgets[2]?.data.map(
-                (savings: any, i: any) => {
-                  return (
-                    <CategoryViewCard
-                      key={i}
-                      category={savings?.name}
-                      progressPercentage={checkNAN(
-                        (savings.expenses / savings?.amount) * 100
-                      )}
-                      icon={savings.category?.emoji}
-                      amount={savings?.amount}
-                      budgetAmount={savings.amount}
-                      spentAmount={savings.expenses}
-                      iconBg="bg-skin-secondaryWithOpacity"
-                      baseBgColor="#C8ECEF"
-                      bgColor="#1BBFCD"
-                      primaryColor="text-skin-base"
-                      fadedColor="text-skin-subtitle"
-                      caption="saved"
-                    />
-                  );
-                }
-              )
+                  (savings: any, i: any) => {
+                    return (
+                      <CategoryViewCard
+                        key={i}
+                        category={savings?.name}
+                        progressPercentage={checkNAN(
+                          (savings.expenses / savings?.amount) * 100
+                        )}
+                        icon={savings.category?.emoji}
+                        amount={savings?.amount}
+                        budgetAmount={savings.amount}
+                        spentAmount={savings.expenses}
+                        iconBg="bg-skin-secondaryWithOpacity"
+                        baseBgColor="#C8ECEF"
+                        bgColor="#1BBFCD"
+                        primaryColor="text-skin-base"
+                        fadedColor="text-skin-subtitle"
+                        caption="saved"
+                      />
+                    );
+                  }
+                )
               : null}
           </div>
         </div>

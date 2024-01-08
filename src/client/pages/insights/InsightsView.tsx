@@ -95,7 +95,7 @@ const InsightsView = () => {
   //   essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
   const accountStore = useAccountStore((state: any) => state);
   const accounts = accountStore.accounts as Accounts;
-  console.log("accounts", accounts);
+
   useEffect(() => {
     const fetchCashFlowData = async () => {
       const data = await getCashFlow({
@@ -125,14 +125,16 @@ const InsightsView = () => {
     { refetchOnWindowFocus: false }
   );
   const microGoals = useMicroGoalsStore((state) => state.microGoals);
-  const macroTypeTotals = calculateMacroTypeTotals(microGoals)
-  const { Wants: wantsTotal = 0, Essentials: essentialsTotal = 0, Savings: savingsTotal = 0 } = macroTypeTotals.reduce((acc, { macroType, total }) => {
+  const macroTypeTotals = calculateMacroTypeTotals(microGoals);
+  const {
+    Wants: wantsTotal = 0,
+    Essentials: essentialsTotal = 0,
+    Savings: savingsTotal = 0,
+  } = macroTypeTotals.reduce((acc, { macroType, total }) => {
     acc[macroType] = total || 0;
     return acc;
   }, {} as any);
-  console.log("wantsTotal", wantsTotal);
-  console.log("essentialsTotal", essentialsTotal);
-  console.log("savingsTotal", savingsTotal);
+
   const totalExpenses = wantsTotal + essentialsTotal;
   const closeBottomSheet = () => {
     openFilter(false);
@@ -250,12 +252,12 @@ const InsightsView = () => {
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={userStore.user.income - totalBudgetAmount}
-              // spent={90000 + 209000}
-              // budget={totalBudgetAmount}
-              // wantsSpend={209000}
-              // savingsSpend={121000}
-              // essentialsSpend={90000}
-              // unallocatedSpend={userStore.user.income - totalBudgetAmount}
+                // spent={90000 + 209000}
+                // budget={totalBudgetAmount}
+                // wantsSpend={209000}
+                // savingsSpend={121000}
+                // essentialsSpend={90000}
+                // unallocatedSpend={userStore.user.income - totalBudgetAmount}
               />
             ) : (
               <OthersSpend
@@ -265,12 +267,12 @@ const InsightsView = () => {
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={0}
-              //   spentBudget={90000 + 209000}
-              //   plannedBudget={totalBudgetAmount}
-              //   wantsSpend={209000}
-              //   savingsSpend={121000}
-              //   essentialsSpend={90000}
-              //   unallocatedSpend={0}
+                //   spentBudget={90000 + 209000}
+                //   plannedBudget={totalBudgetAmount}
+                //   wantsSpend={209000}
+                //   savingsSpend={121000}
+                //   essentialsSpend={90000}
+                //   unallocatedSpend={0}
               />
             )}
           </div>

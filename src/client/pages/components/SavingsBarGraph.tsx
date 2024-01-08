@@ -31,28 +31,27 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
       setGraphWidth(window.innerWidth - 20);
     };
     getMonthNames();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const getMonthNames = () => {
     const date = currentMonthDate ?? new Date();
-    console.log("date", currentMonthDate);
 
-    const currentMonth = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+    const currentMonth = date
+      .toLocaleString("en-US", { month: "short" })
+      .toUpperCase();
     setCurrentMonthName(currentMonth);
 
     // Calculate the last day of the previous month by setting the current date to the 1st day of the current month
     const previousMonthDate = new Date(date);
     previousMonthDate.setDate(1);
     previousMonthDate.setDate(previousMonthDate.getDate() - 1);
-    console.log("previousMonthDate", previousMonthDate);
 
-    const previousMonth = previousMonthDate.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+    const previousMonth = previousMonthDate
+      .toLocaleString("en-US", { month: "short" })
+      .toUpperCase();
     setPreviousMonthName(previousMonth);
-
-    console.log("currentMonth", currentMonth);
-    console.log("previousMonth", previousMonth);
 
     return true;
   };
@@ -101,7 +100,7 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
     const highestPossibleGrowth = Math.max(
       actualGrowthRate + minimumGrowthFactor + daysScalingFactor,
       actualGrowthRate * additionalGrowthFactor +
-      actualGrowthRate * daysScalingFactor
+        actualGrowthRate * daysScalingFactor
     );
 
     // Convert to percentage
@@ -150,8 +149,9 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
             />
             {/* Pointing tip below the tooltip */}
             <polygon
-              points={`${x + 23},${tooltipPosY + tooltipHeight + 5} ${x + 19},${tooltipPosY + tooltipHeight
-                } ${x + 27},${tooltipPosY + tooltipHeight}`}
+              points={`${x + 23},${tooltipPosY + tooltipHeight + 5} ${x + 19},${
+                tooltipPosY + tooltipHeight
+              } ${x + 27},${tooltipPosY + tooltipHeight}`}
               fill="#101a25"
               stroke="#101a25"
               strokeWidth="1"
@@ -239,8 +239,9 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
 
         {/* Conditionally render the arrow icon */}
         <g
-          transform={`translate(${graphWidth - 155}, ${graphHeight - 87
-            }) scale(1.5)`}
+          transform={`translate(${graphWidth - 155}, ${
+            graphHeight - 87
+          }) scale(1.5)`}
         >
           {isIncrease ? (
             <FiArrowUpRight color="#565656" strokeWidth="1" />
@@ -290,11 +291,23 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
         viewBox={`0 0 ${graphWidth} ${graphHeight}`}
         preserveAspectRatio="xMidYMid meet"
       >
-
         <defs>
-          <linearGradient id="savings-gradient" x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(124.2)">
-            <stop offset="0%" style={{ stopColor: "#1BBFCD", stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: "#0099A6", stopOpacity: 1 }} />
+          <linearGradient
+            id="savings-gradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+            gradientTransform="rotate(124.2)"
+          >
+            <stop
+              offset="0%"
+              style={{ stopColor: "#1BBFCD", stopOpacity: 1 }}
+            />
+            <stop
+              offset="100%"
+              style={{ stopColor: "#0099A6", stopOpacity: 1 }}
+            />
           </linearGradient>
         </defs>
 

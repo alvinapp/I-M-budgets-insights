@@ -41,15 +41,6 @@ const Cashflow = () => {
         endDate,
       });
 
-      console.log(
-        "Fetching data from server:",
-        "data.earnedData", data.earnedData,
-        "data.totalEarned", data.totalEarned,
-        "data.totalSpent", data.totalSpent,
-        "data.spentData", data.spentData,
-        "data.datalabels", data.datalabels
-      )
-
       setEarnedData(data.earnedData);
       setTotalEarned(data.totalEarned);
       setTotalSpent(data.totalSpent);
@@ -63,7 +54,7 @@ const Cashflow = () => {
   useEffect(() => {
     fetchDataFromServer();
   }, []);
-  const currencySymbol = '$';
+  const currencySymbol = "$";
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -80,7 +71,7 @@ const Cashflow = () => {
               </div>
               <div
                 className="h-6 w-6 rounded-full flex justify-center items-center"
-                onClick={() => { }}
+                onClick={() => {}}
               >
                 <FiInfo color="#101010" size="1.5rem" />
               </div>
@@ -92,7 +83,12 @@ const Cashflow = () => {
       <div className="flex flex-col mx-3.5">
         <div className="py-3 flex flex-wrap items-center mb-3">
           {cashflowFilters?.map((element: any, i: number) => {
-            const label = i === 0 ? accountName : i === 1 ? dateFilter : element.name ?? "All accounts";
+            const label =
+              i === 0
+                ? accountName
+                : i === 1
+                ? dateFilter
+                : element.name ?? "All accounts";
             return (
               <CashFlowFilterButton
                 label={label}
@@ -100,12 +96,7 @@ const Cashflow = () => {
                 key={i}
                 isActive={false}
                 onClick={() => {
-                  console.log(
-                    "Active filter:",
-                    element.name,
-                  );
                   if (i === 2) {
-                    console.log("Launch filter bottom sheet");
                   }
                 }}
                 id={`${i}`}
@@ -124,13 +115,23 @@ const Cashflow = () => {
               <div className="font-medium font-poppins text-tiny tracking-wide mb-2 mr-1">
                 - You've made an average of
               </div>
-              <AmountDisplay amount={earnedData.reduce((a: number, b: number) => a + b, 0) / earnedData.length} />
+              <AmountDisplay
+                amount={
+                  earnedData.reduce((a: number, b: number) => a + b, 0) /
+                  earnedData.length
+                }
+              />
             </div>
             <div className="flex flex-row">
               <div className="font-medium font-poppins text-tiny tracking-wide mr-2">
                 - You've spent an average of
               </div>
-              <AmountDisplay amount={spentData.reduce((a: number, b: number) => a + b, 0) / spentData.length} />
+              <AmountDisplay
+                amount={
+                  spentData.reduce((a: number, b: number) => a + b, 0) /
+                  spentData.length
+                }
+              />
             </div>
           </div>
         </div>

@@ -41,12 +41,16 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
 
   let cumulativePercentage = 0;
   const currencyStore = useCurrencySettingsStore((state: any) => state);
-  const cashflowVariables = useCashflowVariablesStore.getState().cashflowVariables;
-  console.log("cashflowVariables", cashflowVariables);
+  const cashflowVariables =
+    useCashflowVariablesStore.getState().cashflowVariables;
   return (
     <div
       className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full"
-      onClick={() => navigate(`/cashflow?startDate=${cashflowVariables.startDate}&endDate=${cashflowVariables.endDate}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter}`)}
+      onClick={() =>
+        navigate(
+          `/cashflow?startDate=${cashflowVariables.startDate}&endDate=${cashflowVariables.endDate}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter}`
+        )
+      }
     >
       <div className="flex flex-row justify-start items-center pl-3.5">
         <h2 className="font-workSans text-base font-semibold">Cash flow</h2>
@@ -68,8 +72,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           <g transform={`translate(${radius}, ${radius})`}>
             {["moneyIn", "moneyOut"].map((type, index) => {
               const percentage = (values[type] / total) * 100;
-              const color =
-                type === "moneyIn" ? "#0099A6" : "#F99E36";
+              const color = type === "moneyIn" ? "#0099A6" : "#F99E36";
 
               const startX =
                 normalizedRadius *

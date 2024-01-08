@@ -31,7 +31,7 @@ export const MySpend = ({
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
-  const expenditureProgress = calculateSpending(spent, budget)
+  const expenditureProgress = calculateSpending(spent, budget);
 
   // useEffect(() => {
   //   const fetchMicroGoalTotalsData = async () => {
@@ -41,9 +41,8 @@ export const MySpend = ({
 
   //   fetchMicroGoalTotalsData();
   // }, []);
-  console.log("Microgoals data", microGoals);
-  const budgetColumnWidth = '120px';
-  const spentColumnWidth = '20%';
+  const budgetColumnWidth = "120px";
+  const spentColumnWidth = "20%";
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -53,7 +52,9 @@ export const MySpend = ({
         </div>
       </div>
       <div className="mt-2.5 flex flex-row">
-        <InsightsTooltipProgressBar progressPercent={expenditureProgress.expenditureProgress} />
+        <InsightsTooltipProgressBar
+          progressPercent={expenditureProgress.expenditureProgress}
+        />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
         <AmountView caption="Spent" amount={spent} />
@@ -80,10 +81,16 @@ export const MySpend = ({
         </div>
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
-            <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide items-end" style={{ width: budgetColumnWidth }}>
+            <div
+              className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide items-end"
+              style={{ width: budgetColumnWidth }}
+            >
               Budget
             </div>
-            <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide items-end" style={{ width: spentColumnWidth }}>
+            <div
+              className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide items-end"
+              style={{ width: spentColumnWidth }}
+            >
               Spent
             </div>
           </div>
@@ -92,17 +99,17 @@ export const MySpend = ({
       <div className="flex flex-col">
         {microGoals && microGoals.length > 0
           ? microGoals.slice(0, 5).map((microGoal, i: number) => {
-            return (
-              <ExpenditureCard
-                transactions={microGoal.number_of_transactions}
-                icon={microGoal.emoji}
-                budget={microGoal.amount}
-                spent={microGoal.total_transactions}
-                key={i}
-                category={microGoal.name}
-              />
-            );
-          })
+              return (
+                <ExpenditureCard
+                  transactions={microGoal.number_of_transactions}
+                  icon={microGoal.emoji}
+                  budget={microGoal.amount}
+                  spent={microGoal.total_transactions}
+                  key={i}
+                  category={microGoal.name}
+                />
+              );
+            })
           : null}
       </div>
     </div>
