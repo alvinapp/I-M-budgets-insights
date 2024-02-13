@@ -118,7 +118,8 @@ const Cashflow = () => {
         <div className="mt-6">
           <div className="flex flex-col rounded-lg bg-skin-base p-4 shadow-card">
             <div className="font-medium font-poppins text-tiny tracking-wide mb-4">
-              In the last {earnedData.length} months:
+              {/* In the last {earnedData.length} months: */}
+              In the selected period:
             </div>
             <div className="flex flex-row">
               <div className="font-medium font-poppins text-tiny tracking-wide mb-2 mr-1">

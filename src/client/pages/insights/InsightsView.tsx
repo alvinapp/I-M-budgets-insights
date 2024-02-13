@@ -34,6 +34,7 @@ import { useQuery } from "react-query";
 import getAccounts from "client/api/account";
 import { calculateMacroTypeTotals } from "client/utils/Formatters";
 import useMicroGoalsStore from "client/store/microGoalStore";
+import useCashflowVariablesStore from "client/store/cashFlowStore";
 
 const InsightsView = () => {
   const location = useLocation();
@@ -95,18 +96,19 @@ const InsightsView = () => {
   //   essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
   const accountStore = useAccountStore((state: any) => state);
   const accounts = accountStore.accounts as Accounts;
+  const cashflowVariables = useCashflowVariablesStore.getState().cashflowVariables;
   console.log("accounts", accounts);
   useEffect(() => {
     const fetchCashFlowData = async () => {
       const data = await getCashFlow({
         configuration: config,
-        start_date: startDate || undefined,
-        end_date: endDate || undefined,
+        start_date: cashflowVariables.startDate || undefined,
+        end_date: cashflowVariables.endDate || undefined,
       });
       setCashFlowData(data);
     };
     fetchCashFlowData();
-  }, []);
+  }, [cashflowVariables.startDate, cashflowVariables.dateFilter]);
 
   const [toggleTabId, setToggleTabId] = useState(0);
   const [budgetSpendTabId, setBudgetSpendTabId] = useState(0);

@@ -18,7 +18,7 @@ type IBudgetSettingsStore = BudgetSettings & {
 };
 
 const useBudgetSettingsStore = create<IBudgetSettingsStore>((set) => ({
-  currency: "KES",
+  currency: " ₦",
   monthlyIncome: 0,
   incomeSplit: {
     essentials: 50,
