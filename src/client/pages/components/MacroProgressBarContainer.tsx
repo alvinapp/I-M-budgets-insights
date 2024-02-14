@@ -1,5 +1,6 @@
 import React from "react";
 import MacroProgressBar from "./MacroProgressBar";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
 
 interface MacroProgressBarsContainerProps {
   ratios: string; // format like "50/30/20"
@@ -21,7 +22,8 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
   },
 }) => {
   const ratioArray = ratios.split("/").map(Number);
-  const currencySymbol = "₦";
+  const currencyStore = useCurrencySettingsStore((state: any) => state);
+  const currencySymbol = currencyStore.currencySymbol;
   const progressString = ["Essentials spend", "Wants spend", "Saved"];
 
   return (
@@ -34,14 +36,14 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           <MacroProgressBar
             flexValue={1}
             bgColorBottom={
-              index === 0 ? "#E7EDF3" : index === 1 ? "#efebe7" : "#e7f3e6"
+              index === 0 ? "#E7EDF3" : index === 1 ? "#E7EDF3" : "#C8ECEF"
             }
             bgColorTop={
               index === 0
-                ? "linear-gradient(124.2deg, #0C9DBE 0%, #056489 100%)"
+                ? "linear-gradient(124.2deg, #144CBC 0%, #0131A1 100%)"
                 : index === 1
-                ? "linear-gradient(77.97deg, #ca965c 0%, #935107 100%)"
-                : "linear-gradient(70.18deg, #66be5e 0%, #117C07 100%)"
+                  ? "#6F89A5"
+                  : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
             }
             outsideLength={
               progressPercentage[Object.keys(progressPercentage)[index]]
@@ -51,34 +53,27 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           <div className="flex flex-col justify-end items-start mt-3">
             <div className="flex flex-row">
               <div className="relative flex items-end">
-                <div
-                  className="absolute -right-1 -top-2"
-                  style={{
-                    color:
-                      index === 0
-                        ? "#056489"
-                        : index === 1
-                        ? "#c77e2b"
-                        : "#117C07",
-                    fontSize: "80%",
-                  }}
+                {/* <div
+                  className="absolute -right-4 -top-1.5 text-xxxs font-workSans font-semibold text-skin-base"
+
                 >
                   {currencySymbol}
-                </div>
+                </div> */}
                 <div
-                  className="font-workSans font-semibold text-l"
-                  style={{
-                    color:
-                      index === 0
-                        ? "#056489"
-                        : index === 1
-                        ? "#c77e2b"
-                        : "#117C07",
-                  }}
+                  className="font-workSans font-semibold text-lg text-skin-base"
+                /*  style={{
+                  color:
+                    index === 0
+                     / ? "#056489"
+                      : index === 1
+                     / ? "#c77e2b"
+                      : "#117C07",
+                }} */
                 >
                   {budgetAmount[
                     Object.keys(budgetAmount)[index]
                   ]?.toLocaleString("en-US")}
+                  <sup style={{ fontSize: '12px', verticalAlign: 'super', marginLeft: '-4px' }}>{currencySymbol ? currencySymbol : ""}</sup>
                 </div>
               </div>
             </div>

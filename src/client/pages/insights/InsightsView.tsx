@@ -19,14 +19,31 @@ import { ExpenditureCard } from "../components/insights/ExpenditureCard";
 import ExpenditureBarGraph from "../components/ExpenditureBarGraph";
 import SavingsBarGraph from "../components/SavingsBarGraph";
 import CashFlowPieChart from "../components/CashFlowPieChart";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getCashFlow } from "client/api/transactions";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
 import useCategoriesStore from "client/store/categoriesStore";
 import useMacroGoalsStore from "client/store/macroGoalStore";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import InsightsFilters from "./InsightsFilters";
+import useAccountStore from "client/store/accountStore";
+import Accounts from "client/models/Accounts";
+import Account from "client/models/Account";
+import { useQuery } from "react-query";
+import getAccounts from "client/api/account";
+import { calculateMacroTypeTotals } from "client/utils/Formatters";
+import useMicroGoalsStore from "client/store/microGoalStore";
+import useCashflowVariablesStore from "client/store/cashFlowStore";
 
 const InsightsView = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
+
+  // console.log("startDate", startDate);
+  // console.log("endDate", endDate);
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
@@ -50,6 +67,9 @@ const InsightsView = () => {
   } = cashFlowData || {};
   const categoryStore = useCategoriesStore((state: any) => state);
 
+  // console.log("categoryStore", categoryStore.categoryBudgets);
+  // console.log("macroGoalStore", macroGoalStore.macroGoals);
+
   const essentialTotalBudgetAmount =
     categoryStore.categoryBudgets[0]?.total_amount;
   const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
@@ -72,20 +92,57 @@ const InsightsView = () => {
     essentialTotalBudgetAmount +
     wantsTotalBudgetAmount +
     savingsTotalBudgetAmount;
-  const totalExpenses =
-    essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
+  // const totalExpenses =
+  //   essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
+  const accountStore = useAccountStore((state: any) => state);
+  const accounts = accountStore.accounts as Accounts;
 
+  const cashflowVariables =
+    useCashflowVariablesStore.getState().cashflowVariables;
+  console.log("accounts", accounts);
   useEffect(() => {
     const fetchCashFlowData = async () => {
-      const data = await getCashFlow({ configuration: config });
+      const data = await getCashFlow({
+        configuration: config,
+        start_date: cashflowVariables.startDate || undefined,
+        end_date: cashflowVariables.endDate || undefined,
+      });
       setCashFlowData(data);
     };
     fetchCashFlowData();
-  }, []);
+  }, [cashflowVariables.startDate, cashflowVariables.dateFilter]);
 
   const [toggleTabId, setToggleTabId] = useState(0);
   const [budgetSpendTabId, setBudgetSpendTabId] = useState(0);
   const navigate = useNavigate();
+  const [filter, openFilter] = useState(false);
+  const filterAccountBy = useAccountStore((state: any) => state.filterBy);
+  const filteredAccount = useAccountStore(
+    (state: any) => state.filter
+  ) as Account;
+  const { data: fetchedAccounts } = useQuery(
+    "fetch-accounts",
+    () =>
+      getAccounts(config).then((accounts) => {
+        accountStore.init(accounts || []);
+      }),
+    { refetchOnWindowFocus: false }
+  );
+  const microGoals = useMicroGoalsStore((state) => state.microGoals);
+  const macroTypeTotals = calculateMacroTypeTotals(microGoals);
+  const {
+    Wants: wantsTotal = 0,
+    Essentials: essentialsTotal = 0,
+    Savings: savingsTotal = 0,
+  } = macroTypeTotals.reduce((acc, { macroType, total }) => {
+    acc[macroType] = total || 0;
+    return acc;
+  }, {} as any);
+
+  const totalExpenses = wantsTotal + essentialsTotal;
+  const closeBottomSheet = () => {
+    openFilter(false);
+  };
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -100,7 +157,10 @@ const InsightsView = () => {
                   <NavBarTitle title="Insights" fontSize="text-2xl" />
                 </div>
               </div>
-              <div className="h-6 w-6 rounded-full flex justify-center items-center">
+              <div
+                className="h-6 w-6 rounded-full flex justify-center items-center"
+                onClick={() => openFilter(true)}
+              >
                 <FiFilter color="#4E6783" size="1.5rem" />
               </div>
             </div>
@@ -112,13 +172,13 @@ const InsightsView = () => {
         <div className="flex flex-row items-center justify-between mr-5">
           {toggleTabId == 0 ? (
             <AvailableBudgetContainer
-              amount={essentialTotalExpenses + wantsTotalExpenses}
+              amount={essentialsTotal + wantsTotal}
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
             />
           ) : (
             <AvailableBudgetContainer
-              amount={savingsTotalExpenses}
+              amount={savingsTotal}
               subtitle="Current total savings"
               currencySymbol={currencySymbol}
             />
@@ -144,22 +204,24 @@ const InsightsView = () => {
               }}
               currentMonth={{
                 essentials: {
-                  spent: essentialTotalExpenses,
+                  spent: essentialsTotal,
                   expenseLimit: essentialTotalBudgetAmount,
                 },
                 wants: {
-                  spent: wantsTotalExpenses,
+                  spent: wantsTotal,
                   expenseLimit: wantsTotalBudgetAmount,
                 },
               }}
               budgetLimit={userStore.user.income}
+              currentMonthDate={endDate ? new Date(endDate) : new Date()}
             />
           ) : (
             <SavingsBarGraph
               previousMonthSavings={previousSavingsTotalExpenses}
-              currentMonthSavings={savingsTotalExpenses}
+              currentMonthSavings={savingsTotal}
               savingsTarget={savingsTotalBudgetAmount}
               budgetLimit={userStore.user.income}
+              currentMonthDate={endDate ? new Date(endDate) : new Date()}
             />
           )}
         </div>
@@ -190,24 +252,56 @@ const InsightsView = () => {
               <MySpend
                 spent={totalExpenses}
                 budget={totalBudgetAmount}
-                wantsSpend={wantsTotalExpenses}
-                savingsSpend={savingsTotalExpenses}
-                essentialsSpend={essentialTotalExpenses}
+                wantsSpend={wantsTotal ?? 0}
+                savingsSpend={savingsTotal ?? 0}
+                essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={userStore.user.income - totalBudgetAmount}
+                // spent={90000 + 209000}
+                // budget={totalBudgetAmount}
+                // wantsSpend={209000}
+                // savingsSpend={121000}
+                // essentialsSpend={90000}
+                // unallocatedSpend={userStore.user.income - totalBudgetAmount}
               />
             ) : (
               <OthersSpend
                 spentBudget={totalExpenses}
                 plannedBudget={totalBudgetAmount}
-                wantsSpend={wantsTotalExpenses}
-                savingsSpend={savingsTotalExpenses}
-                essentialsSpend={essentialTotalExpenses}
+                wantsSpend={wantsTotal ?? 0}
+                savingsSpend={savingsTotal ?? 0}
+                essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={0}
+                //   spentBudget={90000 + 209000}
+                //   plannedBudget={totalBudgetAmount}
+                //   wantsSpend={209000}
+                //   savingsSpend={121000}
+                //   essentialsSpend={90000}
+                //   unallocatedSpend={0}
               />
             )}
           </div>
         </div>
       </div>
+      <BottomSheet
+        onDismiss={() => {
+          openFilter(false);
+        }}
+        open={filter}
+        style={{
+          borderRadius: 24,
+        }}
+        children={
+          <InsightsFilters
+            accounts={accounts}
+            activeAccount={filteredAccount}
+            onClick={(account: Account) => {
+              filterAccountBy(account);
+            }}
+            closeBottomSheet={closeBottomSheet}
+          />
+        }
+        defaultSnap={400}
+      ></BottomSheet>
     </div>
   );
 };

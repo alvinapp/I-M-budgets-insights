@@ -27,6 +27,8 @@ import { getMacros } from "client/api/macros";
 import settings from "client/assets/images/budgets-insights/Settings.svg";
 import { AddBudgetCard } from "../components/budget/AddBudgetCard";
 import useMacrosStore from "client/store/macroGoalStore";
+import { fetchMicroGoalTotals } from "client/api/micros";
+import useMicroGoalsStore from "client/store/microGoalStore";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -34,6 +36,8 @@ const BudgetsView = () => {
   );
   const categoryStore = useCategoriesStore((state: any) => state);
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
+  const microGoals = useMicroGoalsStore((state) => state.microGoals);
+  const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -72,6 +76,11 @@ const BudgetsView = () => {
     currentMonth.getMonth() + 1,
     0
   );
+  const navigateToInsightsView = () => {
+    navigate(
+      `/insights-view?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
+    );
+  };
   const formattedEndDate = `${endOfMonth.getFullYear()}-${(
     endOfMonth.getMonth() + 1
   )
@@ -91,17 +100,36 @@ const BudgetsView = () => {
     { enabled: !!config.token }
   );
 
+  const { isFetching: fetchingMacros, refetch: refetchMacros } = useQuery(
+    "macros",
+    () =>
+      fetchMicroGoalTotals({
+        configuration: config,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      }).then((result) => {
+        setMicroGoals(result);
+      }),
+    { enabled: !!config.token }
+  );
+
   useEffect(() => {
     refetch();
+    refetchMacros();
   }, [currentMonth]);
+
   useEffect(() => {
     const fetchMacroGoalsData = async () => {
-      const { data } = await getMacros({ configuration: config });
+      const { data } = await getMacros({
+        configuration: config,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      });
       const result = data?.map((item: any) => item.goals).flat();
       macroGoalStore.setMacros(result && result.length > 0 ? result : []);
     };
     fetchMacroGoalsData();
-  }, [config]);
+  }, [currentMonth]);
 
   const {
     essentialTotalBudgetAmount,
@@ -132,7 +160,6 @@ const BudgetsView = () => {
       savingsTotalBudgetAmount;
     const totalExpenditure =
       essentialTotalExpenses + wantsTotalExpenses + savingsTotalExpenses;
-
     return {
       essentialTotalBudgetAmount,
       wantsTotalBudgetAmount,
@@ -208,15 +235,18 @@ const BudgetsView = () => {
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
             amount={checkNAN(
-              essentialTotalBudgetAmount +
-                wantsTotalBudgetAmount -
-                (essentialTotalExpenses + wantsTotalExpenses)
+              Math.max(
+                0,
+                essentialTotalBudgetAmount +
+                  wantsTotalBudgetAmount -
+                  (essentialTotalExpenses + wantsTotalExpenses)
+              )
             )}
             subtitle="Available budget spend"
             currencySymbol={currencySymbol}
           />
           <div className="flex flex-col justify-center">
-            <InsightsButton onClick={() => navigate("/insights-view")} />
+            <InsightsButton onClick={() => navigateToInsightsView()} />
           </div>
         </div>
         <div className="mt-11">
@@ -224,6 +254,9 @@ const BudgetsView = () => {
             progressPercent={expenditureProgress.expenditureProgress}
             progressTooltip={expenditureProgress.expectedExpenditureProgress}
             activeMonth={currentMonth}
+            showProgressTooltip={
+              currentMonth.getMonth() === new Date().getMonth()
+            }
           />
         </div>
         <div className="mt-2">
@@ -256,7 +289,7 @@ const BudgetsView = () => {
           <CategoryCardHeader
             title="Essentials"
             amount={checkNAN(
-              essentialTotalBudgetAmount - essentialTotalExpenses
+              Math.max(0, essentialTotalBudgetAmount - essentialTotalExpenses)
             )}
             caption="Available"
             currencySymbol={currencySymbol}
@@ -276,10 +309,10 @@ const BudgetsView = () => {
                       budgetAmount={essential.amount}
                       spentAmount={essential?.expenses}
                       iconBg="bg-skin-secondaryWithOpacity"
-                      baseBgColor="#D0DDEA"
-                      bgColor="#056489"
-                      primaryColor="text-skin-primary"
-                      fadedColor="text-skin-neutral"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#0131A1"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
                     />
                   );
                 })
@@ -291,7 +324,7 @@ const BudgetsView = () => {
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
-                  fadedColor="text-skin-neutral"
+                  fadedColor="text-skin-subtitle"
                   icon="🚀"
                   iconBg="bg-skin-secondaryWithOpacity"
                   budgetAmount={checkNAN(
@@ -307,7 +340,9 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
           <CategoryCardHeader
             title="Wants"
-            amount={checkNAN(wantsTotalBudgetAmount - wantsTotalExpenses)}
+            amount={checkNAN(
+              Math.max(0, wantsTotalBudgetAmount - wantsTotalExpenses)
+            )}
             caption="Available"
             currencySymbol={currencySymbol}
           />
@@ -326,10 +361,10 @@ const BudgetsView = () => {
                       budgetAmount={want?.amount}
                       spentAmount={want?.expenses}
                       iconBg="bg-skin-secondary3WithOpacity"
-                      baseBgColor="#E8E3DC"
-                      bgColor="#A28D72"
-                      primaryColor="text-skin-alvinBrown"
-                      fadedColor="text-skin-alvinBrownFaded"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#6F89A5"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
                     />
                   );
                 })
@@ -341,7 +376,7 @@ const BudgetsView = () => {
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
-                  fadedColor="text-skin-alvinBrownFaded"
+                  fadedColor="text-skin-subtitle"
                   icon="🚀"
                   iconBg="bg-skin-secondaryWithOpacity"
                   budgetAmount={checkNAN(
@@ -378,10 +413,10 @@ const BudgetsView = () => {
                         budgetAmount={savings.amount}
                         spentAmount={savings.expenses}
                         iconBg="bg-skin-secondaryWithOpacity"
-                        baseBgColor="#D6EAD4"
-                        bgColor="#33982A"
-                        primaryColor="text-skin-success"
-                        fadedColor="text-skin-successSecondary"
+                        baseBgColor="#C8ECEF"
+                        bgColor="#1BBFCD"
+                        primaryColor="text-skin-base"
+                        fadedColor="text-skin-subtitle"
                         caption="saved"
                       />
                     );

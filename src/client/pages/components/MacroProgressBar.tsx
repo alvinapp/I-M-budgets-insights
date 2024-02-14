@@ -25,7 +25,8 @@ const MacroProgressBar: React.FC<MacroProgressBarProps> = ({
   const progressBarStyle = {
     flex: flexValue,
     // width: `${maxLength}%`,
-    backgroundColor: bgColorBottom,
+    // backgroundColor: bgColorBottom,
+    background: bgColorBottom,
     overflow: "hidden",
     borderRadius: "500px",
     height: `${height}px`,

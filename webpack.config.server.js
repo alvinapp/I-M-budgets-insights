@@ -8,7 +8,7 @@ const webPackConfig = (env) => {
   const config = require(resolve(process.cwd(), env.config));
   const zlib = require("zlib");
   const SERVER_HOST = config.HOST || "http://localhost";
-  const SERVER_PORT = config.PORT || 8000;
+  const SERVER_PORT = config.PORT || 8003;
   const SERVER_DOMAIN = `${SERVER_HOST}:${SERVER_PORT}`;
 
   console.log("configuration", config);
@@ -35,7 +35,7 @@ const webPackConfig = (env) => {
         server: [resolve("./src/server")],
         assets: [resolve("./src/client/assets")],
       },
-      extensions: [" ",".js", ".jsx", ".ts", ".tsx"],
+      extensions: [" ", ".js", ".jsx", ".ts", ".tsx"],
       fallback: {
         path: false,
         buffer: false,

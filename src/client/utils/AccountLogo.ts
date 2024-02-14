@@ -14,6 +14,10 @@ export const accountLogo = (accountName: string) => {
       return "https://mono-public-bucket.s3.eu-west-2.amazonaws.com/images/mpesa-icon.png";
     case "Equity Bank":
       return "https://mono-public-bucket.s3.eu-west-2.amazonaws.com/images/equity-bank-icon.png";
+    case "I&M Bank":
+      return "https://res.cloudinary.com/brybzlee/image/upload/v1701444919/I_M_logo.png";
+    case "WEMA":
+      return "https://res.cloudinary.com/brybzlee/image/upload/v1707820985/image.png";
     default:
       return "";
   }

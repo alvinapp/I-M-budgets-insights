@@ -1,5 +1,5 @@
 declare var __SERVER_DOMAIN__: string;
-
+console.log(__SERVER_DOMAIN__);
 const defaultStyles: any = {
   border: "none",
   "z-index": 2147483647,

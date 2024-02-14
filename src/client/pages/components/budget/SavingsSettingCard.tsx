@@ -57,7 +57,7 @@ export const SavingsSettingCard = ({
         <div className="flex flex-row items-center justify-center">
           <div className="relative">
             <div
-              className={`absolute -right-2 -top-1 font-workSans font-semibold text-xxxs ${
+              className={`absolute -right-2 -top-2.5 font-workSans font-semibold text-xxxs ${
                 isAdded ? "text-skin-base" : "text-skin-neutral"
               }`}
             >

@@ -14,7 +14,7 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
 }) => {
   return (
     <div
-        {...props}
+      {...props}
       style={{
         ...props?.style,
         height: "27px",
@@ -32,7 +32,7 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
           height: "19px",
           width: "19px",
           borderRadius: "50%",
-          backgroundColor: "#4e6784",
+          backgroundColor: "#144CBC",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -51,9 +51,9 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
           width: "fit-content",
         }}
       >
-       {showPercentage? <div
+        {showPercentage ? <div
           style={{
-            backgroundColor: "rgba(0, 0, 0, 1)",
+            background: "linear-gradient(124.2deg, #144CBC 0%, #0131A1 100%)",
             color: "white",
             padding: "4px",
             borderRadius: "50%",
@@ -76,12 +76,12 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
               transform: "translateX(-50%)",
               width: 0,
               height: 0,
-              borderTop: "6px solid black",
+              borderTop: "6px solid #0131A1",
               borderRight: "6px solid transparent",
               borderLeft: "6px solid transparent",
             }}
           />
-        </div>: null}
+        </div> : null}
       </div>
     </div>
   );

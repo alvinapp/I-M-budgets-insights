@@ -54,19 +54,20 @@ export const BudgetDisplay = ({
         completed={progressPercentage}
         height="1.0625rem"
         baseBgColor={`#E7EDF3`}
-        bgColor={`#6F89A5`}
+        // bgColor={`#6F89A5`}
+        bgColor="#0131a1"
         isLabelVisible={false}
       />
       <div className="flex flex-row justify-between items-center mt-6">
         <div className="flex flex-col">
           <div className="flex flex-row">
             <div className="flex flex-col mr-3 mt-1">
-              <div className="rounded-full bg-skin-neutral h-4 w-4"></div>
+              <div className="rounded-full bg-[#0131a1] h-4 w-4"></div>
             </div>
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <div className="relative">
-                  <div className="absolute -right-1 -top-3 font-workSans font-semibold text-sm text-skin-neutral2">
+                  <div className="absolute -right-5 -top-3 font-workSans font-semibold text-sm text-skin-neutral2">
                     {currencySymbol}
                   </div>
                   <div className="font-workSans font-semibold text-lg text-skin-neutral2">

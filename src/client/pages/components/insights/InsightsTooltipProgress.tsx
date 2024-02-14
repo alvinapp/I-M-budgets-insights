@@ -24,7 +24,7 @@ const InsightsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
 
   const progressStyle = {
     background:
-      "linear-gradient(65.42deg, rgba(8,127,162,0.54) 0%, rgba(193,138,76,0.37) 52.44%, rgba(89,182,81,0.49) 100%)",
+      "linear-gradient(65.42deg, rgba(11, 62, 175, 1) 0%, rgba(157, 177, 198, 1) 52.44%, rgba(20, 181, 195, 1) 100%)",
     width: `${progressPercent}%`,
   };
 

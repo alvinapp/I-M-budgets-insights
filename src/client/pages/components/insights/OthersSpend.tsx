@@ -22,8 +22,8 @@ export const OthersSpend = ({
   savingsSpend,
   unallocatedSpend,
 }: OthersSpendProps) => {
-  const expenditureProgress = calculateSpending(spentBudget, plannedBudget)
-  const othersAverageProgress = calculateSpending(59850, plannedBudget)
+  const expenditureProgress = calculateSpending(spentBudget, plannedBudget);
+  const othersAverageProgress = calculateSpending(319850, plannedBudget);
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -32,31 +32,36 @@ export const OthersSpend = ({
         </div>
       </div>
       <div className="mt-2.5 flex flex-row">
-        <InsightsVsTooltipProgressBar othersProgressSpend={expenditureProgress.expenditureProgress} myProgressSpend={othersAverageProgress.expenditureProgress} />
+        <InsightsVsTooltipProgressBar
+          othersProgressSpend={expenditureProgress.expenditureProgress}
+          myProgressSpend={othersAverageProgress.expenditureProgress}
+        />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
         <div className="flex flex-row items-start">
-          <div style={{
-            width: 10,
-            height: 10,
-            marginTop: 10,
-            borderRadius: 4,
-            backgroundColor: "#cac969",
-            marginRight: 5,
-          }}>
-          </div>
-          <AmountView caption="Other's avg spend" amount={59850} />
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              marginTop: 10,
+              borderRadius: 10,
+              backgroundColor: "#cac969",
+              marginRight: 5,
+            }}
+          ></div>
+          <AmountView caption="Other's avg spend" amount={319850} />
         </div>
         <div className="flex flex-row items-start">
-          <div style={{
-            width: 10,
-            height: 10,
-            marginTop: 10,
-            borderRadius: 4,
-            backgroundColor: "#6f89a5",
-            marginRight: 5,
-          }}>
-          </div>
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              marginTop: 10,
+              borderRadius: 10,
+              backgroundColor: "#6f89a5",
+              marginRight: 5,
+            }}
+          ></div>
           <AmountView caption="My spend" amount={spentBudget} />
         </div>
       </div>

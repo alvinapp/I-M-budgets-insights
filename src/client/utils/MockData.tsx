@@ -1,4 +1,4 @@
-import { FiUser, FiUsers } from "react-icons/fi";
+import { FiCalendar, FiUser, FiUsers } from "react-icons/fi";
 
 const date = new Date();
 const yesterday = new Date(date.getTime());
@@ -297,4 +297,17 @@ export const expenditureCompareList = [
     emoji: "🌐",
     percentage: 2,
   },
+];
+export const dateFilters = [
+  { id: 0, name: "All time" },
+  { id: 1, name: "This month" },
+  { id: 2, name: "Last month" },
+  { id: 3, name: "Last 3 month" },
+  { id: 4, name: "Last 6 months" },
+  // { id: 5, name: "Custom date" },
+];
+export const cashflowFilters = [
+  { id: 0, name: "All accounts", icon: null },
+  { id: 1, name: "Last 3 month", icon: <FiCalendar /> },
+  // { id: 2, name: "Clear", icon: null },
 ];

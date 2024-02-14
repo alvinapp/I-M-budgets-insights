@@ -11,9 +11,9 @@ export const InsightsButton = ({ onClick }: InsightsButtonProps) => {
     >
       <div className="flex flex-col mr-1.5">
         <div className="relative">
-          <div className="absolute top-0 right-0.5 rounded-full h-1.5 w-1.5 bg-skin-primary"></div>
-          <div className="flex justify-center items-center rounded-full h-6 w-6 border border-skin-primary">
-            <FiBarChart color="#056489" />
+          {/* <div className="absolute top-0 right-0.5 rounded-full h-1.5 w-1.5 bg-skin-primary"></div> */}
+          <div className="flex justify-center items-center rounded-full h-6 w-6 border border-[#0d0d0d]">
+            <FiBarChart color="#0d0d0d" />
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ interface BarGraphProps {
   currentMonthSavings: number;
   savingsTarget: number;
   budgetLimit: number;
+  currentMonthDate?: Date;
 }
 
 const SavingsBarGraph: React.FC<BarGraphProps> = ({
@@ -15,12 +16,45 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
   currentMonthSavings,
   savingsTarget,
   budgetLimit,
+  currentMonthDate,
 }) => {
   const [graphWidth, setGraphWidth] = useState(window.innerWidth - 23);
   const graphHeight = 200;
   const maxLimit = Math.max(savingsTarget, budgetLimit);
   const scaleFactor = (graphHeight - 70) / maxLimit;
   const barSpacing = graphWidth * 0.2;
+  const [curentMonthName, setCurrentMonthName] = useState<string>();
+  const [previousMonthName, setPreviousMonthName] = useState<string>();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setGraphWidth(window.innerWidth - 20);
+    };
+    getMonthNames();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const getMonthNames = () => {
+    const date = currentMonthDate ?? new Date();
+
+    const currentMonth = date
+      .toLocaleString("en-US", { month: "short" })
+      .toUpperCase();
+    setCurrentMonthName(currentMonth);
+
+    // Calculate the last day of the previous month by setting the current date to the 1st day of the current month
+    const previousMonthDate = new Date(date);
+    previousMonthDate.setDate(1);
+    previousMonthDate.setDate(previousMonthDate.getDate() - 1);
+
+    const previousMonth = previousMonthDate
+      .toLocaleString("en-US", { month: "short" })
+      .toUpperCase();
+    setPreviousMonthName(previousMonth);
+
+    return true;
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,18 +63,6 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const getMonthNames = () => {
-    const date = new Date();
-    const currentMonth = date
-      .toLocaleString("default", { month: "short" })
-      .toUpperCase();
-    date.setMonth(date.getMonth() - 1);
-    const previousMonth = date
-      .toLocaleString("default", { month: "short" })
-      .toUpperCase();
-    return [previousMonth, currentMonth];
-  };
 
   // create a const to get the number of days left in the month
   const getDaysLeftInMonth = () => {
@@ -272,10 +294,20 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
         <defs>
           <linearGradient
             id="savings-gradient"
-            gradientTransform="rotate(70.18)"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+            gradientTransform="rotate(124.2)"
           >
-            <stop offset="0%" stopColor="#66be5e" />
-            <stop offset="100%" stopColor="#117C07" />
+            <stop
+              offset="0%"
+              style={{ stopColor: "#1BBFCD", stopOpacity: 1 }}
+            />
+            <stop
+              offset="100%"
+              style={{ stopColor: "#0099A6", stopOpacity: 1 }}
+            />
           </linearGradient>
         </defs>
 
@@ -300,7 +332,7 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
           fontWeight="bold"
           fontFamily="Poppins"
         >
-          {previousMonthSavings > 0 ? getMonthNames()[0] : ""}
+          {previousMonthSavings > 0 ? previousMonthName : ""}
         </text>
         <text
           x={graphWidth * 0.39 + 22}
@@ -310,7 +342,7 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
           fontWeight="bold"
           fontFamily="Poppins"
         >
-          {getMonthNames()[1]}
+          {curentMonthName}
         </text>
         {renderChangeContainer()}
       </svg>
@@ -322,7 +354,7 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
           margin: "0px 10px 2px 10px",
         }}
       >
-        <GraphLegend color="#66be5e" label="Savings" />
+        <GraphLegend color="#0099A6" label="Savings" />
       </div>
     </div>
   );

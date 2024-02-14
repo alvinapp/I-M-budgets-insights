@@ -9,17 +9,17 @@ const FilterButton = ({ label, onClick, isActive, id }: FilterButtonProps) => {
     <button
       className={`${
         isActive
-          ? "bg-white rounded-md drop-shadow-lg"
-          : "bg-icon_bg/20 rounded-md"
-      } px-4 py-1 ml-4`}
+          ? "bg-skin-secondaryWithOpacity rounded-full drop-shadow-lg"
+          : " bg-skin-accent2 rounded-full"
+      } px-4 py-1 mr-2 mb-3`}
       onClick={onClick}
       id={`${id}`}
     >
       <div
-        className={`uppercase ${
+        className={`${
           isActive
-            ? "text-primary_light font-poppins text-xs font-semibold tracking-longtext"
-            : "text-gray_light font-poppins text-xs font-semibold tracking-longtext"
+            ? " text-skin-primary font-poppins text-xs font-semibold tracking-longtext"
+            : " text-skin-subtitle font-poppins text-xs font-semibold tracking-longtext"
         }`}
       >
         {label}

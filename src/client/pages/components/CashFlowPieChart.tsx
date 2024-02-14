@@ -6,6 +6,9 @@ import {
 } from "react-icons/fi";
 import PercentageItem from "./PercentageItem";
 import { checkNAN } from "client/utils/Formatters";
+import { useNavigate } from "react-router";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import useCashflowVariablesStore from "client/store/cashFlowStore";
 
 interface CashFlowPieChartProps {
   dimensions: number;
@@ -24,19 +27,31 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   values,
   percentageChange,
 }) => {
-  const { moneyIn, moneyOut } = values;
+  let { moneyIn, moneyOut } = values;
+  const navigate = useNavigate();
   const total = moneyIn + moneyOut;
-  const moneyOutPercentage = total > 0 ? Math.round((moneyOut / total) * 100).toFixed(1) : 0;
-  const moneyInPercentage = total > 0 ? Math.round((moneyIn / total) * 100).toFixed(1) : 0;
+  const moneyOutPercentage =
+    total > 0 ? Math.round((moneyOut / total) * 100).toFixed(1) : 0;
+  const moneyInPercentage =
+    total > 0 ? Math.round((moneyIn / total) * 100).toFixed(1) : 0;
   const radius = dimensions / 2;
   const strokeWidth = doughnutThickness;
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
   let cumulativePercentage = 0;
-
+  const currencyStore = useCurrencySettingsStore((state: any) => state);
+  const cashflowVariables =
+    useCashflowVariablesStore.getState().cashflowVariables;
   return (
-    <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full">
+    <div
+      className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full"
+      onClick={() =>
+        navigate(
+          `/cashflow?startDate=${cashflowVariables.startDate}&endDate=${cashflowVariables.endDate}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter}`
+        )
+      }
+    >
       <div className="flex flex-row justify-start items-center pl-3.5">
         <h2 className="font-workSans text-base font-semibold">Cash flow</h2>
         <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>
@@ -57,8 +72,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           <g transform={`translate(${radius}, ${radius})`}>
             {["moneyIn", "moneyOut"].map((type, index) => {
               const percentage = (values[type] / total) * 100;
-              const color =
-                type === "moneyIn" ? "url(#moneyInGradient)" : "#F99E36";
+              const color = type === "moneyIn" ? "#0099A6" : "#F99E36";
 
               const startX =
                 normalizedRadius *
@@ -159,14 +173,15 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           <div className="flex flex-col justify-end items-start mt-8">
             <div className="flex flex-row">
               <div className="relative flex item-start">
-                <div
-                  className="absolute -right-1 -top-2 font-semibold"
-                  style={{ fontSize: "15px" }}
+                {/* <div
+                  className="absolute -right-6 -top-2 font-semibold"
+                  style={{ fontSize: "12px" }}
                 >
-                  {"₦"}
-                </div>
+                  {currencyStore.currencySymbol}
+                </div> */}
                 <div className="font-workSans text-2xl font-semibold text-skin-neutral2">
-                  {(checkNAN(moneyIn + moneyOut)).toLocaleString("en-US")}
+                  {checkNAN(moneyIn + moneyOut).toLocaleString("en-US")}
+                  <sup style={{ fontSize: '16px', verticalAlign: 'super', marginLeft: '-4px' }}>{currencyStore.currencySymbol ?? ""}</sup>
                 </div>
               </div>
             </div>
@@ -178,17 +193,13 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           </div>
           <div className="flex flex-row items-start mt-5">
             <PercentageItem
-              color="#66be5f"
-              percentage={Number(
-                moneyInPercentage
-              )}
+              color="#0099A6"
+              percentage={Number(moneyInPercentage)}
               label="Money in"
             />
             <PercentageItem
               color="#F99E36"
-              percentage={Number(
-                moneyOutPercentage
-              )}
+              percentage={Number(moneyOutPercentage)}
               label="Money out"
             />
           </div>

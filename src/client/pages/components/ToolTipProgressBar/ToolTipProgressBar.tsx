@@ -5,6 +5,7 @@ interface TooltipProgressBarProps {
   backgroundColor?: string;
   progressPercent: number;
   progressTooltip: number;
+  showProgressTooltip?: boolean;
   activeMonth: Date;
 }
 
@@ -12,6 +13,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   backgroundColor = "#E7EDF3",
   progressPercent,
   progressTooltip,
+  showProgressTooltip = true,
   activeMonth,
 }) => {
   const date = new Date();
@@ -27,8 +29,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   const progress = (currentDay / daysInMonth) * 100;
 
   const progressStyle = {
-    background:
-      "linear-gradient(65.42deg, rgba(8,127,162,0.54) 0%, rgba(193,138,76,0.37) 52.44%, rgba(89,182,81,0.49) 100%)",
+    background: "linear-gradient(65.42deg, rgba(11, 62, 175, 1) 0%, rgba(157, 177, 198, 1) 52.44%, rgba(20, 181, 195, 1) 100%)",
     width: `${progressPercent}%`,
   };
 
@@ -56,15 +57,15 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
           className="tooltip-progress-bar-progress"
           style={progressStyle}
         ></div>
-        <div
+        {showProgressTooltip && <div
           className="dotted-divider-container"
           style={{ left: `calc(${progressTooltip}%)` }}
         >
           <div className="dotted-divider"></div>
-        </div>
-        <div className="tooltip" style={tooltipStyle}>
+        </div>}
+        {showProgressTooltip && <div className="tooltip" style={tooltipStyle}>
           Today
-        </div>
+        </div>}
       </div>
       <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">
         {monthEnd.toLocaleDateString("en-US", {

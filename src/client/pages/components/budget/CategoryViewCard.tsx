@@ -72,6 +72,7 @@ export const CategoryViewCard = ({
           height="4px"
           baseBgColor={`${baseBgColor}`}
           bgColor={`${bgColor}`}
+          // bgColor="#0131a1"
           isLabelVisible={false}
         />
         <div className="flex flex-row mb-2.5 items-center"></div>
@@ -92,7 +93,7 @@ export const CategoryViewCard = ({
           </div>
           <div className="relative mr-1">
             <div
-              className={`absolute -right-1 -top-1.5 font-poppins text-xxxxxs ${
+              className={`absolute -right-2.5 -top-2 font-poppins text-xxxxxs ${
                 fadedColor ?? "text-skin-base"
               } font-semibold`}
             >

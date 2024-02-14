@@ -10,6 +10,7 @@ type BudgetSettingCardProps = {
   selected?: boolean;
   addValue: (e: any) => void;
   maxValue: number;
+  updateValue?: (value: number) => void;
 };
 export const BudgetSettingCard = ({
   category,
@@ -20,6 +21,7 @@ export const BudgetSettingCard = ({
   selected = false,
   addValue,
   maxValue,
+  updateValue,
 }: BudgetSettingCardProps) => {
   const handleIncrement = (event: any) => {
     event.stopPropagation();
@@ -65,6 +67,9 @@ export const BudgetSettingCard = ({
                     onChange={(e) => {
                       if (parseInt(e.target.value) > 0) {
                         addValue(parseInt(e.target.value));
+                        if (updateValue) {
+                          updateValue(parseInt(e.target.value));
+                        }
                       }
                     }}
                   />

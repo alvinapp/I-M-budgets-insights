@@ -20,7 +20,7 @@ export const setMacros = async ({
     const res = await postData({
       endpoint: "goals/macros",
       token: configuration.token,
-      data: { ...data},
+      data: { ...data },
     });
     return res;
   } catch (reason: any) {
@@ -32,18 +32,34 @@ export const setMacros = async ({
 
 export const getMacros = async ({
   configuration,
+  start_date,
+  end_date,
 }: {
   configuration: IConfig;
+  start_date?: string;
+  end_date?: string;
 }) => {
   try {
-    const res = await fetchData({
-      endpoint: "/goals/macros",
-      token: configuration.token,
-    });
+    let res;
+    if (start_date && end_date) {
+      res = await fetchData({
+        endpoint: `/goals/macros/?start_date=${start_date}&end_date=${end_date}`,
+        token: configuration.token,
+      });
+    } else {
+      res = await fetchData({
+        endpoint: `/goals/macros/`,
+        token: configuration.token,
+      });
+    }
+    // const res = await fetchData({
+    //   endpoint: "/goals/macros",
+    //   token: configuration.token,
+    // });
     return res;
   } catch (reason: any) {
     Sentry.captureException(reason);
     console.debug(reason);
     return Promise.reject(reason);
   }
-}
+};

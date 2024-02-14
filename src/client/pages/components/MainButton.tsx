@@ -16,7 +16,7 @@ const MainButton = ({
 }: MainButonProps) => {
   return (
     <button
-      className={`my-3.5 bg-skin-primary rounded-full text-white font-poppins font-semibold tracking-widest w-full h-14 shadow-button text-base ${
+      className={`my-3.5 bg-gradient-to-r from-[#124DE0] via-[#144CBC] via-0% to-[#0131A1] to-100%  rounded-full text-white font-poppins font-semibold tracking-widest w-full h-14 shadow-button text-base ${
         isDisabled ? "disabled:opacity-25 focus:outline-none" : ""
       }`}
       disabled={isDisabled}
