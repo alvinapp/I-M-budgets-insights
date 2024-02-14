@@ -53,19 +53,12 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           <div className="flex flex-col justify-end items-start mt-3">
             <div className="flex flex-row">
               <div className="relative flex items-end">
-                <div
+                {/* <div
                   className="absolute -right-4 -top-1.5 text-xxxs font-workSans font-semibold text-skin-base"
-                /*  style={{
-                  color:
-                    index === 0
-                     / ? "#056489"
-                      : index === 1
-                     / ? "#c77e2b"
-                      : "#117C07",
-                }}*/
+
                 >
                   {currencySymbol}
-                </div>
+                </div> */}
                 <div
                   className="font-workSans font-semibold text-lg text-skin-base"
                 /*  style={{
@@ -80,6 +73,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                   {budgetAmount[
                     Object.keys(budgetAmount)[index]
                   ]?.toLocaleString("en-US")}
+                  <sup style={{ fontSize: '12px', verticalAlign: 'super', marginLeft: '-4px' }}>{currencySymbol ? currencySymbol : ""}</sup>
                 </div>
               </div>
             </div>

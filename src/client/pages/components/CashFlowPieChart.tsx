@@ -173,14 +173,15 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           <div className="flex flex-col justify-end items-start mt-8">
             <div className="flex flex-row">
               <div className="relative flex item-start">
-                <div
+                {/* <div
                   className="absolute -right-6 -top-2 font-semibold"
                   style={{ fontSize: "12px" }}
                 >
                   {currencyStore.currencySymbol}
-                </div>
+                </div> */}
                 <div className="font-workSans text-2xl font-semibold text-skin-neutral2">
                   {checkNAN(moneyIn + moneyOut).toLocaleString("en-US")}
+                  <sup style={{ fontSize: '16px', verticalAlign: 'super', marginLeft: '-4px' }}>{currencyStore.currencySymbol ?? ""}</sup>
                 </div>
               </div>
             </div>

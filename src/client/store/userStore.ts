@@ -9,7 +9,7 @@ type UserStore = {
 
 const useUserStore = create<UserStore>((set) => ({
   user: {},
-  currencySymbol: "KES",
+  currencySymbol: " ₦",
   setUser: (user) => {
     set((state) => ({
       ...state,
