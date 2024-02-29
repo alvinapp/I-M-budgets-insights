@@ -94,7 +94,7 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
               alt="icon"
               style={{ width: "24px", height: "24px" }}
             />
-            <div className="font-poppins text-xxxxxs text-skin-subtitle tracking-longest_text">
+            <div className="font-primary text-xxxxxs text-skin-subtitle tracking-longest_text">
               <span>Overall budget split</span>
             </div>
           </div>

@@ -96,19 +96,19 @@ const InsightsFilters = ({
   return (
     <div className="flex flex-col mt-6 mx-4">
       <div className="flex flex-row justify-between items-center">
-        <div className="text-xs font-poppins font-semibold text-skin-neutral tracking-longtext">
+        <div className="text-xs font-primary font-semibold text-skin-neutral tracking-longtext">
           Clear
         </div>
-        <div className="font-workSans text-skin-base font-semibold tracking-title text-base">
+        <div className="font-custom text-skin-base font-semibold tracking-title text-base">
           Filter by
         </div>
         <div className="flex flex-col"></div>
       </div>
       <div className="flex flex-row justify-start items-center mt-10">
-        <div className="font-workSans text-skin-base font-semibold tracking-title text-base mr-1">
+        <div className="font-custom text-skin-base font-semibold tracking-title text-base mr-1">
           <img src={bank} />
         </div>
-        <div className="font-workSans text-skin-base font-semibold tracking-title text-base">
+        <div className="font-custom text-skin-base font-semibold tracking-title text-base">
           My accounts
         </div>
       </div>
@@ -144,10 +144,10 @@ const InsightsFilters = ({
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mb-6"></div>
       <div className="flex flex-row justify-start items-center">
-        <div className="font-workSans text-skin-base font-semibold tracking-title text-base mr-1">
+        <div className="font-custom text-skin-base font-semibold tracking-title text-base mr-1">
           <FiCalendar />
         </div>
-        <div className="font-workSans text-skin-base font-semibold tracking-title text-base">
+        <div className="font-custom text-skin-base font-semibold tracking-title text-base">
           Date
         </div>
       </div>

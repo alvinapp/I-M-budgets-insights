@@ -42,8 +42,8 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
               index === 0
                 ? "linear-gradient(124.2deg, #144CBC 0%, #0131A1 100%)"
                 : index === 1
-                  ? "#6F89A5"
-                  : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
+                ? "#6F89A5"
+                : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
             }
             outsideLength={
               progressPercentage[Object.keys(progressPercentage)[index]]
@@ -54,14 +54,14 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
             <div className="flex flex-row">
               <div className="relative flex items-end">
                 {/* <div
-                  className="absolute -right-4 -top-1.5 text-xxxs font-workSans font-semibold text-skin-base"
+                  className="absolute -right-4 -top-1.5 text-xxxs font-custom font-semibold text-skin-base"
 
                 >
                   {currencySymbol}
                 </div> */}
                 <div
-                  className="font-workSans font-semibold text-lg text-skin-base"
-                /*  style={{
+                  className="font-custom font-semibold text-lg text-skin-base"
+                  /*  style={{
                   color:
                     index === 0
                      / ? "#056489"
@@ -73,12 +73,20 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                   {budgetAmount[
                     Object.keys(budgetAmount)[index]
                   ]?.toLocaleString("en-US")}
-                  <sup style={{ fontSize: '12px', verticalAlign: 'super', marginLeft: '-4px' }}>{currencySymbol ? currencySymbol : ""}</sup>
+                  <sup
+                    style={{
+                      fontSize: "12px",
+                      verticalAlign: "super",
+                      marginLeft: "-4px",
+                    }}
+                  >
+                    {currencySymbol ? currencySymbol : ""}
+                  </sup>
                 </div>
               </div>
             </div>
             <div className="flex flex-row">
-              <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">
+              <div className="font-primary text-xxs text-skin-subtitle tracking-longest_text">
                 {progressString[index]}
               </div>
             </div>

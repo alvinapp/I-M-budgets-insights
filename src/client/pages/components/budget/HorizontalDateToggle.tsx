@@ -7,7 +7,11 @@ type Props = {
   monthName: string;
 };
 
-export const HorizontalDateToggle: React.FC<Props> = ({ onPreviousMonthClick, onNextMonthClick, monthName }) => {
+export const HorizontalDateToggle: React.FC<Props> = ({
+  onPreviousMonthClick,
+  onNextMonthClick,
+  monthName,
+}) => {
   const month = [
     "January",
     "February",
@@ -39,7 +43,7 @@ export const HorizontalDateToggle: React.FC<Props> = ({ onPreviousMonthClick, on
       <div className="flex flex-col">
         <div className="flex flex-row items-center">
           <FiCalendar />
-          <div className="font-workSans text-base text-skin-base font-semibold tracking-title ml-3">
+          <div className="font-custom text-base text-skin-base font-semibold tracking-title ml-3">
             {monthName ? monthName : name}
           </div>
         </div>

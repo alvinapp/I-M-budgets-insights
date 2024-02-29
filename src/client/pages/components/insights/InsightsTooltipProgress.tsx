@@ -42,13 +42,13 @@ const InsightsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-row justify-between items-center">
-        <div className="font-poppins text-xs text-skin-subtitle font-medium tracking-wide">
+        <div className="font-primary text-xs text-skin-subtitle font-medium tracking-wide">
           {monthStart.toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
           })}
         </div>
-        <div className="font-poppins text-xs text-skin-subtitle font-medium tracking-wide">
+        <div className="font-primary text-xs text-skin-subtitle font-medium tracking-wide">
           {monthEnd.toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",

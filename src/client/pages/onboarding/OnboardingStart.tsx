@@ -31,7 +31,8 @@ const OnboardingStart = () => {
     if (response?.user) {
       setLoading(false);
       if (response?.user.is_onboarded) {
-        navigate("/budgets-view");
+        navigate("/onboard-start");
+        // navigate("/budgets-view");
       }
       setUser(response.user);
       setToken(response.token);
@@ -57,9 +58,9 @@ const OnboardingStart = () => {
           <div className="h-1/4 absolute top-0 left-0 right-0">
             <NavBar
               children={
-                <div className="flex flex-row items-center justify-between pt-5 pb-2">
+                <div className="flex flex-row items-center justify-between pt-5">
                   <CloseButton onClick={() => navigate(-1)} />
-                  <NavBarTitle title="Setup Monthly Budget" />
+                  <NavBarTitle title="Create Monthly Budget" />
                   <div className="h-6 w-6 rounded-full"></div>
                 </div>
               }
@@ -73,23 +74,12 @@ const OnboardingStart = () => {
                 ></div>
               </div>
               <div className="mt-6">
-                <div className="flex flex-row justify-center mx-4 font-workSans text-base text-center font-semibold tracking-title">
+                <div className="flex flex-row justify-center mx-4 font-custom text-xl text-center font-medium tracking-title text-skin-base">
                   Unlock easy spend tracking and savings.
                 </div>
-                <div className="flex flex-row justify-center items center text-xs font-poppins tracking-wide text-center text-skin-base mt-3 font-medium">
+                <div className="flex flex-row justify-center items center text-sm font-primary tracking-wide text-center text-skin-base mt-3 font-normal">
                   Set individual savings schedules or fun savings rules for each
                   goal you have.
-                </div>
-                <div className="flex flex-row justify-center mt-18">
-                  <div className="w-24 h-1 bg-skin-secondary3WithOpacity"></div>
-                </div>
-                <div className="flex flex-row justify-center mt-6">
-                  <div className="rounded-full h-14 w-14 flex justify-center items-center shadow-budgetButton">
-                    <FiChevronsDown size="0.875rem" color="#4E6783" />
-                  </div>
-                </div>
-                <div className="flex flex-row justify-center text-xs font-poppins text-center text-skin-neutral mt-1 tracking-longest_text">
-                  Learn more
                 </div>
               </div>
             </div>

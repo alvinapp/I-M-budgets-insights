@@ -53,7 +53,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
       }
     >
       <div className="flex flex-row justify-start items-center pl-3.5">
-        <h2 className="font-workSans text-base font-semibold">Cash flow</h2>
+        <h2 className="font-custom text-base font-semibold">Cash flow</h2>
         <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>
           <FiChevronRight size="0.625rem" />
         </div>
@@ -152,7 +152,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                     {/* trend indicator */}
                   </div>
                   <span
-                    className="font-poppins text-s tracking-wide font-bold"
+                    className="font-primary text-s tracking-wide font-bold"
                     style={{ marginLeft: "4px", color: "#565656" }}
                   >
                     {percentageChange.toFixed(1)}%
@@ -160,7 +160,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                   {/* percentage change */}
                 </div>
                 <div
-                  className="font-poppins text-xxxxs tracking-longest_text mt-2"
+                  className="font-primary text-xxxxs tracking-longest_text mt-2"
                   style={{ color: "#565656" }}
                 >
                   <span>change this month</span>
@@ -179,14 +179,22 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                 >
                   {currencyStore.currencySymbol}
                 </div> */}
-                <div className="font-workSans text-2xl font-semibold text-skin-neutral2">
+                <div className="font-custom text-2xl font-semibold text-skin-neutral2">
                   {checkNAN(moneyIn + moneyOut).toLocaleString("en-US")}
-                  <sup style={{ fontSize: '16px', verticalAlign: 'super', marginLeft: '-4px' }}>{currencyStore.currencySymbol ?? ""}</sup>
+                  <sup
+                    style={{
+                      fontSize: "16px",
+                      verticalAlign: "super",
+                      marginLeft: "-4px",
+                    }}
+                  >
+                    {currencyStore.currencySymbol ?? ""}
+                  </sup>
                 </div>
               </div>
             </div>
             <div className="flex flex-row">
-              <div className="font-poppins text-xxs text-skin-subtitle font-semibold tracking-longest_text">
+              <div className="font-primary text-xxs text-skin-subtitle font-semibold tracking-longest_text">
                 {"Total cash flow"}
               </div>
             </div>

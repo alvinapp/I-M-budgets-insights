@@ -23,13 +23,22 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     date.getMonth() + 1,
     0
   ).getDate();
-  const monthStart = new Date(activeMonth.getFullYear(), activeMonth.getMonth(), 1);
-  const monthEnd = new Date(activeMonth.getFullYear(), activeMonth.getMonth() + 1, 0);
+  const monthStart = new Date(
+    activeMonth.getFullYear(),
+    activeMonth.getMonth(),
+    1
+  );
+  const monthEnd = new Date(
+    activeMonth.getFullYear(),
+    activeMonth.getMonth() + 1,
+    0
+  );
 
   const progress = (currentDay / daysInMonth) * 100;
 
   const progressStyle = {
-    background: "linear-gradient(65.42deg, rgba(11, 62, 175, 1) 0%, rgba(157, 177, 198, 1) 52.44%, rgba(20, 181, 195, 1) 100%)",
+    background:
+      "linear-gradient(65.42deg, rgba(11, 62, 175, 1) 0%, rgba(157, 177, 198, 1) 52.44%, rgba(20, 181, 195, 1) 100%)",
     width: `${progressPercent}%`,
   };
 
@@ -46,7 +55,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
 
   return (
     <div className="row">
-      <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">
+      <div className="font-primary text-xxs text-skin-subtitle tracking-longest_text">
         {monthStart.toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
@@ -57,17 +66,21 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
           className="tooltip-progress-bar-progress"
           style={progressStyle}
         ></div>
-        {showProgressTooltip && <div
-          className="dotted-divider-container"
-          style={{ left: `calc(${progressTooltip}%)` }}
-        >
-          <div className="dotted-divider"></div>
-        </div>}
-        {showProgressTooltip && <div className="tooltip" style={tooltipStyle}>
-          Today
-        </div>}
+        {showProgressTooltip && (
+          <div
+            className="dotted-divider-container"
+            style={{ left: `calc(${progressTooltip}%)` }}
+          >
+            <div className="dotted-divider"></div>
+          </div>
+        )}
+        {showProgressTooltip && (
+          <div className="tooltip" style={tooltipStyle}>
+            Today
+          </div>
+        )}
       </div>
-      <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">
+      <div className="font-primary text-xxs text-skin-subtitle tracking-longest_text">
         {monthEnd.toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",

@@ -18,7 +18,7 @@ const SuccessButton = ({
 }: SuccessButonProps) => {
   return (
     <button
-      className={`my-3.5 bg-skin-base rounded-full text-skin-primary font-poppins font-semibold tracking-widest w-full h-14 text-base ${
+      className={`my-3.5 bg-skin-base rounded-full text-skin-primary font-primary font-medium tracking-widest w-full h-14 text-lg ${
         isDisabled ? "disabled:opacity-25 focus:outline-none" : ""
       }`}
       disabled={isDisabled}

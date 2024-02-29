@@ -15,7 +15,7 @@ const IntroHeader = ({
   return (
     <div className="flex justify-between items-center" onClick={onClick}>
       <div
-        className={`text-black font-semibold font-workSans tracking-wide ${Font.applyFontSize(
+        className={`text-black font-semibold font-custom tracking-wide ${Font.applyFontSize(
           { fontSize: titleFontSize, defaultFontSize: "text-base" }
         )}`}
       >
@@ -26,7 +26,7 @@ const IntroHeader = ({
           className="rounded-full bg-icon_bg/20 px-3 py-1 flex items-center text-gray_light"
           id="al__secondary-button"
         >
-          <div className="font-poppins font-medium text-xs tracking-longtext">
+          <div className="font-primary font-medium text-xs tracking-longtext">
             View all
           </div>
         </button>

@@ -237,7 +237,7 @@ const InsightsView = () => {
           />
         </div>
         <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
-          <div className="text-base text-skin-base font-semibold tracking-title font-workSans">
+          <div className="text-base text-skin-base font-semibold tracking-title font-custom">
             Budget spend
           </div>
           <div className="mt-4.5 mx-2">

@@ -11,14 +11,14 @@ export const Amount = ({ balance, textColor }: AmountProps) => {
       <div
         className={`text-xl ${
           textColor ?? "text-skin-base"
-        } font-semibold font-workSans -translate-x-1 translate-y-1`}
+        } font-semibold font-custom -translate-x-1 translate-y-1`}
       >
         {currency.currencySymbol}
       </div>
       <div
         className={`text-4xl ${
           textColor ?? "text-skin-base"
-        } font-semibold font-workSans`}
+        } font-semibold font-custom`}
       >
         {checkNAN(Math.round(balance!)).toLocaleString()}
       </div>

@@ -24,7 +24,11 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
   const normalizedRadius = radius - strokeWidth * 2;
 
   const items = [
-    { percentage: (essentials / total) * 100, color: "#6f89a5", label: "Essentials" },
+    {
+      percentage: (essentials / total) * 100,
+      color: "#6f89a5",
+      label: "Essentials",
+    },
     { percentage: (wants / total) * 100, color: "#9db1c6", label: "Wants" },
     { percentage: (savings / total) * 100, color: "#cfddea", label: "Savings" },
   ];
@@ -37,24 +41,38 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
         {items.map((item, index) => {
           const middleX =
             normalizedRadius *
-            Math.cos((2 * Math.PI * (cumulativePercentage + item.percentage / 2)) / 100);
+            Math.cos(
+              (2 * Math.PI * (cumulativePercentage + item.percentage / 2)) / 100
+            );
           const middleY =
             normalizedRadius *
-            Math.sin((2 * Math.PI * (cumulativePercentage + item.percentage / 2)) / 100);
+            Math.sin(
+              (2 * Math.PI * (cumulativePercentage + item.percentage / 2)) / 100
+            );
 
           const controlPointX =
             (normalizedRadius + 15) *
-            Math.cos((2 * Math.PI * (cumulativePercentage + item.percentage / 2.5)) / 100);
+            Math.cos(
+              (2 * Math.PI * (cumulativePercentage + item.percentage / 2.5)) /
+                100
+            );
           const controlPointY =
             (normalizedRadius + 15) *
-            Math.sin((2 * Math.PI * (cumulativePercentage + item.percentage / 2.5)) / 100);
+            Math.sin(
+              (2 * Math.PI * (cumulativePercentage + item.percentage / 2.5)) /
+                100
+            );
 
           const labelX =
             (normalizedRadius + 50) *
-            Math.cos((2 * Math.PI * (cumulativePercentage + item.percentage / 2)) / 100);
+            Math.cos(
+              (2 * Math.PI * (cumulativePercentage + item.percentage / 2)) / 100
+            );
           const labelY =
             (normalizedRadius + 50) *
-            Math.sin((2 * Math.PI * (cumulativePercentage + item.percentage / 2)) / 100);
+            Math.sin(
+              (2 * Math.PI * (cumulativePercentage + item.percentage / 2)) / 100
+            );
 
           const startX =
             normalizedRadius *
@@ -95,10 +113,35 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
                 strokeWidth="2"
                 fill="none"
               />
-              <foreignObject x={labelX - 30} y={labelY - 20} width={60} height={40}>
-                <div style={{textAlign: 'center'}}>
-                  <div style={{fontSize: '12px', color: 'white', fontFamily: 'Poppins', fontWeight: 'bold'}}>{item.label}</div>
-                  <div style={{fontSize: '12px', color: 'white', fontFamily: 'Poppins', fontWeight: 'bold'}}>({item.percentage.toFixed(0)}%)</div>
+              <foreignObject
+                x={labelX - 30}
+                y={labelY - 20}
+                width={80}
+                height={60}
+              >
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    className="font-primary text-sm tracking-wide text-skin-white font-medium"
+                    style={{
+                      fontSize: "12px",
+                      color: "white",
+                      fontFamily: "Poppins",
+                      fontWeight: "medium",
+                    }}
+                  >
+                    {item.label}
+                  </div>
+                  <div
+                    className="font-primary text-sm tracking-wide text-skin-white font-medium"
+                    style={{
+                      fontSize: "12px",
+                      color: "white",
+                      fontFamily: "Poppins",
+                      fontWeight: "medium",
+                    }}
+                  >
+                    ({item.percentage.toFixed(0)}%)
+                  </div>
                 </div>
               </foreignObject>
             </>
@@ -127,7 +170,7 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
               alt="icon"
               style={{ width: "24px", height: "24px" }}
             />
-            <div className="font-poppins text-xxxxs tracking-longest_text mt-2" style={{ color: "white" }}>
+            <div className="font-primary text-sm tracking-wide mt-2 text-skin-white font-medium">
               <span>Overall budget split</span>
             </div>
           </div>

@@ -102,8 +102,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        workSans: "'Work Sans', sans-serif",
-        poppins: "'Poppins', sans-serif",
+        custom: "'NeueMontreal', sans-serif",
+        primary: "'NeueMontreal', sans-serif",
         montserrat: "'Montserrat', sans-serif",
       },
       spacing: {

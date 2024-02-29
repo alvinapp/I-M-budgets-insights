@@ -8,6 +8,16 @@
 @import "react-datepicker/dist/react-datepicker.css";
 @import "react-toastify/dist/ReactToastify.css";
 
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("./assets/fonts/PPNeueMontreal-Bold.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-Light.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-Medium.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-Regular.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-SemiBold.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-Thin.ttf") format("ttf");
+}
+
 @layer base {
   :root {
     --color-text-base: #101010;
@@ -36,10 +46,10 @@
     --color-text-icon-tertiary: #8b714f;
     --color-text-alvin-brown: #6f5a3f;
     --color-text-alvin-brown-faded: #b9aa95;
-    --color-button-primary: #056489;
+    --color-button-primary: #0539ec;
     --color-button-neutral: #6f89a5;
     --color-background-base: #ffffff;
-    --color-background-primary: #056489;
+    --color-background-primary: #0539ec;
     --color-background-secondary: #cde0e7;
     --color-background-warning: #e08e31;
     --color-background-success: #297a22;
@@ -64,7 +74,7 @@
     --color-background-input: #e6e9ed;
     --color-background-input-button: #e7edf3;
     --color-background-divider: #d3d3d3;
-    --color-background-icon-primary: rgba(214, 234, 212, 0.2);
+    --color-background-icon-primary: #f2f2f2;
     --color-background-icon-secondary: rgba(213, 212, 217, 0.2);
     --color-background-icon-tertiary: rgba(232, 227, 220, 0.2);
     --color-background-path: rgba(255, 255, 255, 0.25);
@@ -72,7 +82,7 @@
     --color-background-accent2-withOpacity: rgba(242, 242, 242, 0.2);
     --color-background-black: #101010;
     --color-outline-base: #101010;
-    --color-outline-primary: #056489;
+    --color-outline-primary: #0539ec;
     --color-outline-neutral: #6f89a5;
     --color-outline-secondary: #d0ddea;
     --color-outline-success-neutral: #d6ead4;

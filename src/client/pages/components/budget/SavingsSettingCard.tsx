@@ -42,11 +42,11 @@ export const SavingsSettingCard = ({
           </div>
           <div className="flex flex-col">
             {isAdded ? (
-              <div className="font-poppins text-xs font-medium tracking-wide text-skin-base">
+              <div className="font-primary text-xs font-medium tracking-wide text-skin-base">
                 Rainy day fund
               </div>
             ) : (
-              <div className="font-poppins text-xs font-medium tracking-wide text-skin-base">
+              <div className="font-primary text-xs font-medium tracking-wide text-skin-base">
                 {category}
               </div>
             )}
@@ -57,14 +57,14 @@ export const SavingsSettingCard = ({
         <div className="flex flex-row items-center justify-center">
           <div className="relative">
             <div
-              className={`absolute -right-2 -top-2.5 font-workSans font-semibold text-xxxs ${
+              className={`absolute -right-2 -top-2.5 font-custom font-semibold text-xxxs ${
                 isAdded ? "text-skin-base" : "text-skin-neutral"
               }`}
             >
               {currencySymbol}
             </div>
             <div
-              className={`font-workSans font-semibold text-xs ${
+              className={`font-custom font-semibold text-xs ${
                 isAdded ? "text-skin-base" : "text-skin-neutral"
               }`}
             >
@@ -77,7 +77,7 @@ export const SavingsSettingCard = ({
               onClick={handleEdit}
             >
               <div
-                className={`font-workSans font-semibold text-xs ${
+                className={`font-custom font-semibold text-xs ${
                   isAdded ? "text-skin-base" : "text-skin-neutral"
                 } mr-1`}
               >

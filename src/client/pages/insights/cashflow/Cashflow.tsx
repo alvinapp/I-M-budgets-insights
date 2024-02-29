@@ -108,12 +108,12 @@ const Cashflow = () => {
         <Graph earned={totalEarned} spent={totalSpent} />
         <div className="mt-6">
           <div className="flex flex-col rounded-lg bg-skin-base p-4 shadow-card">
-            <div className="font-medium font-poppins text-tiny tracking-wide mb-4">
+            <div className="font-medium font-primary text-tiny tracking-wide mb-4">
               {/* In the last {earnedData.length} months: */}
               In the selected period:
             </div>
             <div className="flex flex-row">
-              <div className="font-medium font-poppins text-tiny tracking-wide mb-2 mr-1">
+              <div className="font-medium font-primary text-tiny tracking-wide mb-2 mr-1">
                 - You've made an average of
               </div>
               <AmountDisplay
@@ -124,7 +124,7 @@ const Cashflow = () => {
               />
             </div>
             <div className="flex flex-row">
-              <div className="font-medium font-poppins text-tiny tracking-wide mr-2">
+              <div className="font-medium font-primary text-tiny tracking-wide mr-2">
                 - You've spent an average of
               </div>
               <AmountDisplay

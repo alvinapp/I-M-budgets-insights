@@ -53,7 +53,7 @@ const App = () => {
             }
           >
             <Routes>
-              <Route path="/" element={<OnboardingStart />} />
+              <Route path="/" element={<OnboardingSuccess />} />
               <Route path="/onboard-start" element={<OnboardingStart />} />
               <Route
                 path="/onboard-add-income"

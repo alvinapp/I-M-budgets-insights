@@ -44,9 +44,9 @@ const BookingSuccess = () => {
       // navigate("/view-flight-details");
     }
   }, [timer, timeOutCallback]);
-  const chartDimensions = 230;
-  const doughnutThickness = 18;
-  const budgetValues = {...budgetSettingsStore.incomeSplit};
+  const chartDimensions = 250;
+  const doughnutThickness = 20;
+  const budgetValues = { ...budgetSettingsStore.incomeSplit };
   return (
     <div className="h-screen bg-connectSuccessBg bg-cover w-screen relative">
       <div className="absolute w-full h-full">
@@ -60,12 +60,12 @@ const BookingSuccess = () => {
             values={budgetValues}
           />
         </div>
-        <div className="mt-15 flex flex-row justify-center mx-4">
-          <div className="font-workSans text-skin-white text-xl text-center font-semibold">
+        <div className="mt-6 flex flex-row justify-center mx-4">
+          <div className="font-custom text-skin-white text-xl text-center font-medium">
             Great job, {user.first_name}!
           </div>
         </div>
-        <div className="text-xxxs font-poppins tracking-longtext text-skin-white text-center mt-4">
+        <div className="text-sm font-primary tracking-wide text-skin-white text-center mt-4 font-normal">
           This looks like a very balanced budget and a great roadmap for you to
           hit your financial goals. We'll notify you whenever you may be
           overspending in category so you can stay on track.
@@ -74,19 +74,30 @@ const BookingSuccess = () => {
       <div className="fixed bottom-0 left-0 right-0 flex flex-col justify-end items-center mx-3.5">
         {!loading ? (
           <>
-        <SuccessButton title="Maybe later" click={() => navigate("/budgets-view")} style={{
-          border: "1px solid #fff",
-          color: "#c9e0ea",
-          backgroundColor: "transparent",
-        }}/>
-        <SuccessButton title="Add category budgets" click={() => navigate("/budget-settings")} style={{
-          marginTop: -8,
-        }}/>
-        </>
+            <SuccessButton
+              title="Maybe later"
+              click={() => navigate("/budgets-view")}
+              style={{
+                border: "1px solid #fff",
+                color: "#c9e0ea",
+                backgroundColor: "transparent",
+              }}
+            />
+            <SuccessButton
+              title="Set category budgets"
+              click={() => navigate("/budget-settings")}
+              style={{
+                marginTop: -8,
+              }}
+            />
+          </>
         ) : (
-          <SuccessButton loading={true}  style={{
-            backgroundColor: "#CDE0E7",
-          }}/>
+          <SuccessButton
+            loading={true}
+            style={{
+              backgroundColor: "#CDE0E7",
+            }}
+          />
         )}
       </div>
     </div>

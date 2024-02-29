@@ -33,21 +33,21 @@ export const AddBudgetCard = ({
       </div>
       <div className="flex flex-col w-full justify-center">
         <div className="flex flex-row items-center">
-          <div className="font-poppins text-xs text-skin-base font-medium tracking-wide">
+          <div className="font-primary text-xs text-skin-base font-medium tracking-wide">
             Add more budgets
           </div>
         </div>
         <div className="flex flex-row items-center mt-2">
           <div className="relative">
             <div
-              className={`absolute -right-2.5 -top-2 font-poppins text-xxxxxs ${
+              className={`absolute -right-2.5 -top-2 font-primary text-xxxxxs ${
                 fadedColor ?? "text-skin-base"
               } font-semibold`}
             >
               {currencySymbol ?? ""}
             </div>
             <div
-              className={`font-poppins text-xs ${
+              className={`font-primary text-xs ${
                 fadedColor ?? "text-skin-base"
               } font-semibold`}
             >

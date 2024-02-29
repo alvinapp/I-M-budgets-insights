@@ -41,7 +41,7 @@ export const BudgetSettingCard = ({
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="font-poppins text-xs font-medium tracking-wide text-skin-base">
+            <div className="font-primary text-xs font-medium tracking-wide text-skin-base">
               {category}
             </div>
           </div>
@@ -57,9 +57,9 @@ export const BudgetSettingCard = ({
                   size="1rem"
                   onClick={handleDecrement}
                 />
-                <div className="font-poppins font-semibold text-xs mx-2">
+                <div className="font-primary font-semibold text-xs mx-2">
                   <input
-                    className="bg-transparent font-workSans text-xs tracking-title text-skin-base text-center font-semibold border-l-0 border-r-0 border-t-0 focus:ring-0 focus:outline-0 focus:border-b-skin-primary w-20 h-5"
+                    className="bg-transparent font-custom text-xs tracking-title text-skin-base text-center font-semibold border-l-0 border-r-0 border-t-0 focus:ring-0 focus:outline-0 focus:border-b-skin-primary w-20 h-5"
                     type="number"
                     value={amount}
                     min={0}

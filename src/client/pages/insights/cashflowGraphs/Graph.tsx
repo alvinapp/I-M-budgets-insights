@@ -55,12 +55,12 @@ const Graph: FC<Props> = ({ earned, spent }) => {
         </div>
       </div>
       <div className="legend">
-        <div className="font-poppins text-xs text-skin-subtitle font-medium tracking-subtitle">
+        <div className="font-primary text-xs text-skin-subtitle font-medium tracking-subtitle">
           <span style={{ backgroundColor: "#0d40b0" }}></span> Total earned
         </div>
         <div
           style={{ marginLeft: "1rem" }}
-          className="font-poppins text-xs text-skin-subtitle font-medium tracking-subtitle"
+          className="font-primary text-xs text-skin-subtitle font-medium tracking-subtitle"
         >
           <span style={{ backgroundColor: "#11b1bf" }}></span> Total spent
         </div>

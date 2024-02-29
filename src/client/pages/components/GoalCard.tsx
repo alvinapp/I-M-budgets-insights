@@ -76,7 +76,7 @@
 //                 {is_active ? (
 //                   <div></div>
 //                 ) : (
-//                   <div className="absolute bottom-0 left-1 bg-skin-accent shadow-knob w-2.5 h-2.5 rounded-full flex items-center justify-center font-poppins text-xs font-semibold tracking-tight p-0.5 text-skin-neutral">
+//                   <div className="absolute bottom-0 left-1 bg-skin-accent shadow-knob w-2.5 h-2.5 rounded-full flex items-center justify-center font-primary text-xs font-semibold tracking-tight p-0.5 text-skin-neutral">
 //                     <FiPause color="#4E6783" />
 //                   </div>
 //                 )}
@@ -84,13 +84,13 @@
 //             </div>
 //             <div className="flex flex-col">
 //               <div
-//                 className="font-workSans text-sm font-semibold text-skin-title text-start text-ellipsis overflow-hidden whitespace-nowrap w-40 tracking-tab_text"
+//                 className="font-custom text-sm font-semibold text-skin-title text-start text-ellipsis overflow-hidden whitespace-nowrap w-40 tracking-tab_text"
 //                 id="al-transaction-card--merchant-name"
 //               >
 //                 {name}
 //               </div>
 //               <div
-//                 className={`font-poppins text-xs font-medium text-skin-subtitle tracking-wide text-start mt-1`}
+//                 className={`font-primary text-xs font-medium text-skin-subtitle tracking-wide text-start mt-1`}
 //               >
 //                 {status === null ? "" : status}
 //               </div>
@@ -100,10 +100,10 @@
 //         <div className="flex flex-col">
 //           {is_active ? (
 //             <div
-//               className="font-poppins text-sm font-medium text-black text-end text-ellipsis overflow-hidden whitespace-nowrap flex-row"
+//               className="font-primary text-sm font-medium text-black text-end text-ellipsis overflow-hidden whitespace-nowrap flex-row"
 //               id="al-transaction-card--amount"
 //             >
-//               <span className="font-poppins text-sm font-medium text-black mx-1">
+//               <span className="font-primary text-sm font-medium text-black mx-1">
 //                 {currencySymbol}
 //               </span>
 //               {Math.round(amount).toLocaleString("en-US")}

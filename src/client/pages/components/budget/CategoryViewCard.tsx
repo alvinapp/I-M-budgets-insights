@@ -48,7 +48,7 @@ export const CategoryViewCard = ({
         <div className="flex flex-row justify-between items-center mb-2.5">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
-              <div className="font-poppins text-xs text-skin-base font-medium tracking-wide">
+              <div className="font-primary text-xs text-skin-base font-medium tracking-wide">
                 {category}
               </div>
               <div>
@@ -58,10 +58,10 @@ export const CategoryViewCard = ({
           </div>
           <div className="flex flex-col">
             <div className="relative">
-              <div className="absolute -right-1 -top-2 font-poppins font-semibold text-xxxxxs text-skin-base ">
+              <div className="absolute -right-1 -top-2 font-primary font-semibold text-xxxxxs text-skin-base ">
                 {currencySymbol ?? ""}
               </div>
-              <div className="font-poppins text-xs text-skin-base font-semibold">
+              <div className="font-primary text-xs text-skin-base font-semibold">
                 {amount?.toLocaleString("en-us")}
               </div>
             </div>
@@ -78,14 +78,14 @@ export const CategoryViewCard = ({
         <div className="flex flex-row mb-2.5 items-center"></div>
         <div className="flex flex-row items-center">
           <div
-            className={`font-poppins text-xs ${
+            className={`font-primary text-xs ${
               primaryColor ?? "text-skin-base"
             } font-semibold mr-1`}
           >
             {spentAmount?.toLocaleString("en-us")}
           </div>
           <div
-            className={`font-poppins text-xs ${
+            className={`font-primary text-xs ${
               fadedColor ?? "text-skin-base"
             } font-semibold mr-1`}
           >
@@ -93,14 +93,14 @@ export const CategoryViewCard = ({
           </div>
           <div className="relative mr-1">
             <div
-              className={`absolute -right-2.5 -top-2 font-poppins text-xxxxxs ${
+              className={`absolute -right-2.5 -top-2 font-primary text-xxxxxs ${
                 fadedColor ?? "text-skin-base"
               } font-semibold`}
             >
               {currencySymbol ?? ""}
             </div>
             <div
-              className={`font-poppins text-xs ${
+              className={`font-primary text-xs ${
                 fadedColor ?? "text-skin-base"
               } font-semibold`}
             >
@@ -108,7 +108,7 @@ export const CategoryViewCard = ({
             </div>
           </div>
           <div
-            className={`font-poppins text-xs ${
+            className={`font-primary text-xs ${
               fadedColor ?? "text-skin-base"
             } font-semibold`}
           >

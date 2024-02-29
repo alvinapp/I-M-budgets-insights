@@ -20,7 +20,7 @@ const BalanceView = ({
     <div className="flex flex-row">
       <div className="flex flex-col" onClick={viewBalance}>
         <div className="flex flex-row items-center justify-center">
-          <div className="text-skin-subtitle text-center font-poppins text-xs font-medium tracking-wide">
+          <div className="text-skin-subtitle text-center font-primary text-xs font-medium tracking-wide">
             Total savings
           </div>
         </div>

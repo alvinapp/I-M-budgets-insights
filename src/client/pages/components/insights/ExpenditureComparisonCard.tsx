@@ -19,7 +19,7 @@ export const ExpenditureComparisonCard = ({
             <div>{icon}</div>
           </div>
           <div className="flex flex-col">
-            <div className="font-medium font-poppins text-xs text-skin-base tracking-subtitle mb-1">
+            <div className="font-medium font-primary text-xs text-skin-base tracking-subtitle mb-1">
               {category}
             </div>
           </div>
@@ -42,7 +42,7 @@ export const ExpenditureComparisonCard = ({
           </div>
           <div className="flex flex-col">
             <div
-              className={`font-bold font-poppins text-xs ${
+              className={`font-bold font-primary text-xs ${
                 percentage < 0 ? "text-skin-successAccent" : "text-skin-accent3"
               } tracking-widest`}
             >
