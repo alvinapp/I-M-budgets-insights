@@ -10,6 +10,7 @@ import SuccessButton from "../components/SuccessButton";
 import BudgetSplitChart from "../components/onboarding/BudgetSplitChart";
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
 import useUserStore from "client/store/userStore";
+import { capitalize } from "client/utils/Formatters";
 const BookingSuccess = () => {
   const navigate = useNavigate();
 
@@ -47,6 +48,7 @@ const BookingSuccess = () => {
   const chartDimensions = 250;
   const doughnutThickness = 20;
   const budgetValues = { ...budgetSettingsStore.incomeSplit };
+  const useName = "Jane";
   return (
     <div className="h-screen bg-connectSuccessBg bg-cover w-screen relative">
       <div className="absolute w-full h-full">
@@ -60,9 +62,9 @@ const BookingSuccess = () => {
             values={budgetValues}
           />
         </div>
-        <div className="mt-6 flex flex-row justify-center mx-4">
+        <div className="mt-4 flex flex-row justify-center mx-4">
           <div className="font-custom text-skin-white text-xl text-center font-medium">
-            Great job, {user.first_name}!
+            Great job, {capitalize(user.first_name)}!
           </div>
         </div>
         <div className="text-sm font-primary tracking-wide text-skin-white text-center mt-4 font-normal">
