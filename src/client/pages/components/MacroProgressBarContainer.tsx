@@ -40,9 +40,9 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
             }
             bgColorTop={
               index === 0
-                ? "linear-gradient(124.2deg, #144CBC 0%, #0131A1 100%)"
+                ? "linear-gradient(159deg,#4053D0_0%,#051AA3_100%)"
                 : index === 1
-                ? "#6F89A5"
+                ? "linear-gradient(159deg,#8490E2_0%,#3B4381_100%)"
                 : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
             }
             outsideLength={
@@ -51,17 +51,16 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
             height={30}
           />
           <div className="flex flex-col justify-end items-start mt-3">
-            <div className="flex flex-row">
-              <div className="relative flex items-end">
-                {/* <div
+            <div className="relative flex items-end">
+              {/* <div
                   className="absolute -right-4 -top-1.5 text-xxxs font-custom font-semibold text-skin-base"
 
                 >
                   {currencySymbol}
                 </div> */}
-                <div
-                  className="font-custom font-semibold text-lg text-skin-base"
-                  /*  style={{
+              <div
+                className="font-custom font-medium text-base text-skin-base"
+                /*  style={{
                   color:
                     index === 0
                      / ? "#056489"
@@ -69,26 +68,23 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                      / ? "#c77e2b"
                       : "#117C07",
                 }} */
+              >
+                {budgetAmount[Object.keys(budgetAmount)[index]]?.toLocaleString(
+                  "en-US"
+                )}
+                <sup
+                  style={{
+                    fontSize: "12px",
+                    verticalAlign: "super",
+                    marginLeft: "-4px",
+                  }}
                 >
-                  {budgetAmount[
-                    Object.keys(budgetAmount)[index]
-                  ]?.toLocaleString("en-US")}
-                  <sup
-                    style={{
-                      fontSize: "12px",
-                      verticalAlign: "super",
-                      marginLeft: "-4px",
-                    }}
-                  >
-                    {currencySymbol ? currencySymbol : ""}
-                  </sup>
-                </div>
+                  {currencySymbol ? currencySymbol : ""}
+                </sup>
               </div>
             </div>
-            <div className="flex flex-row">
-              <div className="font-primary text-xxs text-skin-subtitle tracking-longest_text">
-                {progressString[index]}
-              </div>
+            <div className="font-primary text-xs text-skin-base tracking-progress_label">
+              {progressString[index]}
             </div>
           </div>
         </div>

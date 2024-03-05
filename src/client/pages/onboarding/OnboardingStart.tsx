@@ -31,8 +31,8 @@ const OnboardingStart = () => {
     if (response?.user) {
       setLoading(false);
       if (response?.user.is_onboarded) {
-        navigate("/onboard-start");
-        // navigate("/budgets-view");
+        // navigate("/onboard-start");
+        navigate("/budgets-view");
       }
       setUser(response.user);
       setToken(response.token);
@@ -84,7 +84,7 @@ const OnboardingStart = () => {
               </div>
             </div>
           </div>
-          <div className="fixed bottom-0 left-0 right-0 mx-4">
+          <div className="fixed bottom-5 left-0 right-0 mx-4">
             <MainButton
               title="Start Budgeting"
               click={() => {

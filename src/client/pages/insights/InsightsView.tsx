@@ -161,7 +161,7 @@ const InsightsView = () => {
                 className="h-6 w-6 rounded-full flex justify-center items-center"
                 onClick={() => openFilter(true)}
               >
-                <FiFilter color="#4E6783" size="1.5rem" />
+                <FiFilter color="#101010" size="1.5rem" />
               </div>
             </div>
           }
@@ -237,7 +237,7 @@ const InsightsView = () => {
           />
         </div>
         <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
-          <div className="text-base text-skin-base font-semibold tracking-title font-custom">
+          <div className="text-base text-skin-base font-medium tracking-title font-custom">
             Budget spend
           </div>
           <div className="mt-4.5 mx-2">

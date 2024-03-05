@@ -42,11 +42,11 @@ export const SavingsSettingCard = ({
           </div>
           <div className="flex flex-col">
             {isAdded ? (
-              <div className="font-primary text-xs font-medium tracking-wide text-skin-base">
+              <div className="font-primary text-sm font-medium tracking-wide text-skin-base">
                 Rainy day fund
               </div>
             ) : (
-              <div className="font-primary text-xs font-medium tracking-wide text-skin-base">
+              <div className="font-primary text-sm font-medium tracking-wide text-skin-base">
                 {category}
               </div>
             )}
@@ -57,40 +57,33 @@ export const SavingsSettingCard = ({
         <div className="flex flex-row items-center justify-center">
           <div className="relative">
             <div
-              className={`absolute -right-2 -top-2.5 font-custom font-semibold text-xxxs ${
-                isAdded ? "text-skin-base" : "text-skin-neutral"
-              }`}
-            >
-              {currencySymbol}
-            </div>
-            <div
-              className={`font-custom font-semibold text-xs ${
-                isAdded ? "text-skin-base" : "text-skin-neutral"
-              }`}
+              className={`font-custom font-medium text-sm text-skin-base tracking-longest_text`}
             >
               {amount?.toLocaleString("en-US")}
+              <sup className="font-custom font-medium text-xxs text-skin-base align-super">
+                {currencySymbol}
+              </sup>
             </div>
           </div>
           {isAdded ? (
             <div
-              className="flex justify-center items-center flex-row px-3 py-3"
+              className="flex justify-center items-center flex-row"
               onClick={handleEdit}
             >
               <div
-                className={`font-custom font-semibold text-xs ${
-                  isAdded ? "text-skin-base" : "text-skin-neutral"
-                } mr-1`}
+                className={`font-custom font-medium text-xs text-skin-base
+                 mr-2 ml-1 tracking-progress_label`}
               >
                 per month
               </div>
-              <FiEdit2 color="#04506E" size="0.75rem" />
+              <FiEdit2 color="#101010" size="0.75rem" />
             </div>
           ) : (
             <div
-              className="rounded-full shadow-budgetButton flex justify-center items-center flex-row px-3 py-3 ml-4"
+              className="rounded-full shadow-budgetButton flex justify-center items-center flex-row p-2.5 ml-4"
               onClick={handleAdd}
             >
-              <FiPlus color="#04506E" size="1rem" />
+              <FiPlus color="#042EBD" size="1.2rem" />
             </div>
           )}
         </div>

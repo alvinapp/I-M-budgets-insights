@@ -72,6 +72,7 @@ module.exports = {
           iconTertiary: "var( --color-background-icon-tertiary)",
           path: "var( --color-background-path)",
           blackBg: "var( --color-background-black)",
+          disabledBg: "var(--color-background-disabled)",
         },
       },
       outlineColor: {

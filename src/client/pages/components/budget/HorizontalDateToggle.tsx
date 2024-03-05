@@ -34,7 +34,7 @@ export const HorizontalDateToggle: React.FC<Props> = ({
     <div className="flex flex-row justify-between items-center">
       <div className="flex flex-col">
         <div
-          className="h-10 w-10 rounded-full flex justify-center items-center border border-skin-neutral cursor-pointer"
+          className="h-10 w-10 rounded-full flex justify-center items-center border border-skin-base cursor-pointer"
           onClick={onPreviousMonthClick} // Call the left chevron click handler
         >
           <FiChevronLeft color="#4E6783" size="1rem" />
@@ -43,13 +43,13 @@ export const HorizontalDateToggle: React.FC<Props> = ({
       <div className="flex flex-col">
         <div className="flex flex-row items-center">
           <FiCalendar />
-          <div className="font-custom text-base text-skin-base font-semibold tracking-title ml-3">
+          <div className="font-custom text-base text-skin-base font-medium tracking-title ml-3">
             {monthName ? monthName : name}
           </div>
         </div>
       </div>
       <div
-        className="h-10 w-10 rounded-full flex justify-center items-center border border-skin-neutral cursor-pointer"
+        className="h-10 w-10 rounded-full flex justify-center items-center border border-skin-base cursor-pointer"
         onClick={onNextMonthClick} // Call the right chevron click handler
       >
         <FiChevronRight color="#4E6783" size="1rem" />

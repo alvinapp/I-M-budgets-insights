@@ -16,8 +16,10 @@ const MainButton = ({
 }: MainButonProps) => {
   return (
     <button
-      className={`my-3.5 bg-skin-primary rounded-full text-white font-primary font-medium tracking-widest w-full h-14 shadow-button text-lg ${
-        isDisabled ? "disabled:opacity-25 focus:outline-none" : ""
+      className={`rounded-full text-white font-primary font-medium tracking-widest w-full h-14 text-lg ${
+        isDisabled
+          ? "focus:outline-none bg-skin-disabledBg"
+          : "bg-skin-primary shadow-button"
       }`}
       disabled={isDisabled}
       onClick={loading ? () => {} : click}

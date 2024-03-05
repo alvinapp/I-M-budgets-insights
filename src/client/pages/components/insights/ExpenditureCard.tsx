@@ -47,10 +47,10 @@ export const ExpenditureCard = ({
           style={{ width: budgetColumnWidth }}
         >
           <div className="relative">
-            <span className="font-bold font-primary text-xs text-skin-neutral tracking-widest">
+            <span className="font-medium font-primary text-xs text-skin-base tracking-widest">
               {budget?.toLocaleString()}
             </span>
-            <span className="absolute -top-2 -right-1 font-bold font-primary text-xxxs text-skin-neutral">
+            <span className="absolute -top-2 -right-1 font-medium font-primary text-xxxs text-skin-neutral">
               {currencySymbol}
             </span>
           </div>
@@ -63,9 +63,9 @@ export const ExpenditureCard = ({
           <div className="relative">
             <span className="font-bold font-primary text-xs text-skin-base tracking-widest">
               {spent?.toLocaleString()}
-            </span>
-            <span className="absolute -top-2 -right-1 font-bold font-primary text-xxxs text-skin-base">
-              {currencySymbol}
+              <sup className=" text-xs align-super font-medium">
+                {currencySymbol}
+              </sup>
             </span>
           </div>
         </div>

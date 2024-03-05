@@ -14,20 +14,20 @@ export const CategoryCardHeader = ({
   return (
     <div className="flex flex-row justify-between items-center">
       <div className="flex flex-col">
-        <div className="font-custom font-semibold text-xl text-skin-base tracking-title">
+        <div className="font-custom font-medium text-xl text-skin-base tracking-title">
           {title}
         </div>
       </div>
       <div className="flex flex-col items-end">
         <div className="relative">
-          <div className="absolute right-0 -top-1.5 font-custom font-semibold text-xxxxxs text-skin-neutral2 ">
-            {currencySymbol ?? ""}
-          </div>
-          <div className="font-custom text-lg text-skin-neutral2 font-semibold">
+          <div className="font-custom text-lg text-skin-base font-medium">
             {amount?.toLocaleString("en-us")}
+            <sup className=" text-xs align-super -ml-1">
+              {currencySymbol ? currencySymbol : ""}
+            </sup>
           </div>
         </div>
-        <div className="font-primary text-xxxs font-bold tracking-longest_text text-skin-subtitle">
+        <div className="font-primary text-xs font-medium tracking-wider text-skin-subtitle">
           {caption}
         </div>
       </div>

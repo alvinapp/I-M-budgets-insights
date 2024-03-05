@@ -196,7 +196,7 @@ export const BudgetSettings = () => {
         children={
           <div className="flex flex-row items-center justify-between border border-b-1 pt-4 pb-2">
             <CloseButton onClick={() => navigate(-1)} />
-            <NavBarTitle title="Add Category Budgets" />
+            <NavBarTitle title="Set Category Budgets" />
             <div className="h-6 w-6 rounded-full"></div>
           </div>
         }
@@ -204,7 +204,7 @@ export const BudgetSettings = () => {
       <div className="flex flex-col mx-3.5">
         <div className="mb-3 mt-7">
           <GeneralInfoCard
-            iconBg="bg-skin-successWithOpacity"
+            iconBg="bg-skin-iconPrimary"
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
@@ -218,7 +218,7 @@ export const BudgetSettings = () => {
           />
         </div>
         <GeneralInfoCard
-          iconBg="bg-skin-secondary3WithOpacity"
+          iconBg="bg-skin-iconPrimary"
           icon={<FiPieChart />}
           title="Budget split"
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
@@ -252,18 +252,20 @@ export const BudgetSettings = () => {
                 ? 0
                 : (allocatedEssentials / essentialBudgetAmount) * 100
             }
+            indicatorColor="bg-[linear-gradient(159deg,#4053D0_0%,#051AA3_100%)]"
+            progressColor="#051AA3"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
-            <div className="text-skin-base font-primary text-xs tracking-wide">
+            <div className="text-skin-base font-primary text-xs tracking-wider font-medium">
               Add budgets to your Essentials below
             </div>
           </div>
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+            <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
               Categories
             </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+            <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
             </div>
           </div>
@@ -371,18 +373,20 @@ export const BudgetSettings = () => {
             unallocatedAmount={wantsBudgetAmount - allocatedWants}
             allocatedAmount={allocatedWants}
             progressPercentage={(allocatedWants / wantsBudgetAmount) * 100}
+            indicatorColor="bg-[linear-gradient(159deg,#8490E2_0%,#3B4381_100%)]"
+            progressColor="#3B4381"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
-            <div className="text-skin-base font-primary text-xs tracking-wide">
+            <div className="text-skin-base font-primary text-xs tracking-wider font-medium">
               Add budgets to your Wants below
             </div>
           </div>
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+            <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
               Categories
             </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+            <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
             </div>
           </div>
@@ -475,7 +479,7 @@ export const BudgetSettings = () => {
               : null}
           </div>
         </div>
-        <div className="px-4 pt-5 pb-3 mt-4.5 rounded-lg">
+        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
           <BudgetDisplay
             title="Savings"
             budgetAmount={savingsBudgetAmount}
@@ -487,13 +491,15 @@ export const BudgetSettings = () => {
             unallocatedAmount={savingsBudgetAmount - allocatedSavings}
             allocatedAmount={allocatedSavings}
             progressPercentage={(allocatedSavings / savingsBudgetAmount) * 100}
+            indicatorColor="bg-[#84C1B2]"
+            progressColor="#84C1B2"
           />
-          <div className="border mt-6 mb-4.5"></div>
+          <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
-              Categories
+            <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+              Goals
             </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+            <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
             </div>
           </div>
@@ -535,11 +541,11 @@ export const BudgetSettings = () => {
           </div>
         </div>
         <div className="flex flex-row mt-18 justify-center items-center">
-          <div className="font-primary text-xs font-medium tracking-wide text-skin-neutral">
+          <div className="font-primary text-sm font-medium tracking-wide text-skin-base">
             *Setup at least 3 categories
           </div>
         </div>
-        <div className="mt-2">
+        <div className="mt-2 mb-5">
           {listCheckForEntries.length >= 3 ? (
             <MainButton
               title="All set"

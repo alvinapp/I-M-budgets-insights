@@ -215,7 +215,7 @@ const EditBudgetSettings = () => {
               className="h-6 w-6 rounded-full flex items-center justify-center"
               onClick={() => navigate("/view-info")}
             >
-              <FiInfo color="#4E6783" size="1.5rem" />
+              <FiInfo color="#101010" size="1.5rem" />
             </div>
           </div>
         }
@@ -276,6 +276,8 @@ const EditBudgetSettings = () => {
                 ? 0
                 : (allocatedEssentials / essentialBudgetAmount) * 100
             }
+            progressColor="#051AA3"
+            indicatorColor="bg-[linear-gradient(159deg,#4053D0_0%,#051AA3_100%)]"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-primary text-xs tracking-wide">
@@ -365,6 +367,8 @@ const EditBudgetSettings = () => {
             unallocatedAmount={wantsBudgetAmount - allocatedWants}
             allocatedAmount={allocatedWants}
             progressPercentage={(allocatedWants / wantsBudgetAmount) * 100}
+            progressColor="#3B4381"
+            indicatorColor="bg-[linear-gradient(159deg,#8490E2_0%,#3B4381_100%)]"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-primary text-xs tracking-wide">
@@ -445,6 +449,8 @@ const EditBudgetSettings = () => {
             unallocatedAmount={savingsBudgetAmount - allocatedSavings}
             allocatedAmount={allocatedSavings}
             progressPercentage={(allocatedSavings / savingsBudgetAmount) * 100}
+            progressColor="#84C1B2"
+            indicatorColor="bg-[#84C1B2]"
           />
           <div className="border mt-6 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
@@ -494,11 +500,11 @@ const EditBudgetSettings = () => {
               : null}
           </div>
         </div>
-        <div className="flex flex-row mt-18 justify-center items-center">
+        {/* <div className="flex flex-row mt-18 justify-center items-center">
           <div className="font-primary text-xs font-medium tracking-wide text-skin-neutral">
             *Setup at least 3 categories
           </div>
-        </div>
+        </div> */}
         {/* <div className="mt-2">
           <MainButton
             title="All set"

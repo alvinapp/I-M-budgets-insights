@@ -12,10 +12,10 @@ export const AmountView = ({ amount, caption, flex }: AmountViewProps) => {
   return (
     <div className={`flex flex-col ${flex ?? "items-start"}`}>
       <div className="relative">
-        <div className="absolute -top-1 -right-2 font-custom text-xxxxxs text-skin-neutral2 font-semibold">
+        <div className="absolute -top-1 -right-2 font-custom text-xxxxxs text-skin-base font-medium">
           {currencySymbol}
         </div>
-        <div className="font-custom text-lg text-skin-neutral2 font-semibold">
+        <div className="font-custom text-lg text-skin-neutral2 font-medium">
           {amount?.toLocaleString("en-us")}
         </div>
       </div>

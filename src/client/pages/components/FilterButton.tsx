@@ -18,8 +18,8 @@ const FilterButton = ({ label, onClick, isActive, id }: FilterButtonProps) => {
       <div
         className={`${
           isActive
-            ? " text-skin-primary font-primary text-xs font-semibold tracking-longtext"
-            : " text-skin-subtitle font-primary text-xs font-semibold tracking-longtext"
+            ? " text-skin-primary font-primary text-xs font-medium tracking-longtext"
+            : " text-skin-subtitle font-primary text-xs font-medium tracking-longtext"
         }`}
       >
         {label}

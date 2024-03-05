@@ -10,6 +10,8 @@ type BudgetDisplayProps = {
   allocatedCaption?: string;
   allocatedAmount?: number;
   unallocatedAmount?: number;
+  indicatorColor?: string;
+  progressColor?: string;
 };
 export const BudgetDisplay = ({
   title,
@@ -20,6 +22,8 @@ export const BudgetDisplay = ({
   allocatedCaption,
   percentageOfBudgetCaption,
   progressPercentage = 0,
+  indicatorColor,
+  progressColor,
 }: BudgetDisplayProps) => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
@@ -28,23 +32,21 @@ export const BudgetDisplay = ({
     <div className="flex flex-col">
       <div className="flex flex-row justify-between items-center mb-6">
         <div className="flex flex-col">
-          <div className="font-custom font-semibold text-xl text-skin-base tracking-title">
+          <div className="font-custom font-medium text-xl text-skin-base tracking-title">
             {title}
           </div>
         </div>
         <div className="flex flex-col justify-end items-end">
           <div className="flex flex-row">
-            <div className="relative">
-              <div className="absolute -right-1 -top-3 font-custom font-semibold text-sm text-skin-neutral2">
+            <div className="font-custom font-medium text-lg text-skin-base">
+              {budgetAmount?.toLocaleString("en-US")}
+              <sup className="font-custom font-medium text-xxs text-skin-base align-super">
                 {currencySymbol}
-              </div>
-              <div className="font-custom font-semibold text-lg text-skin-neutral2">
-                {budgetAmount?.toLocaleString("en-US")}
-              </div>
+              </sup>
             </div>
           </div>
           <div className="flex flex-row">
-            <div className="font-primary text-xxxs font-bold text-skin-subtitle tracking-longest_text">
+            <div className="font-primary text-sm font-medium text-skin-subtitle tracking-wider">
               {percentageOfBudgetCaption}
             </div>
           </div>
@@ -53,30 +55,32 @@ export const BudgetDisplay = ({
       <ProgressBar
         completed={progressPercentage}
         height="1.0625rem"
-        baseBgColor={`#E7EDF3`}
+        baseBgColor={`#E7E7E7`}
         // bgColor={`#6F89A5`}
-        bgColor="#0131a1"
+        bgColor={progressColor}
         isLabelVisible={false}
       />
       <div className="flex flex-row justify-between items-center mt-6">
         <div className="flex flex-col">
           <div className="flex flex-row">
             <div className="flex flex-col mr-3 mt-1">
-              <div className="rounded-full bg-[#0131a1] h-4 w-4"></div>
+              <div
+                className={`rounded-full ${
+                  indicatorColor ?? "bg-[#0131a1]"
+                }  h-4 w-4`}
+              ></div>
             </div>
             <div className="flex flex-col">
               <div className="flex flex-row">
-                <div className="relative">
-                  <div className="absolute -right-5 -top-3 font-custom font-semibold text-sm text-skin-neutral2">
+                <div className="font-custom font-medium text-lg text-skin-base">
+                  {allocatedAmount?.toLocaleString("en-US")}
+                  <sup className="font-custom font-medium text-xxs text-skin-base align-super">
                     {currencySymbol}
-                  </div>
-                  <div className="font-custom font-semibold text-lg text-skin-neutral2">
-                    {allocatedAmount?.toLocaleString("en-US")}
-                  </div>
+                  </sup>
                 </div>
               </div>
               <div className="flex flex-row">
-                <div className="font-primary text-xs font-medium text-skin-subtitle tracking-wide">
+                <div className="font-primary text-sm font-medium text-skin-subtitle tracking-wider">
                   {allocatedCaption}
                 </div>
               </div>
@@ -86,21 +90,21 @@ export const BudgetDisplay = ({
         <div className="flex flex-col justify-end items-end">
           <div className="flex flex-row relative">
             <div className="flex flex-col mr-3 mt-1">
-              <div className="rounded-full bg-skin-accent h-4 w-4"></div>
+              <div className="rounded-full bg-[#E7E7E7] h-4 w-4"></div>
             </div>
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <div className="relative">
-                  <div className="absolute -right-1 -top-3  font-custom font-semibold text-sm text-skin-neutral2">
-                    {currencySymbol}
-                  </div>
-                  <div className="font-custom font-semibold text-lg text-skin-neutral2">
+                  <div className="font-custom font-medium text-lg text-skin-base">
                     {unallocatedAmount?.toLocaleString("en-US")}
+                    <sup className="font-custom font-medium text-xxs text-skin-base align-super">
+                      {currencySymbol}
+                    </sup>
                   </div>
                 </div>
               </div>
               <div className="flex flex-row">
-                <div className="font-primary text-xs font-medium text-skin-subtitle tracking-wide">
+                <div className="font-primary text-sm font-medium text-skin-subtitle tracking-wider">
                   {unallocatedCaption}
                 </div>
               </div>

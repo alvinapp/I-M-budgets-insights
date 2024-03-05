@@ -81,6 +81,7 @@
     --color-background-accent2: #f2f2f2;
     --color-background-accent2-withOpacity: rgba(242, 242, 242, 0.2);
     --color-background-black: #101010;
+    --color-background-disabled: #c3c3c3;
     --color-outline-base: #101010;
     --color-outline-primary: #0539ec;
     --color-outline-neutral: #6f89a5;

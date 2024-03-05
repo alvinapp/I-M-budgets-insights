@@ -1,25 +1,20 @@
 import React, { useEffect, useMemo, useState } from "react";
 import NavBar from "../components/NavBar";
-import CloseButton from "../components/CloseButton";
 import NavBarTitle from "../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
-import { FiPieChart, FiSettings } from "react-icons/fi";
+import { FiPieChart } from "react-icons/fi";
 import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
 import { AvailableBudgetContainer } from "../components/budget/AvailableBudgetContainer";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { InsightsButton } from "../components/budget/InsightsButton";
 import { CategoriesIconLabel } from "../components/budget/CategoriesIconLabel";
 import { CategoryCardHeader } from "../components/budget/CategoryCardHeader";
-import { essentials, savings, wants } from "client/utils/MockData";
 import { CategoryViewCard } from "../components/budget/CategoryViewCard";
 import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
 import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
 import { useQuery } from "react-query";
 import { fetchBudgetCategories } from "client/api/budget";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
-import getToken from "client/api/token";
-import useUserStore from "client/store/userStore";
-import { showCustomToast } from "client/utils/Toast";
 import useCategoriesStore from "client/store/categoriesStore";
 import { calculateSpending, checkNAN } from "client/utils/Formatters";
 import useMacroGoalsStore from "client/store/macroGoalStore";
@@ -281,8 +276,8 @@ const BudgetsView = () => {
         <div className="mt-8">
           <CategoriesIconLabel
             label="Categories"
-            icon={<FiPieChart color="#4C4C4C" />}
-            iconBg="bg-skin-accent2"
+            icon={<FiPieChart color="#101010" />}
+            iconBg="bg-skin-iconPrimary"
           />
         </div>
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
@@ -308,7 +303,7 @@ const BudgetsView = () => {
                       amount={essential?.amount}
                       budgetAmount={essential.amount}
                       spentAmount={essential?.expenses}
-                      iconBg="bg-skin-secondaryWithOpacity"
+                      iconBg="bg-skin-icon-primary"
                       baseBgColor="#E7EDF3"
                       bgColor="#0131A1"
                       primaryColor="text-skin-base"
@@ -326,7 +321,7 @@ const BudgetsView = () => {
                 <AddBudgetCard
                   fadedColor="text-skin-subtitle"
                   icon="🚀"
-                  iconBg="bg-skin-secondaryWithOpacity"
+                  iconBg="bg-skin-icon-primary"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[0]?.amount -
                       categoryStore.categoryBudgets[0]?.total_amount
@@ -360,7 +355,7 @@ const BudgetsView = () => {
                       amount={want?.amount}
                       budgetAmount={want?.amount}
                       spentAmount={want?.expenses}
-                      iconBg="bg-skin-secondary3WithOpacity"
+                      iconBg="bg-skin-icon-primary"
                       baseBgColor="#E7EDF3"
                       bgColor="#6F89A5"
                       primaryColor="text-skin-base"
@@ -378,7 +373,7 @@ const BudgetsView = () => {
                 <AddBudgetCard
                   fadedColor="text-skin-subtitle"
                   icon="🚀"
-                  iconBg="bg-skin-secondaryWithOpacity"
+                  iconBg="bg-skin-icon-primary"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[1]?.amount -
                       categoryStore.categoryBudgets[1]?.total_amount
@@ -412,7 +407,7 @@ const BudgetsView = () => {
                         amount={savings?.amount}
                         budgetAmount={savings.amount}
                         spentAmount={savings.expenses}
-                        iconBg="bg-skin-secondaryWithOpacity"
+                        iconBg="bg-skin-icon-primary"
                         baseBgColor="#C8ECEF"
                         bgColor="#1BBFCD"
                         primaryColor="text-skin-base"
