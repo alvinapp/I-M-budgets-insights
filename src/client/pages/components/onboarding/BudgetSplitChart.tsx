@@ -26,11 +26,11 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
   const items = [
     {
       percentage: (essentials / total) * 100,
-      color: "#6f89a5",
+      color: "#4053D0",
       label: "Essentials",
     },
-    { percentage: (wants / total) * 100, color: "#9db1c6", label: "Wants" },
-    { percentage: (savings / total) * 100, color: "#cfddea", label: "Savings" },
+    { percentage: (wants / total) * 100, color: "#8490E2", label: "Wants" },
+    { percentage: (savings / total) * 100, color: "#71EBD7", label: "Savings" },
   ];
 
   let cumulativePercentage = 0;
@@ -108,7 +108,7 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
               />
               <path
                 d={`M ${middleX} ${middleY} Q ${controlPointX} ${controlPointY}, ${labelX} ${labelY}`}
-                stroke="white"
+                stroke="#101010"
                 strokeOpacity={0.5}
                 strokeWidth="2"
                 fill="none"
@@ -121,24 +121,24 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
               >
                 <div style={{ textAlign: "center" }}>
                   <div
-                    className="font-primary text-sm tracking-wide text-skin-white font-medium"
-                    style={{
-                      fontSize: "12px",
-                      color: "white",
-                      fontFamily: "Poppins",
-                      fontWeight: "medium",
-                    }}
+                    className="font-primary text-sm tracking-wide text-skin-base font-medium"
+                    // style={{
+                    //   fontSize: "12px",
+                    //   color: "white",
+                    //   fontFamily: "Poppins",
+                    //   fontWeight: "medium",
+                    // }}
                   >
                     {item.label}
                   </div>
                   <div
-                    className="font-primary text-sm tracking-wide text-skin-white font-medium"
-                    style={{
-                      fontSize: "12px",
-                      color: "white",
-                      fontFamily: "Poppins",
-                      fontWeight: "medium",
-                    }}
+                    className="font-primary text-sm tracking-wide text-skin-base font-medium"
+                    // style={{
+                    //   fontSize: "12px",
+                    //   color: "white",
+                    //   fontFamily: "Poppins",
+                    //   fontWeight: "medium",
+                    // }}
                   >
                     ({item.percentage.toFixed(0)}%)
                   </div>

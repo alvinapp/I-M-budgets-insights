@@ -23,6 +23,9 @@ import { error } from "console";
 import { config } from "process";
 import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
 import { element } from "prop-types";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import OnboardingSuccess from "../onboarding/OnboardingSuccess";
+import useBottomSheetStore from "client/store/bottomSheetStore";
 
 export const BudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -186,10 +189,15 @@ export const BudgetSettings = () => {
     },
     { refetchOnWindowFocus: false, enabled: false }
   );
+
   const allAddedCategoriesList = essentialsList.concat(wantsList);
   const listCheckForEntries = allAddedCategoriesList.filter(
     (element) => element.amount > 0
   );
+  const bottomSheetStore = useBottomSheetStore((state: any) => state);
+  useEffect(() => {
+    bottomSheetStore?.setSuccessBottomSheet(true);
+  }, []);
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -579,6 +587,17 @@ export const BudgetSettings = () => {
           )}
         </div>
       </div>
+      <BottomSheet
+        onDismiss={() => {
+          bottomSheetStore?.setSuccessBottomSheet(false);
+        }}
+        open={bottomSheetStore?.successBottomSheet}
+        style={{
+          borderRadius: 24,
+        }}
+        children={<OnboardingSuccess />}
+        defaultSnap={400}
+      ></BottomSheet>
     </div>
   );
 };

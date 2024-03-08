@@ -303,7 +303,7 @@ const BudgetsView = () => {
                       amount={essential?.amount}
                       budgetAmount={essential.amount}
                       spentAmount={essential?.expenses}
-                      iconBg="bg-skin-icon-primary"
+                      iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
                       bgColor="#0131A1"
                       primaryColor="text-skin-base"
@@ -321,7 +321,7 @@ const BudgetsView = () => {
                 <AddBudgetCard
                   fadedColor="text-skin-subtitle"
                   icon="🚀"
-                  iconBg="bg-skin-icon-primary"
+                  iconBg="bg-skin-iconPrimary"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[0]?.amount -
                       categoryStore.categoryBudgets[0]?.total_amount
@@ -355,7 +355,7 @@ const BudgetsView = () => {
                       amount={want?.amount}
                       budgetAmount={want?.amount}
                       spentAmount={want?.expenses}
-                      iconBg="bg-skin-icon-primary"
+                      iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
                       bgColor="#6F89A5"
                       primaryColor="text-skin-base"
@@ -407,7 +407,7 @@ const BudgetsView = () => {
                         amount={savings?.amount}
                         budgetAmount={savings.amount}
                         spentAmount={savings.expenses}
-                        iconBg="bg-skin-icon-primary"
+                        iconBg="bg-skin-iconPrimary"
                         baseBgColor="#C8ECEF"
                         bgColor="#1BBFCD"
                         primaryColor="text-skin-base"

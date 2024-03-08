@@ -282,26 +282,28 @@ const InsightsView = () => {
           </div>
         </div>
       </div>
-      <BottomSheet
-        onDismiss={() => {
-          openFilter(false);
-        }}
-        open={filter}
-        style={{
-          borderRadius: 24,
-        }}
-        children={
-          <InsightsFilters
-            accounts={accounts}
-            activeAccount={filteredAccount}
-            onClick={(account: Account) => {
-              filterAccountBy(account);
-            }}
-            closeBottomSheet={closeBottomSheet}
-          />
-        }
-        defaultSnap={400}
-      ></BottomSheet>
+      <div className="mb-5">
+        <BottomSheet
+          onDismiss={() => {
+            openFilter(false);
+          }}
+          open={filter}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            <InsightsFilters
+              accounts={accounts}
+              activeAccount={filteredAccount}
+              onClick={(account: Account) => {
+                filterAccountBy(account);
+              }}
+              closeBottomSheet={closeBottomSheet}
+            />
+          }
+          defaultSnap={400}
+        ></BottomSheet>
+      </div>
     </div>
   );
 };

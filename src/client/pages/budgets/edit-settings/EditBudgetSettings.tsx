@@ -210,7 +210,7 @@ const EditBudgetSettings = () => {
                 navigate("/budgets-view");
               }}
             />
-            <NavBarTitle title="Add Category Budgets" />
+            <NavBarTitle title="" />
             <div
               className="h-6 w-6 rounded-full flex items-center justify-center"
               onClick={() => navigate("/view-info")}

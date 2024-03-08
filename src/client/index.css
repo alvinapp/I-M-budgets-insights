@@ -240,3 +240,17 @@ input[type="number"] {
   margin-left: 0.937rem;
   margin-right: 0.937rem;
 }
+
+/* Bottom sheet overlay custom styles */
+[data-rsbs-overlay] {
+  margin-bottom: 2rem;
+  margin-left: 0.6875rem;
+  margin-right: 0.6875rem;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+}
+[ball-testid] > svg {
+  color: #101010;
+}
