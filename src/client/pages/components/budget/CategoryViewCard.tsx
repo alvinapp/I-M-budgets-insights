@@ -17,6 +17,7 @@ type CategoryViewCardProps = {
   primaryColor?: string;
   fadedColor?: string;
   caption?: string;
+  onClick?: () => void;
 };
 export const CategoryViewCard = ({
   icon,
@@ -31,12 +32,13 @@ export const CategoryViewCard = ({
   primaryColor,
   fadedColor,
   caption,
+  onClick,
 }: CategoryViewCardProps) => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
   return (
-    <div className="flex flex-row mb-3">
+    <div className="flex flex-row mb-3" onClick={onClick}>
       <div className="flex flex-col mr-2">
         <div
           className={`rounded-full h-10 w-10 flex justify-center items-center ${iconBg}`}
@@ -69,7 +71,6 @@ export const CategoryViewCard = ({
           height="4px"
           baseBgColor={`${baseBgColor}`}
           bgColor={`${bgColor}`}
-          // bgColor="#0131a1"
           isLabelVisible={false}
         />
         <div className="flex flex-row mb-2.5 items-center"></div>

@@ -441,7 +441,7 @@ const EditBudgetSettings = () => {
               : null}
           </div>
         </div>
-        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
+        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-6">
           <BudgetDisplay
             title="Savings"
             budgetAmount={savingsBudgetAmount}
@@ -555,8 +555,8 @@ const EditBudgetSettings = () => {
               />
             ) : (
               <SavingsGoalConfirmation
-                monthlyContribution={20000}
-                targetAmount={300000}
+                monthlyContribution={savingsBudgetAmount}
+                targetAmount={savingsBudgetAmount * 12}
                 progressPercentage={3}
                 onClick={() => {
                   setSavingsSuccess(true);

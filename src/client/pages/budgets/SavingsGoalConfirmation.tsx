@@ -23,7 +23,7 @@ const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
       <div className="flex flex-row rounded-b-lg h-[8.375rem]">
         <img src={image} alt="" className=" object-cover" />
       </div>
-      <div className="flex flex-row justify-between items-center mx-4 mb-2">
+      <div className="flex flex-row justify-between items-center mx-4 mb-3">
         <SavingsAmountView
           amount={monthlyContribution}
           caption="Monthly contribution"

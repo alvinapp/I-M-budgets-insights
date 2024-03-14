@@ -26,6 +26,9 @@ import { fetchMicroGoalTotals } from "client/api/micros";
 import useMicroGoalsStore from "client/store/microGoalStore";
 import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
 import SavingsCategoryViewCard from "../components/budget/SavingsCategoryViewCard";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import ViewBudget from "./ViewBudget";
+import { essentials } from "client/utils/MockData";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -84,7 +87,7 @@ const BudgetsView = () => {
     .toString()
     .padStart(2, "0")}-${endOfMonth.getDate()}`;
 
-  const { isFetching: fetchingEssentialsBudget, refetch } = useQuery(
+  const { refetch } = useQuery(
     "essentials-budgets",
     () =>
       fetchBudgetCategories({
@@ -97,7 +100,7 @@ const BudgetsView = () => {
     { enabled: !!config.token }
   );
 
-  const { isFetching: fetchingMacros, refetch: refetchMacros } = useQuery(
+  const { refetch: refetchMacros } = useQuery(
     "macros",
     () =>
       fetchMicroGoalTotals({
@@ -195,7 +198,18 @@ const BudgetsView = () => {
     (savings: any) => savings?.amount !== 0
   );
   const macroStore = useMacrosStore((state: any) => state);
-
+  const [viewBudgetSheet, openViewBudgetSheet] = useState(false);
+  const budgetDetails = {
+    spentAmount: 0,
+    totalBudgetAmount: 0,
+    progress: 0,
+    category: "",
+    emoji: "",
+    startDate: formattedStartDate,
+    endDate: formattedEndDate,
+    microGoal: 0,
+  };
+  const [budgetDetailsData, setBudgetDetailsData] = useState(budgetDetails);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -313,6 +327,21 @@ const BudgetsView = () => {
                       bgColor="#0131A1"
                       primaryColor="text-skin-base"
                       fadedColor="text-skin-subtitle"
+                      onClick={() => {
+                        openViewBudgetSheet(true);
+                        setBudgetDetailsData({
+                          spentAmount: essential?.expenses,
+                          totalBudgetAmount: essential?.amount,
+                          progress: checkNAN(
+                            (essential?.expenses / essential?.amount) * 100
+                          ),
+                          category: essential?.name,
+                          emoji: essential.category?.emoji,
+                          startDate: formattedStartDate,
+                          endDate: formattedEndDate,
+                          microGoal: essential?.id,
+                        });
+                      }}
                     />
                   );
                 })
@@ -365,6 +394,21 @@ const BudgetsView = () => {
                       bgColor="#6F89A5"
                       primaryColor="text-skin-base"
                       fadedColor="text-skin-subtitle"
+                      onClick={() => {
+                        openViewBudgetSheet(true);
+                        setBudgetDetailsData({
+                          spentAmount: want?.expenses,
+                          totalBudgetAmount: want?.amount,
+                          progress: checkNAN(
+                            (want?.expenses / want?.amount) * 100
+                          ),
+                          category: want?.name,
+                          emoji: want.category?.emoji,
+                          startDate: formattedStartDate,
+                          endDate: formattedEndDate,
+                          microGoal: want?.id,
+                        });
+                      }}
                     />
                   );
                 })
@@ -433,6 +477,31 @@ const BudgetsView = () => {
             )}
           </div>
         </div>
+        <BottomSheet
+          onDismiss={() => {
+            openViewBudgetSheet(false);
+          }}
+          open={viewBudgetSheet}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            <ViewBudget
+              spentAmount={budgetDetailsData?.spentAmount}
+              totalBudgetAmount={budgetDetailsData?.totalBudgetAmount}
+              progress={budgetDetailsData?.progress}
+              category={budgetDetailsData?.category}
+              emoji={budgetDetailsData?.emoji}
+              microGoalId={budgetDetailsData.microGoal}
+              startDate={budgetDetailsData?.startDate}
+              endDate={budgetDetailsData?.endDate}
+              onClick={() => {
+                openViewBudgetSheet(false);
+              }}
+            />
+          }
+          defaultSnap={400}
+        ></BottomSheet>
       </div>
     </div>
   );

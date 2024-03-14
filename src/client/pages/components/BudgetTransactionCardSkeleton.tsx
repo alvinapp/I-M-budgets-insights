@@ -2,9 +2,9 @@ import React from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const TransactionCardSkeleton = () => {
+const BudgetTransactionCardSkeleton = () => {
   return (
-    <div className="rounded-lg px-4 py-3 w-auto mb-2">
+    <div className="rounded-lg w-auto mb-3">
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
@@ -37,4 +37,4 @@ const TransactionCardSkeleton = () => {
     </div>
   );
 };
-export default TransactionCardSkeleton;
+export default BudgetTransactionCardSkeleton;

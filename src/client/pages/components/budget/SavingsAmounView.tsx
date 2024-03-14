@@ -16,7 +16,7 @@ export const SavingsAmountView = ({
   return (
     <div className={`flex flex-col ${flex ?? "items-start"}`}>
       <div className="relative">
-        <div className="font-custom text-lg text-skin-neutral2 font-medium">
+        <div className="font-custom text-lg text-skin-base font-medium">
           {amount?.toLocaleString("en-us")}
           <sup className=" text-xs align-super -ml-1">
             {currencySymbol ? currencySymbol : ""}
