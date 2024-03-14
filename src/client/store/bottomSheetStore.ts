@@ -14,3 +14,15 @@ const useBottomSheetStore = create((set) => ({
 }));
 
 export default useBottomSheetStore;
+
+export const useSavingsBottomSheetStore = create((set) => ({
+  savingsBottomSheet: false,
+  setSavingsBottomSheet: (open: boolean) => {
+    return set(() => {
+      const result = {
+        savingsBottomSheet: open,
+      };
+      return result;
+    });
+  },
+}));

@@ -12,13 +12,14 @@ import { setIncome, completeOnboarding } from "client/api/users";
 import { GoalMacroType, setMacro } from "client/api/goals";
 import SliderThumbComponent from "../components/SliderThumbComponent";
 import debounce from "lodash.debounce";
+import useBottomSheetStore from "client/store/bottomSheetStore";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
   const configuration = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
-
+  const bottomSheetStore = useBottomSheetStore((state: any) => state);
   const budgetSettingsStore = useBudgetSettingsStore();
   const { monthlyIncome, currency, incomeSplit } = budgetSettingsStore;
 
@@ -127,7 +128,8 @@ const OnboardingSplitIncome = () => {
       await completeOnboarding({ completionTime: new Date(), configuration });
 
       // Redirect to success page
-      navigate("/onboard-success");
+      bottomSheetStore.setSuccessBottomSheet(true);
+      navigate("/budget-settings");
     } catch (error) {
       console.error(error);
       // Handle the error
@@ -400,7 +402,7 @@ const OnboardingSplitIncome = () => {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-0 left-0 right-0 mx-3.5 text-sm z-10">
+        <div className="fixed bottom-5 left-0 right-0 mx-3.5 text-sm z-10">
           <MainButton
             title="Continue"
             isDisabled={false}
@@ -411,7 +413,6 @@ const OnboardingSplitIncome = () => {
                 savings: savingsRatio,
               });
               postAllMacros();
-              navigate("/onboard-success");
             }}
           />
         </div>

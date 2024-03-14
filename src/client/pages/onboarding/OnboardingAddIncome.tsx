@@ -80,7 +80,7 @@ const OnboardingAddIncome = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 mx-3.5">
+      <div className="fixed bottom-5 left-0 right-0 mx-3.5">
         <MainButton
           title="Continue"
           isDisabled={false}

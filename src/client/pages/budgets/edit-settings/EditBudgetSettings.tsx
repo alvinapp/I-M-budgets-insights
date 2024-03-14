@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import ArrowBackButton from "../../components/ArrowBack";
 import NavBar from "../../components/NavBar";
 import NavBarTitle from "../../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
-import CloseButton from "../../components/CloseButton";
 import { FiBriefcase, FiInfo, FiPieChart } from "react-icons/fi";
 import { BudgetDisplay } from "../../components/budget/BudgetDisplay";
 import { useQuery } from "react-query";
 import { getCategories } from "client/api/categories";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useCategoriesStore from "client/store/categoriesStore";
-import { Category } from "client/models/Categories";
 import { BudgetSettingCard } from "../../components/budget/BudgetSettingCard";
-import MainButton from "../../components/MainButton";
 import { GeneralInfoCard } from "../../components/budget/GeneralInfoCard";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { fetchMacros, saveBudget } from "client/api/budget";
@@ -22,8 +18,17 @@ import useUserStore from "client/store/userStore";
 import { SavingsSettingCard } from "../../components/budget/SavingsSettingCard";
 import BackButton from "client/pages/components/BackButton";
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
+import { useSavingsBottomSheetStore } from "client/store/bottomSheetStore";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import SavingsGoalConfirmation from "../SavingsGoalConfirmation";
+import SuccessfullCreatedView from "client/pages/components/budget/SuccessfullCreatedView";
+import successIcon from "client/assets/images/success-icon.svg";
 
 const EditBudgetSettings = () => {
+  const [savingsSuccess, setSavingsSuccess] = useState(false);
+  const savingsBottomSheetStore = useSavingsBottomSheetStore(
+    (state: any) => state
+  );
   const configurations = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -61,7 +66,6 @@ const EditBudgetSettings = () => {
       is_contribute_customized: true,
     },
   ];
-
   const { isFetching: fetchingCategories } = useQuery(
     "fetch-categories",
     () =>
@@ -437,7 +441,7 @@ const EditBudgetSettings = () => {
               : null}
           </div>
         </div>
-        <div className="px-4 pt-5 pb-3 mt-4.5 rounded-lg">
+        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
           <BudgetDisplay
             title="Savings"
             budgetAmount={savingsBudgetAmount}
@@ -455,7 +459,7 @@ const EditBudgetSettings = () => {
           <div className="border mt-6 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
             <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
-              Categories
+              Goals
             </div>
             <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
@@ -463,41 +467,57 @@ const EditBudgetSettings = () => {
           </div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[2] &&
-            categoriesStore.categoryBudgets[2].data?.length > 0
-              ? categoriesStore.categoryBudgets[2].data.map((category: any) => {
-                  return (
-                    <SavingsSettingCard
-                      isAdded={addSavings}
-                      category="Create a goal"
-                      emoji="🎯"
-                      amount={savingsBudgetAmount}
-                      add={() => {
-                        setAddSavings(true);
-                        setAllocatedSavings(savingsBudgetAmount);
-                        setSavingsList([
-                          {
-                            amount: savingsBudgetAmount,
-                            contribution_amount: 0,
-                            percentage: 0,
-                            category_id: category?.category.id,
-                            name: category?.name,
-                            pseudo_name:
-                              category?.name + " " + category?.category.emoji,
-                            extern_id: category?.category.id,
-                            order: 0,
-                            contribution_at: "",
-                            is_contribute_customized: true,
-                          },
-                        ]);
-                      }}
-                      edit={() => {
-                        setAddSavings(false);
-                        setAllocatedSavings(0);
-                      }}
-                    />
-                  );
-                })
-              : null}
+            categoriesStore.categoryBudgets[2].data?.length > 0 ? (
+              categoriesStore.categoryBudgets[2].data.map((category: any) => {
+                return (
+                  <SavingsSettingCard
+                    isAdded={addSavings}
+                    goal="Create a Rainy day fund goal"
+                    emoji="🎯"
+                    amount={savingsBudgetAmount}
+                    add={() => {
+                      setAddSavings(true);
+                      setAllocatedSavings(savingsBudgetAmount);
+                      setSavingsList([
+                        {
+                          amount: savingsBudgetAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.category.id,
+                          name: category?.name,
+                          pseudo_name:
+                            category?.name + " " + category?.category.emoji,
+                          extern_id: category?.category.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        },
+                      ]);
+                    }}
+                    edit={() => {
+                      // setAddSavings(false);
+                      // setAllocatedSavings(0);
+                    }}
+                  />
+                );
+              })
+            ) : (
+              <SavingsSettingCard
+                isAdded={addSavings}
+                goal="Create a Rainy day fund goal"
+                emoji="🎯"
+                amount={savingsBudgetAmount}
+                add={() => {
+                  // setAddSavings(true);
+                  // setAllocatedSavings(savingsBudgetAmount);
+                  savingsBottomSheetStore.setSavingsBottomSheet(true);
+                }}
+                edit={() => {
+                  // setAddSavings(false);
+                  // setAllocatedSavings(0);
+                }}
+              />
+            )}
           </div>
         </div>
         {/* <div className="flex flex-row mt-18 justify-center items-center">
@@ -515,6 +535,37 @@ const EditBudgetSettings = () => {
             }}
           />
         </div> */}
+        <BottomSheet
+          onDismiss={() => {
+            savingsBottomSheetStore.setSavingsBottomSheet(false);
+          }}
+          open={savingsBottomSheetStore.savingsBottomSheet}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            savingsSuccess ? (
+              <SuccessfullCreatedView
+                image={successIcon}
+                title="Whoop! Goal created"
+                caption="Duis aute categorize in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident."
+                onClick={() => {
+                  savingsBottomSheetStore.setSavingsBottomSheet(false);
+                }}
+              />
+            ) : (
+              <SavingsGoalConfirmation
+                monthlyContribution={20000}
+                targetAmount={300000}
+                progressPercentage={3}
+                onClick={() => {
+                  setSavingsSuccess(true);
+                }}
+              />
+            )
+          }
+          defaultSnap={400}
+        ></BottomSheet>
       </div>
     </div>
   );

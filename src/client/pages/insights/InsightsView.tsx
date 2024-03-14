@@ -41,9 +41,6 @@ const InsightsView = () => {
   const searchParams = new URLSearchParams(location.search);
   const startDate = searchParams.get("startDate");
   const endDate = searchParams.get("endDate");
-
-  // console.log("startDate", startDate);
-  // console.log("endDate", endDate);
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
@@ -66,10 +63,6 @@ const InsightsView = () => {
     total_change: netCashFlow = 0,
   } = cashFlowData || {};
   const categoryStore = useCategoriesStore((state: any) => state);
-
-  // console.log("categoryStore", categoryStore.categoryBudgets);
-  // console.log("macroGoalStore", macroGoalStore.macroGoals);
-
   const essentialTotalBudgetAmount =
     categoryStore.categoryBudgets[0]?.total_amount;
   const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
@@ -99,7 +92,6 @@ const InsightsView = () => {
 
   const cashflowVariables =
     useCashflowVariablesStore.getState().cashflowVariables;
-  console.log("accounts", accounts);
   useEffect(() => {
     const fetchCashFlowData = async () => {
       const data = await getCashFlow({

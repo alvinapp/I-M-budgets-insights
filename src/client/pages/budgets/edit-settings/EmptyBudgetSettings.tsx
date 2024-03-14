@@ -471,7 +471,7 @@ export const EmptyBudgetSettings = () => {
                   return (
                     <SavingsSettingCard
                       isAdded={addSavings}
-                      category="Create a goal"
+                      goal="Create a goal"
                       emoji="🎯"
                       amount={savingsBudgetAmount}
                       add={() => {

@@ -13,10 +13,10 @@ import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
 import { useState } from "react";
 import CustomLoader from "../components/Loader/CustomLoader";
+import { fetchBudgetCategories } from "client/api/budget";
 
 const OnboardingStart = () => {
   const navigate = useNavigate();
-
   const configurations = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -24,18 +24,34 @@ const OnboardingStart = () => {
   const setUser = useUserStore((state) => state.setUser);
   // add loading
   const [loading, setLoading] = useState(false);
-
   const authenticateUser = async () => {
     setLoading(true);
     const response = await getToken(configurations);
     if (response?.user) {
       setLoading(false);
-      if (response?.user.is_onboarded) {
-        // navigate("/onboard-start");
-        navigate("/budgets-view");
-      }
       setUser(response.user);
       setToken(response.token);
+      await fetchBudgetCategories({
+        configuration: {
+          publicKey: "",
+          token: response.token,
+          identifier: "",
+          monoPubKey: "",
+          settings: "",
+        },
+      }).then((result) => {
+        const totalBudgets =
+          result[0]?.data.length +
+          result[1]?.data.length +
+          result[2]?.data.length;
+        if (!response?.user.is_onboarded) {
+          navigate("/");
+        } else if (totalBudgets < 3 && response?.user.is_onboarded) {
+          navigate("budget-settings");
+        } else {
+          navigate("/budgets-view");
+        }
+      });
     } else {
       setLoading(false);
       navigate("/");

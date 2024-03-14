@@ -204,25 +204,25 @@ input[type="number"] {
   background: #85c17f;
 }
 .my-class {
-  border: 1px solid #056489 !important;
+  border: 1px solid #f0f3fe !important;
   border-radius: 500px !important;
   width: 100% !important;
   height: 3.5rem !important;
-  color: #04506e !important;
+  color: #0539ec !important;
 }
 .my-caret-class {
   padding: 1.5rem !important;
   height: 3.0625rem !important;
   width: 3.0625rem !important;
   border-radius: 500px !important;
-  background: #056489 !important;
+  background: #0539ec !important;
   color: white !important;
 }
 .my-overlay-class {
-  background: white !important;
+  background: #f0f3fe !important;
   padding-left: 50px !important;
   padding-right: 5px !important;
-  color: white !important;
+  color: #f0f3fe !important;
 }
 .toast {
   background-color: #2c3f53;

@@ -195,9 +195,6 @@ export const BudgetSettings = () => {
     (element) => element.amount > 0
   );
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
-  useEffect(() => {
-    bottomSheetStore?.setSuccessBottomSheet(true);
-  }, []);
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -517,7 +514,7 @@ export const BudgetSettings = () => {
                   return (
                     <SavingsSettingCard
                       isAdded={addSavings}
-                      category="Create a goal"
+                      goal="Create a goal"
                       emoji="🎯"
                       amount={savingsBudgetAmount}
                       add={() => {

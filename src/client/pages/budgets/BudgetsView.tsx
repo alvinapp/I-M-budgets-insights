@@ -24,6 +24,8 @@ import { AddBudgetCard } from "../components/budget/AddBudgetCard";
 import useMacrosStore from "client/store/macroGoalStore";
 import { fetchMicroGoalTotals } from "client/api/micros";
 import useMicroGoalsStore from "client/store/microGoalStore";
+import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
+import SavingsCategoryViewCard from "../components/budget/SavingsCategoryViewCard";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -187,7 +189,10 @@ const BudgetsView = () => {
     (essential: any) => essential?.amount !== 0
   );
   const wantsBudgets = categoryStore.categoryBudgets[1]?.data.filter(
-    (essential: any) => essential?.amount !== 0
+    (wants: any) => wants?.amount !== 0
+  );
+  const savingsBudgets = categoryStore.categoryBudgets[2]?.data.filter(
+    (savings: any) => savings?.amount !== 0
   );
   const macroStore = useMacrosStore((state: any) => state);
 
@@ -237,7 +242,7 @@ const BudgetsView = () => {
                   (essentialTotalExpenses + wantsTotalExpenses)
               )
             )}
-            subtitle="Available budget spend"
+            subtitle="Available budget"
             currencySymbol={currencySymbol}
           />
           <div className="flex flex-col justify-center">
@@ -374,6 +379,7 @@ const BudgetsView = () => {
                   fadedColor="text-skin-subtitle"
                   icon="🚀"
                   iconBg="bg-skin-icon-primary"
+                  plusColor="#8490E2"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[1]?.amount -
                       categoryStore.categoryBudgets[1]?.total_amount
@@ -393,31 +399,38 @@ const BudgetsView = () => {
           />
           <div className="mt-6 flex flex-col">
             {categoryStore.categoryBudgets[2]?.data &&
-            categoryStore.categoryBudgets[2]?.data.length > 0
-              ? categoryStore.categoryBudgets[2]?.data.map(
-                  (savings: any, i: any) => {
-                    return (
-                      <CategoryViewCard
-                        key={i}
-                        category={savings?.name}
-                        progressPercentage={checkNAN(
-                          (savings.expenses / savings?.amount) * 100
-                        )}
-                        icon={savings.category?.emoji}
-                        amount={savings?.amount}
-                        budgetAmount={savings.amount}
-                        spentAmount={savings.expenses}
-                        iconBg="bg-skin-iconPrimary"
-                        baseBgColor="#C8ECEF"
-                        bgColor="#1BBFCD"
-                        primaryColor="text-skin-base"
-                        fadedColor="text-skin-subtitle"
-                        caption="saved"
-                      />
-                    );
-                  }
-                )
-              : null}
+            categoryStore.categoryBudgets[2]?.data.length > 0 ? (
+              categoryStore.categoryBudgets[2]?.data.map(
+                (savings: any, i: any) => {
+                  return (
+                    <SavingsCategoryViewCard
+                      key={i}
+                      category={savings?.name}
+                      progressPercentage={checkNAN(
+                        (savings.expenses / savings?.amount) * 100
+                      )}
+                      icon={savings.category?.emoji}
+                      amount={savings?.amount}
+                      budgetAmount={savings.amount}
+                      spentAmount={savings.expenses}
+                      iconBg="bg-skin-iconPrimary"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#84C1B2"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
+                      caption="saved"
+                    />
+                  );
+                }
+              )
+            ) : (
+              <SavingsSettingCard
+                goal="Create a Rainy day fund goal"
+                add={() => {
+                  navigate("/edit-budgets");
+                }}
+              />
+            )}
           </div>
         </div>
       </div>

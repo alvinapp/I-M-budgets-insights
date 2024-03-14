@@ -10,6 +10,7 @@ type AddBudgetCardProps = {
   iconBg?: string;
   budgetAmount?: number;
   fadedColor?: string;
+  plusColor?: string;
   onClick?: () => void;
 };
 export const AddBudgetCard = ({
@@ -17,6 +18,7 @@ export const AddBudgetCard = ({
   iconBg,
   budgetAmount,
   fadedColor,
+  plusColor,
   onClick,
 }: AddBudgetCardProps) => {
   const currencySymbol = useCurrencySettingsStore(
@@ -53,8 +55,12 @@ export const AddBudgetCard = ({
         </div>
       </div>
       <div className="flex flex-col justify-center items-center">
-        <div className="rounded-full shadow-budgetButton flex justify-center items-center flex-row px-2 py-2">
-          <FiPlus color="#04506E" size="0.75rem" onClick={onClick} />
+        <div className="rounded-full shadow-budgetButton flex justify-center items-center flex-row w-7 h-7">
+          <FiPlus
+            color={`${plusColor ?? "#0539EC"}`}
+            size="1rem"
+            onClick={onClick}
+          />
         </div>
       </div>
     </div>

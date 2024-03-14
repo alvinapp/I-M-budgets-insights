@@ -1,11 +1,15 @@
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
-type AmountViewProps = {
+type SavingsAmountViewProps = {
   amount: number;
   caption?: string;
   flex?: string;
 };
-export const AmountView = ({ amount, caption, flex }: AmountViewProps) => {
+export const SavingsAmountView = ({
+  amount,
+  caption,
+  flex,
+}: SavingsAmountViewProps) => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
@@ -19,7 +23,7 @@ export const AmountView = ({ amount, caption, flex }: AmountViewProps) => {
           </sup>
         </div>
       </div>
-      <div className="font-primary text-xs text-skin-subtitle font-medium tracking-wide">
+      <div className="font-primary text-xs text-skin-base font-medium tracking-wide">
         {caption}
       </div>
     </div>
