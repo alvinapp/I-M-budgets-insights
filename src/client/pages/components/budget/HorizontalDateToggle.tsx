@@ -1,16 +1,23 @@
 import React from "react";
 import { FiCalendar, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import CustomDateRangePicker from "../custom-date-picker/CustomerDateRangePicker";
 
 type Props = {
-  onPreviousMonthClick: () => void;
-  onNextMonthClick: () => void;
-  monthName: string;
+  onPreviousMonthClick: (event: any) => void;
+  onNextMonthClick: (event: any) => void;
+  onDateRangeSelect: (DateRange: any) => void;
+  startDate: Date | null;
+  endDate: Date | null;
+  lastUpdatedEnv: "props" | "local";
 };
 
 export const HorizontalDateToggle: React.FC<Props> = ({
   onPreviousMonthClick,
   onNextMonthClick,
-  monthName,
+  onDateRangeSelect,
+  startDate,
+  endDate,
+  lastUpdatedEnv,
 }) => {
   const month = [
     "January",
@@ -40,14 +47,14 @@ export const HorizontalDateToggle: React.FC<Props> = ({
           <FiChevronLeft color="#4E6783" size="1rem" />
         </div>
       </div>
-      <div className="flex flex-col">
-        <div className="flex flex-row items-center">
-          <FiCalendar />
-          <div className="font-custom text-base text-skin-base font-medium tracking-title ml-3">
-            {monthName ? monthName : name}
-          </div>
-        </div>
-      </div>
+      <CustomDateRangePicker
+        onDateRangeSelect={onDateRangeSelect}
+        startDate={startDate}
+        endDate={endDate}
+        disabled={true}
+        restrictToCurrentMonth={true}
+        lastUpdatedEnv={lastUpdatedEnv}
+      />
       <div
         className="h-10 w-10 rounded-full flex justify-center items-center border border-skin-base cursor-pointer"
         onClick={onNextMonthClick} // Call the right chevron click handler

@@ -233,10 +233,8 @@ const EditBudgetSettings = () => {
             subtitle="When set, this will be used as the base calculation for your overall budget split."
             caption={`${
               budgetSettingsStore.monthlyIncome !== 0
-                ? budgetSettingsStore.monthlyIncome
-                : typeof userStore.user.income === undefined
-                ? ""
-                : userStore.user.income
+                ? budgetSettingsStore.monthlyIncome.toString()
+                : userStore.user?.income?.toString() ?? ""
             }`}
             currencySymbol={currencySymbol}
             onClick={() => navigate("/edit-monthly-income")}
@@ -247,14 +245,12 @@ const EditBudgetSettings = () => {
           icon={<FiPieChart />}
           title="Budget split"
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
-          caption={`${
-            typeof categoriesStore.macros?.budget_split === undefined
-              ? ""
-              : categoriesStore.macros?.budget_split
-          }`}
+          caption={`${categoriesStore.macros?.budget_split ?? ""}`}
           onClick={() => {
-            navigate("/edit-split-income");
-            budgetStore.setMonthlyIncome(userStore.user?.income);
+            if (categoriesStore.macros?.budget_split) {
+              navigate("/edit-split-income");
+              budgetStore.setMonthlyIncome(userStore.user?.income);
+            }
           }}
         />
         <div className="mb-4 mt-5 flex flex-row items-center justify-center px-3.5">
@@ -267,18 +263,27 @@ const EditBudgetSettings = () => {
         <div className="shadow-card px-4 pt-5 pb-3 rounded-lg">
           <BudgetDisplay
             title="Essentials"
-            budgetAmount={essentialBudgetAmount}
+            budgetAmount={essentialBudgetAmount ?? 0}
             percentageOfBudgetCaption={`${
               essentialGoals[0]?.share ?? ""
             }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={essentialBudgetAmount - allocatedEssentials}
+            unallocatedAmount={
+              typeof essentialBudgetAmount === "number" &&
+              essentialBudgetAmount > 0
+                ? Math.min(essentialBudgetAmount - allocatedEssentials, 0)
+                : 0 // Ensure perc
+            }
             allocatedAmount={allocatedEssentials}
             progressPercentage={
-              typeof essentialBudgetAmount === "undefined"
-                ? 0
-                : (allocatedEssentials / essentialBudgetAmount) * 100
+              typeof essentialBudgetAmount === "number" &&
+              essentialBudgetAmount > 0
+                ? Math.min(
+                    (allocatedEssentials / essentialBudgetAmount) * 100,
+                    100
+                  ) // Ensure percentage stays between 0 and 100
+                : 0
             }
             progressColor="#051AA3"
             indicatorColor="bg-[linear-gradient(159deg,#4053D0_0%,#051AA3_100%)]"
@@ -362,15 +367,23 @@ const EditBudgetSettings = () => {
         <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
           <BudgetDisplay
             title="Wants"
-            budgetAmount={wantsBudgetAmount}
+            budgetAmount={wantsBudgetAmount ?? 0}
             percentageOfBudgetCaption={`${
               wantsGoals[0]?.share ?? ""
             }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={wantsBudgetAmount - allocatedWants}
-            allocatedAmount={allocatedWants}
-            progressPercentage={(allocatedWants / wantsBudgetAmount) * 100}
+            unallocatedAmount={
+              typeof wantsBudgetAmount === "number" && wantsBudgetAmount > 0
+                ? Math.min(wantsBudgetAmount - allocatedWants, 0) // Ensure percentage stays between 0 and 100
+                : 0
+            }
+            allocatedAmount={allocatedWants ?? 0}
+            progressPercentage={
+              typeof wantsBudgetAmount === "number" && wantsBudgetAmount > 0
+                ? Math.min((allocatedWants / wantsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
+                : 0
+            }
             progressColor="#3B4381"
             indicatorColor="bg-[linear-gradient(159deg,#8490E2_0%,#3B4381_100%)]"
           />
@@ -444,15 +457,23 @@ const EditBudgetSettings = () => {
         <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-6">
           <BudgetDisplay
             title="Savings"
-            budgetAmount={savingsBudgetAmount}
+            budgetAmount={savingsBudgetAmount ?? 0}
             percentageOfBudgetCaption={`${
               savingsGoals[0]?.share ?? ""
             }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={savingsBudgetAmount - allocatedSavings}
+            unallocatedAmount={
+              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
+                ? Math.min(savingsBudgetAmount - allocatedSavings, 0)
+                : 0
+            }
             allocatedAmount={allocatedSavings}
-            progressPercentage={(allocatedSavings / savingsBudgetAmount) * 100}
+            progressPercentage={
+              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
+                ? Math.min((allocatedSavings / savingsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
+                : 0
+            }
             progressColor="#84C1B2"
             indicatorColor="bg-[#84C1B2]"
           />
@@ -474,7 +495,7 @@ const EditBudgetSettings = () => {
                     isAdded={addSavings}
                     goal="Create a Rainy day fund goal"
                     emoji="🎯"
-                    amount={savingsBudgetAmount}
+                    amount={savingsBudgetAmount ?? 0}
                     add={() => {
                       setAddSavings(true);
                       setAllocatedSavings(savingsBudgetAmount);
@@ -506,12 +527,13 @@ const EditBudgetSettings = () => {
                 isAdded={addSavings}
                 goal="Create a Rainy day fund goal"
                 emoji="🎯"
-                amount={savingsBudgetAmount}
-                add={() => {
-                  // setAddSavings(true);
-                  // setAllocatedSavings(savingsBudgetAmount);
-                  savingsBottomSheetStore.setSavingsBottomSheet(true);
-                }}
+                amount={savingsBudgetAmount ?? 0}
+                // add={() => {
+                //   // setAddSavings(true);
+                //   // setAllocatedSavings(savingsBudgetAmount);
+                //   console.log("Show bottom sheet");
+                //   savingsBottomSheetStore.setSavingsBottomSheet(true);
+                // }}
                 edit={() => {
                   // setAddSavings(false);
                   // setAllocatedSavings(0);
@@ -550,13 +572,14 @@ const EditBudgetSettings = () => {
                 title="Whoop! Goal created"
                 caption="Duis aute categorize in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident."
                 onClick={() => {
+                  setSavingsSuccess(false);
                   savingsBottomSheetStore.setSavingsBottomSheet(false);
                 }}
               />
             ) : (
               <SavingsGoalConfirmation
                 monthlyContribution={savingsBudgetAmount}
-                targetAmount={savingsBudgetAmount * 12}
+                targetAmount={essentialBudgetAmount * 3}
                 progressPercentage={3}
                 onClick={() => {
                   setSavingsSuccess(true);

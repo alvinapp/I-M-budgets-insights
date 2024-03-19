@@ -22,13 +22,21 @@ import { getMacros } from "client/api/macros";
 import settings from "client/assets/images/budgets-insights/Settings.svg";
 import { AddBudgetCard } from "../components/budget/AddBudgetCard";
 import useMacrosStore from "client/store/macroGoalStore";
-import { fetchMicroGoalTotals } from "client/api/micros";
+import { MicroGoalTotal, fetchMicroGoalTotals } from "client/api/micros";
 import useMicroGoalsStore from "client/store/microGoalStore";
 import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
 import SavingsCategoryViewCard from "../components/budget/SavingsCategoryViewCard";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import ViewBudget from "./ViewBudget";
-import { essentials } from "client/utils/MockData";
+import {
+  startOfMonth,
+  endOfMonth,
+  format,
+  addMonths,
+  subMonths,
+} from "date-fns";
+import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
+import { MicroGoal } from "client/models/MicroGoal";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -41,95 +49,155 @@ const BudgetsView = () => {
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
-  //Remove this query for token and make sure its on the first page of this package
-  // const { data } = useQuery(
-  //   ["token"],
-  //   () =>
-  //     getToken(config).then((res) => {
-  //       if (typeof res.user !== "undefined") {
-  //         setUser(res.user);
-  //         setToken(res.token);
-  //       } else {
-  //         navigate("/");
-  //         showCustomToast({ message: "The sdk key is invalid" });
-  //       }
-  //     }),
-  //   { refetchOnWindowFocus: false }
-  // );
+  const { activePeriodRange, setRangeStartDate, setRangeEndDate } =
+    useActivePeriodRangeStore();
+  const [startDate, setStartDate] = useState<Date>(activePeriodRange.startDate);
+  const [endDate, setEndDate] = useState<Date>(activePeriodRange.endDate);
+  const [updatedEvironment, setUpdatedEnvironment] = React.useState<
+    "local" | "props"
+  >("props");
+  const [isLoading, setIsLoading] = useState(false);
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Calculate the start_date as the first day of the current month
-  const startOfMonth = new Date(
-    currentMonth.getFullYear(),
-    currentMonth.getMonth(),
-    1
-  );
-  const formattedStartDate = `${startOfMonth.getFullYear()}-${(
-    startOfMonth.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}-01`;
-
-  // Calculate the end_date as the last day of the current month
-  const endOfMonth = new Date(
-    currentMonth.getFullYear(),
-    currentMonth.getMonth() + 1,
-    0
-  );
+  const formattedStartDate = format(startDate, "yyyy-MM-dd");
+  const formattedEndDate = format(endDate, "yyyy-MM-dd");
   const navigateToInsightsView = () => {
     navigate(
       `/insights-view?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
     );
   };
-  const formattedEndDate = `${endOfMonth.getFullYear()}-${(
-    endOfMonth.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}-${endOfMonth.getDate()}`;
+  const fetchData = async (
+    queryKey: string,
+    fetchFunction: {
+      ({
+        configuration,
+        start_date,
+        end_date,
+      }: {
+        configuration: IConfig;
+        start_date?: string | undefined;
+        end_date?: string | undefined;
+      }): Promise<any>;
+      ({
+        configuration,
+        start_date,
+        end_date,
+      }: {
+        configuration: IConfig;
+        start_date?: string | undefined;
+        end_date?: string | undefined;
+      }): Promise<MicroGoalTotal[]>;
+      ({
+        configuration,
+        start_date,
+        end_date,
+      }: {
+        configuration: IConfig;
+        start_date?: string | undefined;
+        end_date?: string | undefined;
+      }): Promise<any>;
+      ({
+        configuration,
+        start_date,
+        end_date,
+      }: {
+        configuration: IConfig;
+        start_date?: string | undefined;
+        end_date?: string | undefined;
+      }): Promise<MicroGoalTotal[]>;
+      (arg0: { configuration: any; start_date: any; end_date: any }): any;
+    },
+    config: IConfig,
+    formattedStartDate: string,
+    formattedEndDate: string,
+    setDataCallback: {
+      (data: MicroGoal[]): void;
+      (data: MicroGoal[]): void;
+      (arg0: any): void;
+    }
+  ) => {
+    try {
+      const result = await fetchFunction({
+        configuration: config,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      });
+      setDataCallback(result);
+    } catch (error) {
+      console.error(`Error fetching ${queryKey}:`, error);
+    }
+  };
 
-  const { refetch } = useQuery(
+  const { isFetching: fetchingEssentialsBudget } = useQuery(
     "essentials-budgets",
     () =>
-      fetchBudgetCategories({
-        configuration: config,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      }).then((result) => {
-        categoryStore.setCategoryBudgets(result);
-      }),
+      fetchData(
+        "essentials-budgets",
+        fetchBudgetCategories,
+        config,
+        formattedStartDate,
+        formattedEndDate,
+        categoryStore.setCategoryBudgets
+      ),
     { enabled: !!config.token }
   );
 
-  const { refetch: refetchMacros } = useQuery(
+  const { isFetching: fetchingMacros } = useQuery(
     "macros",
     () =>
-      fetchMicroGoalTotals({
-        configuration: config,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      }).then((result) => {
-        setMicroGoals(result);
-      }),
+      fetchData(
+        "macros",
+        fetchMicroGoalTotals,
+        config,
+        formattedStartDate,
+        formattedEndDate,
+        setMicroGoals
+      ),
     { enabled: !!config.token }
   );
 
-  useEffect(() => {
-    refetch();
-    refetchMacros();
-  }, [currentMonth]);
-
-  useEffect(() => {
-    const fetchMacroGoalsData = async () => {
+  const fetchMacroGoalsData = async () => {
+    try {
       const { data } = await getMacros({
         configuration: config,
         start_date: formattedStartDate,
         end_date: formattedEndDate,
       });
-      const result = data?.map((item: any) => item.goals).flat();
-      macroGoalStore.setMacros(result && result.length > 0 ? result : []);
+      const result =
+        data?.map((item: { goals: any }) => item.goals).flat() || [];
+      macroGoalStore.setMacros(result);
+    } catch (error) {
+      console.error("Error fetching macro goals:", error);
+    }
+  };
+  useEffect(() => {
+    const fetchDataAndUpdateMacroGoals = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        fetchData(
+          "essentials-budgets",
+          fetchBudgetCategories,
+          config,
+          formattedStartDate,
+          formattedEndDate,
+          categoryStore.setCategoryBudgets
+        ),
+        fetchData(
+          "macros",
+          fetchMicroGoalTotals,
+          config,
+          formattedStartDate,
+          formattedEndDate,
+          setMicroGoals
+        ),
+        fetchMacroGoalsData(),
+      ]);
+      setIsLoading(false);
     };
-    fetchMacroGoalsData();
-  }, [currentMonth]);
+    fetchDataAndUpdateMacroGoals();
+  }, [config.token, startDate, endDate]);
 
   const {
     essentialTotalBudgetAmount,
@@ -172,21 +240,37 @@ const BudgetsView = () => {
       expenditureProgress: calculateSpending(totalExpenditure, totalBudget),
     };
   }, [categoryStore.categoryBudgets]);
-  const handlePreviousMonthClick = () => {
-    const previousMonth = new Date(currentMonth);
-    previousMonth.setMonth(currentMonth.getMonth() - 1);
-
-    setCurrentMonth(previousMonth);
+  const handlePreviousMonthClick = (e: any) => {
+    const newStartDate = startOfMonth(subMonths(startDate, 1));
+    setStartDate(newStartDate);
+    setRangeStartDate(new Date(format(newStartDate, "yyyy-MM-dd")));
+    const newEndDate = endOfMonth(subMonths(startDate, 1));
+    setEndDate(newEndDate);
+    setRangeEndDate(new Date(format(newEndDate, "yyyy-MM-dd")));
+    setUpdatedEnvironment("props");
   };
 
-  const handleNextMonthClick = () => {
-    const nextMonth = new Date(currentMonth);
-    nextMonth.setMonth(currentMonth.getMonth() + 1);
+  const handleNextMonthClick = (e: any) => {
+    const newStartDate = startOfMonth(addMonths(startDate, 1));
+    setStartDate(newStartDate);
+    setRangeStartDate(new Date(format(newStartDate, "yyyy-MM-dd")));
+    const newEndDate = endOfMonth(addMonths(startDate, 1));
+    setEndDate(newEndDate);
+    setRangeEndDate(new Date(format(newEndDate, "yyyy-MM-dd")));
+    setUpdatedEnvironment("props");
+  };
 
-    setCurrentMonth(nextMonth);
+  const onDateRangeSelect = (dateRange: any) => {
+    console.log("We are updating the date range");
+    setRangeStartDate(dateRange.start);
+    setStartDate(dateRange.start);
+    setEndDate(dateRange.end);
+    setRangeEndDate(dateRange.end);
+    setUpdatedEnvironment("local");
   };
 
   // Format the current month for display
+
   const month = currentMonth.toLocaleString("default", { month: "long" });
   const essentialBudgets = categoryStore.categoryBudgets[0]?.data.filter(
     (essential: any) => essential?.amount !== 0
@@ -240,7 +324,12 @@ const BudgetsView = () => {
           <HorizontalDateToggle
             onPreviousMonthClick={handlePreviousMonthClick}
             onNextMonthClick={handleNextMonthClick}
-            monthName={month}
+            startDate={activePeriodRange.startDate}
+            endDate={activePeriodRange.endDate}
+            onDateRangeSelect={(date: any) => {
+              onDateRangeSelect(date);
+            }}
+            lastUpdatedEnv={updatedEvironment}
           />
         </div>
       </div>
@@ -267,7 +356,7 @@ const BudgetsView = () => {
           <TooltipProgressBar
             progressPercent={expenditureProgress.expenditureProgress}
             progressTooltip={expenditureProgress.expectedExpenditureProgress}
-            activeMonth={currentMonth}
+            activeMonth={startDate}
             showProgressTooltip={
               currentMonth.getMonth() === new Date().getMonth()
             }
@@ -290,6 +379,7 @@ const BudgetsView = () => {
               savingsProgress:
                 checkNAN(savingsTotalExpenses / savingsTotalBudgetAmount) * 100,
             }}
+            isLoading={isLoading}
           />
         </div>
         <div className="mt-8">

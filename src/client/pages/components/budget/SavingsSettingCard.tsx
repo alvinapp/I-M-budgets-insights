@@ -1,3 +1,4 @@
+import { useSavingsBottomSheetStore } from "client/store/bottomSheetStore";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
 import { FiEdit2, FiMinus, FiPlus } from "react-icons/fi";
@@ -31,6 +32,9 @@ export const SavingsSettingCard = ({
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
+  const savingsBottomSheetStore = useSavingsBottomSheetStore(
+    (state: any) => state
+  );
   return (
     <div className="flex flex-row items-center justify-between mb-3">
       <div className="flex-col">
@@ -52,7 +56,9 @@ export const SavingsSettingCard = ({
           <div className="flex-col">
             <div
               className="rounded-full shadow-budgetButton flex justify-center items-center flex-row ml-4 w-7 h-7"
-              onClick={handleAdd}
+              onClick={() =>
+                savingsBottomSheetStore.setSavingsBottomSheet(true)
+              }
             >
               <FiPlus color="#639186" size="1rem" />
             </div>

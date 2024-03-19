@@ -99,3 +99,24 @@ export const fetchBudgetCategoriesTransactions = async ({
     return Promise.reject(reason);
   }
 };
+
+export const checkIfUserHasMicros = async ({
+  configuration,
+  token,
+}: {
+  configuration: IConfig;
+  token: string;
+}) => {
+  try {
+    const res = await fetchData({
+      endpoint: `/goals/micros/check/`,
+      token: token,
+      publicKey: configuration.publicKey,
+    });
+    return res;
+  } catch (reason: any) {
+    Sentry.captureException(reason);
+    console.debug(reason);
+    return Promise.reject(reason);
+  }
+};

@@ -6,6 +6,7 @@ interface MacroProgressBarsContainerProps {
   ratios: string; // format like "50/30/20"
   budgetAmount: { [key: string]: number };
   progressPercentage?: { [key: string]: number };
+  isLoading: boolean;
 }
 
 const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
@@ -20,6 +21,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
     essentialsProgress: 0,
     savingsProgress: 0,
   },
+  isLoading,
 }) => {
   const ratioArray = ratios.split("/").map(Number);
   const currencyStore = useCurrencySettingsStore((state: any) => state);
@@ -33,23 +35,28 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
     >
       {ratioArray.map((flexValue, index) => (
         <div key={index} className="flex flex-col" style={{ flex: flexValue }}>
-          <MacroProgressBar
-            flexValue={1}
-            bgColorBottom={
-              index === 0 ? "#E7EDF3" : index === 1 ? "#E7EDF3" : "#C8ECEF"
-            }
-            bgColorTop={
-              index === 0
-                ? "linear-gradient(159deg,#4053D0_0%,#051AA3_100%)"
-                : index === 1
-                ? "linear-gradient(159deg,#8490E2_0%,#3B4381_100%)"
-                : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
-            }
-            outsideLength={
-              progressPercentage[Object.keys(progressPercentage)[index]]
-            }
-            height={30}
-          />
+          {/* Conditional rendering based on isLoading */}
+          {isLoading ? ( // Render shimmer effect if isLoading is true
+            <div className="bg-silver animate-pulse h-[1.875rem] rounded-[1.375rem] bg-[#d2d2d2] min-w-[7.5rem]" />
+          ) : (
+            <MacroProgressBar
+              flexValue={1}
+              bgColorBottom={
+                index === 0 ? "#E7EDF3" : index === 1 ? "#E7EDF3" : "#C8ECEF"
+              }
+              bgColorTop={
+                index === 0
+                  ? "linear-gradient(159deg, #4053D0 0%, #051AA3 100%)"
+                  : index === 1
+                  ? "linear-gradient(159deg, #8490E2 0%, #3B4381 100%)"
+                  : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
+              }
+              outsideLength={
+                progressPercentage[Object.keys(progressPercentage)[index]]
+              }
+              height={30}
+            />
+          )}
           <div className="flex flex-col justify-end items-start mt-3">
             <div className="relative flex items-end">
               {/* <div

@@ -55,7 +55,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
 
   return (
     <div className="row">
-      <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">
+      <div className="font-custom text-xxs text-skin-subtitle tracking-longest_text">
         {monthStart.toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
@@ -80,7 +80,7 @@ const TooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
           </div>
         )}
       </div>
-      <div className="font-poppins text-xxs text-skin-subtitle tracking-longest_text">
+      <div className="font-custom text-xxs text-skin-subtitle tracking-longest_text">
         {monthEnd.toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",

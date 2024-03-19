@@ -13,7 +13,7 @@ import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
 import { useState } from "react";
 import CustomLoader from "../components/Loader/CustomLoader";
-import { fetchBudgetCategories } from "client/api/budget";
+import { checkIfUserHasMicros, fetchBudgetCategories } from "client/api/budget";
 
 const OnboardingStart = () => {
   const navigate = useNavigate();
@@ -28,30 +28,24 @@ const OnboardingStart = () => {
     setLoading(true);
     const response = await getToken(configurations);
     if (response?.user) {
-      setLoading(false);
       setUser(response.user);
       setToken(response.token);
-      await fetchBudgetCategories({
-        configuration: {
-          publicKey: "",
-          token: response.token,
-          identifier: "",
-          monoPubKey: "",
-          settings: "",
-        },
-      }).then((result) => {
-        const totalBudgets =
-          result[0]?.data.length +
-          result[1]?.data.length +
-          result[2]?.data.length;
-        if (!response?.user.is_onboarded) {
-          navigate("/");
-        } else if (totalBudgets < 3 && response?.user.is_onboarded) {
-          navigate("budget-settings");
-        } else {
-          navigate("/budgets-view");
-        }
-      });
+      await checkIfUserHasMicros({
+        configuration: configurations,
+        token: response.token,
+      })
+        .then((result) => {
+          if (!response?.user.is_onboarded) {
+            navigate("/");
+          } else if (!result.has_micro_goals && response?.user.is_onboarded) {
+            navigate("budget-settings");
+          } else {
+            navigate("/budgets-view");
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     } else {
       setLoading(false);
       navigate("/");

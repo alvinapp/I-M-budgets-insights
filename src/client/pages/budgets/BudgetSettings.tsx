@@ -25,7 +25,12 @@ import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
 import { element } from "prop-types";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import OnboardingSuccess from "../onboarding/OnboardingSuccess";
-import useBottomSheetStore from "client/store/bottomSheetStore";
+import useBottomSheetStore, {
+  useSavingsBottomSheetStore,
+} from "client/store/bottomSheetStore";
+import SavingsGoalConfirmation from "./SavingsGoalConfirmation";
+import SuccessfullCreatedView from "../components/budget/SuccessfullCreatedView";
+import successIcon from "client/assets/images/success-icon.svg";
 
 export const BudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -35,6 +40,9 @@ export const BudgetSettings = () => {
   const setToken = useConfigurationStore((state: any) => state.setToken);
   const userStore = useUserStore((state: any) => state);
   const setUser = userStore.setUser;
+  const savingsBottomSheetStore = useSavingsBottomSheetStore(
+    (state: any) => state
+  );
   const { data } = useQuery(
     ["token"],
     () =>
@@ -195,6 +203,7 @@ export const BudgetSettings = () => {
     (element) => element.amount > 0
   );
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
+  const [savingsSuccess, setSavingsSuccess] = useState(false);
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -584,6 +593,38 @@ export const BudgetSettings = () => {
           )}
         </div>
       </div>
+      <BottomSheet
+        onDismiss={() => {
+          savingsBottomSheetStore.setSavingsBottomSheet(false);
+        }}
+        open={savingsBottomSheetStore.savingsBottomSheet}
+        style={{
+          borderRadius: 24,
+        }}
+        children={
+          savingsSuccess ? (
+            <SuccessfullCreatedView
+              image={successIcon}
+              title="Whoop! Goal created"
+              caption="Duis aute categorize in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident."
+              onClick={() => {
+                savingsBottomSheetStore.setSavingsBottomSheet(false);
+                setSavingsSuccess(false);
+              }}
+            />
+          ) : (
+            <SavingsGoalConfirmation
+              monthlyContribution={savingsBudgetAmount}
+              targetAmount={essentialBudgetAmount * 3}
+              progressPercentage={3}
+              onClick={() => {
+                setSavingsSuccess(true);
+              }}
+            />
+          )
+        }
+        defaultSnap={400}
+      ></BottomSheet>
       <BottomSheet
         onDismiss={() => {
           bottomSheetStore?.setSuccessBottomSheet(false);
