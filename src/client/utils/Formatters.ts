@@ -205,3 +205,60 @@ export function calculateMacroTypeTotals(data: any[]) {
 
   return result;
 }
+
+//Function to show the contribution time
+
+interface GoalCompletionResult {
+  goalCompletionString: string;
+  estimatedCompletionDate: string;
+}
+
+function formatCurrency(value: number): string {
+  if (value >= 1e6) {
+    return `${(value / 1e6).toFixed(1)}m`;
+  } else if (value >= 1000) {
+    return `${(value / 1000).toFixed(0)}k`;
+  }
+  return value.toFixed(0).toString();
+}
+
+function calculateEstimatedCompletionDate(
+  startDate: Date,
+  monthsToAdd: number
+): string {
+  const resultDate = new Date(startDate);
+  resultDate.setMonth(resultDate.getMonth() + monthsToAdd);
+
+  return resultDate.toLocaleDateString("en-US", {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+export function getGoalCompletionString(
+  monthly_contribution: number,
+  target_amount: number,
+  goal_creation_date: Date
+): GoalCompletionResult {
+  const totalMonthsNeeded = Math.ceil(target_amount / monthly_contribution);
+
+  const estimatedCompletionDate = calculateEstimatedCompletionDate(
+    goal_creation_date,
+    totalMonthsNeeded
+  );
+
+  const monthlyContributionFormatted = formatCurrency(monthly_contribution);
+  const weeklyContributionFormatted = formatCurrency(
+    monthly_contribution / 4.34524
+  );
+  const targetAmountFormatted = formatCurrency(target_amount);
+
+  const goalCompletionString = `🙌🏼 By saving ${monthlyContributionFormatted}/month or ${weeklyContributionFormatted}/week, you'll achieve your goal of ${targetAmountFormatted} in approximately ${totalMonthsNeeded} months.`;
+
+  return {
+    goalCompletionString,
+    estimatedCompletionDate,
+  };
+}

@@ -4,6 +4,7 @@ import { SavingsAmountView } from "../components/budget/SavingsAmounView";
 /* @ts-ignore */
 import SlideButton from "react-slide-button";
 import { FiArrowRight, FiChevronRight } from "react-icons/fi";
+import { getGoalCompletionString } from "client/utils/Formatters";
 interface SavingsGoalConfirmationProps {
   image?: string;
   monthlyContribution: number;
@@ -18,6 +19,12 @@ const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
   progressPercentage,
   onClick,
 }) => {
+  const contributionText = getGoalCompletionString(
+    monthlyContribution,
+    targetAmount,
+    new Date()
+  );
+  const { goalCompletionString, estimatedCompletionDate } = contributionText;
   return (
     <div className="flex flex-col">
       <div className="flex flex-row rounded-b-lg h-[8.375rem]">
@@ -45,11 +52,10 @@ const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
         isLabelVisible={false}
       />
       <div className="font-custom text-sm font-medium tracking-wide text-skin-base mt-4 mb-5 mx-4">
-        Est. goal completion: Wed,Aug 3rd,2024
+        Est. goal completion: {estimatedCompletionDate}
       </div>
       <div className="font-custom text-lg font-normal text-skin-base tracking-wide mx-4 mb-8">
-        🙌🏼 By saving 1,875k/month or 488k/ week, you’ll achieve your goal by the
-        next 5 months and 10 days.
+        {goalCompletionString}
       </div>
       <div className="font-custom text-sm font-medium tracking-wide text-skin-base text-center mb-3">
         Swipe to create goal and allocate a monthly budget
