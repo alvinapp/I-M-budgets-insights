@@ -210,10 +210,11 @@ export const EmptyBudgetSettings = () => {
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
-            caption={`${typeof userStore.user.income === undefined
-              ? ""
-              : userStore.user.income
-              }`}
+            caption={`${
+              typeof userStore.user.income === undefined
+                ? ""
+                : userStore.user.income
+            }`}
             currencySymbol={currencySymbol}
             onClick={() => navigate("/edit-monthly-income")}
           />
@@ -223,10 +224,11 @@ export const EmptyBudgetSettings = () => {
           icon={<FiPieChart />}
           title="Budget split"
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
-          caption={`${typeof categoriesStore.macros?.budget_split
-            ? categoriesStore.macros?.budget_split
-            : ""
-            }`}
+          caption={`${
+            typeof categoriesStore.macros?.budget_split
+              ? categoriesStore.macros?.budget_split
+              : ""
+          }`}
           onClick={() => navigate("/onboard-split-income")}
         />
         <div className="mb-4 mt-5 flex flex-row items-center justify-center px-3.5">
@@ -240,8 +242,9 @@ export const EmptyBudgetSettings = () => {
           <BudgetDisplay
             title="Essentials"
             budgetAmount={essentialBudgetAmount}
-            percentageOfBudgetCaption={`${essentialGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              essentialGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={essentialBudgetAmount - allocatedEssentials}
@@ -253,16 +256,16 @@ export const EmptyBudgetSettings = () => {
             }
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
-            <div className="text-skin-base font-poppins text-xs tracking-wide">
+            <div className="text-skin-base font-primary text-xs tracking-wide">
               Add budgets to your Essentials below
             </div>
           </div>
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Categories
             </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
             </div>
           </div>
@@ -317,7 +320,7 @@ export const EmptyBudgetSettings = () => {
                       setAllocatedEssentials(
                         allocatedEssentials > 0
                           ? allocatedEssentials -
-                          categoriesStore.incrementalAmount
+                              categoriesStore.incrementalAmount
                           : 0
                       );
                       updateEssentialsMap(i, {
@@ -346,8 +349,9 @@ export const EmptyBudgetSettings = () => {
           <BudgetDisplay
             title="Wants"
             budgetAmount={wantsBudgetAmount}
-            percentageOfBudgetCaption={`${wantsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              wantsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={wantsBudgetAmount - allocatedWants}
@@ -355,126 +359,35 @@ export const EmptyBudgetSettings = () => {
             progressPercentage={(allocatedWants / wantsBudgetAmount) * 100}
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
-            <div className="text-skin-base font-poppins text-xs tracking-wide">
+            <div className="text-skin-base font-primary text-xs tracking-wide">
               Add budgets to your Wants below
             </div>
           </div>
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Categories
             </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
             </div>
           </div>
           <div className="flex flex-col">
             {wantsCategories && wantsCategories.length > 0
               ? wantsCategories.map((category: Category, i: any) => {
-                const isSelected = i === selectedWantsId;
-                const data = wantsMapState.get(`data${i}`);
-                return (
-                  <BudgetSettingCard
-                    key={i}
-                    maxValue={Number.MAX_SAFE_INTEGER}
-                    category={category?.name}
-                    emoji={category?.emoji}
-                    amount={data?.amount}
-                    selected={isSelected}
-                    addValue={(e) =>
-                      updateWantsMap(i, {
-                        amount: e,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      })
-                    }
-                    increment={() => {
-                      setSelectedWantsId(i);
-                      setAllocatedWants(
-                        allocatedWants + categoriesStore.incrementalAmount
-                      );
-                      updateWantsMap(i, {
-                        amount:
-                          data?.amount + categoriesStore.incrementalAmount,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      });
-                    }}
-                    decrement={() => {
-                      setSelectedWantsId(i);
-                      setAllocatedWants(
-                        allocatedWants - categoriesStore.incrementalAmount
-                      );
-                      updateWantsMap(i, {
-                        amount:
-                          data?.amount - categoriesStore.incrementalAmount,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      });
-                    }}
-                  />
-                );
-              })
-              : null}
-          </div>
-        </div>
-        <div className="px-4 pt-5 pb-3 mt-4.5 rounded-lg">
-          <BudgetDisplay
-            title="Savings"
-            budgetAmount={savingsBudgetAmount}
-            percentageOfBudgetCaption={`${savingsGoals[0]?.share ?? ""
-              }% of overall budget`}
-            unallocatedCaption="Unallocated"
-            allocatedCaption="Allocated"
-            unallocatedAmount={savingsBudgetAmount - allocatedSavings}
-            allocatedAmount={allocatedSavings}
-            progressPercentage={(allocatedSavings / savingsBudgetAmount) * 100}
-          />
-          <div className="border mt-6 mb-4.5"></div>
-          <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
-              Categories
-            </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
-              Budget allocation
-            </div>
-          </div>
-          <div className="flex flex-col">
-            {savingsCategories && savingsCategories.length > 0
-              ? savingsCategories.map((category: any) => {
-                return (
-                  <SavingsSettingCard
-                    isAdded={addSavings}
-                    category="Create a goal"
-                    emoji="🎯"
-                    amount={savingsBudgetAmount}
-                    add={() => {
-                      setAddSavings(true);
-                      setAllocatedSavings(savingsBudgetAmount);
-                      setSavingsList([
-                        {
-                          amount: savingsBudgetAmount,
+                  const isSelected = i === selectedWantsId;
+                  const data = wantsMapState.get(`data${i}`);
+                  return (
+                    <BudgetSettingCard
+                      key={i}
+                      maxValue={Number.MAX_SAFE_INTEGER}
+                      category={category?.name}
+                      emoji={category?.emoji}
+                      amount={data?.amount}
+                      selected={isSelected}
+                      addValue={(e) =>
+                        updateWantsMap(i, {
+                          amount: e,
                           contribution_amount: 0,
                           percentage: 0,
                           category_id: category?.id,
@@ -484,16 +397,108 @@ export const EmptyBudgetSettings = () => {
                           order: 0,
                           contribution_at: "",
                           is_contribute_customized: true,
-                        },
-                      ]);
-                    }}
-                    edit={() => {
-                      setAddSavings(false);
-                      setAllocatedSavings(0);
-                    }}
-                  />
-                );
-              })
+                        })
+                      }
+                      increment={() => {
+                        setSelectedWantsId(i);
+                        setAllocatedWants(
+                          allocatedWants + categoriesStore.incrementalAmount
+                        );
+                        updateWantsMap(i, {
+                          amount:
+                            data?.amount + categoriesStore.incrementalAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }}
+                      decrement={() => {
+                        setSelectedWantsId(i);
+                        setAllocatedWants(
+                          allocatedWants - categoriesStore.incrementalAmount
+                        );
+                        updateWantsMap(i, {
+                          amount:
+                            data?.amount - categoriesStore.incrementalAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }}
+                    />
+                  );
+                })
+              : null}
+          </div>
+        </div>
+        <div className="px-4 pt-5 pb-3 mt-4.5 rounded-lg">
+          <BudgetDisplay
+            title="Savings"
+            budgetAmount={savingsBudgetAmount}
+            percentageOfBudgetCaption={`${
+              savingsGoals[0]?.share ?? ""
+            }% of overall budget`}
+            unallocatedCaption="Unallocated"
+            allocatedCaption="Allocated"
+            unallocatedAmount={savingsBudgetAmount - allocatedSavings}
+            allocatedAmount={allocatedSavings}
+            progressPercentage={(allocatedSavings / savingsBudgetAmount) * 100}
+          />
+          <div className="border mt-6 mb-4.5"></div>
+          <div className="flex flex-row justify-between items-center mb-4">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+              Categories
+            </div>
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+              Budget allocation
+            </div>
+          </div>
+          <div className="flex flex-col">
+            {savingsCategories && savingsCategories.length > 0
+              ? savingsCategories.map((category: any) => {
+                  return (
+                    <SavingsSettingCard
+                      isAdded={addSavings}
+                      goal="Create a goal"
+                      emoji="🎯"
+                      amount={savingsBudgetAmount}
+                      add={() => {
+                        setAddSavings(true);
+                        setAllocatedSavings(savingsBudgetAmount);
+                        setSavingsList([
+                          {
+                            amount: savingsBudgetAmount,
+                            contribution_amount: 0,
+                            percentage: 0,
+                            category_id: category?.id,
+                            name: category?.name,
+                            pseudo_name: category?.name + " " + category?.emoji,
+                            extern_id: category?.id,
+                            order: 0,
+                            contribution_at: "",
+                            is_contribute_customized: true,
+                          },
+                        ]);
+                      }}
+                      edit={() => {
+                        setAddSavings(false);
+                        setAllocatedSavings(0);
+                      }}
+                    />
+                  );
+                })
               : null}
           </div>
         </div>

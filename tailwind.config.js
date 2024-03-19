@@ -72,6 +72,7 @@ module.exports = {
           iconTertiary: "var( --color-background-icon-tertiary)",
           path: "var( --color-background-path)",
           blackBg: "var( --color-background-black)",
+          disabledBg: "var(--color-background-disabled)",
         },
       },
       outlineColor: {
@@ -102,8 +103,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        workSans: "'Work Sans', sans-serif",
-        poppins: "'Poppins', sans-serif",
+        custom: "'NeueMontreal', sans-serif",
+        primary: "'NeueMontreal', sans-serif",
         montserrat: "'Montserrat', sans-serif",
       },
       spacing: {

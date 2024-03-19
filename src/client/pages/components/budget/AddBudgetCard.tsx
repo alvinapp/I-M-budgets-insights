@@ -10,6 +10,7 @@ type AddBudgetCardProps = {
   iconBg?: string;
   budgetAmount?: number;
   fadedColor?: string;
+  plusColor?: string;
   onClick?: () => void;
 };
 export const AddBudgetCard = ({
@@ -17,6 +18,7 @@ export const AddBudgetCard = ({
   iconBg,
   budgetAmount,
   fadedColor,
+  plusColor,
   onClick,
 }: AddBudgetCardProps) => {
   const currencySymbol = useCurrencySettingsStore(
@@ -33,32 +35,32 @@ export const AddBudgetCard = ({
       </div>
       <div className="flex flex-col w-full justify-center">
         <div className="flex flex-row items-center">
-          <div className="font-poppins text-xs text-skin-base font-medium tracking-wide">
+          <div className="font-primary text-sm text-skin-base font-medium tracking-wide">
             Add more budgets
           </div>
         </div>
         <div className="flex flex-row items-center mt-2">
           <div className="relative">
             <div
-              className={`absolute -right-2.5 -top-2 font-poppins text-xxxxxs ${
+              className={`font-primary text-sm ${
                 fadedColor ?? "text-skin-base"
-              } font-semibold`}
+              } font-medium`}
             >
-              {currencySymbol ?? ""}
-            </div>
-            <div
-              className={`font-poppins text-xs ${
-                fadedColor ?? "text-skin-base"
-              } font-semibold`}
-            >
-              {budgetAmount?.toLocaleString("en-us")}
+              {budgetAmount?.toLocaleString("en-us")}{" "}
+              <sup className=" align-super -ml-1 text-xxs">
+                {currencySymbol ?? ""}
+              </sup>
             </div>
           </div>
         </div>
       </div>
       <div className="flex flex-col justify-center items-center">
-        <div className="rounded-full shadow-budgetButton flex justify-center items-center flex-row px-2 py-2">
-          <FiPlus color="#04506E" size="0.75rem" onClick={onClick} />
+        <div className="rounded-full shadow-budgetButton flex justify-center items-center flex-row w-7 h-7">
+          <FiPlus
+            color={`${plusColor ?? "#0539EC"}`}
+            size="1rem"
+            onClick={onClick}
+          />
         </div>
       </div>
     </div>

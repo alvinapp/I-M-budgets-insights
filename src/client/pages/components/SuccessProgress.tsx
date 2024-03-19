@@ -18,7 +18,7 @@ const SuccessProgress = ({ timer, label }: SuccessProgressProps) => {
         <div
           className={`${
             timer <= 12 && timer >= 1 ? " text-white/50" : " text-white "
-          } font-poppins text-base font-medium tracking-progress_label ml-4`}
+          } font-primary text-base font-medium tracking-progress_label ml-4`}
         >
           {label}
         </div>

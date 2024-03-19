@@ -12,13 +12,14 @@ import { setIncome, completeOnboarding } from "client/api/users";
 import { GoalMacroType, setMacro } from "client/api/goals";
 import SliderThumbComponent from "../components/SliderThumbComponent";
 import debounce from "lodash.debounce";
+import useBottomSheetStore from "client/store/bottomSheetStore";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
   const configuration = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
-
+  const bottomSheetStore = useBottomSheetStore((state: any) => state);
   const budgetSettingsStore = useBudgetSettingsStore();
   const { monthlyIncome, currency, incomeSplit } = budgetSettingsStore;
 
@@ -127,7 +128,8 @@ const OnboardingSplitIncome = () => {
       await completeOnboarding({ completionTime: new Date(), configuration });
 
       // Redirect to success page
-      navigate("/onboard-success");
+      bottomSheetStore.setSuccessBottomSheet(true);
+      navigate("/budget-settings");
     } catch (error) {
       console.error(error);
       // Handle the error
@@ -140,8 +142,8 @@ const OnboardingSplitIncome = () => {
       type === "essentials"
         ? essentialsRatio
         : type === "wants"
-          ? wantsRatio
-          : savingsRatio;
+        ? wantsRatio
+        : savingsRatio;
     const change = newValue - oldValue;
 
     if (newValue === totalRatio) {
@@ -254,7 +256,7 @@ const OnboardingSplitIncome = () => {
   };
 
   return (
-    <div className="h-screen w-screen relative no-scrollbar">
+    <div className="flex flex-col">
       <NavBar
         children={
           <div className="flex flex-row items-center justify-between pt-6 pb-2 pr-6">
@@ -265,14 +267,14 @@ const OnboardingSplitIncome = () => {
       <div className="flex-grow h-px bg-skin-accent3"></div>
 
       <div className="flex flex-col mt-3 items-left">
-        <div className="rounded-full h-11 w-11 bg-skin-tertiaryWithOpacity flex justify-center items-center mx-3.5">
+        <div className="rounded-full h-11 w-11 bg-skin-iconPrimary flex justify-center items-center mx-3.5">
           <FiPieChart color="#555466" />
         </div>
-        <div className="font-workSans font-semibold text-xl tracking-title mt-1.5 mx-3.5">
+        <div className="font-custom font-medium text-2xl text-skin-base mt-1.5 mx-3.5">
           Whoop! Here is your recommended budget split.
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
-          <div className="text-xs font-poppins text-skin-subtitle tracking-wide mt-6 font-medium mx-3.5">
+          <div className="text-sm font-primary text-skin-base tracking-wide mt-6 font-regular mx-3.5">
             The best practice for budgeting is 50% of your income for
             Essentials, 30% for Wants, then 20% for Savings. However, you can
             personalize your budget split below.
@@ -281,13 +283,18 @@ const OnboardingSplitIncome = () => {
         </div>
         <div className="flex flex-col mt-12 mx-6">
           <div className="grid grid-cols-2 gap-4 w-full">
-            <div className="justify-self-start font-semibold">Essentials</div>
-            <div className="justify-self-end font-semibold">
+            <div className="justify-self-start font-medium text-2xl text-skin-base">
+              Essentials
+            </div>
+            <div className="justify-self-end font-medium text-2xl text-skin-base">
               <div className="relative">
-                <div className="absolute -right-3 font-workSans font-semibold text-xs text-skin-neutral2 " style={{ top: "-0.5rem" }}>
+                <div
+                  className="absolute -right-3 -top-0.5 font-custom font-medium text-xs text-skin-base"
+                  style={{ top: "-0.5rem" }}
+                >
                   {currency ?? ""}
                 </div>
-                <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
+                <div className="font-custom font-medium text-2xl text-skin-base">
                   {calculateIncomeAmount(essentialsRatio)?.toLocaleString(
                     "en-us"
                   )}
@@ -318,13 +325,15 @@ const OnboardingSplitIncome = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 w-full mt-16">
-            <div className="justify-self-start font-semibold">Wants</div>
-            <div className="justify-self-end font-semibold">
+            <div className="justify-self-start font-medium text-2xl text-skin-base">
+              Wants
+            </div>
+            <div className="justify-self-end font-medium text-2xl text-skin-base">
               <div className="relative">
-                <div className="absolute -right-3 font-workSans font-semibold text-xs text-skin-neutral2 " style={{ top: "-0.5rem" }}>
+                <div className="absolute -right-3 -top-0.5 font-custom font-medium text-xs text-skin-base">
                   {currency ?? ""}
                 </div>
-                <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
+                <div className="font-custom font-medium text-2xl text-skin-base">
                   {calculateIncomeAmount(wantsRatio)?.toLocaleString("en-us")}
                 </div>
               </div>
@@ -352,14 +361,19 @@ const OnboardingSplitIncome = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 w-full mt-16">
-            <div className="justify-self-start font-semibold">Savings</div>
-            <div className="justify-self-end font-semibold">
+          <div className="grid grid-cols-2 gap-4 w-full mt-16 mb-32">
+            <div className="justify-self-start font-medium text-2xl text-skin-base">
+              Savings
+            </div>
+            <div className="justify-self-end font-medium text-2xl text-skin-base">
               <div className="relative">
-                <div className="absolute -right-3 font-workSans font-semibold text-xs text-skin-neutral2 " style={{ top: "-0.5rem" }}>
+                <div
+                  className="absolute -right-3 -top-0.5 font-custom font-medium text-xs text-skin-base"
+                  style={{ top: "-0.5rem" }}
+                >
                   {currency ?? ""}
                 </div>
-                <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
+                <div className="font-custom font-medium text-2xl text-skin-base">
                   {calculateIncomeAmount(savingsRatio)?.toLocaleString("en-us")}
                 </div>
               </div>
@@ -388,22 +402,20 @@ const OnboardingSplitIncome = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 mx-3.5 text-sm">
-        <MainButton
-          title="Continue"
-          isDisabled={false}
-          click={() => {
-            budgetSettingsStore.setIncomeSplit({
-              essentials: essentialsRatio,
-              wants: wantsRatio,
-              savings: savingsRatio,
-            });
-            postAllMacros();
-            navigate("/onboard-success");
-          }}
-        />
+        <div className="fixed bottom-5 left-0 right-0 mx-3.5 text-sm z-10">
+          <MainButton
+            title="Continue"
+            isDisabled={false}
+            click={() => {
+              budgetSettingsStore.setIncomeSplit({
+                essentials: essentialsRatio,
+                wants: wantsRatio,
+                savings: savingsRatio,
+              });
+              postAllMacros();
+            }}
+          />
+        </div>
       </div>
     </div>
   );

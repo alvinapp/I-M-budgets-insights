@@ -19,8 +19,8 @@ export const ExpenditureCard = ({
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
-  const budgetColumnWidth = '80px';
-  const spentColumnWidth = '80px';
+  const budgetColumnWidth = "80px";
+  const spentColumnWidth = "80px";
 
   return (
     <div className="flex flex-row items-center justify-between mb-3">
@@ -30,10 +30,10 @@ export const ExpenditureCard = ({
         <div className="mr-2">{icon}</div>
         {/* Category and transaction count */}
         <div className="flex flex-col">
-          <div className="font-medium font-poppins text-xs text-skin-base tracking-subtitle mb-1">
+          <div className="font-medium font-primary text-xs text-skin-base tracking-subtitle mb-1">
             {category}
           </div>
-          <div className="font-medium font-poppins text-xxxs text-skin-subtitle tracking-wide">
+          <div className="font-medium font-primary text-xxxs text-skin-subtitle tracking-wide">
             {`${transactions} transaction${transactions === 1 ? "" : "s"}`}
           </div>
         </div>
@@ -42,24 +42,30 @@ export const ExpenditureCard = ({
       {/* Budget and spent section */}
       <div className="flex">
         {/* Budget */}
-        <div className="flex flex-col items-center" style={{ width: budgetColumnWidth }}>
+        <div
+          className="flex flex-col items-center"
+          style={{ width: budgetColumnWidth }}
+        >
           <div className="relative">
-            <span className="font-bold font-poppins text-xs text-skin-neutral tracking-widest">
+            <span className="font-medium font-primary text-xs text-skin-base tracking-widest">
               {budget?.toLocaleString()}
             </span>
-            <span className="absolute -top-2 -right-1 font-bold font-poppins text-xxxs text-skin-neutral">
+            <span className="absolute -top-2 -right-1 font-medium font-primary text-xxxs text-skin-neutral">
               {currencySymbol}
             </span>
           </div>
         </div>
         {/* Spent */}
-        <div className="flex flex-col items-center" style={{ width: spentColumnWidth }}>
+        <div
+          className="flex flex-col items-center"
+          style={{ width: spentColumnWidth }}
+        >
           <div className="relative">
-            <span className="font-bold font-poppins text-xs text-skin-base tracking-widest">
+            <span className="font-bold font-primary text-xs text-skin-base tracking-widest">
               {spent?.toLocaleString()}
-            </span>
-            <span className="absolute -top-2 -right-1 font-bold font-poppins text-xxxs text-skin-base">
-              {currencySymbol}
+              <sup className=" text-xs align-super font-medium">
+                {currencySymbol}
+              </sup>
             </span>
           </div>
         </div>

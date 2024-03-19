@@ -2,9 +2,9 @@ import React from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const TransactionCardSkeleton = () => {
+const BudgetTransactionCardSkeleton = () => {
   return (
-    <div className="rounded-lg px-4 py-3 w-auto mb-2">
+    <div className="rounded-lg w-auto mb-3">
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
@@ -12,11 +12,11 @@ const TransactionCardSkeleton = () => {
               <Skeleton circle width={40} height={40} />
             </div>
             <div className="flex flex-col">
-              <div className=" font-poppins text-sm font-medium text-black text-start text-ellipsis overflow-hidden whitespace-nowrap w-44">
+              <div className=" font-primary text-sm font-medium text-black text-start text-ellipsis overflow-hidden whitespace-nowrap w-44">
                 <Skeleton />
               </div>
               <div
-                className={`font-poppins text-xs font-medium tracking-wide text-start`}
+                className={`font-primary text-xs font-medium tracking-wide text-start`}
               >
                 <Skeleton />
               </div>
@@ -24,11 +24,11 @@ const TransactionCardSkeleton = () => {
           </div>
         </div>
         <div className="flex flex-col">
-          <div className=" font-poppins text-sm font-medium text-black text-end text-ellipsis overflow-hidden whitespace-nowrap w-16">
+          <div className=" font-primary text-sm font-medium text-black text-end text-ellipsis overflow-hidden whitespace-nowrap w-16">
             <Skeleton />
           </div>
           <div
-            className={`font-poppins text-xs font-medium tracking-wide text-end w-12`}
+            className={`font-primary text-xs font-medium tracking-wide text-end w-12`}
           >
             <Skeleton />
           </div>
@@ -37,4 +37,4 @@ const TransactionCardSkeleton = () => {
     </div>
   );
 };
-export default TransactionCardSkeleton;
+export default BudgetTransactionCardSkeleton;

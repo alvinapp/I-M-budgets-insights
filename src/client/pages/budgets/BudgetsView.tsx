@@ -1,25 +1,20 @@
 import React, { useEffect, useMemo, useState } from "react";
 import NavBar from "../components/NavBar";
-import CloseButton from "../components/CloseButton";
 import NavBarTitle from "../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
-import { FiPieChart, FiSettings } from "react-icons/fi";
+import { FiPieChart } from "react-icons/fi";
 import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
 import { AvailableBudgetContainer } from "../components/budget/AvailableBudgetContainer";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { InsightsButton } from "../components/budget/InsightsButton";
 import { CategoriesIconLabel } from "../components/budget/CategoriesIconLabel";
 import { CategoryCardHeader } from "../components/budget/CategoryCardHeader";
-import { essentials, savings, wants } from "client/utils/MockData";
 import { CategoryViewCard } from "../components/budget/CategoryViewCard";
 import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
 import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
 import { useQuery } from "react-query";
 import { fetchBudgetCategories } from "client/api/budget";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
-import getToken from "client/api/token";
-import useUserStore from "client/store/userStore";
-import { showCustomToast } from "client/utils/Toast";
 import useCategoriesStore from "client/store/categoriesStore";
 import { calculateSpending, checkNAN } from "client/utils/Formatters";
 import useMacroGoalsStore from "client/store/macroGoalStore";
@@ -27,8 +22,21 @@ import { getMacros } from "client/api/macros";
 import settings from "client/assets/images/budgets-insights/Settings.svg";
 import { AddBudgetCard } from "../components/budget/AddBudgetCard";
 import useMacrosStore from "client/store/macroGoalStore";
-import { fetchMicroGoalTotals } from "client/api/micros";
+import { MicroGoalTotal, fetchMicroGoalTotals } from "client/api/micros";
 import useMicroGoalsStore from "client/store/microGoalStore";
+import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
+import SavingsCategoryViewCard from "../components/budget/SavingsCategoryViewCard";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import ViewBudget from "./ViewBudget";
+import {
+  startOfMonth,
+  endOfMonth,
+  format,
+  addMonths,
+  subMonths,
+} from "date-fns";
+import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
+import { MicroGoal } from "client/models/MicroGoal";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -41,95 +49,155 @@ const BudgetsView = () => {
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
-  //Remove this query for token and make sure its on the first page of this package
-  // const { data } = useQuery(
-  //   ["token"],
-  //   () =>
-  //     getToken(config).then((res) => {
-  //       if (typeof res.user !== "undefined") {
-  //         setUser(res.user);
-  //         setToken(res.token);
-  //       } else {
-  //         navigate("/");
-  //         showCustomToast({ message: "The sdk key is invalid" });
-  //       }
-  //     }),
-  //   { refetchOnWindowFocus: false }
-  // );
+  const { activePeriodRange, setRangeStartDate, setRangeEndDate } =
+    useActivePeriodRangeStore();
+  const [startDate, setStartDate] = useState<Date>(activePeriodRange.startDate);
+  const [endDate, setEndDate] = useState<Date>(activePeriodRange.endDate);
+  const [updatedEvironment, setUpdatedEnvironment] = React.useState<
+    "local" | "props"
+  >("props");
+  const [isLoading, setIsLoading] = useState(false);
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Calculate the start_date as the first day of the current month
-  const startOfMonth = new Date(
-    currentMonth.getFullYear(),
-    currentMonth.getMonth(),
-    1
-  );
-  const formattedStartDate = `${startOfMonth.getFullYear()}-${(
-    startOfMonth.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}-01`;
-
-  // Calculate the end_date as the last day of the current month
-  const endOfMonth = new Date(
-    currentMonth.getFullYear(),
-    currentMonth.getMonth() + 1,
-    0
-  );
+  const formattedStartDate = format(startDate, "yyyy-MM-dd");
+  const formattedEndDate = format(endDate, "yyyy-MM-dd");
   const navigateToInsightsView = () => {
     navigate(
       `/insights-view?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
     );
   };
-  const formattedEndDate = `${endOfMonth.getFullYear()}-${(
-    endOfMonth.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}-${endOfMonth.getDate()}`;
+  const fetchData = async (
+    queryKey: string,
+    fetchFunction: {
+      ({
+        configuration,
+        start_date,
+        end_date,
+      }: {
+        configuration: IConfig;
+        start_date?: string | undefined;
+        end_date?: string | undefined;
+      }): Promise<any>;
+      ({
+        configuration,
+        start_date,
+        end_date,
+      }: {
+        configuration: IConfig;
+        start_date?: string | undefined;
+        end_date?: string | undefined;
+      }): Promise<MicroGoalTotal[]>;
+      ({
+        configuration,
+        start_date,
+        end_date,
+      }: {
+        configuration: IConfig;
+        start_date?: string | undefined;
+        end_date?: string | undefined;
+      }): Promise<any>;
+      ({
+        configuration,
+        start_date,
+        end_date,
+      }: {
+        configuration: IConfig;
+        start_date?: string | undefined;
+        end_date?: string | undefined;
+      }): Promise<MicroGoalTotal[]>;
+      (arg0: { configuration: any; start_date: any; end_date: any }): any;
+    },
+    config: IConfig,
+    formattedStartDate: string,
+    formattedEndDate: string,
+    setDataCallback: {
+      (data: MicroGoal[]): void;
+      (data: MicroGoal[]): void;
+      (arg0: any): void;
+    }
+  ) => {
+    try {
+      const result = await fetchFunction({
+        configuration: config,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      });
+      setDataCallback(result);
+    } catch (error) {
+      console.error(`Error fetching ${queryKey}:`, error);
+    }
+  };
 
-  const { isFetching: fetchingEssentialsBudget, refetch } = useQuery(
+  const { isFetching: fetchingEssentialsBudget } = useQuery(
     "essentials-budgets",
     () =>
-      fetchBudgetCategories({
-        configuration: config,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      }).then((result) => {
-        categoryStore.setCategoryBudgets(result);
-      }),
+      fetchData(
+        "essentials-budgets",
+        fetchBudgetCategories,
+        config,
+        formattedStartDate,
+        formattedEndDate,
+        categoryStore.setCategoryBudgets
+      ),
     { enabled: !!config.token }
   );
 
-  const { isFetching: fetchingMacros, refetch: refetchMacros } = useQuery(
+  const { isFetching: fetchingMacros } = useQuery(
     "macros",
     () =>
-      fetchMicroGoalTotals({
-        configuration: config,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      }).then((result) => {
-        setMicroGoals(result);
-      }),
+      fetchData(
+        "macros",
+        fetchMicroGoalTotals,
+        config,
+        formattedStartDate,
+        formattedEndDate,
+        setMicroGoals
+      ),
     { enabled: !!config.token }
   );
 
-  useEffect(() => {
-    refetch();
-    refetchMacros();
-  }, [currentMonth]);
-
-  useEffect(() => {
-    const fetchMacroGoalsData = async () => {
+  const fetchMacroGoalsData = async () => {
+    try {
       const { data } = await getMacros({
         configuration: config,
         start_date: formattedStartDate,
         end_date: formattedEndDate,
       });
-      const result = data?.map((item: any) => item.goals).flat();
-      macroGoalStore.setMacros(result && result.length > 0 ? result : []);
+      const result =
+        data?.map((item: { goals: any }) => item.goals).flat() || [];
+      macroGoalStore.setMacros(result);
+    } catch (error) {
+      console.error("Error fetching macro goals:", error);
+    }
+  };
+  useEffect(() => {
+    const fetchDataAndUpdateMacroGoals = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        fetchData(
+          "essentials-budgets",
+          fetchBudgetCategories,
+          config,
+          formattedStartDate,
+          formattedEndDate,
+          categoryStore.setCategoryBudgets
+        ),
+        fetchData(
+          "macros",
+          fetchMicroGoalTotals,
+          config,
+          formattedStartDate,
+          formattedEndDate,
+          setMicroGoals
+        ),
+        fetchMacroGoalsData(),
+      ]);
+      setIsLoading(false);
     };
-    fetchMacroGoalsData();
-  }, [currentMonth]);
+    fetchDataAndUpdateMacroGoals();
+  }, [config.token, startDate, endDate]);
 
   const {
     essentialTotalBudgetAmount,
@@ -172,30 +240,60 @@ const BudgetsView = () => {
       expenditureProgress: calculateSpending(totalExpenditure, totalBudget),
     };
   }, [categoryStore.categoryBudgets]);
-  const handlePreviousMonthClick = () => {
-    const previousMonth = new Date(currentMonth);
-    previousMonth.setMonth(currentMonth.getMonth() - 1);
-
-    setCurrentMonth(previousMonth);
+  const handlePreviousMonthClick = (e: any) => {
+    const newStartDate = startOfMonth(subMonths(startDate, 1));
+    setStartDate(newStartDate);
+    setRangeStartDate(new Date(format(newStartDate, "yyyy-MM-dd")));
+    const newEndDate = endOfMonth(subMonths(startDate, 1));
+    setEndDate(newEndDate);
+    setRangeEndDate(new Date(format(newEndDate, "yyyy-MM-dd")));
+    setUpdatedEnvironment("props");
   };
 
-  const handleNextMonthClick = () => {
-    const nextMonth = new Date(currentMonth);
-    nextMonth.setMonth(currentMonth.getMonth() + 1);
+  const handleNextMonthClick = (e: any) => {
+    const newStartDate = startOfMonth(addMonths(startDate, 1));
+    setStartDate(newStartDate);
+    setRangeStartDate(new Date(format(newStartDate, "yyyy-MM-dd")));
+    const newEndDate = endOfMonth(addMonths(startDate, 1));
+    setEndDate(newEndDate);
+    setRangeEndDate(new Date(format(newEndDate, "yyyy-MM-dd")));
+    setUpdatedEnvironment("props");
+  };
 
-    setCurrentMonth(nextMonth);
+  const onDateRangeSelect = (dateRange: any) => {
+    console.log("We are updating the date range");
+    setRangeStartDate(dateRange.start);
+    setStartDate(dateRange.start);
+    setEndDate(dateRange.end);
+    setRangeEndDate(dateRange.end);
+    setUpdatedEnvironment("local");
   };
 
   // Format the current month for display
+
   const month = currentMonth.toLocaleString("default", { month: "long" });
   const essentialBudgets = categoryStore.categoryBudgets[0]?.data.filter(
     (essential: any) => essential?.amount !== 0
   );
   const wantsBudgets = categoryStore.categoryBudgets[1]?.data.filter(
-    (essential: any) => essential?.amount !== 0
+    (wants: any) => wants?.amount !== 0
+  );
+  const savingsBudgets = categoryStore.categoryBudgets[2]?.data.filter(
+    (savings: any) => savings?.amount !== 0
   );
   const macroStore = useMacrosStore((state: any) => state);
-
+  const [viewBudgetSheet, openViewBudgetSheet] = useState(false);
+  const budgetDetails = {
+    spentAmount: 0,
+    totalBudgetAmount: 0,
+    progress: 0,
+    category: "",
+    emoji: "",
+    startDate: formattedStartDate,
+    endDate: formattedEndDate,
+    microGoal: 0,
+  };
+  const [budgetDetailsData, setBudgetDetailsData] = useState(budgetDetails);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -226,7 +324,12 @@ const BudgetsView = () => {
           <HorizontalDateToggle
             onPreviousMonthClick={handlePreviousMonthClick}
             onNextMonthClick={handleNextMonthClick}
-            monthName={month}
+            startDate={activePeriodRange.startDate}
+            endDate={activePeriodRange.endDate}
+            onDateRangeSelect={(date: any) => {
+              onDateRangeSelect(date);
+            }}
+            lastUpdatedEnv={updatedEvironment}
           />
         </div>
       </div>
@@ -242,7 +345,7 @@ const BudgetsView = () => {
                   (essentialTotalExpenses + wantsTotalExpenses)
               )
             )}
-            subtitle="Available budget spend"
+            subtitle="Available budget"
             currencySymbol={currencySymbol}
           />
           <div className="flex flex-col justify-center">
@@ -253,7 +356,7 @@ const BudgetsView = () => {
           <TooltipProgressBar
             progressPercent={expenditureProgress.expenditureProgress}
             progressTooltip={expenditureProgress.expectedExpenditureProgress}
-            activeMonth={currentMonth}
+            activeMonth={startDate}
             showProgressTooltip={
               currentMonth.getMonth() === new Date().getMonth()
             }
@@ -276,13 +379,14 @@ const BudgetsView = () => {
               savingsProgress:
                 checkNAN(savingsTotalExpenses / savingsTotalBudgetAmount) * 100,
             }}
+            isLoading={isLoading}
           />
         </div>
         <div className="mt-8">
           <CategoriesIconLabel
             label="Categories"
-            icon={<FiPieChart color="#4C4C4C" />}
-            iconBg="bg-skin-accent2"
+            icon={<FiPieChart color="#101010" />}
+            iconBg="bg-skin-iconPrimary"
           />
         </div>
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
@@ -308,11 +412,26 @@ const BudgetsView = () => {
                       amount={essential?.amount}
                       budgetAmount={essential.amount}
                       spentAmount={essential?.expenses}
-                      iconBg="bg-skin-secondaryWithOpacity"
+                      iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
                       bgColor="#0131A1"
                       primaryColor="text-skin-base"
                       fadedColor="text-skin-subtitle"
+                      onClick={() => {
+                        openViewBudgetSheet(true);
+                        setBudgetDetailsData({
+                          spentAmount: essential?.expenses,
+                          totalBudgetAmount: essential?.amount,
+                          progress: checkNAN(
+                            (essential?.expenses / essential?.amount) * 100
+                          ),
+                          category: essential?.name,
+                          emoji: essential.category?.emoji,
+                          startDate: formattedStartDate,
+                          endDate: formattedEndDate,
+                          microGoal: essential?.id,
+                        });
+                      }}
                     />
                   );
                 })
@@ -326,7 +445,7 @@ const BudgetsView = () => {
                 <AddBudgetCard
                   fadedColor="text-skin-subtitle"
                   icon="🚀"
-                  iconBg="bg-skin-secondaryWithOpacity"
+                  iconBg="bg-skin-iconPrimary"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[0]?.amount -
                       categoryStore.categoryBudgets[0]?.total_amount
@@ -360,11 +479,26 @@ const BudgetsView = () => {
                       amount={want?.amount}
                       budgetAmount={want?.amount}
                       spentAmount={want?.expenses}
-                      iconBg="bg-skin-secondary3WithOpacity"
+                      iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
                       bgColor="#6F89A5"
                       primaryColor="text-skin-base"
                       fadedColor="text-skin-subtitle"
+                      onClick={() => {
+                        openViewBudgetSheet(true);
+                        setBudgetDetailsData({
+                          spentAmount: want?.expenses,
+                          totalBudgetAmount: want?.amount,
+                          progress: checkNAN(
+                            (want?.expenses / want?.amount) * 100
+                          ),
+                          category: want?.name,
+                          emoji: want.category?.emoji,
+                          startDate: formattedStartDate,
+                          endDate: formattedEndDate,
+                          microGoal: want?.id,
+                        });
+                      }}
                     />
                   );
                 })
@@ -378,7 +512,8 @@ const BudgetsView = () => {
                 <AddBudgetCard
                   fadedColor="text-skin-subtitle"
                   icon="🚀"
-                  iconBg="bg-skin-secondaryWithOpacity"
+                  iconBg="bg-skin-icon-primary"
+                  plusColor="#8490E2"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[1]?.amount -
                       categoryStore.categoryBudgets[1]?.total_amount
@@ -398,33 +533,65 @@ const BudgetsView = () => {
           />
           <div className="mt-6 flex flex-col">
             {categoryStore.categoryBudgets[2]?.data &&
-            categoryStore.categoryBudgets[2]?.data.length > 0
-              ? categoryStore.categoryBudgets[2]?.data.map(
-                  (savings: any, i: any) => {
-                    return (
-                      <CategoryViewCard
-                        key={i}
-                        category={savings?.name}
-                        progressPercentage={checkNAN(
-                          (savings.expenses / savings?.amount) * 100
-                        )}
-                        icon={savings.category?.emoji}
-                        amount={savings?.amount}
-                        budgetAmount={savings.amount}
-                        spentAmount={savings.expenses}
-                        iconBg="bg-skin-secondaryWithOpacity"
-                        baseBgColor="#C8ECEF"
-                        bgColor="#1BBFCD"
-                        primaryColor="text-skin-base"
-                        fadedColor="text-skin-subtitle"
-                        caption="saved"
-                      />
-                    );
-                  }
-                )
-              : null}
+            categoryStore.categoryBudgets[2]?.data.length > 0 ? (
+              categoryStore.categoryBudgets[2]?.data.map(
+                (savings: any, i: any) => {
+                  return (
+                    <SavingsCategoryViewCard
+                      key={i}
+                      category={savings?.name}
+                      progressPercentage={checkNAN(
+                        (savings.expenses / savings?.amount) * 100
+                      )}
+                      icon={savings.category?.emoji}
+                      amount={savings?.amount}
+                      budgetAmount={savings.amount}
+                      spentAmount={savings.expenses}
+                      iconBg="bg-skin-iconPrimary"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#84C1B2"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
+                      caption="saved"
+                    />
+                  );
+                }
+              )
+            ) : (
+              <SavingsSettingCard
+                goal="Create a Rainy day fund goal"
+                add={() => {
+                  navigate("/edit-budgets");
+                }}
+              />
+            )}
           </div>
         </div>
+        <BottomSheet
+          onDismiss={() => {
+            openViewBudgetSheet(false);
+          }}
+          open={viewBudgetSheet}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            <ViewBudget
+              spentAmount={budgetDetailsData?.spentAmount}
+              totalBudgetAmount={budgetDetailsData?.totalBudgetAmount}
+              progress={budgetDetailsData?.progress}
+              category={budgetDetailsData?.category}
+              emoji={budgetDetailsData?.emoji}
+              microGoalId={budgetDetailsData.microGoal}
+              startDate={budgetDetailsData?.startDate}
+              endDate={budgetDetailsData?.endDate}
+              onClick={() => {
+                openViewBudgetSheet(false);
+              }}
+            />
+          }
+          defaultSnap={400}
+        ></BottomSheet>
       </div>
     </div>
   );

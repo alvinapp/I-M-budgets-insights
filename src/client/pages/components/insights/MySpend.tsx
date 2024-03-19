@@ -46,7 +46,7 @@ export const MySpend = ({
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
-        <div className="font-poppins text-skin-base text-sm tracking-listtile_subtitle">
+        <div className="font-primary text-skin-base text-sm tracking-listtile_subtitle">
           🙌🏼 Sweet! You 're well within your overall budget limit for this
           month.
         </div>
@@ -76,19 +76,19 @@ export const MySpend = ({
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
       <div className="flex flex-row items-center justify-between mb-6">
-        <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide">
+        <div className="font-medium font-primary text-xs text-skin-subtitle tracking-wide">
           Categories
         </div>
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
             <div
-              className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide items-end"
+              className="font-medium font-primary text-xs text-skin-subtitle tracking-wide items-end"
               style={{ width: budgetColumnWidth }}
             >
               Budget
             </div>
             <div
-              className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide items-end"
+              className="font-medium font-primary text-xs text-skin-subtitle tracking-wide items-end"
               style={{ width: spentColumnWidth }}
             >
               Spent

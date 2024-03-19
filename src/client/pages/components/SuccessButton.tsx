@@ -2,7 +2,7 @@ import React from "react";
 import { BallTriangle } from "react-loader-spinner";
 
 type SuccessButonProps = {
-  title?: string;
+  label?: string;
   click?: () => void;
   isDisabled?: boolean;
   loading?: boolean;
@@ -10,7 +10,7 @@ type SuccessButonProps = {
 };
 
 const SuccessButton = ({
-  title,
+  label,
   click,
   isDisabled = false,
   loading = false,
@@ -18,7 +18,7 @@ const SuccessButton = ({
 }: SuccessButonProps) => {
   return (
     <button
-      className={`my-3.5 bg-skin-base rounded-full text-skin-primary font-poppins font-semibold tracking-widest w-full h-14 text-base ${
+      className={`my-3.5 bg-skin-primary rounded-full text-skin-white font-primary font-medium tracking-widest w-full h-14 text-lg focus:outline-none ${
         isDisabled ? "disabled:opacity-25 focus:outline-none" : ""
       }`}
       disabled={isDisabled}
@@ -26,12 +26,7 @@ const SuccessButton = ({
       style={style}
     >
       <div className="flex flex-row justify-center items-center">
-        <div className={`${loading ? "mr-3" : ""}`}>{title}</div>
-        {loading ? (
-          <BallTriangle height={18} width={18} color="#056489" visible={true} />
-        ) : (
-          <div></div>
-        )}
+        <div>{label}</div>
       </div>
     </button>
   );

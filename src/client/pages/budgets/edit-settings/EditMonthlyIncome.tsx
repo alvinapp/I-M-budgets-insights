@@ -64,11 +64,11 @@ const EditMonthlyIncome = () => {
         <div className="rounded-full h-11 w-11 bg-skin-successNeutralWithOpacity flex justify-center items-center mx-3.5">
           <FiBriefcase color="#33982A" />
         </div>
-        <div className="font-workSans font-semibold text-xl tracking-title mt-1.5 mx-3.5">
+        <div className="font-custom font-semibold text-xl tracking-title mt-1.5 mx-3.5">
           What's your monthly net income?
         </div>
         <div className="bg-splitBudgetBg bg-cover bg-no-repeat h-36 bg-right">
-          <div className="text-xs font-poppins text-skin-subtitle tracking-wide mt-6 font-medium mx-3.5">
+          <div className="text-xs font-primary text-skin-subtitle tracking-wide mt-6 font-medium mx-3.5">
             We need to use this as a base calculation for your overall monthly
             budget. You can always modify later.
             <br></br>
@@ -88,7 +88,7 @@ const EditMonthlyIncome = () => {
             setMonthlyIncomeValue(e);
           }}
         />
-        <div className="text-xxxs font-poppins text-[#B0B0B0] text-center mt-2.5 tracking-longest_text">
+        <div className="text-xxxs font-primary text-[#B0B0B0] text-center mt-2.5 tracking-longest_text">
           *equals your overall monthly budget
         </div>
       </div>

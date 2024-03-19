@@ -12,15 +12,17 @@ export const AvailableBudgetContainer = ({
   return (
     <div className="flex flex-col items-start">
       <div className="">
-        {/* <div className="absolute -right-7 top-1.5 font-workSans font-semibold text-sm text-skin-neutral2 ">
+        {/* <div className="absolute -right-7 top-1.5 font-custom font-semibold text-sm text-skin-neutral2 ">
           {currencySymbol ?? ""}
         </div> */}
-        <div className="font-workSans text-4xl text-skin-neutral2 font-semibold">
+        <div className="font-custom text-4xl text-skin-base font-medium">
           {amount?.toLocaleString("en-us")}
-          <sup style={{ fontSize: '16px', verticalAlign: 'super', marginLeft: '-4px' }}>{currencySymbol ? currencySymbol : ""}</sup>
+          <sup className="text-xs align-super -ml-1">
+            {currencySymbol ? currencySymbol : ""}
+          </sup>
         </div>
       </div>
-      <div className="font-poppins text-xs font-medium tracking-wide text-skin-subtitle">
+      <div className="font-primary text-xs font-medium tracking-wider text-skin-base">
         {subtitle}
       </div>
     </div>

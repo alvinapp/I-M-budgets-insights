@@ -27,7 +27,7 @@ export const OthersSpend = ({
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
-        <div className="font-poppins text-skin-base text-sm tracking-listtile_subtitle">
+        <div className="font-primary text-skin-base text-sm tracking-listtile_subtitle">
           🎉 Nice! You're spending on par with others like you per category.
         </div>
       </div>
@@ -82,11 +82,11 @@ export const OthersSpend = ({
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-4.5 mb-6"></div>
       <div className="flex flex-row items-center justify-between mb-6">
-        <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide">
+        <div className="font-medium font-primary text-xs text-skin-subtitle tracking-wide">
           Categories
         </div>
         <div className="flex flex-col items-end">
-          <div className="font-medium font-poppins text-xs text-skin-subtitle tracking-wide">
+          <div className="font-medium font-primary text-xs text-skin-subtitle tracking-wide">
             Spend difference
           </div>
         </div>
@@ -94,15 +94,15 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
-            return (
-              <ExpenditureComparisonCard
-                icon={expenditure.emoji}
-                key={i}
-                category={expenditure.name}
-                percentage={expenditure.percentage}
-              />
-            );
-          })
+              return (
+                <ExpenditureComparisonCard
+                  icon={expenditure.emoji}
+                  key={i}
+                  category={expenditure.name}
+                  percentage={expenditure.percentage}
+                />
+              );
+            })
           : null}
       </div>
     </div>

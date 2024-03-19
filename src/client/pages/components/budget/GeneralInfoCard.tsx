@@ -9,7 +9,7 @@ type GeneralInfoCardProps = {
   subtitle?: string;
   caption?: string;
   currencySymbol?: string;
-  onClick?:()=>void;
+  onClick?: () => void;
 };
 export const GeneralInfoCard = ({
   title,
@@ -18,7 +18,7 @@ export const GeneralInfoCard = ({
   subtitle,
   caption,
   currencySymbol,
-  onClick
+  onClick,
 }: GeneralInfoCardProps) => {
   return (
     <div className="flex flex-col shadow-card p-4 rounded-lg" onClick={onClick}>
@@ -30,20 +30,18 @@ export const GeneralInfoCard = ({
             >
               <div className="">{icon}</div>
             </div>
-            <div className="font-poppins text-sm tracking-listtile_subtitle text-skin-base font-medium ml-4">
+            <div className="font-primary text-base text-skin-base font-medium ml-4">
               {title}
             </div>
           </div>
         </div>
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
-            <div className="relative">
-              <div className="absolute -right-1 -top-3 font-workSans font-semibold text-sm text-skin-neutral2 ">
-                {currencySymbol ?? ""}
-              </div>
-              <div className="font-workSans font-semibold text-lg text-skin-neutral2">
-                {caption}
-              </div>
+            <div className="font-custom font-medium text-base text-skin-base">
+              {caption}
+              <sup className="font-custom font-medium text-xxs text-skin-base align-super">
+                {currencySymbol}
+              </sup>
             </div>
             <div className="ml-1 font-semibold text-lg text-skin-neutral2">
               <FiChevronRight size="1rem" />
@@ -51,8 +49,8 @@ export const GeneralInfoCard = ({
           </div>
         </div>
       </div>
-      <div className="flex flex-row mt-3.5 mx-1">
-        <div className="font-poppins text-xs font-medium tracking-wide text-skin-subtitle">
+      <div className="flex flex-row mt-2 mx-1">
+        <div className="font-primary text-sm font-normal tracking-wide text-skin-base">
           {subtitle}
         </div>
       </div>

@@ -41,9 +41,6 @@ const InsightsView = () => {
   const searchParams = new URLSearchParams(location.search);
   const startDate = searchParams.get("startDate");
   const endDate = searchParams.get("endDate");
-
-  // console.log("startDate", startDate);
-  // console.log("endDate", endDate);
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
@@ -66,10 +63,6 @@ const InsightsView = () => {
     total_change: netCashFlow = 0,
   } = cashFlowData || {};
   const categoryStore = useCategoriesStore((state: any) => state);
-
-  // console.log("categoryStore", categoryStore.categoryBudgets);
-  // console.log("macroGoalStore", macroGoalStore.macroGoals);
-
   const essentialTotalBudgetAmount =
     categoryStore.categoryBudgets[0]?.total_amount;
   const wantsTotalBudgetAmount = categoryStore.categoryBudgets[1]?.total_amount;
@@ -99,7 +92,6 @@ const InsightsView = () => {
 
   const cashflowVariables =
     useCashflowVariablesStore.getState().cashflowVariables;
-  console.log("accounts", accounts);
   useEffect(() => {
     const fetchCashFlowData = async () => {
       const data = await getCashFlow({
@@ -161,7 +153,7 @@ const InsightsView = () => {
                 className="h-6 w-6 rounded-full flex justify-center items-center"
                 onClick={() => openFilter(true)}
               >
-                <FiFilter color="#4E6783" size="1.5rem" />
+                <FiFilter color="#101010" size="1.5rem" />
               </div>
             </div>
           }
@@ -237,7 +229,7 @@ const InsightsView = () => {
           />
         </div>
         <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
-          <div className="text-base text-skin-base font-semibold tracking-title font-workSans">
+          <div className="text-base text-skin-base font-medium tracking-title font-custom">
             Budget spend
           </div>
           <div className="mt-4.5 mx-2">
@@ -282,26 +274,28 @@ const InsightsView = () => {
           </div>
         </div>
       </div>
-      <BottomSheet
-        onDismiss={() => {
-          openFilter(false);
-        }}
-        open={filter}
-        style={{
-          borderRadius: 24,
-        }}
-        children={
-          <InsightsFilters
-            accounts={accounts}
-            activeAccount={filteredAccount}
-            onClick={(account: Account) => {
-              filterAccountBy(account);
-            }}
-            closeBottomSheet={closeBottomSheet}
-          />
-        }
-        defaultSnap={400}
-      ></BottomSheet>
+      <div className="mb-5">
+        <BottomSheet
+          onDismiss={() => {
+            openFilter(false);
+          }}
+          open={filter}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            <InsightsFilters
+              accounts={accounts}
+              activeAccount={filteredAccount}
+              onClick={(account: Account) => {
+                filterAccountBy(account);
+              }}
+              closeBottomSheet={closeBottomSheet}
+            />
+          }
+          defaultSnap={400}
+        ></BottomSheet>
+      </div>
     </div>
   );
 };

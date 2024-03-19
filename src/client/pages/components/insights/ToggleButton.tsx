@@ -22,8 +22,8 @@ export const ToggleButton = ({
       <div
         className={`text-center ${
           isActive
-            ? "text-skin-primary font-workSans text-xxxs font-semibold tracking-tab_text"
-            : "text-[#B0B0B0] font-workSans text-xxxs font-semibold tracking-tab_text"
+            ? "text-skin-primary font-custom text-xxxs font-semibold tracking-tab_text"
+            : "text-[#B0B0B0] font-custom text-xxxs font-semibold tracking-tab_text"
         }`}
       >
         {label}

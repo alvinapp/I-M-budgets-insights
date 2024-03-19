@@ -30,8 +30,8 @@ const PercentageItem: React.FC<PercentageItemProps> = ({
           }}
         ></div>
         <div className="flex flex-col items-start">
-          <span className="font-workSans font-semibold text-base text-skin-base">{`${percentage}%`}</span>
-          <span className="font-poppins text-xs text-skin-subtitle font-medium">
+          <span className="font-custom font-medium text-base text-skin-base">{`${percentage}%`}</span>
+          <span className="font-primary text-xs text-skin-subtitle font-medium">
             {label}
           </span>
         </div>

@@ -8,6 +8,16 @@
 @import "react-datepicker/dist/react-datepicker.css";
 @import "react-toastify/dist/ReactToastify.css";
 
+@font-face {
+  font-family: "NeueMontreal";
+  src: url("./assets/fonts/PPNeueMontreal-Bold.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-Light.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-Medium.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-Regular.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-SemiBold.ttf") format("ttf"),
+    url("./assets/fonts/PPNeueMontreal-Thin.ttf") format("ttf");
+}
+
 @layer base {
   :root {
     --color-text-base: #101010;
@@ -36,10 +46,10 @@
     --color-text-icon-tertiary: #8b714f;
     --color-text-alvin-brown: #6f5a3f;
     --color-text-alvin-brown-faded: #b9aa95;
-    --color-button-primary: #056489;
+    --color-button-primary: #0539ec;
     --color-button-neutral: #6f89a5;
     --color-background-base: #ffffff;
-    --color-background-primary: #056489;
+    --color-background-primary: #0539ec;
     --color-background-secondary: #cde0e7;
     --color-background-warning: #e08e31;
     --color-background-success: #297a22;
@@ -64,15 +74,16 @@
     --color-background-input: #e6e9ed;
     --color-background-input-button: #e7edf3;
     --color-background-divider: #d3d3d3;
-    --color-background-icon-primary: rgba(214, 234, 212, 0.2);
+    --color-background-icon-primary: #f2f2f2;
     --color-background-icon-secondary: rgba(213, 212, 217, 0.2);
     --color-background-icon-tertiary: rgba(232, 227, 220, 0.2);
     --color-background-path: rgba(255, 255, 255, 0.25);
     --color-background-accent2: #f2f2f2;
     --color-background-accent2-withOpacity: rgba(242, 242, 242, 0.2);
     --color-background-black: #101010;
+    --color-background-disabled: #c3c3c3;
     --color-outline-base: #101010;
-    --color-outline-primary: #056489;
+    --color-outline-primary: #0539ec;
     --color-outline-neutral: #6f89a5;
     --color-outline-secondary: #d0ddea;
     --color-outline-success-neutral: #d6ead4;
@@ -193,25 +204,25 @@ input[type="number"] {
   background: #85c17f;
 }
 .my-class {
-  border: 1px solid #056489 !important;
+  border: 1px solid #f0f3fe !important;
   border-radius: 500px !important;
   width: 100% !important;
   height: 3.5rem !important;
-  color: #04506e !important;
+  color: #0539ec !important;
 }
 .my-caret-class {
   padding: 1.5rem !important;
   height: 3.0625rem !important;
   width: 3.0625rem !important;
   border-radius: 500px !important;
-  background: #056489 !important;
+  background: #0539ec !important;
   color: white !important;
 }
 .my-overlay-class {
-  background: white !important;
+  background: #f0f3fe !important;
   padding-left: 50px !important;
   padding-right: 5px !important;
-  color: white !important;
+  color: #f0f3fe !important;
 }
 .toast {
   background-color: #2c3f53;
@@ -228,4 +239,18 @@ input[type="number"] {
   margin-bottom: 1.5rem;
   margin-left: 0.937rem;
   margin-right: 0.937rem;
+}
+
+/* Bottom sheet overlay custom styles */
+[data-rsbs-overlay] {
+  margin-bottom: 2rem;
+  margin-left: 0.6875rem;
+  margin-right: 0.6875rem;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+}
+[ball-testid] > svg {
+  color: #101010;
 }

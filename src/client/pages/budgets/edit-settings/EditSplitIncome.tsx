@@ -235,11 +235,11 @@ const EditSplitIncome = () => {
         <div className="rounded-full h-11 w-11 bg-skin-tertiaryWithOpacity flex justify-center items-center mx-3.5">
           <FiPieChart color="#555466" />
         </div>
-        <div className="font-workSans font-semibold text-xl tracking-title mt-1.5 mx-3.5">
+        <div className="font-custom font-semibold text-xl tracking-title mt-1.5 mx-3.5">
           Whoop! Here is your recommended budget split.
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
-          <div className="text-xs font-poppins text-skin-subtitle tracking-wide mt-6 font-medium mx-3.5">
+          <div className="text-xs font-primary text-skin-subtitle tracking-wide mt-6 font-medium mx-3.5">
             The best practice for budgeting is 50% of your income for
             Essentials, 30% for Wants, then 20% for Savings. However, you can
             personalize your budget split below.
@@ -251,10 +251,10 @@ const EditSplitIncome = () => {
             <div className="justify-self-start font-semibold">Essentials</div>
             <div className="justify-self-end font-semibold">
               <div className="relative">
-                <div className="absolute -right-3 -top-1.5 font-workSans font-semibold text-xs text-skin-neutral2 ">
+                <div className="absolute -right-3 -top-1.5 font-custom font-semibold text-xs text-skin-neutral2 ">
                   {currency ?? ""}
                 </div>
-                <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
+                <div className="font-custom text-lg text-skin-neutral2 font-semibold">
                   {calculateIncomeAmount(essentialsRatio)?.toLocaleString(
                     "en-us"
                   )}
@@ -291,10 +291,10 @@ const EditSplitIncome = () => {
             <div className="justify-self-start font-semibold">Wants</div>
             <div className="justify-self-end font-semibold">
               <div className="relative">
-                <div className="absolute -right-3 -top-1.5 font-workSans font-semibold text-xs text-skin-neutral2 ">
+                <div className="absolute -right-3 -top-1.5 font-custom font-semibold text-xs text-skin-neutral2 ">
                   {currency ?? ""}
                 </div>
-                <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
+                <div className="font-custom text-lg text-skin-neutral2 font-semibold">
                   {calculateIncomeAmount(wantsRatio)?.toLocaleString("en-us")}
                 </div>
               </div>
@@ -329,10 +329,10 @@ const EditSplitIncome = () => {
             <div className="justify-self-start font-semibold">Savings</div>
             <div className="justify-self-end font-semibold">
               <div className="relative">
-                <div className="absolute -right-3 -top-1.5 font-workSans font-semibold text-xs text-skin-neutral2 ">
+                <div className="absolute -right-3 -top-1.5 font-custom font-semibold text-xs text-skin-neutral2 ">
                   {currency ?? ""}
                 </div>
-                <div className="font-workSans text-lg text-skin-neutral2 font-semibold">
+                <div className="font-custom text-lg text-skin-neutral2 font-semibold">
                   {calculateIncomeAmount(savingsRatio)?.toLocaleString("en-us")}
                 </div>
               </div>

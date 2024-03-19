@@ -18,7 +18,7 @@ export const DepositButton = ({ warning = false }: DepositButtonProps) => {
         <div
           className={`${
             warning ? "text-skin-warning" : "text-skin-primary"
-          } font-poppins text-xs font-semibold tracking-tab_text`}
+          } font-primary text-xs font-semibold tracking-tab_text`}
         >
           Deposit
         </div>

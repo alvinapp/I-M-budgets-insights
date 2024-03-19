@@ -25,10 +25,10 @@ export const SearchDropDown = ({ data, onClick }: SearchDropDownProps) => {
                 <div className="text-skin-subtitle flex-col justify-center mr-2">
                   <FiCheck size="1.2rem" />
                 </div>
-                <div className="text-base font-poppins font-medium tracking-progress_label flex flex-col">
+                <div className="text-base font-primary font-medium tracking-progress_label flex flex-col">
                   {`${capitalize(city.address.cityName.toLowerCase())},`}
                 </div>
-                <span className="text-base font-poppins font-medium tracking-progress_label">
+                <span className="text-base font-primary font-medium tracking-progress_label">
                   {capitalize(city.address.countryName.toLowerCase())}
                 </span>
               </div>

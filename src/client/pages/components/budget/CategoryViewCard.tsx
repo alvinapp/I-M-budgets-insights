@@ -17,6 +17,7 @@ type CategoryViewCardProps = {
   primaryColor?: string;
   fadedColor?: string;
   caption?: string;
+  onClick?: () => void;
 };
 export const CategoryViewCard = ({
   icon,
@@ -31,12 +32,13 @@ export const CategoryViewCard = ({
   primaryColor,
   fadedColor,
   caption,
+  onClick,
 }: CategoryViewCardProps) => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
   return (
-    <div className="flex flex-row mb-3">
+    <div className="flex flex-row mb-3" onClick={onClick}>
       <div className="flex flex-col mr-2">
         <div
           className={`rounded-full h-10 w-10 flex justify-center items-center ${iconBg}`}
@@ -48,21 +50,18 @@ export const CategoryViewCard = ({
         <div className="flex flex-row justify-between items-center mb-2.5">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
-              <div className="font-poppins text-xs text-skin-base font-medium tracking-wide">
+              <div className="font-primary text-sm text-skin-base font-medium tracking-wide">
                 {category}
-              </div>
-              <div>
-                <FiChevronRight size="0.5rem" />
               </div>
             </div>
           </div>
           <div className="flex flex-col">
             <div className="relative">
-              <div className="absolute -right-1 -top-2 font-poppins font-semibold text-xxxxxs text-skin-base ">
-                {currencySymbol ?? ""}
-              </div>
-              <div className="font-poppins text-xs text-skin-base font-semibold">
+              <div className="font-primary text-sm text-skin-base font-medium">
                 {amount?.toLocaleString("en-us")}
+                <sup className=" align-super -ml-1 text-xxs">
+                  {currencySymbol ?? ""}
+                </sup>
               </div>
             </div>
           </div>
@@ -72,45 +71,40 @@ export const CategoryViewCard = ({
           height="4px"
           baseBgColor={`${baseBgColor}`}
           bgColor={`${bgColor}`}
-          // bgColor="#0131a1"
           isLabelVisible={false}
         />
         <div className="flex flex-row mb-2.5 items-center"></div>
         <div className="flex flex-row items-center">
           <div
-            className={`font-poppins text-xs ${
+            className={`font-primary text-sm ${
               primaryColor ?? "text-skin-base"
-            } font-semibold mr-1`}
+            } font-medium mr-1`}
           >
             {spentAmount?.toLocaleString("en-us")}
           </div>
           <div
-            className={`font-poppins text-xs ${
+            className={`font-primary text-sm ${
               fadedColor ?? "text-skin-base"
-            } font-semibold mr-1`}
+            } font-medium mr-1`}
           >
             of
           </div>
           <div className="relative mr-1">
             <div
-              className={`absolute -right-2.5 -top-2 font-poppins text-xxxxxs ${
+              className={`font-primary text-sm ${
                 fadedColor ?? "text-skin-base"
-              } font-semibold`}
-            >
-              {currencySymbol ?? ""}
-            </div>
-            <div
-              className={`font-poppins text-xs ${
-                fadedColor ?? "text-skin-base"
-              } font-semibold`}
+              } font-medium`}
             >
               {budgetAmount?.toLocaleString("en-us")}
+              <sup className=" align-super -ml-1 text-xxs">
+                {currencySymbol ?? ""}
+              </sup>
             </div>
           </div>
           <div
-            className={`font-poppins text-xs ${
+            className={`font-primary text-sm ${
               fadedColor ?? "text-skin-base"
-            } font-semibold`}
+            } font-medium`}
           >
             {caption ?? "spent"}
           </div>

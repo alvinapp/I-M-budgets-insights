@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import ArrowBackButton from "../../components/ArrowBack";
 import NavBar from "../../components/NavBar";
 import NavBarTitle from "../../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
-import CloseButton from "../../components/CloseButton";
 import { FiBriefcase, FiInfo, FiPieChart } from "react-icons/fi";
 import { BudgetDisplay } from "../../components/budget/BudgetDisplay";
 import { useQuery } from "react-query";
 import { getCategories } from "client/api/categories";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useCategoriesStore from "client/store/categoriesStore";
-import { Category } from "client/models/Categories";
 import { BudgetSettingCard } from "../../components/budget/BudgetSettingCard";
-import MainButton from "../../components/MainButton";
 import { GeneralInfoCard } from "../../components/budget/GeneralInfoCard";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { fetchMacros, saveBudget } from "client/api/budget";
@@ -22,8 +18,17 @@ import useUserStore from "client/store/userStore";
 import { SavingsSettingCard } from "../../components/budget/SavingsSettingCard";
 import BackButton from "client/pages/components/BackButton";
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
+import { useSavingsBottomSheetStore } from "client/store/bottomSheetStore";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import SavingsGoalConfirmation from "../SavingsGoalConfirmation";
+import SuccessfullCreatedView from "client/pages/components/budget/SuccessfullCreatedView";
+import successIcon from "client/assets/images/success-icon.svg";
 
 const EditBudgetSettings = () => {
+  const [savingsSuccess, setSavingsSuccess] = useState(false);
+  const savingsBottomSheetStore = useSavingsBottomSheetStore(
+    (state: any) => state
+  );
   const configurations = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -61,13 +66,11 @@ const EditBudgetSettings = () => {
       is_contribute_customized: true,
     },
   ];
-
   const { isFetching: fetchingCategories } = useQuery(
     "fetch-categories",
     () =>
       getCategories({ configuration: configurations }).then((result) => {
         categoriesStore.setCategories(result);
-
 
         const mapper = (type: string) => (category: any, index: number) => {
           category.macro_type?.name === type
@@ -211,12 +214,12 @@ const EditBudgetSettings = () => {
                 navigate("/budgets-view");
               }}
             />
-            <NavBarTitle title="Add Category Budgets" />
+            <NavBarTitle title="" />
             <div
               className="h-6 w-6 rounded-full flex items-center justify-center"
               onClick={() => navigate("/view-info")}
             >
-              <FiInfo color="#4E6783" size="1.5rem" />
+              <FiInfo color="#101010" size="1.5rem" />
             </div>
           </div>
         }
@@ -228,12 +231,11 @@ const EditBudgetSettings = () => {
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
-            caption={`${budgetSettingsStore.monthlyIncome !== 0
-              ? budgetSettingsStore.monthlyIncome
-              : typeof userStore.user.income === undefined
-                ? ""
-                : userStore.user.income
-              }`}
+            caption={`${
+              budgetSettingsStore.monthlyIncome !== 0
+                ? budgetSettingsStore.monthlyIncome.toString()
+                : userStore.user?.income?.toString() ?? ""
+            }`}
             currencySymbol={currencySymbol}
             onClick={() => navigate("/edit-monthly-income")}
           />
@@ -243,13 +245,12 @@ const EditBudgetSettings = () => {
           icon={<FiPieChart />}
           title="Budget split"
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
-          caption={`${typeof categoriesStore.macros?.budget_split === undefined
-            ? ""
-            : categoriesStore.macros?.budget_split
-            }`}
+          caption={`${categoriesStore.macros?.budget_split ?? ""}`}
           onClick={() => {
-            navigate("/edit-split-income");
-            budgetStore.setMonthlyIncome(userStore.user?.income);
+            if (categoriesStore.macros?.budget_split) {
+              navigate("/edit-split-income");
+              budgetStore.setMonthlyIncome(userStore.user?.income);
+            }
           }}
         />
         <div className="mb-4 mt-5 flex flex-row items-center justify-center px-3.5">
@@ -262,36 +263,48 @@ const EditBudgetSettings = () => {
         <div className="shadow-card px-4 pt-5 pb-3 rounded-lg">
           <BudgetDisplay
             title="Essentials"
-            budgetAmount={essentialBudgetAmount}
-            percentageOfBudgetCaption={`${essentialGoals[0]?.share ?? ""
-              }% of overall budget`}
+            budgetAmount={essentialBudgetAmount ?? 0}
+            percentageOfBudgetCaption={`${
+              essentialGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={essentialBudgetAmount - allocatedEssentials}
+            unallocatedAmount={
+              typeof essentialBudgetAmount === "number" &&
+              essentialBudgetAmount > 0
+                ? Math.min(essentialBudgetAmount - allocatedEssentials, 0)
+                : 0 // Ensure perc
+            }
             allocatedAmount={allocatedEssentials}
             progressPercentage={
-              typeof essentialBudgetAmount === "undefined"
-                ? 0
-                : (allocatedEssentials / essentialBudgetAmount) * 100
+              typeof essentialBudgetAmount === "number" &&
+              essentialBudgetAmount > 0
+                ? Math.min(
+                    (allocatedEssentials / essentialBudgetAmount) * 100,
+                    100
+                  ) // Ensure percentage stays between 0 and 100
+                : 0
             }
+            progressColor="#051AA3"
+            indicatorColor="bg-[linear-gradient(159deg,#4053D0_0%,#051AA3_100%)]"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
-            <div className="text-skin-base font-poppins text-xs tracking-wide">
+            <div className="text-skin-base font-primary text-xs tracking-wide">
               Add budgets to your Essentials below
             </div>
           </div>
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Categories
             </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
             </div>
           </div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[0] &&
-              categoriesStore.categoryBudgets[0].data?.length > 0 ? (
+            categoriesStore.categoryBudgets[0].data?.length > 0 ? (
               categoriesStore.categoryBudgets[0].data.map(
                 (category: any, i: any) => {
                   const data = essentialsMapState.get(`data${i}`);
@@ -326,7 +339,7 @@ const EditBudgetSettings = () => {
                         });
                         setAllocatedEssentials(
                           allocatedEssentials +
-                          categoriesStore.incrementalAmount
+                            categoriesStore.incrementalAmount
                         );
                       }}
                       decrement={() => {
@@ -339,7 +352,7 @@ const EditBudgetSettings = () => {
                         });
                         setAllocatedEssentials(
                           allocatedEssentials -
-                          categoriesStore.incrementalAmount
+                            categoriesStore.incrementalAmount
                         );
                       }}
                     />
@@ -354,113 +367,135 @@ const EditBudgetSettings = () => {
         <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
           <BudgetDisplay
             title="Wants"
-            budgetAmount={wantsBudgetAmount}
-            percentageOfBudgetCaption={`${wantsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            budgetAmount={wantsBudgetAmount ?? 0}
+            percentageOfBudgetCaption={`${
+              wantsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={wantsBudgetAmount - allocatedWants}
-            allocatedAmount={allocatedWants}
-            progressPercentage={(allocatedWants / wantsBudgetAmount) * 100}
+            unallocatedAmount={
+              typeof wantsBudgetAmount === "number" && wantsBudgetAmount > 0
+                ? Math.min(wantsBudgetAmount - allocatedWants, 0) // Ensure percentage stays between 0 and 100
+                : 0
+            }
+            allocatedAmount={allocatedWants ?? 0}
+            progressPercentage={
+              typeof wantsBudgetAmount === "number" && wantsBudgetAmount > 0
+                ? Math.min((allocatedWants / wantsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
+                : 0
+            }
+            progressColor="#3B4381"
+            indicatorColor="bg-[linear-gradient(159deg,#8490E2_0%,#3B4381_100%)]"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
-            <div className="text-skin-base font-poppins text-xs tracking-wide">
+            <div className="text-skin-base font-primary text-xs tracking-wide">
               Add budgets to your Wants below
             </div>
           </div>
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Categories
             </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
             </div>
           </div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[1] &&
-              categoriesStore.categoryBudgets[1].data?.length > 0
+            categoriesStore.categoryBudgets[1].data?.length > 0
               ? categoriesStore.categoryBudgets[1].data.map(
-                (category: any, i: any) => {
-                  const data = wantsMapState.get(`data${i}`);
-                  const initialAmount = category?.amount || 0;
-                  const adjustment = data?.amount || 0;
+                  (category: any, i: any) => {
+                    const data = wantsMapState.get(`data${i}`);
+                    const initialAmount = category?.amount || 0;
+                    const adjustment = data?.amount || 0;
 
-                  return (
-                    <BudgetSettingCard
-                      key={i}
-                      category={category?.name}
-                      emoji={category?.category.emoji}
-                      amount={data?.amount}
-                      maxValue={Number.MAX_SAFE_INTEGER}
-                      addValue={(e) => {
-                        const difference = e - (initialAmount + adjustment);
-                        updateWantsMap(i, {
-                          ...data,
-                          amount: e - initialAmount,
-                        });
-                        setAllocatedWants(allocatedWants + difference);
-                      }}
-                      increment={() => {
-                        updateWantsMap(i, {
-                          ...data,
-                          amount:
-                            adjustment + categoriesStore.incrementalAmount,
-                        });
-                        setAllocatedWants(
-                          allocatedWants + categoriesStore.incrementalAmount
-                        );
-                      }}
-                      decrement={() => {
-                        updateWantsMap(i, {
-                          ...data,
-                          amount: Math.max(
-                            adjustment - categoriesStore.incrementalAmount,
-                            0
-                          ),
-                        });
-                        setAllocatedWants(
-                          allocatedWants - categoriesStore.incrementalAmount
-                        );
-                      }}
-                    />
-                  );
-                }
-              )
+                    return (
+                      <BudgetSettingCard
+                        key={i}
+                        category={category?.name}
+                        emoji={category?.category.emoji}
+                        amount={data?.amount}
+                        maxValue={Number.MAX_SAFE_INTEGER}
+                        addValue={(e) => {
+                          const difference = e - (initialAmount + adjustment);
+                          updateWantsMap(i, {
+                            ...data,
+                            amount: e - initialAmount,
+                          });
+                          setAllocatedWants(allocatedWants + difference);
+                        }}
+                        increment={() => {
+                          updateWantsMap(i, {
+                            ...data,
+                            amount:
+                              adjustment + categoriesStore.incrementalAmount,
+                          });
+                          setAllocatedWants(
+                            allocatedWants + categoriesStore.incrementalAmount
+                          );
+                        }}
+                        decrement={() => {
+                          updateWantsMap(i, {
+                            ...data,
+                            amount: Math.max(
+                              adjustment - categoriesStore.incrementalAmount,
+                              0
+                            ),
+                          });
+                          setAllocatedWants(
+                            allocatedWants - categoriesStore.incrementalAmount
+                          );
+                        }}
+                      />
+                    );
+                  }
+                )
               : null}
           </div>
         </div>
-        <div className="px-4 pt-5 pb-3 mt-4.5 rounded-lg">
+        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-6">
           <BudgetDisplay
             title="Savings"
-            budgetAmount={savingsBudgetAmount}
-            percentageOfBudgetCaption={`${savingsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            budgetAmount={savingsBudgetAmount ?? 0}
+            percentageOfBudgetCaption={`${
+              savingsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={savingsBudgetAmount - allocatedSavings}
+            unallocatedAmount={
+              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
+                ? Math.min(savingsBudgetAmount - allocatedSavings, 0)
+                : 0
+            }
             allocatedAmount={allocatedSavings}
-            progressPercentage={(allocatedSavings / savingsBudgetAmount) * 100}
+            progressPercentage={
+              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
+                ? Math.min((allocatedSavings / savingsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
+                : 0
+            }
+            progressColor="#84C1B2"
+            indicatorColor="bg-[#84C1B2]"
           />
           <div className="border mt-6 mb-4.5"></div>
           <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
-              Categories
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+              Goals
             </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-poppins">
+            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
               Budget allocation
             </div>
           </div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[2] &&
-              categoriesStore.categoryBudgets[2].data?.length > 0
-              ? categoriesStore.categoryBudgets[2].data.map((category: any) => {
+            categoriesStore.categoryBudgets[2].data?.length > 0 ? (
+              categoriesStore.categoryBudgets[2].data.map((category: any) => {
                 return (
                   <SavingsSettingCard
                     isAdded={addSavings}
-                    category="Create a goal"
+                    goal="Create a Rainy day fund goal"
                     emoji="🎯"
-                    amount={savingsBudgetAmount}
+                    amount={savingsBudgetAmount ?? 0}
                     add={() => {
                       setAddSavings(true);
                       setAllocatedSavings(savingsBudgetAmount);
@@ -481,20 +516,37 @@ const EditBudgetSettings = () => {
                       ]);
                     }}
                     edit={() => {
-                      setAddSavings(false);
-                      setAllocatedSavings(0);
+                      // setAddSavings(false);
+                      // setAllocatedSavings(0);
                     }}
                   />
                 );
               })
-              : null}
+            ) : (
+              <SavingsSettingCard
+                isAdded={addSavings}
+                goal="Create a Rainy day fund goal"
+                emoji="🎯"
+                amount={savingsBudgetAmount ?? 0}
+                // add={() => {
+                //   // setAddSavings(true);
+                //   // setAllocatedSavings(savingsBudgetAmount);
+                //   console.log("Show bottom sheet");
+                //   savingsBottomSheetStore.setSavingsBottomSheet(true);
+                // }}
+                edit={() => {
+                  // setAddSavings(false);
+                  // setAllocatedSavings(0);
+                }}
+              />
+            )}
           </div>
         </div>
-        <div className="flex flex-row mt-18 justify-center items-center">
-          <div className="font-poppins text-xs font-medium tracking-wide text-skin-neutral">
+        {/* <div className="flex flex-row mt-18 justify-center items-center">
+          <div className="font-primary text-xs font-medium tracking-wide text-skin-neutral">
             *Setup at least 3 categories
           </div>
-        </div>
+        </div> */}
         {/* <div className="mt-2">
           <MainButton
             title="All set"
@@ -505,6 +557,38 @@ const EditBudgetSettings = () => {
             }}
           />
         </div> */}
+        <BottomSheet
+          onDismiss={() => {
+            savingsBottomSheetStore.setSavingsBottomSheet(false);
+          }}
+          open={savingsBottomSheetStore.savingsBottomSheet}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            savingsSuccess ? (
+              <SuccessfullCreatedView
+                image={successIcon}
+                title="Whoop! Goal created"
+                caption="Duis aute categorize in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident."
+                onClick={() => {
+                  setSavingsSuccess(false);
+                  savingsBottomSheetStore.setSavingsBottomSheet(false);
+                }}
+              />
+            ) : (
+              <SavingsGoalConfirmation
+                monthlyContribution={savingsBudgetAmount}
+                targetAmount={essentialBudgetAmount * 3}
+                progressPercentage={3}
+                onClick={() => {
+                  setSavingsSuccess(true);
+                }}
+              />
+            )
+          }
+          defaultSnap={400}
+        ></BottomSheet>
       </div>
     </div>
   );

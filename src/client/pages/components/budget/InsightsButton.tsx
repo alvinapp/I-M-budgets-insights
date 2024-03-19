@@ -19,7 +19,7 @@ export const InsightsButton = ({ onClick }: InsightsButtonProps) => {
       </div>
       <div className="flex flex-col">
         <div className="flex flex-row items-center">
-          <div className="font-poppins text-xs font-medium text-skin-neutral2">
+          <div className="font-primary text-xs font-medium text-skin-base">
             Insights
           </div>
           <span>
