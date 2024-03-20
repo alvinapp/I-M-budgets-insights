@@ -1,5 +1,6 @@
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
+import AnimatedNumber from "../AnimatedNumber";
 type AmountViewProps = {
   amount: number;
   caption?: string;
@@ -13,7 +14,7 @@ export const AmountView = ({ amount, caption, flex }: AmountViewProps) => {
     <div className={`flex flex-col ${flex ?? "items-start"}`}>
       <div className="relative">
         <div className="font-custom text-lg text-skin-base font-medium">
-          {amount?.toLocaleString("en-us")}
+          <AnimatedNumber target={amount} duration={500} />
           <sup className=" text-xs align-super -ml-1">
             {currencySymbol ? currencySymbol : ""}
           </sup>

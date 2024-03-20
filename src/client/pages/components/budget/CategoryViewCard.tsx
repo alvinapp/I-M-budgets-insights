@@ -3,6 +3,7 @@ import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { string } from "prop-types";
 import React from "react";
 import { FiChevronRight } from "react-icons/fi";
+import AnimatedNumber from "../AnimatedNumber";
 
 type CategoryViewCardProps = {
   category?: string;
@@ -76,24 +77,21 @@ export const CategoryViewCard = ({
         <div className="flex flex-row mb-2.5 items-center"></div>
         <div className="flex flex-row items-center">
           <div
-            className={`font-primary text-sm ${
-              primaryColor ?? "text-skin-base"
-            } font-medium mr-1`}
+            className={`font-primary text-sm ${primaryColor ?? "text-skin-base"
+              } font-medium mr-1`}
           >
-            {spentAmount?.toLocaleString("en-us")}
+            <AnimatedNumber target={spentAmount ?? 0} duration={500} />
           </div>
           <div
-            className={`font-primary text-sm ${
-              fadedColor ?? "text-skin-base"
-            } font-medium mr-1`}
+            className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+              } font-medium mr-1`}
           >
             of
           </div>
           <div className="relative mr-1">
             <div
-              className={`font-primary text-sm ${
-                fadedColor ?? "text-skin-base"
-              } font-medium`}
+              className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+                } font-medium`}
             >
               {budgetAmount?.toLocaleString("en-us")}
               <sup className=" align-super -ml-1 text-xxs">
@@ -102,9 +100,8 @@ export const CategoryViewCard = ({
             </div>
           </div>
           <div
-            className={`font-primary text-sm ${
-              fadedColor ?? "text-skin-base"
-            } font-medium`}
+            className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+              } font-medium`}
           >
             {caption ?? "spent"}
           </div>

@@ -76,8 +76,8 @@ const CustomSelectDropdown = ({
   };
 
   return (
-    <CustomSelect>
-      <SelectButton onClick={isDisabled ? () => {} : toggleDropdown}>
+    <CustomSelect className="font-custom">
+      <SelectButton className="font-custom" onClick={isDisabled ? () => { } : toggleDropdown}>
         {selectedOption || "Select an option"}
       </SelectButton>
       {isOpen && (

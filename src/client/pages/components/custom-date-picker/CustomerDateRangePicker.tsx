@@ -21,7 +21,6 @@ import CustomSelectDropdown from "./CustomSelectDropDown";
 
 const DatePickerWrapper = styled.div`
   position: relative;
-  font-family: "Arial", sans-serif;
 `;
 
 const IconContainer = styled.div`
@@ -108,15 +107,15 @@ const Day = styled.div<{
     props.isToday
       ? "black"
       : props.isInRange
-      ? "#fff"
-      : props.isCurrentMonth
-      ? "black"
-      : "#ccc"};
+        ? "#fff"
+        : props.isCurrentMonth
+          ? "black"
+          : "#ccc"};
   border-radius: 50%;
   border: ${(props) => (props.isSelected ? "2px solid #101010" : "none")};
   &:hover {
     background: ${(props) =>
-      !props.isSelected && props.isHovered ? "#c4c4c4" : ""};
+    !props.isSelected && props.isHovered ? "#c4c4c4" : ""};
   }
 `;
 
@@ -309,7 +308,7 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
   }, [isModalOpen, startMonth]);
 
   return (
-    <DatePickerWrapper>
+    <DatePickerWrapper className="font-custom">
       <IconContainer>
         <FiCalendar />
       </IconContainer>
@@ -337,12 +336,12 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
               isDisabled={disabled}
             />
           </MonthYearSelection>
-          <CalendarHeader>
+          <CalendarHeader className="font-custom">
             {["S", "M", "T", "W", "T", "F", "S"].map((dayName) => (
               <DayName key={dayName}>{dayName}</DayName>
             ))}
           </CalendarHeader>
-          <CalendarGrid>
+          <CalendarGrid className="font-custom">
             {generateCalendarDates(currentMonth).map((date) => (
               <Day
                 key={date.toString()}

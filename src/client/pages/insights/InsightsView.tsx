@@ -9,6 +9,7 @@ import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle"
 import Toggle from "../components/insights/Toggle";
 import {
   budgetSpendTabs,
+  cashflowFilters,
   expenditureList,
   insightsToggleTabs,
 } from "client/utils/MockData";
@@ -35,6 +36,7 @@ import getAccounts from "client/api/account";
 import { calculateMacroTypeTotals } from "client/utils/Formatters";
 import useMicroGoalsStore from "client/store/microGoalStore";
 import useCashflowVariablesStore from "client/store/cashFlowStore";
+import CashFlowFilterButton from "../components/insights/CashFlowFilterButton";
 
 const InsightsView = () => {
   const location = useLocation();
@@ -160,7 +162,25 @@ const InsightsView = () => {
         />
       </div>
       <div className="flex-grow h-px bg-skin-accent3"></div>
-      <div className="flex flex-col mt-7 mx-3.5">
+      <div className="py-3 mx-3.5 flex flex-wrap items-center">
+        {cashflowFilters?.map((element: any, i: number) => {
+          const label = "All accounts";
+          return (
+            <CashFlowFilterButton
+              label={label}
+              icon={element.icon}
+              key={i}
+              isActive={false}
+              onClick={() => {
+                if (i === 2) {
+                }
+              }}
+              id={`${i}`}
+            />
+          );
+        })}
+      </div>
+      <div className="flex flex-col mt-2 mx-3.5">
         <div className="flex flex-row items-center justify-between mr-5">
           {toggleTabId == 0 ? (
             <AvailableBudgetContainer
@@ -248,12 +268,12 @@ const InsightsView = () => {
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={userStore.user.income - totalBudgetAmount}
-                // spent={90000 + 209000}
-                // budget={totalBudgetAmount}
-                // wantsSpend={209000}
-                // savingsSpend={121000}
-                // essentialsSpend={90000}
-                // unallocatedSpend={userStore.user.income - totalBudgetAmount}
+              // spent={90000 + 209000}
+              // budget={totalBudgetAmount}
+              // wantsSpend={209000}
+              // savingsSpend={121000}
+              // essentialsSpend={90000}
+              // unallocatedSpend={userStore.user.income - totalBudgetAmount}
               />
             ) : (
               <OthersSpend
@@ -263,12 +283,18 @@ const InsightsView = () => {
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={0}
-                //   spentBudget={90000 + 209000}
-                //   plannedBudget={totalBudgetAmount}
-                //   wantsSpend={209000}
-                //   savingsSpend={121000}
-                //   essentialsSpend={90000}
-                //   unallocatedSpend={0}
+                startDate={
+                  startDate ? startDate : undefined
+                }
+                endDate={
+                  endDate ? endDate : undefined
+                }
+              //   spentBudget={90000 + 209000}
+              //   plannedBudget={totalBudgetAmount}
+              //   wantsSpend={209000}
+              //   savingsSpend={121000}
+              //   essentialsSpend={90000}
+              //   unallocatedSpend={0}
               />
             )}
           </div>
