@@ -255,7 +255,7 @@ export function getGoalCompletionString(
   );
   const targetAmountFormatted = formatCurrency(target_amount);
 
-  const goalCompletionString = `🙌🏼 By saving ${monthlyContributionFormatted}/month or ${weeklyContributionFormatted}/week, you'll achieve your goal of ${targetAmountFormatted} in approximately ${totalMonthsNeeded} months.`;
+  const goalCompletionString = `🙌🏼 By saving ${monthlyContributionFormatted}/month or ${weeklyContributionFormatted}/week, you'll achieve your goal by the next ${totalMonthsNeeded} months.`;
 
   return {
     goalCompletionString,

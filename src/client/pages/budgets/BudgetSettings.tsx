@@ -524,7 +524,7 @@ export const BudgetSettings = () => {
                     <SavingsSettingCard
                       isAdded={addSavings}
                       goal="Create a goal"
-                      emoji="🎯"
+                      emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
                       amount={savingsBudgetAmount}
                       add={() => {
                         setAddSavings(true);
@@ -534,7 +534,7 @@ export const BudgetSettings = () => {
                             amount: savingsBudgetAmount,
                             contribution_amount: 0,
                             percentage: 0,
-                            category_id: category?.id,
+                            category_id: category?.id ?? "",
                             name: category?.name,
                             pseudo_name: category?.name + " " + category?.emoji,
                             extern_id: category?.id,

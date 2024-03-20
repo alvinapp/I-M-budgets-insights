@@ -42,8 +42,12 @@ export const SavingsSettingCard = ({
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
               <div className="flex flex-col mr-2">
-                <div className="h-8 w-8 rounded-full flex items-center justify-center bg-skin-iconSecondary">
-                  <div>{emoji}</div>
+                <div className="h-8 w-8 relative overflow-hidden rounded-full bg-skin-iconSecondary">
+                  <img
+                    src={emoji}
+                    alt=""
+                    className=" inline m-auto h-full w-auto"
+                  />
                 </div>
               </div>
               <div className="flex flex-col">

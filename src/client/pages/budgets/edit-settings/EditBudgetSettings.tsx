@@ -23,6 +23,7 @@ import { BottomSheet } from "react-spring-bottom-sheet";
 import SavingsGoalConfirmation from "../SavingsGoalConfirmation";
 import SuccessfullCreatedView from "client/pages/components/budget/SuccessfullCreatedView";
 import successIcon from "client/assets/images/success-icon.svg";
+import EditSavingsViewCard from "./EditSavingsViewCard";
 
 const EditBudgetSettings = () => {
   const [savingsSuccess, setSavingsSuccess] = useState(false);
@@ -202,6 +203,9 @@ const EditBudgetSettings = () => {
     },
     { refetchOnWindowFocus: false, enabled: false }
   );
+  const [selectedSavingsGoal, setSelectedSavingsGoal] = useState({
+    name: "",
+  });
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -304,64 +308,62 @@ const EditBudgetSettings = () => {
           </div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[0] &&
-            categoriesStore.categoryBudgets[0].data?.length > 0 ? (
-              categoriesStore.categoryBudgets[0].data.map(
-                (category: any, i: any) => {
-                  const data = essentialsMapState.get(`data${i}`);
-                  const initialAmount = category?.amount || 0;
-                  const adjustment = data?.amount || 0;
+            categoriesStore.categoryBudgets[0].data?.length > 0
+              ? categoriesStore.categoryBudgets[0].data.map(
+                  (category: any, i: any) => {
+                    const data = essentialsMapState.get(`data${i}`);
+                    const initialAmount = category?.amount || 0;
+                    const adjustment = data?.amount || 0;
 
-                  return (
-                    <BudgetSettingCard
-                      key={i}
-                      category={category?.name}
-                      emoji={category?.category.emoji}
-                      amount={data?.amount}
-                      maxValue={Number.MAX_SAFE_INTEGER}
-                      addValue={(e) => {
-                        const difference = e - (initialAmount + adjustment);
-                        setAllocatedEssentials(
-                          allocatedEssentials + difference
-                        );
-                        updateEssentialsMap(i, {
-                          ...data,
-                          amount: e - initialAmount,
-                        });
-                        setAllocatedEssentials(
-                          allocatedEssentials + e - initialAmount
-                        );
-                      }}
-                      increment={() => {
-                        updateEssentialsMap(i, {
-                          ...data,
-                          amount:
-                            adjustment + categoriesStore.incrementalAmount,
-                        });
-                        setAllocatedEssentials(
-                          allocatedEssentials +
-                            categoriesStore.incrementalAmount
-                        );
-                      }}
-                      decrement={() => {
-                        updateEssentialsMap(i, {
-                          ...data,
-                          amount: Math.max(
-                            adjustment - categoriesStore.incrementalAmount,
-                            0
-                          ),
-                        });
-                        setAllocatedEssentials(
-                          allocatedEssentials -
-                            categoriesStore.incrementalAmount
-                        );
-                      }}
-                    />
-                  );
-                }
-              )
-            ) : (
-              <div></div>
-            )}
+                    return (
+                      <BudgetSettingCard
+                        key={i}
+                        category={category?.name}
+                        emoji={category?.category.emoji}
+                        amount={data?.amount}
+                        maxValue={Number.MAX_SAFE_INTEGER}
+                        addValue={(e) => {
+                          const difference = e - (initialAmount + adjustment);
+                          setAllocatedEssentials(
+                            allocatedEssentials + difference
+                          );
+                          updateEssentialsMap(i, {
+                            ...data,
+                            amount: e - initialAmount,
+                          });
+                          setAllocatedEssentials(
+                            allocatedEssentials + e - initialAmount
+                          );
+                        }}
+                        increment={() => {
+                          updateEssentialsMap(i, {
+                            ...data,
+                            amount:
+                              adjustment + categoriesStore.incrementalAmount,
+                          });
+                          setAllocatedEssentials(
+                            allocatedEssentials +
+                              categoriesStore.incrementalAmount
+                          );
+                        }}
+                        decrement={() => {
+                          updateEssentialsMap(i, {
+                            ...data,
+                            amount: Math.max(
+                              adjustment - categoriesStore.incrementalAmount,
+                              0
+                            ),
+                          });
+                          setAllocatedEssentials(
+                            allocatedEssentials -
+                              categoriesStore.incrementalAmount
+                          );
+                        }}
+                      />
+                    );
+                  }
+                )
+              : null}
           </div>
         </div>
         <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
@@ -478,67 +480,87 @@ const EditBudgetSettings = () => {
             indicatorColor="bg-[#84C1B2]"
           />
           <div className="border mt-6 mb-4.5"></div>
-          <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
-              Goals
-            </div>
-            <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
-              Budget allocation
-            </div>
-          </div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[2] &&
             categoriesStore.categoryBudgets[2].data?.length > 0 ? (
               categoriesStore.categoryBudgets[2].data.map((category: any) => {
+                console.log(category);
                 return (
-                  <SavingsSettingCard
-                    isAdded={addSavings}
-                    goal="Create a Rainy day fund goal"
-                    emoji="🎯"
-                    amount={savingsBudgetAmount ?? 0}
-                    add={() => {
-                      setAddSavings(true);
-                      setAllocatedSavings(savingsBudgetAmount);
-                      setSavingsList([
-                        {
-                          amount: savingsBudgetAmount,
-                          contribution_amount: 0,
-                          percentage: 0,
-                          category_id: category?.category.id,
-                          name: category?.name,
-                          pseudo_name:
-                            category?.name + " " + category?.category.emoji,
-                          extern_id: category?.category.id,
-                          order: 0,
-                          contribution_at: "",
-                          is_contribute_customized: true,
-                        },
-                      ]);
-                    }}
-                    edit={() => {
-                      // setAddSavings(false);
-                      // setAllocatedSavings(0);
-                    }}
-                  />
+                  <>
+                    <div className="flex flex-row justify-between items-center mb-4">
+                      <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+                        Goals
+                      </div>
+                      <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+                        Budget contribution
+                      </div>
+                    </div>
+                    <EditSavingsViewCard
+                      amount={savingsBudgetAmount ?? 0}
+                      icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                      goal={category?.name ?? ""}
+                    />
+                  </>
+
+                  // <SavingsSettingCard
+                  //   isAdded={addSavings}
+                  //   goal="Create a Rainy day fund goal"
+                  //   emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                  //   amount={savingsBudgetAmount ?? 0}
+                  //   add={() => {
+                  //     setAddSavings(true);
+                  //     setAllocatedSavings(savingsBudgetAmount);
+                  //     setSavingsList([
+                  //       {
+                  //         amount: savingsBudgetAmount,
+                  //         contribution_amount: 0,
+                  //         percentage: 0,
+                  //         category_id: category?.category.id,
+                  //         name: category?.name,
+                  //         pseudo_name:
+                  //           category?.name + " " + category?.category.emoji,
+                  //         extern_id: category?.category.id,
+                  //         order: 0,
+                  //         contribution_at: "",
+                  //         is_contribute_customized: true,
+                  //       },
+                  //     ]);
+                  //     setSelectedSavingsGoal({ name: category?.name });
+                  //   }}
+                  //   edit={() => {
+                  //     // setAddSavings(false);
+                  //     // setAllocatedSavings(0);
+                  //   }}
+                  // />
                 );
               })
             ) : (
-              <SavingsSettingCard
-                isAdded={addSavings}
-                goal="Create a Rainy day fund goal"
-                emoji="🎯"
-                amount={savingsBudgetAmount ?? 0}
-                // add={() => {
-                //   // setAddSavings(true);
-                //   // setAllocatedSavings(savingsBudgetAmount);
-                //   console.log("Show bottom sheet");
-                //   savingsBottomSheetStore.setSavingsBottomSheet(true);
-                // }}
-                edit={() => {
-                  // setAddSavings(false);
-                  // setAllocatedSavings(0);
-                }}
-              />
+              <>
+                <div className="flex flex-row justify-between items-center mb-4">
+                  <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+                    Goals
+                  </div>
+                  <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+                    Budget contribution
+                  </div>
+                </div>
+                <SavingsSettingCard
+                  isAdded={addSavings}
+                  goal="Create a Rainy day fund goal"
+                  emoji="🎯"
+                  amount={savingsBudgetAmount ?? 0}
+                  // add={() => {
+                  //   // setAddSavings(true);
+                  //   // setAllocatedSavings(savingsBudgetAmount);
+                  //   console.log("Show bottom sheet");
+                  //   savingsBottomSheetStore.setSavingsBottomSheet(true);
+                  // }}
+                  edit={() => {
+                    // setAddSavings(false);
+                    // setAllocatedSavings(0);
+                  }}
+                />
+              </>
             )}
           </div>
         </div>
@@ -581,8 +603,14 @@ const EditBudgetSettings = () => {
                 monthlyContribution={savingsBudgetAmount}
                 targetAmount={essentialBudgetAmount * 3}
                 progressPercentage={3}
+                goal={selectedSavingsGoal.name}
                 onClick={() => {
-                  setSavingsSuccess(true);
+                  saveBudgetInfo().then((results) => {
+                    if (results.isSuccess) {
+                      console.log(results);
+                      setSavingsSuccess(true);
+                    }
+                  });
                 }}
               />
             )
