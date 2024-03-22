@@ -120,19 +120,22 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({ cur
 
     const [series, setSeries] = useState([
         {
-            name: 'Purchase Volume',
+            name: 'Essentials spend',
             type: 'line',
             data: demoDataSeries.purchaseVolume,
+            color: '#0131A1',
         },
         {
-            name: 'Commission',
+            name: 'Wants spend',
             type: 'line',
             data: demoDataSeries.commissionData,
+            color: '#9DB1C6',
         },
         {
-            name: 'Another Data Set',
+            name: 'Total spend',
             type: 'line',
             data: demoDataSeries.anotherDataSet,
+            color: '#101010',
         },
     ]);
 

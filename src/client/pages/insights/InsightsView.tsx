@@ -229,7 +229,7 @@ const InsightsView = () => {
             //   budgetLimit={userStore.user.income}
             //   currentMonthDate={endDate ? new Date(endDate) : new Date()}
             // />
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full justify-center">
               <InsightsExpenditureChart currencySymbol="₦" />
               <div
                 className="space-x-1"
