@@ -240,63 +240,172 @@ export const expenditureList = [
 ];
 export const expenditureCompareList = [
   {
-    id: 0,
-    name: "Rent / Mortgage",
-    macro_type: {
-      id: 1,
-      name: "Essentials",
-    },
-    icon_name: "rent",
-    emoji: "🏠",
-    percentage: -10,
-  },
-  {
-    id: 1,
-    name: "Groceries",
-    macro_type: {
-      id: 1,
-      name: "Essentials",
-    },
-    icon_name: "groceries",
-    emoji: "📚",
-    percentage: 5,
-  },
-  {
     id: 2,
-    name: "Health",
-    macro_type: {
-      id: 1,
-      name: "Essentials",
-    },
-    icon_name: "health",
-    extern_id: 5,
-    emoji: "💚",
-    percentage: 1,
-  },
-  {
-    id: 3,
-    name: "Bills & Fees",
-    macro_type: {
-      id: 1,
-      name: "Essentials",
-    },
-    icon_name: "bills",
-    extern_id: 1,
-    emoji: "💳",
-    percentage: -12,
-  },
-  {
-    id: 4,
     name: "Data & WiFi",
     macro_type: {
       id: 1,
-      name: "Essentials",
+      name: "Essentials"
     },
     icon_name: "datawifi",
     extern_id: 2,
     emoji: "🌐",
-    percentage: 2,
+    percentage: 0
   },
+  {
+    id: 5,
+    name: "Health",
+    macro_type: {
+      id: 1,
+      name: "Essentials"
+    },
+    icon_name: "health",
+    extern_id: 5,
+    emoji: "💚",
+    percentage: 0
+  },
+  {
+    id: 8,
+    name: "Education",
+    macro_type: {
+      id: 1,
+      name: "Essentials"
+    },
+    icon_name: "education",
+    extern_id: 8,
+    emoji: "📚",
+    percentage: 0
+  },
+  {
+    id: 6,
+    name: "Rent / Mortgage",
+    macro_type: {
+      id: 1,
+      name: "Essentials"
+    },
+    icon_name: "rent",
+    extern_id: 6,
+    emoji: "🏠",
+    percentage: 0
+  },
+  {
+    id: 9,
+    name: "Family & Friends",
+    macro_type: {
+      id: 2,
+      name: "Wants"
+    },
+    icon_name: "familyfriends",
+    extern_id: 1,
+    emoji: "👨‍👩‍👧‍👦",
+    percentage: 0
+  },
+  {
+    id: 3,
+    name: "Transport & Fuel",
+    macro_type: {
+      id: 1,
+      name: "Essentials"
+    },
+    icon_name: "transport",
+    extern_id: 3,
+    emoji: "🚌",
+    percentage: 0
+  },
+  {
+    id: 7,
+    name: "Loan Repayment",
+    macro_type: {
+      id: 1,
+      name: "Essentials"
+    },
+    icon_name: "loanrepayment",
+    extern_id: 7,
+    emoji: "🙌🏼",
+    percentage: 0
+  },
+  {
+    id: 12,
+    name: "Miscellaneous",
+    macro_type: {
+      id: 2,
+      name: "Wants"
+    },
+    icon_name: "miscellaneous",
+    extern_id: 4,
+    emoji: "🤷🏽‍",
+    percentage: 0
+  },
+  {
+    name: "Gambling",
+    macro_type: {
+      id: 2,
+      name: "Wants"
+    },
+    icon_name: "gambling",
+    extern_id: 9,
+    emoji: "🎰",
+    percentage: 0
+  },
+  {
+    id: 1,
+    name: "Bills & Fees",
+    macro_type: {
+      id: 1,
+      name: "Essentials"
+    },
+    icon_name: "bills",
+    extern_id: 1,
+    emoji: "💳",
+    percentage: 0
+  },
+  {
+    id: 11,
+    name: "Shopping",
+    macro_type: {
+      id: 2,
+      name: "Wants"
+    },
+    icon_name: "shopping",
+    extern_id: 3,
+    emoji: "🛍",
+    percentage: 0
+  },
+  {
+    id: 4,
+    name: "Groceries",
+    macro_type: {
+      id: 1,
+      name: "Essentials"
+    },
+    icon_name: "groceries",
+    extern_id: 4,
+    emoji: "🥦",
+    percentage: 0
+  },
+  {
+    id: 10,
+    name: "Going out",
+    macro_type: {
+      id: 2,
+      name: "Wants"
+    },
+    icon_name: "goingout",
+    extern_id: 2,
+    emoji: "🍽",
+    percentage: 0
+  },
+  {
+    id: 13,
+    name: "Emergency fund",
+    macro_type: {
+      id: 3,
+      name: "Savings"
+    },
+    icon_name: "emergencyfund",
+    extern_id: 1,
+    emoji: "🎯",
+    percentage: 0
+  }
 ];
 export const dateFilters = [
   { id: 0, name: "All time" },

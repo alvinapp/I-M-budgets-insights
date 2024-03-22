@@ -5,14 +5,16 @@ interface TooltipProgressBarProps {
   backgroundColor?: string;
   othersProgressSpend: number;
   myProgressSpend: number; // Added second progress
+  startDate: Date;
 }
 
 const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   backgroundColor = "#E7EDF3",
   othersProgressSpend,
   myProgressSpend, // Added second progress
+  startDate,
 }) => {
-  const date = new Date();
+  const date = startDate ?? new Date();
   const currentDay = date.getDate();
   const daysInMonth = new Date(
     date.getFullYear(),

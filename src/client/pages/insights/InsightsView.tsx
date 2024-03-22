@@ -37,6 +37,8 @@ import { calculateMacroTypeTotals } from "client/utils/Formatters";
 import useMicroGoalsStore from "client/store/microGoalStore";
 import useCashflowVariablesStore from "client/store/cashFlowStore";
 import CashFlowFilterButton from "../components/insights/CashFlowFilterButton";
+import InsightsExpenditureChart from "./insightsChart/InsightsExpenditureChart";
+import GraphLegend from "../components/GraphLegend";
 
 const InsightsView = () => {
   const location = useLocation();
@@ -203,30 +205,46 @@ const InsightsView = () => {
         </div>
         <div className="flex flex-row mt-4 mb-6">
           {toggleTabId === 0 ? (
-            <ExpenditureBarGraph
-              previousMonth={{
-                essentials: {
-                  spent: previousEssentialTotalExpenses,
-                  expenseLimit: essentialTotalBudgetAmount,
-                },
-                wants: {
-                  spent: previousWantsTotalExpenses,
-                  expenseLimit: wantsTotalBudgetAmount,
-                },
-              }}
-              currentMonth={{
-                essentials: {
-                  spent: essentialsTotal,
-                  expenseLimit: essentialTotalBudgetAmount,
-                },
-                wants: {
-                  spent: wantsTotal,
-                  expenseLimit: wantsTotalBudgetAmount,
-                },
-              }}
-              budgetLimit={userStore.user.income}
-              currentMonthDate={endDate ? new Date(endDate) : new Date()}
-            />
+            // <ExpenditureBarGraph
+            //   previousMonth={{
+            //     essentials: {
+            //       spent: previousEssentialTotalExpenses,
+            //       expenseLimit: essentialTotalBudgetAmount,
+            //     },
+            //     wants: {
+            //       spent: previousWantsTotalExpenses,
+            //       expenseLimit: wantsTotalBudgetAmount,
+            //     },
+            //   }}
+            //   currentMonth={{
+            //     essentials: {
+            //       spent: essentialsTotal,
+            //       expenseLimit: essentialTotalBudgetAmount,
+            //     },
+            //     wants: {
+            //       spent: wantsTotal,
+            //       expenseLimit: wantsTotalBudgetAmount,
+            //     },
+            //   }}
+            //   budgetLimit={userStore.user.income}
+            //   currentMonthDate={endDate ? new Date(endDate) : new Date()}
+            // />
+            <div className="flex flex-col w-full">
+              <InsightsExpenditureChart currencySymbol="₦" />
+              <div
+                className="space-x-1"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  margin: "0px 10px 2px 10px",
+                  gap: "1.25rem"
+                }}
+              >
+                <GraphLegend color="#0131A1" label="Essentials spend" />
+                <GraphLegend color="#9DB1C6" label="Wants spend" />
+                <GraphLegend color="#101010" label="Total spend" />
+              </div>
+            </div>
           ) : (
             <SavingsBarGraph
               previousMonthSavings={previousSavingsTotalExpenses}
@@ -259,7 +277,7 @@ const InsightsView = () => {
               onClick={(tab: any) => setBudgetSpendTabId(tab.id)}
             />
           </div>
-          <div className="flex flex-row mt-6 mx-2">
+          <div className="flex flex-row mt-6 mx-2 border-skin-border">
             {budgetSpendTabId === 0 ? (
               <MySpend
                 spent={totalExpenses}
@@ -268,6 +286,12 @@ const InsightsView = () => {
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={userStore.user.income - totalBudgetAmount}
+                startDate={
+                  startDate ? startDate : undefined
+                }
+                endDate={
+                  endDate ? endDate : undefined
+                }
               // spent={90000 + 209000}
               // budget={totalBudgetAmount}
               // wantsSpend={209000}

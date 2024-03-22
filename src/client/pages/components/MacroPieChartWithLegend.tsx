@@ -2,6 +2,7 @@ import React from 'react';
 import MacroPieChart from './MacroPieChart';
 import MacroPieChartLegend from './MacroPieChartLegend';
 import { checkNAN } from "client/utils/Formatters";
+import { essentials } from 'client/utils/MockData';
 
 interface Values {
     wants: number;
@@ -14,11 +15,12 @@ interface MacroPieChartWithLegendProps {
     dimensions: number;
     doughnutThickness: number;
     values: Values;
+    peerValues?: Values;
     showComparison?: boolean;
     showUnallocated?: boolean;
 }
 
-const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({ dimensions, doughnutThickness, values, showComparison, showUnallocated }) => {
+const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({ dimensions, doughnutThickness, values, peerValues, showComparison, showUnallocated }) => {
     const total = values.wants + values.essentials + values.savings + values.unallocated;
 
     let percentages = {
@@ -30,6 +32,13 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({ dimen
 
     const totalPercentage = percentages.essentials + percentages.wants + percentages.savings + percentages.unallocated;
 
+    const peerPercentageDifferences = {
+        essentials: (values.essentials - (peerValues?.essentials ?? 0)) / (peerValues?.essentials ?? 0) * 100,
+        wants: (values.wants - (peerValues?.wants ?? 0)) / (peerValues?.wants ?? 0) * 100,
+        savings: (values.savings - (peerValues?.savings ?? 0)) / (peerValues?.savings ?? 0) * 100,
+        unallocated: (values.unallocated - (peerValues?.unallocated ?? 0)) / (peerValues?.unallocated ?? 0) * 100
+    };
+
     if (totalPercentage !== 100) {
         const diff = 100 - totalPercentage;
         percentages.unallocated += diff;
@@ -39,10 +48,10 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({ dimen
         <div className="flex flex-row items-center space-x-4">
             <MacroPieChart dimensions={dimensions} doughnutThickness={doughnutThickness} values={values} />
             <div className="flex flex-col justify-between space-y-2">
-                <MacroPieChartLegend color="#0d44b5" text="Essentials" percentage={checkNAN(percentages.essentials)} showComparison={showComparison} />
-                <MacroPieChartLegend color="#9db2c6" text="Wants" percentage={checkNAN(percentages.wants)} showComparison={showComparison} />
-                <MacroPieChartLegend color="#0dacb9" text="Savings" percentage={checkNAN(percentages.savings)} showComparison={showComparison} />
-                <MacroPieChartLegend color="#d1ddea" text="Unallocated" percentage={checkNAN(percentages.unallocated)} showComparison={showComparison} showUnallocated={showUnallocated} />
+                <MacroPieChartLegend color="#0d44b5" text="Essentials" percentage={checkNAN(percentages.essentials)} showComparison={showComparison} percentageChange={checkNAN(peerPercentageDifferences.essentials.toFixed(2))} />
+                <MacroPieChartLegend color="#9db2c6" text="Wants" percentage={checkNAN(percentages.wants)} showComparison={showComparison} percentageChange={checkNAN(peerPercentageDifferences.wants.toFixed(2))} />
+                <MacroPieChartLegend color="#0dacb9" text="Savings" percentage={checkNAN(percentages.savings)} showComparison={showComparison} percentageChange={checkNAN(peerPercentageDifferences.savings.toFixed(2))} />
+                <MacroPieChartLegend color="#d1ddea" text="Unallocated" percentage={checkNAN(percentages.unallocated)} showComparison={showComparison} showUnallocated={showUnallocated} percentageChange={checkNAN(peerPercentageDifferences.unallocated.toFixed(2))} />
             </div>
         </div>
     );

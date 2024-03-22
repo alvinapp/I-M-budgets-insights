@@ -1,6 +1,7 @@
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
 import { FiArrowDownRight, FiArrowUpRight, FiArrowRight } from "react-icons/fi";
+import AnimatedNumber from "../AnimatedNumber";
 type ExpenditureComparisonCardProps = {
   category: string;
   icon: string;
@@ -46,7 +47,7 @@ export const ExpenditureComparisonCard = ({
               className={`font-bold font-primary text-xs ${percentage < 0 ? "text-skin-successAccent" : "text-skin-accent3"
                 } tracking-widest`}
             >
-              {`${percentage > 0 ? "+" : ""}${percentage}%`}
+              {`${percentage > 0 ? "+" : ""}`}<span> <AnimatedNumber target={parseFloat(percentage.toFixed(1))} duration={500} />%</span>
             </div>
           </div>
         </div>

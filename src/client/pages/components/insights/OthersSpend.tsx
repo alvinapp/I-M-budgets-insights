@@ -36,6 +36,15 @@ export const OthersSpend = ({
   const [totalPeerExpenditure, setTotalPeerExpenditure] = useState(0);
   const [peerProgress, setPeerProgress] = useState(0);
   const [userProgress, setUserProgress] = useState(0);
+  const [userWantsExpenditure, setUserWantsExpenditure] = useState(0);
+  const [userEssentialsExpenditure, setUserEssentialsExpenditure] = useState(0);
+  const [userSavingsExpenditure, setUserSavingsExpenditure] = useState(0);
+  const [peerWantsExpenditure, setPeerWantsExpenditure] = useState(0);
+  const [peerEssentialsExpenditure, setPeerEssentialsExpenditure] = useState(0);
+  const [peerSavingsExpenditure, setPeerSavingsExpenditure] = useState(0);
+
+  const startDateObj = startDate ? new Date(startDate) : null;
+  const endDateObj = endDate ? new Date(endDate) : null;
 
   interface CategoryData {
     percentile: number;
@@ -57,6 +66,12 @@ export const OthersSpend = ({
         const data = await fetchMicrosPercentile({ configuration: config, start_date: startDate, end_date: endDate });
         let totalUserExpenditure = 0;
         let totalPeerExpenditure = 0;
+        let userWantsExpenditure = 0;
+        let userEssentialsExpenditure = 0;
+        let userSavingsExpenditure = 0;
+        let peerWantsExpenditure = 0;
+        let peerEssentialsExpenditure = 0;
+        let peerSavingsExpenditure = 0;
 
         // Iterate over data
         data.forEach((macro: any) => {
@@ -64,6 +79,44 @@ export const OthersSpend = ({
           totalUserExpenditure += macroData.total_user_expenditure_per_macro;
           totalPeerExpenditure += macroData.total_peer_expenditure_per_macro;
         });
+
+        // Iterate over data to get total user expenditure for Wants, Essentials, and Savings; do the same for peer expenditure for Wants, Essentials, and Savings
+        data.forEach((macro: any) => {
+          const macroName = Object.keys(macro)[0];
+          const macroData = macro[macroName];
+          const categories = macroData.categories;
+
+          // Check if the macro name is Wants, Essentials, or Savings
+          if (macroName === "Wants") {
+            for (const category in categories) {
+              const categoryData = categories[category];
+              userWantsExpenditure += categoryData.user_expenditure;
+              peerWantsExpenditure += categoryData.peer_total_expenditure;
+            }
+          } else if (macroName === "Essentials") {
+            for (const category in categories) {
+              const categoryData = categories[category];
+              userEssentialsExpenditure += categoryData.user_expenditure;
+              peerEssentialsExpenditure += categoryData.peer_total_expenditure;
+            }
+          } else if (macroName === "Savings") {
+            for (const category in categories) {
+              const categoryData = categories[category];
+              userSavingsExpenditure += categoryData.user_expenditure;
+              peerSavingsExpenditure += categoryData.peer_total_expenditure;
+            }
+          }
+        });
+
+        setUserWantsExpenditure(userWantsExpenditure);
+        setUserEssentialsExpenditure(userEssentialsExpenditure);
+        setUserSavingsExpenditure(userSavingsExpenditure);
+        setPeerWantsExpenditure(peerWantsExpenditure);
+        setPeerEssentialsExpenditure(peerEssentialsExpenditure);
+        setPeerSavingsExpenditure(peerSavingsExpenditure);
+
+        console.log("User Wants Expenditure:", userWantsExpenditure, "User Essential Expenditure:", userEssentialsExpenditure, "User Savings Expenditure:", userSavingsExpenditure);
+        console.log("Peer Wants Expenditure:", peerWantsExpenditure, "Peer Essential Expenditure:", peerEssentialsExpenditure, "Peer Savings Expenditure:", peerSavingsExpenditure);
 
         setTotalUserExpenditure(totalUserExpenditure);
         setTotalPeerExpenditure(totalPeerExpenditure);
@@ -112,6 +165,7 @@ export const OthersSpend = ({
         <InsightsVsTooltipProgressBar
           othersProgressSpend={userProgress ?? 0}
           myProgressSpend={peerProgress ?? 0}
+          startDate={startDateObj ?? new Date()}
         />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
@@ -150,9 +204,15 @@ export const OthersSpend = ({
           showComparison={true}
           showUnallocated={false}
           values={{
-            wants: wantsSpend,
-            essentials: essentialsSpend,
-            savings: savingsSpend,
+            wants: userWantsExpenditure,
+            essentials: userEssentialsExpenditure,
+            savings: userSavingsExpenditure,
+            unallocated: unallocatedSpend,
+          }}
+          peerValues={{
+            wants: peerWantsExpenditure,
+            essentials: peerEssentialsExpenditure,
+            savings: peerSavingsExpenditure,
             unallocated: unallocatedSpend,
           }}
         />

@@ -37,6 +37,7 @@ import {
 } from "date-fns";
 import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
 import { MicroGoal } from "client/models/MicroGoal";
+import MonthYearPicker from "../components/custom-date-picker/MonthYearPicker";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -269,6 +270,15 @@ const BudgetsView = () => {
     setUpdatedEnvironment("local");
   };
 
+  const onDateChangeSelect = (dateRange: any) => {
+    console.log("We are updating the date range");
+    setRangeStartDate(dateRange.startDate);
+    setStartDate(dateRange.startDate);
+    setEndDate(dateRange.endDate);
+    setRangeEndDate(dateRange.endDate);
+    setUpdatedEnvironment("local");
+  };
+
   // Format the current month for display
 
   const month = currentMonth.toLocaleString("default", { month: "long" });
@@ -327,13 +337,18 @@ const BudgetsView = () => {
             startDate={activePeriodRange.startDate}
             endDate={activePeriodRange.endDate}
             onDateRangeSelect={(date: any) => {
-              onDateRangeSelect(date);
+              onDateChangeSelect(date);
             }}
             lastUpdatedEnv={updatedEvironment}
           />
         </div>
       </div>
-      <div className="flex-grow h-px bg-skin-accent3 mt-3"></div>
+      <div className="flex-grow h-px bg-skin-accent3 mt-3">
+        {/* <MonthYearPicker onMonthYearSubmit={(date) => {
+          console.log("This is the date range", date);
+          onDateChangeSelect(date);
+        }} startDate={activePeriodRange.startDate} endDate={activePeriodRange.endDate} /> */}
+      </div>
       <div className="flex flex-col mx-3.5  mt-8">
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
@@ -350,7 +365,7 @@ const BudgetsView = () => {
             isLoading={isLoading}
           />
           <div className="flex flex-col justify-center">
-            <InsightsButton onClick={() => navigateToInsightsView()} />
+            <InsightsButton onClick={() => isLoading ? null : navigateToInsightsView()} />
           </div>
         </div>
         <div className="mt-11">

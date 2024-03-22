@@ -17,6 +17,8 @@ type MySpendProps = {
   essentialsSpend: number;
   savingsSpend: number;
   unallocatedSpend: number;
+  startDate?: string;
+  endDate?: string;
 };
 export const MySpend = ({
   spent,
@@ -25,6 +27,8 @@ export const MySpend = ({
   essentialsSpend,
   savingsSpend,
   unallocatedSpend,
+  startDate,
+  endDate,
 }: MySpendProps) => {
   const microGoals = useMicroGoalsStore((state) => state.microGoals);
   const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
@@ -32,6 +36,8 @@ export const MySpend = ({
     (state: any) => state.configuration
   ) as IConfig;
   const expenditureProgress = calculateSpending(spent, budget);
+  const startDateObj = startDate ? new Date(startDate) : null;
+  const endDateObj = endDate ? new Date(endDate) : null;
 
   // useEffect(() => {
   //   const fetchMicroGoalTotalsData = async () => {
@@ -54,6 +60,7 @@ export const MySpend = ({
       <div className="mt-2.5 flex flex-row">
         <InsightsTooltipProgressBar
           progressPercent={expenditureProgress.expenditureProgress}
+          startDate={startDateObj ?? new Date()}
         />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
@@ -99,17 +106,17 @@ export const MySpend = ({
       <div className="flex flex-col">
         {microGoals && microGoals.length > 0
           ? microGoals.slice(0, 5).map((microGoal, i: number) => {
-              return (
-                <ExpenditureCard
-                  transactions={microGoal.number_of_transactions}
-                  icon={microGoal.emoji}
-                  budget={microGoal.amount}
-                  spent={microGoal.total_transactions}
-                  key={i}
-                  category={microGoal.name}
-                />
-              );
-            })
+            return (
+              <ExpenditureCard
+                transactions={microGoal.number_of_transactions}
+                icon={microGoal.emoji}
+                budget={microGoal.amount}
+                spent={microGoal.total_transactions}
+                key={i}
+                category={microGoal.name}
+              />
+            );
+          })
           : null}
       </div>
     </div>

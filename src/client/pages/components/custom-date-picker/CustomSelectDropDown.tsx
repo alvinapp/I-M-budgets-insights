@@ -83,7 +83,7 @@ const CustomSelectDropdown = ({
       {isOpen && (
         <Dropdown ref={dropdownRef}>
           {options.map((option: any, index: any) => (
-            <Option key={index} onClick={() => handleSelect(option)}>
+            <Option className="font-custom" key={index} onClick={() => handleSelect(option)}>
               {option}
             </Option>
           ))}

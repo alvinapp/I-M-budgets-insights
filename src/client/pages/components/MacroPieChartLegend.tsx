@@ -5,6 +5,7 @@ interface MacroPieChartLegendProps {
   color: string;
   text: string;
   percentage: number;
+  percentageChange: number;
   showComparison?: boolean;
   showUnallocated?: boolean;
 }
@@ -13,10 +14,11 @@ const MacroPieChartLegend: React.FC<MacroPieChartLegendProps> = ({
   color,
   text,
   percentage,
+  percentageChange = 0,
   showUnallocated = true,
   showComparison = false,
 }) => {
-  const percentageChange = Math.floor(Math.random() * 100) - 50;
+  // const percentageChange = Math.floor(Math.random() * 100) - 50;
   if (!showUnallocated) {
     return <div></div>;
   }
