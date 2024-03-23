@@ -1,12 +1,12 @@
 import { useSavingsBottomSheetStore } from "client/store/bottomSheetStore";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
-import { FiEdit2, FiMinus, FiPlus } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 
 type SavingsSettingCardProps = {
   goal?: string;
   emoji?: string;
-  add?: any;
+  onClick: () => void;
   edit?: any;
   amount?: number;
   selected?: boolean;
@@ -16,24 +16,10 @@ export const SavingsSettingCard = ({
   goal,
   emoji,
   amount = 0,
-  add,
-  edit,
-  selected = false,
-  isAdded = false,
+  onClick,
 }: SavingsSettingCardProps) => {
-  const handleAdd = (event: any) => {
-    event.stopPropagation();
-    add();
-  };
-  const handleEdit = (event: any) => {
-    event.stopPropagation();
-    edit();
-  };
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
-  );
-  const savingsBottomSheetStore = useSavingsBottomSheetStore(
-    (state: any) => state
   );
   return (
     <div className="flex flex-row items-center justify-between mb-3">
@@ -60,9 +46,7 @@ export const SavingsSettingCard = ({
           <div className="flex-col">
             <div
               className="rounded-full shadow-budgetButton flex justify-center items-center flex-row ml-4 w-7 h-7"
-              onClick={() =>
-                savingsBottomSheetStore.setSavingsBottomSheet(true)
-              }
+              onClick={onClick}
             >
               <FiPlus color="#639186" size="1rem" />
             </div>
@@ -74,7 +58,7 @@ export const SavingsSettingCard = ({
             days by saving {amount.toLocaleString("en-us")}
             <sup className="align-super text-xxxxxs font-custom font-normal -ml-1">
               {currencySymbol}
-            </sup>{" "}
+            </sup>
             per month!
           </div>
         </div>

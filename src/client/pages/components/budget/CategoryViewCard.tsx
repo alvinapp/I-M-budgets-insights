@@ -53,6 +53,7 @@ export const CategoryViewCard = ({
               <div className="font-primary text-sm text-skin-base font-medium tracking-wide">
                 {category}
               </div>
+              <FiChevronRight color="#101010" size="0.75rem" />
             </div>
           </div>
           <div className="flex flex-col">

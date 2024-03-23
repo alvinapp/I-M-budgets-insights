@@ -37,6 +37,7 @@ import {
 } from "date-fns";
 import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
 import { MicroGoal } from "client/models/MicroGoal";
+import ViewSavingsBudget from "./ViewSavingsBudget";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -44,7 +45,9 @@ const BudgetsView = () => {
   );
   const categoryStore = useCategoriesStore((state: any) => state);
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
-  const microGoals = useMicroGoalsStore((state) => state.microGoals);
+  const macroData = macroGoalStore.macroGoals ?? [];
+  const essentialMacro = macroData[0];
+  const essentialBudgetAmount = essentialMacro?.amount;
   const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
   const config = useConfigurationStore(
     (state: any) => state.configuration
@@ -125,9 +128,7 @@ const BudgetsView = () => {
         end_date: formattedEndDate,
       });
       setDataCallback(result);
-    } catch (error) {
-      console.error(`Error fetching ${queryKey}:`, error);
-    }
+    } catch (error) {}
   };
 
   const { isFetching: fetchingEssentialsBudget } = useQuery(
@@ -168,9 +169,7 @@ const BudgetsView = () => {
       const result =
         data?.map((item: { goals: any }) => item.goals).flat() || [];
       macroGoalStore.setMacros(result);
-    } catch (error) {
-      console.error("Error fetching macro goals:", error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     const fetchDataAndUpdateMacroGoals = async () => {
@@ -206,8 +205,6 @@ const BudgetsView = () => {
     essentialTotalExpenses,
     wantsTotalExpenses,
     savingsTotalExpenses,
-    totalBudget,
-    totalExpenditure,
     expenditureProgress,
   } = useMemo(() => {
     const essentialTotalBudgetAmount =
@@ -261,7 +258,6 @@ const BudgetsView = () => {
   };
 
   const onDateRangeSelect = (dateRange: any) => {
-    console.log("We are updating the date range");
     setRangeStartDate(dateRange.start);
     setStartDate(dateRange.start);
     setEndDate(dateRange.end);
@@ -283,6 +279,7 @@ const BudgetsView = () => {
   );
   const macroStore = useMacrosStore((state: any) => state);
   const [viewBudgetSheet, openViewBudgetSheet] = useState(false);
+  const [viewSavingsBudgetSheet, openViewSavingsBudgetSheet] = useState(false);
   const budgetDetails = {
     spentAmount: 0,
     totalBudgetAmount: 0,
@@ -293,7 +290,18 @@ const BudgetsView = () => {
     endDate: formattedEndDate,
     microGoal: 0,
   };
+  const savingsGoalDetails = {
+    spentAmount: 0,
+    totalBudgetAmount: 0,
+    progress: 0,
+    category: "",
+    emoji: "",
+    startDate: formattedStartDate,
+    endDate: formattedEndDate,
+    microGoal: 0,
+  };
   const [budgetDetailsData, setBudgetDetailsData] = useState(budgetDetails);
+  const [savingsGoalData, setSavingsGoalData] = useState(savingsGoalDetails);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -527,8 +535,11 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3 mb-8">
           <CategoryCardHeader
             title="Savings"
-            amount={checkNAN(savingsTotalExpenses)}
-            caption="Saved"
+            amount={Math.max(
+              checkNAN(essentialBudgetAmount * 3 - savingsTotalExpenses),
+              0
+            )}
+            caption="Available"
             currencySymbol={currencySymbol}
           />
           <div className="mt-6 flex flex-col">
@@ -539,13 +550,20 @@ const BudgetsView = () => {
                   return (
                     <SavingsCategoryViewCard
                       key={i}
-                      category={savings?.name}
+                      category={
+                        savings?.name === "Emergency fund"
+                          ? "Rainy day fund"
+                          : ""
+                      }
                       progressPercentage={checkNAN(
-                        (savings.expenses / savings?.amount) * 100
+                        Math.min(
+                          (savings.expenses / savings?.amount) * 100,
+                          100
+                        )
                       )}
-                      icon={savings.category?.emoji}
+                      icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
                       amount={savings?.amount}
-                      budgetAmount={savings.amount}
+                      budgetAmount={essentialBudgetAmount * 3}
                       spentAmount={savings.expenses}
                       iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
@@ -553,14 +571,30 @@ const BudgetsView = () => {
                       primaryColor="text-skin-base"
                       fadedColor="text-skin-subtitle"
                       caption="saved"
+                      onClick={() => {
+                        openViewSavingsBudgetSheet(true);
+                        setSavingsGoalData({
+                          spentAmount: savings?.expenses,
+                          totalBudgetAmount: savings?.amount,
+                          progress: checkNAN(
+                            (savings?.expenses / savings?.amount) * 100
+                          ),
+                          category: savings?.name,
+                          emoji: savings.category?.emoji,
+                          startDate: formattedStartDate,
+                          endDate: formattedEndDate,
+                          microGoal: savings?.id,
+                        });
+                      }}
                     />
                   );
                 }
               )
             ) : (
               <SavingsSettingCard
+                emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
                 goal="Create a Rainy day fund goal"
-                add={() => {
+                onClick={() => {
                   navigate("/edit-budgets");
                 }}
               />
@@ -587,6 +621,31 @@ const BudgetsView = () => {
               endDate={budgetDetailsData?.endDate}
               onClick={() => {
                 openViewBudgetSheet(false);
+              }}
+            />
+          }
+          defaultSnap={400}
+        ></BottomSheet>
+        <BottomSheet
+          onDismiss={() => {
+            openViewSavingsBudgetSheet(false);
+          }}
+          open={viewSavingsBudgetSheet}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            <ViewSavingsBudget
+              savedAmount={savingsGoalData?.spentAmount}
+              targetAmount={essentialBudgetAmount * 3}
+              progress={savingsGoalData?.progress}
+              category={savingsGoalData?.category}
+              emoji={savingsGoalData?.emoji}
+              microGoalId={savingsGoalData.microGoal}
+              startDate={savingsGoalData?.startDate}
+              endDate={savingsGoalData?.endDate}
+              onClick={() => {
+                openViewSavingsBudgetSheet(false);
               }}
             />
           }

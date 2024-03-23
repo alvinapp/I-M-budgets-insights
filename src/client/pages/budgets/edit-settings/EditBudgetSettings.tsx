@@ -116,8 +116,6 @@ const EditBudgetSettings = () => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
-  const [selectedEssesntialId, setSelectedEssentialId] = useState();
-  const [selectedWantsId, setSelectedWantsId] = useState();
   const [essentialsMapState, setEssentialsMapState] = useState(new Map());
   const [wantsMapState, setWantsMapState] = useState(new Map());
   const updateEssentialsMap = (i: number, data: any) => {
@@ -274,14 +272,14 @@ const EditBudgetSettings = () => {
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
-              typeof essentialBudgetAmount === "number" &&
+              typeof parseInt(essentialBudgetAmount) === "number" &&
               essentialBudgetAmount > 0
-                ? Math.min(essentialBudgetAmount - allocatedEssentials, 0)
+                ? Math.max(essentialBudgetAmount - allocatedEssentials, 0)
                 : 0 // Ensure perc
             }
             allocatedAmount={allocatedEssentials}
             progressPercentage={
-              typeof essentialBudgetAmount === "number" &&
+              typeof parseInt(essentialBudgetAmount) === "number" &&
               essentialBudgetAmount > 0
                 ? Math.min(
                     (allocatedEssentials / essentialBudgetAmount) * 100,
@@ -376,8 +374,8 @@ const EditBudgetSettings = () => {
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
-              typeof wantsBudgetAmount === "number" && wantsBudgetAmount > 0
-                ? Math.min(wantsBudgetAmount - allocatedWants, 0) // Ensure percentage stays between 0 and 100
+              typeof wantsBudgetAmount === "number" || wantsBudgetAmount > 0
+                ? Math.max(wantsBudgetAmount - allocatedWants, 0) // Ensure percentage stays between 0 and 100
                 : 0
             }
             allocatedAmount={allocatedWants ?? 0}
@@ -467,7 +465,7 @@ const EditBudgetSettings = () => {
             allocatedCaption="Allocated"
             unallocatedAmount={
               typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
-                ? Math.min(savingsBudgetAmount - allocatedSavings, 0)
+                ? Math.max(savingsBudgetAmount - allocatedSavings, 0)
                 : 0
             }
             allocatedAmount={allocatedSavings}
@@ -482,9 +480,45 @@ const EditBudgetSettings = () => {
           <div className="border mt-6 mb-4.5"></div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[2] &&
-            categoriesStore.categoryBudgets[2].data?.length > 0 ? (
+            categoriesStore.categoryBudgets[2].data?.length === 0 ? (
+              <>
+                <div className="flex flex-row items-center mb-4">
+                  <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
+                    Goals
+                  </div>
+                </div>
+                <SavingsSettingCard
+                  isAdded={addSavings}
+                  goal="Create a Rainy day fund goal"
+                  emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                  amount={savingsBudgetAmount ?? 0}
+                  onClick={() => {
+                    setAddSavings(true);
+                    setAllocatedSavings(savingsBudgetAmount);
+                    savingsBottomSheetStore.setSavingsBottomSheet(true);
+                    setSavingsList([
+                      {
+                        amount: savingsBudgetAmount,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: 13 ?? "",
+                        name: "Emergency fund",
+                        pseudo_name: "Emergency fund" + " " + "🎯",
+                        extern_id: 13,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      },
+                    ]);
+                  }}
+                  edit={() => {
+                    // setAddSavings(false);
+                    // setAllocatedSavings(0);
+                  }}
+                />
+              </>
+            ) : (
               categoriesStore.categoryBudgets[2].data.map((category: any) => {
-                console.log(category);
                 return (
                   <>
                     <div className="flex flex-row justify-between items-center mb-4">
@@ -498,69 +532,11 @@ const EditBudgetSettings = () => {
                     <EditSavingsViewCard
                       amount={savingsBudgetAmount ?? 0}
                       icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
-                      goal={category?.name ?? ""}
+                      goal="Rainy day fund"
                     />
                   </>
-
-                  // <SavingsSettingCard
-                  //   isAdded={addSavings}
-                  //   goal="Create a Rainy day fund goal"
-                  //   emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
-                  //   amount={savingsBudgetAmount ?? 0}
-                  //   add={() => {
-                  //     setAddSavings(true);
-                  //     setAllocatedSavings(savingsBudgetAmount);
-                  //     setSavingsList([
-                  //       {
-                  //         amount: savingsBudgetAmount,
-                  //         contribution_amount: 0,
-                  //         percentage: 0,
-                  //         category_id: category?.category.id,
-                  //         name: category?.name,
-                  //         pseudo_name:
-                  //           category?.name + " " + category?.category.emoji,
-                  //         extern_id: category?.category.id,
-                  //         order: 0,
-                  //         contribution_at: "",
-                  //         is_contribute_customized: true,
-                  //       },
-                  //     ]);
-                  //     setSelectedSavingsGoal({ name: category?.name });
-                  //   }}
-                  //   edit={() => {
-                  //     // setAddSavings(false);
-                  //     // setAllocatedSavings(0);
-                  //   }}
-                  // />
                 );
               })
-            ) : (
-              <>
-                <div className="flex flex-row justify-between items-center mb-4">
-                  <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
-                    Goals
-                  </div>
-                  <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
-                    Budget contribution
-                  </div>
-                </div>
-                <SavingsSettingCard
-                  isAdded={addSavings}
-                  goal="Create a Rainy day fund goal"
-                  emoji="🎯"
-                  amount={savingsBudgetAmount ?? 0}
-                  // add={() => {
-                  //   // setAddSavings(true);
-                  //   // setAllocatedSavings(savingsBudgetAmount);
-                  //   console.log("Show bottom sheet");
-                  //   savingsBottomSheetStore.setSavingsBottomSheet(true);
-                  // }}
-                  edit={() => {
-                    // setAddSavings(false);
-                    // setAllocatedSavings(0);
-                  }}
-                />
-              </>
             )}
           </div>
         </div>
@@ -607,7 +583,6 @@ const EditBudgetSettings = () => {
                 onClick={() => {
                   saveBudgetInfo().then((results) => {
                     if (results.isSuccess) {
-                      console.log(results);
                       setSavingsSuccess(true);
                     }
                   });

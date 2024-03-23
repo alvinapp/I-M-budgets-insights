@@ -5,18 +5,23 @@ interface EditSavingsViewCardProps {
   icon?: string;
   goal?: string;
   amount?: number;
+  onClick?: () => void;
 }
 
 const EditSavingsViewCard: React.FC<EditSavingsViewCardProps> = ({
   icon,
   goal,
   amount,
+  onClick,
 }) => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
   return (
-    <div className="flex flex-row mb-3 justify-between items-center">
+    <div
+      className="flex flex-row mb-3 justify-between items-center"
+      onClick={onClick}
+    >
       <div className="flex flex-col mr-2">
         <div className="flex flex-row items-center">
           <div className="flex flex-col mr-2">
