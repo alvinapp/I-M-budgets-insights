@@ -52,21 +52,21 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({ cur
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                         <div style="display: flex; align-items: center;">
                             <span style="height: 10px; width: 10px; background-color: #0131A1; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #0131A1;">Essentials:</span>
+                            <span style="color: #0131A1;margin-right: 5px;">Essentials:</span>
                         </div>
                         <span> ${essentialsValue.toFixed(2).toLocaleString('en')}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                         <div style="display: flex; align-items: center;">
                             <span style="height: 10px; width: 10px; background-color: #9DB1C6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #9DB1C6;">Wants:</span>
+                            <span style="color: #9DB1C6;margin-right: 5px;">Wants:</span>
                         </div>
                         <span> ${wantsValue.toFixed(2).toLocaleString('en')}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center;">
                             <span style="height: 10px; width: 10px; background-color: #101010; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #101010;">Total:</span>
+                            <span style="color: #101010;margin-right: 5px;">Total:</span>
                         </div>
                         <span> ${totalSpendValue.toFixed(2).toLocaleString('en')}</span>
                     </div>

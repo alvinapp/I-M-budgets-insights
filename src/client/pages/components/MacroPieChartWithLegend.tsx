@@ -32,9 +32,6 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({ dimen
 
     const totalPercentage = percentages.essentials + percentages.wants + percentages.savings + percentages.unallocated;
 
-    console.log("Essentials:", values.essentials, "Wants:", values.wants, "Savings:", values.savings, "Unallocated:", values.unallocated)
-    console.log("Peer Essentials:", peerValues?.essentials, "Peer Wants:", peerValues?.wants, "Peer Savings:", peerValues?.savings, "Peer Unallocated:", peerValues?.unallocated)
-
     const peerPercentageDifferences = {
         essentials: calculatePercentageDifference(values.essentials, peerValues?.essentials),
         wants: calculatePercentageDifference(values.wants, peerValues?.wants),

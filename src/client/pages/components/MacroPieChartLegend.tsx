@@ -18,11 +18,9 @@ const MacroPieChartLegend: React.FC<MacroPieChartLegendProps> = ({
   showUnallocated = true,
   showComparison = false,
 }) => {
-  // const percentageChange = Math.floor(Math.random() * 100) - 50;
   if (!showUnallocated) {
     return <div></div>;
   }
-  console.log("percentageChange", percentageChange);
   return (
     <div
       className="flex flex-row items-start justify-start space-x-1.5"
