@@ -16,6 +16,14 @@ const webPackConfig = (env) => {
   console.log("SERVER_PORT", SERVER_PORT);
   console.log("SERVER_DOMAIN", SERVER_DOMAIN);
 
+  const devServerHeaders = {
+    "Access-Control-Allow-Origin": "*", // Allow requests from all domains
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS", // Allow various HTTP methods
+    "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization", // Allow common headers
+    "Access-Control-Allow-Credentials": "true", // Allow sending cookies
+  };
+
+
   const _config = {
     entry: {
       app: ["./src/server/index.tsx"],
@@ -113,6 +121,7 @@ const webPackConfig = (env) => {
       open: false,
       hot: true,
       compress: true,
+      headers: devServerHeaders,
     };
   }
 

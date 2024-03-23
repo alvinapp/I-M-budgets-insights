@@ -2,6 +2,7 @@
 
 import React, { FC, useState, useEffect } from "react";
 import "./Graph.css";
+import AnimatedNumber from "client/pages/components/AnimatedNumber";
 
 interface Props {
   earned: number;
@@ -42,7 +43,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
           style={{ height: `${earnedHeight}%`, backgroundColor: "#0d40b0" }}
         >
           <div className={`barValue${showEarnedValue ? " show" : ""}`}>
-            + {earned.toLocaleString()}
+            + <AnimatedNumber target={earned} duration={500} />
           </div>
         </div>
         <div
@@ -50,7 +51,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
           style={{ height: `${spentHeight}%`, backgroundColor: "#11b1bf" }}
         >
           <div className={`barValue${showSpentValue ? " show" : ""}`}>
-            - {Math.abs(spent).toLocaleString()}
+            - <AnimatedNumber target={Math.abs(spent)} duration={500} />
           </div>
         </div>
       </div>

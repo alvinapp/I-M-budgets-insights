@@ -39,12 +39,13 @@ import useCashflowVariablesStore from "client/store/cashFlowStore";
 import CashFlowFilterButton from "../components/insights/CashFlowFilterButton";
 import InsightsExpenditureChart from "./insightsChart/InsightsExpenditureChart";
 import GraphLegend from "../components/GraphLegend";
+import useInsightsStore from "client/store/insightsStore";
+import { format } from "date-fns";
 
 const InsightsView = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const startDate = searchParams.get("startDate");
-  const endDate = searchParams.get("endDate");
+  const insightsStoreState = useInsightsStore((state) => state);
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
@@ -96,17 +97,27 @@ const InsightsView = () => {
 
   const cashflowVariables =
     useCashflowVariablesStore.getState().cashflowVariables;
+  const [essentialsArray, setEssentialsArray] = useState<any[]>([]);
+  const [wantsArray, setWantsArray] = useState<any[]>([]);
+  const [savingsArray, setSavingsArray] = useState<any[]>([]);
   useEffect(() => {
     const fetchCashFlowData = async () => {
+      insightsStoreState.setInsightsLoading(true);
       const data = await getCashFlow({
         configuration: config,
-        start_date: cashflowVariables.startDate || undefined,
-        end_date: cashflowVariables.endDate || undefined,
+        start_date: format(insightsStoreState.insightsStartDate, "yyyy-MM-dd") || undefined,
+        end_date: format(insightsStoreState.insightsEndDate, "yyyy-MM-dd") || undefined,
       });
+      const macroTypeDistribution = convertTransactionsToDataSeries(data.transactions);
+      const wantsData = getDataForMacroName(macroTypeDistribution, 'Wants');
+      const essentialsData = getDataForMacroName(macroTypeDistribution, 'Essentials');
+      setEssentialsArray(generateLinearProgression(essentialsData));
+      setWantsArray(generateLinearProgression(wantsData));
+      insightsStoreState.setInsightsLoading(false);
       setCashFlowData(data);
     };
     fetchCashFlowData();
-  }, [cashflowVariables.startDate, cashflowVariables.dateFilter]);
+  }, [insightsStoreState.insightsStartDate, insightsStoreState.insightsEndDate]);
 
   const [toggleTabId, setToggleTabId] = useState(0);
   const [budgetSpendTabId, setBudgetSpendTabId] = useState(0);
@@ -164,24 +175,29 @@ const InsightsView = () => {
         />
       </div>
       <div className="flex-grow h-px bg-skin-accent3"></div>
-      <div className="py-3 mx-3.5 flex flex-wrap items-center">
-        {cashflowFilters?.map((element: any, i: number) => {
-          const label = "All accounts";
-          return (
-            <CashFlowFilterButton
-              label={label}
-              icon={element.icon}
-              key={i}
-              isActive={false}
-              onClick={() => {
-                if (i === 2) {
-                }
-              }}
-              id={`${i}`}
-            />
-          );
-        })}
-      </div>
+      {/* <div className="py-3 flex flex-wrap items-center mb-3">
+          {cashflowFilters?.map((element: any, i: number) => {
+            const label =
+              i === 0
+                ? accountName
+                : i === 1
+                  ? dateFilter
+                  : element.name ?? "All accounts";
+            return (
+              <CashFlowFilterButton
+                label={label}
+                icon={element.icon}
+                key={i}
+                isActive={false}
+                onClick={() => {
+                  if (i === 2) {
+                  }
+                }}
+                id={`${i}`}
+              />
+            );
+          })}
+        </div> */}
       <div className="flex flex-col mt-2 mx-3.5">
         <div className="flex flex-row items-center justify-between mr-5">
           {toggleTabId == 0 ? (
@@ -205,32 +221,8 @@ const InsightsView = () => {
         </div>
         <div className="flex flex-row mt-4 mb-6">
           {toggleTabId === 0 ? (
-            // <ExpenditureBarGraph
-            //   previousMonth={{
-            //     essentials: {
-            //       spent: previousEssentialTotalExpenses,
-            //       expenseLimit: essentialTotalBudgetAmount,
-            //     },
-            //     wants: {
-            //       spent: previousWantsTotalExpenses,
-            //       expenseLimit: wantsTotalBudgetAmount,
-            //     },
-            //   }}
-            //   currentMonth={{
-            //     essentials: {
-            //       spent: essentialsTotal,
-            //       expenseLimit: essentialTotalBudgetAmount,
-            //     },
-            //     wants: {
-            //       spent: wantsTotal,
-            //       expenseLimit: wantsTotalBudgetAmount,
-            //     },
-            //   }}
-            //   budgetLimit={userStore.user.income}
-            //   currentMonthDate={endDate ? new Date(endDate) : new Date()}
-            // />
             <div className="flex flex-col w-full justify-center">
-              <InsightsExpenditureChart currencySymbol="₦" />
+              <InsightsExpenditureChart currencySymbol="₦" essentialsArray={essentialsArray} wantsArray={wantsArray} />
               <div
                 className="space-x-1"
                 style={{
@@ -251,7 +243,7 @@ const InsightsView = () => {
               currentMonthSavings={savingsTotal}
               savingsTarget={savingsTotalBudgetAmount}
               budgetLimit={userStore.user.income}
-              currentMonthDate={endDate ? new Date(endDate) : new Date()}
+              currentMonthDate={insightsStoreState.insightsStartDate ?? new Date()}
             />
           )}
         </div>
@@ -260,10 +252,10 @@ const InsightsView = () => {
             dimensions={190}
             doughnutThickness={14}
             values={{
-              moneyIn: cashFlowData?.total_credit || 0,
-              moneyOut: cashFlowData?.total_debit || 0,
+              moneyIn: insightsStoreState.insightsLoading ? 0 : cashFlowData?.total_credit || 0,
+              moneyOut: insightsStoreState.insightsLoading ? 0 : cashFlowData?.total_debit || 0,
             }}
-            percentageChange={cashFlowData?.total_change || 0}
+            percentageChange={insightsStoreState.insightsLoading ? 0 : cashFlowData?.total_change || 0}
           />
         </div>
         <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
@@ -287,17 +279,11 @@ const InsightsView = () => {
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={userStore.user.income - totalBudgetAmount}
                 startDate={
-                  startDate ? startDate : undefined
+                  format(insightsStoreState.insightsStartDate, "yyyy-MM-dd") ?? undefined
                 }
                 endDate={
-                  endDate ? endDate : undefined
+                  format(insightsStoreState.insightsEndDate, "yyyy-MM-dd") ?? undefined
                 }
-              // spent={90000 + 209000}
-              // budget={totalBudgetAmount}
-              // wantsSpend={209000}
-              // savingsSpend={121000}
-              // essentialsSpend={90000}
-              // unallocatedSpend={userStore.user.income - totalBudgetAmount}
               />
             ) : (
               <OthersSpend
@@ -308,17 +294,11 @@ const InsightsView = () => {
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={0}
                 startDate={
-                  startDate ? startDate : undefined
+                  format(insightsStoreState.insightsStartDate, "yyyy-MM-dd") ?? undefined
                 }
                 endDate={
-                  endDate ? endDate : undefined
+                  format(insightsStoreState.insightsEndDate, "yyyy-MM-dd") ?? undefined
                 }
-              //   spentBudget={90000 + 209000}
-              //   plannedBudget={totalBudgetAmount}
-              //   wantsSpend={209000}
-              //   savingsSpend={121000}
-              //   essentialsSpend={90000}
-              //   unallocatedSpend={0}
               />
             )}
           </div>
@@ -350,3 +330,75 @@ const InsightsView = () => {
   );
 };
 export default InsightsView;
+
+
+interface Transaction {
+  total_amount: number;
+  transacted_at: string;
+  macro_name: string;
+}
+
+interface DataPoint {
+  x: string;
+  y: number;
+}
+
+interface DataSeries {
+  [macro_name: string]: DataPoint[];
+}
+
+function convertTransactionsToDataSeries(transactions: Transaction[]): DataSeries {
+  const dataSeries: DataSeries = {};
+
+  transactions.forEach(transaction => {
+    if (!dataSeries[transaction.macro_name]) {
+      dataSeries[transaction.macro_name] = [];
+    }
+
+    dataSeries[transaction.macro_name].push({
+      x: transaction.transacted_at,
+      y: transaction.total_amount
+    });
+  });
+
+  return dataSeries;
+}
+
+function getDataForMacroName(data: DataSeries, macroName: string): DataPoint[] {
+  return data[macroName]?.sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime()) || [];
+}
+
+function generateLinearProgression(data: DataPoint[]): DataPoint[] {
+  try {
+    // Check if all data points are in the same month
+    const sameMonth = data.every((point, index, array) => index === 0 || point.x.slice(0, 7) === array[index - 1].x.slice(0, 7));
+
+    // If not all data points are in the same month, return the original array
+    if (!sameMonth) {
+      return data;
+    }
+
+    // Calculate linear progression within the same month
+    const linearProgression: DataPoint[] = [];
+    let sum = 0;
+    let currentDate = new Date(data[0]?.x);
+
+    for (let i = 0; i < data.length; i++) {
+      const currentPoint = data[i];
+      while (new Date(currentPoint?.x).toISOString().slice(0, 10) !== currentDate.toISOString().slice(0, 10)) {
+        linearProgression.unshift({ x: currentDate.toISOString().slice(0, 10), y: sum });
+        currentDate.setDate(currentDate.getDate() + 1); // Decrement the date
+      }
+      sum += currentPoint.y;
+      linearProgression.unshift({ x: currentPoint?.x, y: sum });
+      currentDate.setDate(currentDate.getDate() + 1); // Decrement the date
+    }
+
+    return linearProgression;
+  }
+  catch (error) {
+    console.log(error);
+    return data;
+  }
+}
+

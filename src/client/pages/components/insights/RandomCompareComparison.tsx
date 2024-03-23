@@ -9,6 +9,7 @@ interface RandomExpenditureComparisonCardProps {
 const RandomExpenditureComparisonCard: React.FC<
   RandomExpenditureComparisonCardProps
 > = ({ percentage }) => {
+  console.log("percentage", percentage);
   return (
     <div className="flex flex-row items-start">
       <div className="flex flex-col">
@@ -18,7 +19,7 @@ const RandomExpenditureComparisonCard: React.FC<
         >
           {percentage < 0 ? (
             <FiArrowDownRight color="#6f5a3f" size="0.75rem" />
-          ) : percentage === 0 ? (
+          ) : percentage === 0 || percentage == 0.00 ? (
             <FiArrowRight color="#1F5B19" size="0.75rem" />
           ) : (
             <FiArrowUpRight color="#1F5B19" size="0.75rem" />
@@ -30,7 +31,7 @@ const RandomExpenditureComparisonCard: React.FC<
           className={`font-bold font-primary text-xs ${percentage < 0 ? "text-skin-successAccent" : "text-skin-accent3"
             } tracking-widest`}
         >
-          {`${percentage > 0 ? "+" : ""}`}<span> <AnimatedNumber target={percentage} duration={500} />%</span>
+          {`${percentage > 0 ? "+" : percentage === 0 || percentage == 0.00 ? "" : "-"}`}<span> <AnimatedNumber target={percentage} duration={500} />%</span>
         </div>
       </div>
     </div>

@@ -22,6 +22,7 @@ const MacroPieChartLegend: React.FC<MacroPieChartLegendProps> = ({
   if (!showUnallocated) {
     return <div></div>;
   }
+  console.log("percentageChange", percentageChange);
   return (
     <div
       className="flex flex-row items-start justify-start space-x-1.5"
@@ -38,7 +39,7 @@ const MacroPieChartLegend: React.FC<MacroPieChartLegendProps> = ({
       <div className="font-primary text-xs text-skin-base tracking-longest_text">
         {text} ({percentage}%){" "}
         {percentage !== 0 && showComparison ? (
-          <RandomExpenditureComparisonCard percentage={percentageChange} />
+          <RandomExpenditureComparisonCard percentage={percentageChange ?? 0} />
         ) : null}
       </div>
     </div>

@@ -32,12 +32,22 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({ dimen
 
     const totalPercentage = percentages.essentials + percentages.wants + percentages.savings + percentages.unallocated;
 
+    console.log("Essentials:", values.essentials, "Wants:", values.wants, "Savings:", values.savings, "Unallocated:", values.unallocated)
+    console.log("Peer Essentials:", peerValues?.essentials, "Peer Wants:", peerValues?.wants, "Peer Savings:", peerValues?.savings, "Peer Unallocated:", peerValues?.unallocated)
+
     const peerPercentageDifferences = {
-        essentials: (values.essentials - (peerValues?.essentials ?? 0)) / (peerValues?.essentials ?? 0) * 100,
-        wants: (values.wants - (peerValues?.wants ?? 0)) / (peerValues?.wants ?? 0) * 100,
-        savings: (values.savings - (peerValues?.savings ?? 0)) / (peerValues?.savings ?? 0) * 100,
-        unallocated: (values.unallocated - (peerValues?.unallocated ?? 0)) / (peerValues?.unallocated ?? 0) * 100
+        essentials: calculatePercentageDifference(values.essentials, peerValues?.essentials),
+        wants: calculatePercentageDifference(values.wants, peerValues?.wants),
+        savings: calculatePercentageDifference(values.savings, peerValues?.savings),
+        unallocated: calculatePercentageDifference(values.unallocated, peerValues?.unallocated),
     };
+
+    function calculatePercentageDifference(userValue: any, peerValue: any) {
+        if (peerValue === 0 || peerValue === undefined) {
+            return 0;
+        }
+        return (userValue - peerValue) / peerValue * 100;
+    }
 
     if (totalPercentage !== 100) {
         const diff = 100 - totalPercentage;

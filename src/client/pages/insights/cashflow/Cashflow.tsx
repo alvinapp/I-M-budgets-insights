@@ -20,6 +20,7 @@ const Cashflow = () => {
   const [totalSpent, setTotalSpent] = useState(0);
   const [spentData, setSpentData] = useState<number[]>([]);
   const [datalabels, setDatalabels] = useState([]);
+  const [fullDataLabels, setFullDataLabels] = useState<Date[]>([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const startDate = searchParams.get("startDate");
@@ -45,6 +46,7 @@ const Cashflow = () => {
       setTotalEarned(data.totalEarned);
       setTotalSpent(data.totalSpent);
       setSpentData(data.spentData);
+      setFullDataLabels(data.fullDataLabels);
       setDatalabels(data.datalabels);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -54,7 +56,7 @@ const Cashflow = () => {
   useEffect(() => {
     fetchDataFromServer();
   }, []);
-  const currencySymbol = "$";
+  const currencySymbol = "₦";
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -71,7 +73,7 @@ const Cashflow = () => {
               </div>
               <div
                 className="h-6 w-6 rounded-full flex justify-center items-center"
-                onClick={() => {}}
+                onClick={() => { }}
               >
                 <FiInfo color="#101010" size="1.5rem" />
               </div>
@@ -87,8 +89,8 @@ const Cashflow = () => {
               i === 0
                 ? accountName
                 : i === 1
-                ? dateFilter
-                : element.name ?? "All accounts";
+                  ? dateFilter
+                  : element.name ?? "All accounts";
             return (
               <CashFlowFilterButton
                 label={label}
@@ -140,6 +142,7 @@ const Cashflow = () => {
           earnedData={earnedData}
           spentData={spentData}
           datalabels={datalabels}
+          fullDataLabels={fullDataLabels}
           currencySymbol={currencySymbol}
         />
       </div>

@@ -7,6 +7,7 @@ import MainButton from "../components/MainButton";
 import { dateFilters } from "client/utils/MockData";
 import { useNavigate } from "react-router-dom";
 import useCashflowVariablesStore from "client/store/cashFlowStore";
+import useInsightsStore from "client/store/insightsStore";
 type InsightsFiltersProps = {
   accounts?: Array<Account>;
   activeAccount?: Account;
@@ -123,7 +124,7 @@ const InsightsFilters = ({
             filter.id === "all"
               ? isAllAccountsActive
               : uniqueAccounts[parseInt(filter.id)].account_id ===
-                activeAccount?.account_id;
+              activeAccount?.account_id;
 
           return (
             <FilterButton
@@ -175,8 +176,12 @@ const InsightsFilters = ({
         <MainButton
           title="Apply"
           click={() => {
+            useInsightsStore.getState().setInsightsLoading(true);
             const { formattedStartDate, formattedEndDate } =
               calculateDateRange(activeDateFilter);
+            useInsightsStore.getState().setInsightsStartDate(new Date(formattedStartDate));
+            useInsightsStore.getState().setInsightsEndDate(new Date(formattedEndDate));
+            useInsightsStore.getState().setInsightsActiveInstitutionId(activeAccount?.id ?? null);
             useCashflowVariablesStore.getState().setCashflowVariables({
               startDate: formattedStartDate,
               endDate: formattedEndDate,
@@ -184,6 +189,7 @@ const InsightsFilters = ({
               dateFilter: activeDateFilter.name,
             });
             closeBottomSheet();
+            useInsightsStore.getState().setInsightsLoading(false);
           }}
         />
       </div>
