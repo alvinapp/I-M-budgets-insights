@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TooltipProgressBar from "../ToolTipProgressBar/ToolTipProgressBar";
 import { AmountView } from "./AmountView";
 import { ExpenditureComparisonCard } from "./ExpenditureComparisonCard";
@@ -6,6 +6,8 @@ import { expenditureCompareList } from "client/utils/MockData";
 import MacroPieChartWithLegend from "../MacroPieChartWithLegend";
 import InsightsVsTooltipProgressBar from "./VsProgress/InsightsVsTooltipProgress";
 import { calculateSpending } from "client/utils/Formatters";
+import { fetchMicrosPercentile } from "client/api/micros";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
 type OthersSpendProps = {
   spentBudget: number;
   plannedBudget: number;
@@ -13,6 +15,8 @@ type OthersSpendProps = {
   essentialsSpend: number;
   savingsSpend: number;
   unallocatedSpend: number;
+  startDate?: string;
+  endDate?: string;
 };
 export const OthersSpend = ({
   spentBudget,
@@ -21,9 +25,135 @@ export const OthersSpend = ({
   essentialsSpend,
   savingsSpend,
   unallocatedSpend,
+  startDate,
+  endDate,
 }: OthersSpendProps) => {
   const expenditureProgress = calculateSpending(spentBudget, plannedBudget);
   const othersAverageProgress = calculateSpending(319850, plannedBudget);
+  const config = useConfigurationStore((state: any) => state.configuration) as IConfig;
+  const [othersData, setOthersData] = useState<any>(null);
+  const [totalUserExpenditure, setTotalUserExpenditure] = useState(0);
+  const [totalPeerExpenditure, setTotalPeerExpenditure] = useState(0);
+  const [peerProgress, setPeerProgress] = useState(0);
+  const [userProgress, setUserProgress] = useState(0);
+  const [userWantsExpenditure, setUserWantsExpenditure] = useState(0);
+  const [userEssentialsExpenditure, setUserEssentialsExpenditure] = useState(0);
+  const [userSavingsExpenditure, setUserSavingsExpenditure] = useState(0);
+  const [peerWantsExpenditure, setPeerWantsExpenditure] = useState(0);
+  const [peerEssentialsExpenditure, setPeerEssentialsExpenditure] = useState(0);
+  const [peerSavingsExpenditure, setPeerSavingsExpenditure] = useState(0);
+
+  const startDateObj = startDate ? new Date(startDate) : null;
+  const endDateObj = endDate ? new Date(endDate) : null;
+
+  interface CategoryData {
+    percentile: number;
+    user_expenditure: number;
+    peer_total_expenditure: number;
+    percentage_difference: number;
+  }
+
+  interface MacroData {
+    total_user_expenditure_per_macro: number;
+    total_peer_expenditure_per_macro: number;
+    macro_percentage_difference: number;
+    categories: { [category: string]: CategoryData };
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchMicrosPercentile({ configuration: config, start_date: startDate, end_date: endDate });
+        let totalUserExpenditure = 0;
+        let totalPeerExpenditure = 0;
+        let userWantsExpenditure = 0;
+        let userEssentialsExpenditure = 0;
+        let userSavingsExpenditure = 0;
+        let peerWantsExpenditure = 0;
+        let peerEssentialsExpenditure = 0;
+        let peerSavingsExpenditure = 0;
+
+        // Iterate over data
+        data.forEach((macro: any) => {
+          const macroData = Object.values(macro)[0] as MacroData;
+          totalUserExpenditure += macroData.total_user_expenditure_per_macro;
+          totalPeerExpenditure += macroData.total_peer_expenditure_per_macro;
+        });
+
+        // Iterate over data to get total user expenditure for Wants, Essentials, and Savings; do the same for peer expenditure for Wants, Essentials, and Savings
+        data.forEach((macro: any) => {
+          const macroName = Object.keys(macro)[0];
+          const macroData = macro[macroName];
+          const categories = macroData.categories;
+
+          // Check if the macro name is Wants, Essentials, or Savings
+          if (macroName === "Wants") {
+            for (const category in categories) {
+              const categoryData = categories[category];
+              userWantsExpenditure += categoryData.user_expenditure;
+              peerWantsExpenditure += categoryData.peer_total_expenditure;
+            }
+          } else if (macroName === "Essentials") {
+            for (const category in categories) {
+              const categoryData = categories[category];
+              userEssentialsExpenditure += categoryData.user_expenditure;
+              peerEssentialsExpenditure += categoryData.peer_total_expenditure;
+            }
+          } else if (macroName === "Savings") {
+            for (const category in categories) {
+              const categoryData = categories[category];
+              userSavingsExpenditure += categoryData.user_expenditure;
+              peerSavingsExpenditure += categoryData.peer_total_expenditure;
+            }
+          }
+        });
+
+        setUserWantsExpenditure(userWantsExpenditure);
+        setUserEssentialsExpenditure(userEssentialsExpenditure);
+        setUserSavingsExpenditure(userSavingsExpenditure);
+        setPeerWantsExpenditure(peerWantsExpenditure);
+        setPeerEssentialsExpenditure(peerEssentialsExpenditure);
+        setPeerSavingsExpenditure(peerSavingsExpenditure);
+
+        console.log("User Wants Expenditure:", userWantsExpenditure, "User Essential Expenditure:", userEssentialsExpenditure, "User Savings Expenditure:", userSavingsExpenditure);
+        console.log("Peer Wants Expenditure:", peerWantsExpenditure, "Peer Essential Expenditure:", peerEssentialsExpenditure, "Peer Savings Expenditure:", peerSavingsExpenditure);
+
+        setTotalUserExpenditure(totalUserExpenditure);
+        setTotalPeerExpenditure(totalPeerExpenditure);
+        const userProgress = calculateSpending(totalUserExpenditure, plannedBudget);
+        const peerProgress = calculateSpending(totalPeerExpenditure, plannedBudget);
+        setUserProgress(userProgress.expenditureProgress);
+        setPeerProgress(peerProgress.expenditureProgress);
+        const updatedExpenditureList = expenditureCompareList.map((expenditure) => {
+          // Find the corresponding category in the data object
+          const categoryData = data.find((macro: any) => {
+            const macroName = Object.keys(macro)[0];
+            return macro[macroName].categories.hasOwnProperty(expenditure.name);
+          });
+
+          // If category data is found, update the percentage
+          if (categoryData) {
+            const macroName = Object.keys(categoryData)[0];
+            const category = categoryData[macroName].categories[expenditure.name];
+            expenditure.percentage = category.percentage_difference;
+          }
+
+          return expenditure;
+        });
+        console.log('Total user expenditure:', totalUserExpenditure, 'Total peer expenditure:', totalPeerExpenditure);
+        console.log(updatedExpenditureList);
+
+        console.log(data);
+        setOthersData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [config]);
+
+  console.log(othersData);
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -33,8 +163,9 @@ export const OthersSpend = ({
       </div>
       <div className="mt-2.5 flex flex-row">
         <InsightsVsTooltipProgressBar
-          othersProgressSpend={expenditureProgress.expenditureProgress}
-          myProgressSpend={othersAverageProgress.expenditureProgress}
+          othersProgressSpend={userProgress ?? 0}
+          myProgressSpend={peerProgress ?? 0}
+          startDate={startDateObj ?? new Date()}
         />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
@@ -49,7 +180,7 @@ export const OthersSpend = ({
               marginRight: 5,
             }}
           ></div>
-          <AmountView caption="Other's avg spend" amount={319850} />
+          <AmountView caption="Other's avg spend" amount={totalPeerExpenditure} />
         </div>
         <div className="flex flex-row items-start">
           <div
@@ -62,7 +193,7 @@ export const OthersSpend = ({
               marginRight: 5,
             }}
           ></div>
-          <AmountView caption="My spend" amount={spentBudget} />
+          <AmountView caption="My spend" amount={totalUserExpenditure} />
         </div>
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
@@ -73,9 +204,15 @@ export const OthersSpend = ({
           showComparison={true}
           showUnallocated={false}
           values={{
-            wants: wantsSpend,
-            essentials: essentialsSpend,
-            savings: savingsSpend,
+            wants: userWantsExpenditure,
+            essentials: userEssentialsExpenditure,
+            savings: userSavingsExpenditure,
+            unallocated: unallocatedSpend,
+          }}
+          peerValues={{
+            wants: peerWantsExpenditure,
+            essentials: peerEssentialsExpenditure,
+            savings: peerSavingsExpenditure,
             unallocated: unallocatedSpend,
           }}
         />
@@ -94,15 +231,15 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
-              return (
-                <ExpenditureComparisonCard
-                  icon={expenditure.emoji}
-                  key={i}
-                  category={expenditure.name}
-                  percentage={expenditure.percentage}
-                />
-              );
-            })
+            return (
+              <ExpenditureComparisonCard
+                icon={expenditure.emoji}
+                key={i}
+                category={expenditure.name}
+                percentage={expenditure.percentage}
+              />
+            );
+          })
           : null}
       </div>
     </div>

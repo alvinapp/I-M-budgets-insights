@@ -1,6 +1,8 @@
 import React from "react";
 import MacroProgressBar from "./MacroProgressBar";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import AnimatedNumber from "./AnimatedNumber";
+import { checkNAN } from "client/utils/Formatters";
 
 interface MacroProgressBarsContainerProps {
   ratios: string; // format like "50/30/20"
@@ -35,8 +37,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
     >
       {ratioArray.map((flexValue, index) => (
         <div key={index} className="flex flex-col" style={{ flex: flexValue }}>
-          {/* Conditional rendering based on isLoading */}
-          {isLoading ? ( // Render shimmer effect if isLoading is true
+          {isLoading ? (
             <div className="bg-silver animate-pulse h-[1.875rem] rounded-[1.375rem] bg-[#d2d2d2] min-w-[7.5rem]" />
           ) : (
             <MacroProgressBar
@@ -48,8 +49,8 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                 index === 0
                   ? "linear-gradient(159deg, #4053D0 0%, #051AA3 100%)"
                   : index === 1
-                  ? "linear-gradient(159deg, #8490E2 0%, #3B4381 100%)"
-                  : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
+                    ? "linear-gradient(159deg, #8490E2 0%, #3B4381 100%)"
+                    : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
               }
               outsideLength={
                 progressPercentage[Object.keys(progressPercentage)[index]]
@@ -59,26 +60,10 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           )}
           <div className="flex flex-col justify-end items-start mt-3">
             <div className="relative flex items-end">
-              {/* <div
-                  className="absolute -right-4 -top-1.5 text-xxxs font-custom font-semibold text-skin-base"
-
-                >
-                  {currencySymbol}
-                </div> */}
               <div
                 className="font-custom font-medium text-base text-skin-base"
-                /*  style={{
-                  color:
-                    index === 0
-                     / ? "#056489"
-                      : index === 1
-                     / ? "#c77e2b"
-                      : "#117C07",
-                }} */
               >
-                {budgetAmount[Object.keys(budgetAmount)[index]]?.toLocaleString(
-                  "en-US"
-                )}
+                <AnimatedNumber target={isLoading ? 0 : checkNAN(budgetAmount[Object.keys(budgetAmount)[index]] ?? 0)} duration={500} />
                 <sup
                   style={{
                     fontSize: "12px",

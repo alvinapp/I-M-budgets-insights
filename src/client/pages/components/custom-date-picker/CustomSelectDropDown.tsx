@@ -76,14 +76,14 @@ const CustomSelectDropdown = ({
   };
 
   return (
-    <CustomSelect>
-      <SelectButton onClick={isDisabled ? () => {} : toggleDropdown}>
+    <CustomSelect className="font-custom">
+      <SelectButton className="font-custom" onClick={isDisabled ? () => { } : toggleDropdown}>
         {selectedOption || "Select an option"}
       </SelectButton>
       {isOpen && (
         <Dropdown ref={dropdownRef}>
           {options.map((option: any, index: any) => (
-            <Option key={index} onClick={() => handleSelect(option)}>
+            <Option className="font-custom" key={index} onClick={() => handleSelect(option)}>
               {option}
             </Option>
           ))}

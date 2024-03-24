@@ -1,5 +1,6 @@
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
+import AnimatedNumber from "../AnimatedNumber";
 
 type ExpenditureCardProps = {
   budget?: number;
@@ -19,8 +20,8 @@ export const ExpenditureCard = ({
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
-  const budgetColumnWidth = "80px";
-  const spentColumnWidth = "80px";
+  const budgetColumnWidth = "90px";
+  const spentColumnWidth = "90px";
 
   return (
     <div className="flex flex-row items-center justify-between mb-3">
@@ -40,30 +41,30 @@ export const ExpenditureCard = ({
       </div>
 
       {/* Budget and spent section */}
-      <div className="flex">
+      <div className="flex flex-row min-w-[55%] justify-between">
         {/* Budget */}
         <div
-          className="flex flex-col items-center"
+          className="flex flex-col items-end"
           style={{ width: budgetColumnWidth }}
         >
           <div className="relative">
             <span className="font-medium font-primary text-xs text-skin-base tracking-widest">
-              {budget?.toLocaleString()}
-            </span>
-            <span className="absolute -top-2 -right-1 font-medium font-primary text-xxxs text-skin-neutral">
-              {currencySymbol}
+              <AnimatedNumber target={budget ?? 0} duration={500} />
+              <sup className=" text-xxxs align-super font-medium ml-[-10%]">
+                {currencySymbol}
+              </sup>
             </span>
           </div>
         </div>
         {/* Spent */}
         <div
-          className="flex flex-col items-center"
+          className="flex flex-col items-end"
           style={{ width: spentColumnWidth }}
         >
           <div className="relative">
             <span className="font-bold font-primary text-xs text-skin-base tracking-widest">
-              {spent?.toLocaleString()}
-              <sup className=" text-xs align-super font-medium">
+              <AnimatedNumber target={spent ?? 0} duration={500} />
+              <sup className=" text-xxxs align-super font-medium ml-[-10%]">
                 {currencySymbol}
               </sup>
             </span>

@@ -1,6 +1,7 @@
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
-import { FiArrowDownRight, FiArrowUpRight } from "react-icons/fi";
+import { FiArrowDownRight, FiArrowUpRight, FiArrowRight } from "react-icons/fi";
+import AnimatedNumber from "../AnimatedNumber";
 type ExpenditureComparisonCardProps = {
   category: string;
   icon: string;
@@ -29,12 +30,13 @@ export const ExpenditureComparisonCard = ({
         <div className="flex flex-row items-center">
           <div className="flex flex-col">
             <div
-              className={`flex justify-center items-center rounded-full h-4.5 w-4.5  mr-2.5 ${
-                percentage < 0 ? "bg-skin-secondary" : "bg-skin-accent4"
-              }`}
+              className={`flex justify-center items-center rounded-full h-4.5 w-4.5  mr-2.5 ${percentage < 0 ? "bg-skin-secondary" : "bg-skin-accent4"
+                }`}
             >
               {percentage < 0 ? (
                 <FiArrowDownRight color="#6f5a3f" size="0.75rem" />
+              ) : percentage == 0 ? (
+                <FiArrowRight color="#1F5B19" size="0.75rem" />
               ) : (
                 <FiArrowUpRight color="#1F5B19" size="0.75rem" />
               )}
@@ -42,11 +44,10 @@ export const ExpenditureComparisonCard = ({
           </div>
           <div className="flex flex-col">
             <div
-              className={`font-bold font-primary text-xs ${
-                percentage < 0 ? "text-skin-successAccent" : "text-skin-accent3"
-              } tracking-widest`}
+              className={`font-bold font-primary text-xs ${percentage < 0 ? "text-skin-successAccent" : "text-skin-accent3"
+                } tracking-widest`}
             >
-              {`${percentage > 0 ? "+" : ""}${percentage}%`}
+              {`${percentage > 0 ? "+" : ""}`}<span> <AnimatedNumber target={parseFloat(percentage.toFixed(1))} duration={500} />%</span>
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import { checkNAN } from "client/utils/Formatters";
 import { useNavigate } from "react-router";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import useCashflowVariablesStore from "client/store/cashFlowStore";
+import AnimatedNumber from "./AnimatedNumber";
 
 interface CashFlowPieChartProps {
   dimensions: number;
@@ -180,7 +181,8 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                   {currencyStore.currencySymbol}
                 </div> */}
                 <div className="font-custom text-2xl font-medium text-skin-neutral2">
-                  {checkNAN(moneyIn + moneyOut).toLocaleString("en-US")}
+                  {/* {checkNAN(moneyIn + moneyOut).toLocaleString("en-US")} */}
+                  <AnimatedNumber target={(moneyIn + moneyOut) ?? 0} duration={500} />
                   <sup
                     style={{
                       fontSize: "12px",

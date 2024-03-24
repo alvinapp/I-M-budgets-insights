@@ -1,4 +1,5 @@
 import React from "react";
+import AnimatedNumber from "./AnimatedNumber";
 
 interface PercentageItemProps {
   color: string;
@@ -30,7 +31,8 @@ const PercentageItem: React.FC<PercentageItemProps> = ({
           }}
         ></div>
         <div className="flex flex-col items-start">
-          <span className="font-custom font-medium text-base text-skin-base">{`${percentage}%`}</span>
+          <span className="font-custom font-medium text-base text-skin-base">
+            <AnimatedNumber target={(percentage) ?? 0} duration={500} />{'%'}</span>
           <span className="font-primary text-xs text-skin-subtitle font-medium">
             {label}
           </span>

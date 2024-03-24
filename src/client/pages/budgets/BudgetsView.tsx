@@ -37,6 +37,7 @@ import {
 } from "date-fns";
 import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
 import { MicroGoal } from "client/models/MicroGoal";
+import MonthYearPicker from "../components/custom-date-picker/MonthYearPicker";
 import ViewSavingsBudget from "./ViewSavingsBudget";
 const BudgetsView = () => {
   const navigate = useNavigate();
@@ -265,6 +266,15 @@ const BudgetsView = () => {
     setUpdatedEnvironment("local");
   };
 
+  const onDateChangeSelect = (dateRange: any) => {
+    console.log("We are updating the date range");
+    setRangeStartDate(dateRange.startDate);
+    setStartDate(dateRange.startDate);
+    setEndDate(dateRange.endDate);
+    setRangeEndDate(dateRange.endDate);
+    setUpdatedEnvironment("local");
+  };
+
   // Format the current month for display
 
   const month = currentMonth.toLocaleString("default", { month: "long" });
@@ -335,13 +345,18 @@ const BudgetsView = () => {
             startDate={activePeriodRange.startDate}
             endDate={activePeriodRange.endDate}
             onDateRangeSelect={(date: any) => {
-              onDateRangeSelect(date);
+              onDateChangeSelect(date);
             }}
             lastUpdatedEnv={updatedEvironment}
           />
         </div>
       </div>
-      <div className="flex-grow h-px bg-skin-accent3 mt-3"></div>
+      <div className="flex-grow h-px bg-skin-accent3 mt-3">
+        {/* <MonthYearPicker onMonthYearSubmit={(date) => {
+          console.log("This is the date range", date);
+          onDateChangeSelect(date);
+        }} startDate={activePeriodRange.startDate} endDate={activePeriodRange.endDate} /> */}
+      </div>
       <div className="flex flex-col mx-3.5  mt-8">
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
@@ -355,18 +370,25 @@ const BudgetsView = () => {
             )}
             subtitle="Available budget"
             currencySymbol={currencySymbol}
+            isLoading={isLoading}
           />
           <div className="flex flex-col justify-center">
-            <InsightsButton onClick={() => navigateToInsightsView()} />
+            <InsightsButton
+              onClick={() => (isLoading ? null : navigateToInsightsView())}
+            />
           </div>
         </div>
         <div className="mt-11">
           <TooltipProgressBar
-            progressPercent={expenditureProgress.expenditureProgress}
-            progressTooltip={expenditureProgress.expectedExpenditureProgress}
+            progressPercent={
+              isLoading ? 0 : expenditureProgress.expenditureProgress
+            }
+            progressTooltip={
+              isLoading ? 0 : expenditureProgress.expectedExpenditureProgress
+            }
             activeMonth={startDate}
             showProgressTooltip={
-              currentMonth.getMonth() === new Date().getMonth()
+              isLoading ? false : startDate.getMonth() === new Date().getMonth()
             }
           />
         </div>
@@ -405,6 +427,7 @@ const BudgetsView = () => {
             )}
             caption="Available"
             currencySymbol={currencySymbol}
+            isloading={isLoading}
           />
           <div className="mt-6 flex flex-col">
             {essentialBudgets && essentialBudgets.length > 0
@@ -413,13 +436,17 @@ const BudgetsView = () => {
                     <CategoryViewCard
                       key={i}
                       category={essential?.name}
-                      progressPercentage={checkNAN(
-                        (essential?.expenses / essential?.amount) * 100
-                      )}
+                      progressPercentage={
+                        isLoading
+                          ? 0
+                          : checkNAN(
+                              (essential?.expenses / essential?.amount) * 100
+                            )
+                      }
                       icon={essential.category?.emoji}
                       amount={essential?.amount}
                       budgetAmount={essential.amount}
-                      spentAmount={essential?.expenses}
+                      spentAmount={isLoading ? 0 : essential?.expenses}
                       iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
                       bgColor="#0131A1"
@@ -472,6 +499,7 @@ const BudgetsView = () => {
             )}
             caption="Available"
             currencySymbol={currencySymbol}
+            isloading={isLoading}
           />
           <div className="mt-6 flex flex-col">
             {wantsBudgets && wantsBudgets.length > 0
@@ -480,13 +508,15 @@ const BudgetsView = () => {
                     <CategoryViewCard
                       key={i}
                       category={want?.name}
-                      progressPercentage={checkNAN(
-                        (want?.expenses / want?.amount) * 100
-                      )}
+                      progressPercentage={
+                        isLoading
+                          ? 0
+                          : checkNAN((want?.expenses / want?.amount) * 100)
+                      }
                       icon={want.category?.emoji}
                       amount={want?.amount}
                       budgetAmount={want?.amount}
-                      spentAmount={want?.expenses}
+                      spentAmount={isLoading ? 0 : want?.expenses}
                       iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
                       bgColor="#6F89A5"
@@ -535,12 +565,17 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3 mb-8">
           <CategoryCardHeader
             title="Savings"
-            amount={Math.max(
-              checkNAN(essentialBudgetAmount * 3 - savingsTotalExpenses),
-              0
-            )}
+            amount={
+              isLoading
+                ? 0
+                : Math.max(
+                    checkNAN(essentialBudgetAmount * 3 - savingsTotalExpenses),
+                    0
+                  )
+            }
             caption="Available"
             currencySymbol={currencySymbol}
+            isloading={isLoading}
           />
           <div className="mt-6 flex flex-col">
             {categoryStore.categoryBudgets[2]?.data &&
@@ -555,16 +590,20 @@ const BudgetsView = () => {
                           ? "Rainy day fund"
                           : ""
                       }
-                      progressPercentage={checkNAN(
-                        Math.min(
-                          (savings.expenses / savings?.amount) * 100,
-                          100
-                        )
-                      )}
+                      progressPercentage={
+                        isLoading
+                          ? 0
+                          : checkNAN(
+                              Math.min(
+                                (savings.expenses / savings?.amount) * 100,
+                                100
+                              )
+                            )
+                      }
                       icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
                       amount={savings?.amount}
                       budgetAmount={essentialBudgetAmount * 3}
-                      spentAmount={savings.expenses}
+                      spentAmount={isLoading ? 0 : savings.expenses}
                       iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
                       bgColor="#84C1B2"

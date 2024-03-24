@@ -4,13 +4,15 @@ import "../../components/ToolTipProgressBar/TooltipProgressBar.css";
 interface TooltipProgressBarProps {
   backgroundColor?: string;
   progressPercent: number;
+  startDate: Date;
 }
 
 const InsightsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   backgroundColor = "#E7EDF3",
   progressPercent,
+  startDate,
 }) => {
-  const date = new Date();
+  const date = startDate ?? new Date();
   const currentDay = date.getDate();
   const daysInMonth = new Date(
     date.getFullYear(),

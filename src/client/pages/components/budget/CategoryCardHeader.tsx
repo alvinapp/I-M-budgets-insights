@@ -1,15 +1,18 @@
 import React from "react";
+import AnimatedNumber from "../AnimatedNumber";
 type CategoryCardHeaderProps = {
   title?: string;
   currencySymbol?: string;
   amount: number;
   caption: string;
+  isloading: boolean;
 };
 export const CategoryCardHeader = ({
   title,
   currencySymbol,
   amount,
   caption,
+  isloading,
 }: CategoryCardHeaderProps) => {
   return (
     <div className="flex flex-row justify-between items-center">
@@ -21,7 +24,7 @@ export const CategoryCardHeader = ({
       <div className="flex flex-col items-end">
         <div className="relative">
           <div className="font-custom text-lg text-skin-base font-medium">
-            {amount?.toLocaleString("en-us")}
+            <AnimatedNumber target={isloading ? 0 : amount ?? 0} duration={500} />
             <sup className=" text-xs align-super -ml-1">
               {currencySymbol ? currencySymbol : ""}
             </sup>
