@@ -52,10 +52,6 @@ export const getMacros = async ({
         token: configuration.token,
       });
     }
-    // const res = await fetchData({
-    //   endpoint: "/goals/macros",
-    //   token: configuration.token,
-    // });
     return res;
   } catch (reason: any) {
     Sentry.captureException(reason);

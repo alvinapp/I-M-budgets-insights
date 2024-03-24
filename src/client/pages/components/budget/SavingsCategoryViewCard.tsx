@@ -1,6 +1,7 @@
 import ProgressBar from "@ramonak/react-progress-bar";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
+import { FiChevronRight } from "react-icons/fi";
 
 interface SavingsCategoryCardProps {
   category?: string;
@@ -15,6 +16,7 @@ interface SavingsCategoryCardProps {
   primaryColor?: string;
   fadedColor?: string;
   caption?: string;
+  onClick?: () => void;
 }
 const SavingsCategoryViewCard: React.FC<SavingsCategoryCardProps> = ({
   icon,
@@ -29,17 +31,16 @@ const SavingsCategoryViewCard: React.FC<SavingsCategoryCardProps> = ({
   primaryColor,
   fadedColor,
   caption,
+  onClick,
 }) => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
   return (
-    <div className="flex flex-row mb-3">
+    <div className="flex flex-row mb-3" onClick={onClick}>
       <div className="flex flex-col mr-2">
-        <div
-          className={`rounded-full h-10 w-10 flex justify-center items-center ${iconBg}`}
-        >
-          <div>{icon}</div>
+        <div className="h-8 w-8 relative overflow-hidden rounded-full bg-skin-iconSecondary">
+          <img src={icon} alt="" className=" inline m-auto h-full w-auto" />
         </div>
       </div>
       <div className="flex flex-col w-full">
@@ -49,6 +50,7 @@ const SavingsCategoryViewCard: React.FC<SavingsCategoryCardProps> = ({
               <div className="font-primary text-sm text-skin-base font-medium tracking-wide">
                 {category}
               </div>
+              <FiChevronRight size="0.75rem" />
             </div>
           </div>
           <div className="flex flex-col">

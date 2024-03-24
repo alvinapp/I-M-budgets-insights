@@ -19,18 +19,16 @@ import { fetchMacros, saveBudget } from "client/api/budget";
 import getToken from "client/api/token";
 import { showCustomToast } from "client/utils/Toast";
 import useUserStore from "client/store/userStore";
-import { error } from "console";
-import { config } from "process";
 import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
-import { element } from "prop-types";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import OnboardingSuccess from "../onboarding/OnboardingSuccess";
 import useBottomSheetStore, {
-  useSavingsBottomSheetStore,
+  useBudgetSavingsSheetStore,
 } from "client/store/bottomSheetStore";
 import SavingsGoalConfirmation from "./SavingsGoalConfirmation";
 import SuccessfullCreatedView from "../components/budget/SuccessfullCreatedView";
 import successIcon from "client/assets/images/success-icon.svg";
+import EditSavingsViewCard from "./edit-settings/EditSavingsViewCard";
 
 export const BudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -40,7 +38,7 @@ export const BudgetSettings = () => {
   const setToken = useConfigurationStore((state: any) => state.setToken);
   const userStore = useUserStore((state: any) => state);
   const setUser = userStore.setUser;
-  const savingsBottomSheetStore = useSavingsBottomSheetStore(
+  const savingsBottomSheetStore = useBudgetSavingsSheetStore(
     (state: any) => state
   );
   const { data } = useQuery(
@@ -126,11 +124,15 @@ export const BudgetSettings = () => {
   const [selectedWantsId, setSelectedWantsId] = useState();
   const [essentialsMapState, setEssentialsMapState] = useState(new Map());
   const [wantsMapState, setWantsMapState] = useState(new Map());
+  const [savingsMapState, setSavingsMapState] = useState(new Map());
   const updateEssentialsMap = (i: number, data: any) => {
     setEssentialsMapState((map) => new Map(map.set(`data${i}`, data)));
   };
   const updateWantsMap = (i: number, data: any) => {
     setWantsMapState((map) => new Map(map.set(`data${i}`, data)));
+  };
+  const updateSavingsMap = (i: number, data: any) => {
+    setSavingsMapState((map) => new Map(map.set(`data${i}`, data)));
   };
   //essentials
   const essentialsList = Array.from(essentialsMapState, ([key, value]) => {
@@ -146,6 +148,11 @@ export const BudgetSettings = () => {
     return element[`data${i}`];
   });
   //savings
+  const savingsList = Array.from(savingsMapState, ([key, value]) => {
+    return { [key]: value };
+  }).map((element: any, i: number) => {
+    return element[`data${i}`];
+  });
   const navigator = useNavigate();
   const macroData = categoriesStore.macros?.data ?? [];
   const essentialMacro = macroData[0];
@@ -161,7 +168,8 @@ export const BudgetSettings = () => {
   const savingsBudgetAmount = savingsGoals[0]?.amount ?? "";
   const [allocatedSavings, setAllocatedSavings] = useState(0);
   const [addSavings, setAddSavings] = useState(false);
-  const [savingsList, setSavingsList] = useState([{}]);
+  // const [savingsList, setSavingsList] = useState([{}]);
+
   const { isFetching: savingBudgetDetails, refetch: saveBudgetInfo } = useQuery(
     "save-budget",
     () => {
@@ -199,7 +207,8 @@ export const BudgetSettings = () => {
   );
 
   const allAddedCategoriesList = essentialsList.concat(wantsList);
-  const listCheckForEntries = allAddedCategoriesList.filter(
+  const finalListCheckForEntries = allAddedCategoriesList.concat(savingsList);
+  const listCheckForEntries = finalListCheckForEntries.filter(
     (element) => element.amount > 0
   );
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
@@ -258,13 +267,21 @@ export const BudgetSettings = () => {
               essentialGoals[0]?.share ?? ""
             }% of overall budget`}
             unallocatedCaption="Unallocated"
-            allocatedCaption="Allocated"
-            unallocatedAmount={essentialBudgetAmount - allocatedEssentials}
+            unallocatedAmount={
+              typeof parseInt(essentialBudgetAmount) === "number" &&
+              essentialBudgetAmount > 0
+                ? Math.max(essentialBudgetAmount - allocatedEssentials, 0)
+                : 0 // Ensure perc
+            }
             allocatedAmount={allocatedEssentials}
             progressPercentage={
-              typeof essentialBudgetAmount === "undefined"
-                ? 0
-                : (allocatedEssentials / essentialBudgetAmount) * 100
+              typeof parseInt(essentialBudgetAmount) === "number" &&
+              essentialBudgetAmount > 0
+                ? Math.min(
+                    (allocatedEssentials / essentialBudgetAmount) * 100,
+                    100
+                  ) // Ensure percentage stays between 0 and 100
+                : 0
             }
             indicatorColor="bg-[linear-gradient(159deg,#4053D0_0%,#051AA3_100%)]"
             progressColor="#051AA3"
@@ -384,9 +401,17 @@ export const BudgetSettings = () => {
             }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={wantsBudgetAmount - allocatedWants}
-            allocatedAmount={allocatedWants}
-            progressPercentage={(allocatedWants / wantsBudgetAmount) * 100}
+            unallocatedAmount={
+              typeof wantsBudgetAmount === "number" || wantsBudgetAmount > 0
+                ? Math.max(wantsBudgetAmount - allocatedWants, 0) // Ensure percentage stays between 0 and 100
+                : 0
+            }
+            allocatedAmount={allocatedWants ?? 0}
+            progressPercentage={
+              typeof wantsBudgetAmount === "number" && wantsBudgetAmount > 0
+                ? Math.min((allocatedWants / wantsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
+                : 0
+            }
             indicatorColor="bg-[linear-gradient(159deg,#8490E2_0%,#3B4381_100%)]"
             progressColor="#3B4381"
           />
@@ -502,56 +527,77 @@ export const BudgetSettings = () => {
             }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={savingsBudgetAmount - allocatedSavings}
+            unallocatedAmount={
+              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
+                ? Math.max(savingsBudgetAmount - allocatedSavings, 0)
+                : 0
+            }
             allocatedAmount={allocatedSavings}
-            progressPercentage={(allocatedSavings / savingsBudgetAmount) * 100}
+            progressPercentage={
+              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
+                ? Math.min((allocatedSavings / savingsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
+                : 0
+            }
             indicatorColor="bg-[#84C1B2]"
             progressColor="#84C1B2"
           />
           <div className="border mt-4 mb-4.5"></div>
-          <div className="flex flex-row justify-between items-center mb-4">
-            <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
-              Goals
-            </div>
-            <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
-              Budget allocation
-            </div>
-          </div>
           <div className="flex flex-col">
-            {savingsCategories && savingsCategories.length > 0
-              ? savingsCategories.map((category: any) => {
-                  return (
+            {savingsCategories &&
+            savingsCategories.length > 0 &&
+            !addSavings ? (
+              savingsCategories.map((category: any, i: number) => {
+                return (
+                  <>
+                    <div className="flex flex-row justify-between items-center mb-4">
+                      <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                        Goals
+                      </div>
+                    </div>
                     <SavingsSettingCard
-                      isAdded={addSavings}
                       goal="Create a goal"
-                      emoji="🎯"
+                      emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
                       amount={savingsBudgetAmount}
-                      add={() => {
-                        setAddSavings(true);
-                        setAllocatedSavings(savingsBudgetAmount);
-                        setSavingsList([
-                          {
-                            amount: savingsBudgetAmount,
-                            contribution_amount: 0,
-                            percentage: 0,
-                            category_id: category?.id,
-                            name: category?.name,
-                            pseudo_name: category?.name + " " + category?.emoji,
-                            extern_id: category?.id,
-                            order: 0,
-                            contribution_at: "",
-                            is_contribute_customized: true,
-                          },
-                        ]);
+                      onClick={() => {
+                        savingsBottomSheetStore.setSavingsBottomSheet(true);
+                        updateSavingsMap(i, {
+                          amount: savingsBudgetAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id ?? "",
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
                       }}
                       edit={() => {
                         setAddSavings(false);
                         setAllocatedSavings(0);
                       }}
                     />
-                  );
-                })
-              : null}
+                  </>
+                );
+              })
+            ) : (
+              <>
+                <div className="flex flex-row justify-between items-center mb-4">
+                  <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                    Goals
+                  </div>
+                  <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                    Budget allocation
+                  </div>
+                </div>
+                <EditSavingsViewCard
+                  amount={savingsBudgetAmount ?? 0}
+                  icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                  goal="Rainy day fund"
+                />
+              </>
+            )}
           </div>
         </div>
         <div className="flex flex-row mt-18 justify-center items-center">
@@ -616,9 +662,19 @@ export const BudgetSettings = () => {
             <SavingsGoalConfirmation
               monthlyContribution={savingsBudgetAmount}
               targetAmount={essentialBudgetAmount * 3}
-              progressPercentage={3}
+              progressPercentage={
+                typeof savingsBudgetAmount === "number" &&
+                savingsBudgetAmount > 0
+                  ? Math.min(
+                      (allocatedSavings / savingsBudgetAmount) * 100,
+                      100
+                    ) // Ensure percentage stays between 0 and 100
+                  : 0
+              }
               onClick={() => {
+                setAllocatedSavings(savingsBudgetAmount);
                 setSavingsSuccess(true);
+                setAddSavings(true);
               }}
             />
           )

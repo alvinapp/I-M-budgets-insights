@@ -1,4 +1,3 @@
-import { FiChevronsDown } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 
@@ -11,9 +10,11 @@ import getToken from "client/api/token";
 import { useConfigurationStore, IConfig } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CustomLoader from "../components/Loader/CustomLoader";
-import { checkIfUserHasMicros, fetchBudgetCategories } from "client/api/budget";
+import { checkIfUserHasMicros } from "client/api/budget";
+import MonoConnect from "@mono.co/connect.js";
+import { getMonoPubKey, postCode } from "client/api/mono";
 
 const OnboardingStart = () => {
   const navigate = useNavigate();
@@ -21,6 +22,58 @@ const OnboardingStart = () => {
     (state: any) => state.configuration
   ) as IConfig;
   const setToken = useConfigurationStore((state: any) => state.setToken);
+  const setMonoPubKey = useConfigurationStore(
+    (state: any) => state.setMonoPubKey
+  );
+  const fetchMonoToken = async ({
+    configuration,
+    setMonoPubKey,
+  }: {
+    configuration: IConfig;
+    setMonoPubKey: any;
+  }) => {
+    return getMonoPubKey(configuration, configuration.country ?? "Nigeria")
+      .then((data) => {
+        if (!data) {
+          return;
+        }
+        setMonoPubKey(data.key);
+        configuration.monoPubKey = data.key;
+      })
+      .catch((error) => {});
+  };
+  useEffect(() => {
+    if (!configurations.monoPubKey) {
+      fetchMonoToken({ configuration: configurations, setMonoPubKey })
+        .then(() => {})
+        .catch((error) => {
+          console.error("Failed to fetch Mono public key:", error);
+        });
+    }
+  }, [configurations.monoPubKey, configurations.country, setMonoPubKey]);
+  const monoConnect = useMemo(() => {
+    if (!configurations.monoPubKey && !configurations.token) {
+      return null;
+    }
+    const monoInstance = new MonoConnect({
+      onClose: () => {},
+      onLoad: () => {},
+      onSuccess: ({ code }: any) => {
+        postCode(configurations, code, configurations.country ?? "Nigeria");
+        navigate("/onboard-add-income");
+      },
+      key: configurations.monoPubKey,
+    });
+    monoInstance.setup();
+
+    return monoInstance;
+  }, [configurations.monoPubKey, configurations.token]);
+
+  const onClick = () => {
+    if (monoConnect) {
+      monoConnect.open();
+    }
+  };
   const setUser = useUserStore((state) => state.setUser);
   // add loading
   const [loading, setLoading] = useState(false);
@@ -96,9 +149,11 @@ const OnboardingStart = () => {
           </div>
           <div className="fixed bottom-5 left-0 right-0 mx-4">
             <MainButton
-              title="Start Budgeting"
+              isDisabled={!configurations.monoPubKey && !configurations.token}
+              title="Link account"
               click={() => {
-                navigate("/onboard-add-income");
+                // navigate("/onboard-add-income");
+                onClick();
               }}
             />
           </div>

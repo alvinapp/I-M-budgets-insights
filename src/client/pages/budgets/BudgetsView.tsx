@@ -38,6 +38,7 @@ import {
 import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
 import { MicroGoal } from "client/models/MicroGoal";
 import MonthYearPicker from "../components/custom-date-picker/MonthYearPicker";
+import ViewSavingsBudget from "./ViewSavingsBudget";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -45,7 +46,9 @@ const BudgetsView = () => {
   );
   const categoryStore = useCategoriesStore((state: any) => state);
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
-  const microGoals = useMicroGoalsStore((state) => state.microGoals);
+  const macroData = macroGoalStore.macroGoals ?? [];
+  const essentialMacro = macroData[0];
+  const essentialBudgetAmount = essentialMacro?.amount;
   const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
   const config = useConfigurationStore(
     (state: any) => state.configuration
@@ -126,9 +129,7 @@ const BudgetsView = () => {
         end_date: formattedEndDate,
       });
       setDataCallback(result);
-    } catch (error) {
-      console.error(`Error fetching ${queryKey}:`, error);
-    }
+    } catch (error) {}
   };
 
   const { isFetching: fetchingEssentialsBudget } = useQuery(
@@ -169,9 +170,7 @@ const BudgetsView = () => {
       const result =
         data?.map((item: { goals: any }) => item.goals).flat() || [];
       macroGoalStore.setMacros(result);
-    } catch (error) {
-      console.error("Error fetching macro goals:", error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     const fetchDataAndUpdateMacroGoals = async () => {
@@ -207,8 +206,6 @@ const BudgetsView = () => {
     essentialTotalExpenses,
     wantsTotalExpenses,
     savingsTotalExpenses,
-    totalBudget,
-    totalExpenditure,
     expenditureProgress,
   } = useMemo(() => {
     const essentialTotalBudgetAmount =
@@ -262,7 +259,6 @@ const BudgetsView = () => {
   };
 
   const onDateRangeSelect = (dateRange: any) => {
-    console.log("We are updating the date range");
     setRangeStartDate(dateRange.start);
     setStartDate(dateRange.start);
     setEndDate(dateRange.end);
@@ -293,6 +289,7 @@ const BudgetsView = () => {
   );
   const macroStore = useMacrosStore((state: any) => state);
   const [viewBudgetSheet, openViewBudgetSheet] = useState(false);
+  const [viewSavingsBudgetSheet, openViewSavingsBudgetSheet] = useState(false);
   const budgetDetails = {
     spentAmount: 0,
     totalBudgetAmount: 0,
@@ -303,7 +300,18 @@ const BudgetsView = () => {
     endDate: formattedEndDate,
     microGoal: 0,
   };
+  const savingsGoalDetails = {
+    spentAmount: 0,
+    totalBudgetAmount: 0,
+    progress: 0,
+    category: "",
+    emoji: "",
+    startDate: formattedStartDate,
+    endDate: formattedEndDate,
+    microGoal: 0,
+  };
   const [budgetDetailsData, setBudgetDetailsData] = useState(budgetDetails);
+  const [savingsGoalData, setSavingsGoalData] = useState(savingsGoalDetails);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -356,8 +364,8 @@ const BudgetsView = () => {
               Math.max(
                 0,
                 essentialTotalBudgetAmount +
-                wantsTotalBudgetAmount -
-                (essentialTotalExpenses + wantsTotalExpenses)
+                  wantsTotalBudgetAmount -
+                  (essentialTotalExpenses + wantsTotalExpenses)
               )
             )}
             subtitle="Available budget"
@@ -365,13 +373,19 @@ const BudgetsView = () => {
             isLoading={isLoading}
           />
           <div className="flex flex-col justify-center">
-            <InsightsButton onClick={() => isLoading ? null : navigateToInsightsView()} />
+            <InsightsButton
+              onClick={() => (isLoading ? null : navigateToInsightsView())}
+            />
           </div>
         </div>
         <div className="mt-11">
           <TooltipProgressBar
-            progressPercent={isLoading ? 0 : expenditureProgress.expenditureProgress}
-            progressTooltip={isLoading ? 0 : expenditureProgress.expectedExpenditureProgress}
+            progressPercent={
+              isLoading ? 0 : expenditureProgress.expenditureProgress
+            }
+            progressTooltip={
+              isLoading ? 0 : expenditureProgress.expectedExpenditureProgress
+            }
             activeMonth={startDate}
             showProgressTooltip={
               isLoading ? false : startDate.getMonth() === new Date().getMonth()
@@ -418,45 +432,49 @@ const BudgetsView = () => {
           <div className="mt-6 flex flex-col">
             {essentialBudgets && essentialBudgets.length > 0
               ? essentialBudgets?.map((essential: any, i: any) => {
-                return (
-                  <CategoryViewCard
-                    key={i}
-                    category={essential?.name}
-                    progressPercentage={isLoading ? 0 : checkNAN(
-                      (essential?.expenses / essential?.amount) * 100
-                    )}
-                    icon={essential.category?.emoji}
-                    amount={essential?.amount}
-                    budgetAmount={essential.amount}
-                    spentAmount={isLoading ? 0 : essential?.expenses}
-                    iconBg="bg-skin-iconPrimary"
-                    baseBgColor="#E7EDF3"
-                    bgColor="#0131A1"
-                    primaryColor="text-skin-base"
-                    fadedColor="text-skin-subtitle"
-                    onClick={() => {
-                      openViewBudgetSheet(true);
-                      setBudgetDetailsData({
-                        spentAmount: essential?.expenses,
-                        totalBudgetAmount: essential?.amount,
-                        progress: checkNAN(
-                          (essential?.expenses / essential?.amount) * 100
-                        ),
-                        category: essential?.name,
-                        emoji: essential.category?.emoji,
-                        startDate: formattedStartDate,
-                        endDate: formattedEndDate,
-                        microGoal: essential?.id,
-                      });
-                    }}
-                  />
-                );
-              })
+                  return (
+                    <CategoryViewCard
+                      key={i}
+                      category={essential?.name}
+                      progressPercentage={
+                        isLoading
+                          ? 0
+                          : checkNAN(
+                              (essential?.expenses / essential?.amount) * 100
+                            )
+                      }
+                      icon={essential.category?.emoji}
+                      amount={essential?.amount}
+                      budgetAmount={essential.amount}
+                      spentAmount={isLoading ? 0 : essential?.expenses}
+                      iconBg="bg-skin-iconPrimary"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#0131A1"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
+                      onClick={() => {
+                        openViewBudgetSheet(true);
+                        setBudgetDetailsData({
+                          spentAmount: essential?.expenses,
+                          totalBudgetAmount: essential?.amount,
+                          progress: checkNAN(
+                            (essential?.expenses / essential?.amount) * 100
+                          ),
+                          category: essential?.name,
+                          emoji: essential.category?.emoji,
+                          startDate: formattedStartDate,
+                          endDate: formattedEndDate,
+                          microGoal: essential?.id,
+                        });
+                      }}
+                    />
+                  );
+                })
               : null}
           </div>
           <div className="flex flex-col">
             {essentialBudgets?.length !==
-              categoryStore.categoryBudgets[0]?.data.length ? (
+            categoryStore.categoryBudgets[0]?.data.length ? (
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
@@ -465,7 +483,7 @@ const BudgetsView = () => {
                   iconBg="bg-skin-iconPrimary"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[0]?.amount -
-                    categoryStore.categoryBudgets[0]?.total_amount
+                      categoryStore.categoryBudgets[0]?.total_amount
                   )}
                   onClick={() => navigate("/edit-budgets")}
                 />
@@ -486,45 +504,47 @@ const BudgetsView = () => {
           <div className="mt-6 flex flex-col">
             {wantsBudgets && wantsBudgets.length > 0
               ? wantsBudgets.map((want: any, i: any) => {
-                return (
-                  <CategoryViewCard
-                    key={i}
-                    category={want?.name}
-                    progressPercentage={isLoading ? 0 : checkNAN(
-                      (want?.expenses / want?.amount) * 100
-                    )}
-                    icon={want.category?.emoji}
-                    amount={want?.amount}
-                    budgetAmount={want?.amount}
-                    spentAmount={isLoading ? 0 : want?.expenses}
-                    iconBg="bg-skin-iconPrimary"
-                    baseBgColor="#E7EDF3"
-                    bgColor="#6F89A5"
-                    primaryColor="text-skin-base"
-                    fadedColor="text-skin-subtitle"
-                    onClick={() => {
-                      openViewBudgetSheet(true);
-                      setBudgetDetailsData({
-                        spentAmount: want?.expenses,
-                        totalBudgetAmount: want?.amount,
-                        progress: checkNAN(
-                          (want?.expenses / want?.amount) * 100
-                        ),
-                        category: want?.name,
-                        emoji: want.category?.emoji,
-                        startDate: formattedStartDate,
-                        endDate: formattedEndDate,
-                        microGoal: want?.id,
-                      });
-                    }}
-                  />
-                );
-              })
+                  return (
+                    <CategoryViewCard
+                      key={i}
+                      category={want?.name}
+                      progressPercentage={
+                        isLoading
+                          ? 0
+                          : checkNAN((want?.expenses / want?.amount) * 100)
+                      }
+                      icon={want.category?.emoji}
+                      amount={want?.amount}
+                      budgetAmount={want?.amount}
+                      spentAmount={isLoading ? 0 : want?.expenses}
+                      iconBg="bg-skin-iconPrimary"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#6F89A5"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
+                      onClick={() => {
+                        openViewBudgetSheet(true);
+                        setBudgetDetailsData({
+                          spentAmount: want?.expenses,
+                          totalBudgetAmount: want?.amount,
+                          progress: checkNAN(
+                            (want?.expenses / want?.amount) * 100
+                          ),
+                          category: want?.name,
+                          emoji: want.category?.emoji,
+                          startDate: formattedStartDate,
+                          endDate: formattedEndDate,
+                          microGoal: want?.id,
+                        });
+                      }}
+                    />
+                  );
+                })
               : null}
           </div>
           <div className="flex flex-col">
             {wantsBudgets?.length !==
-              categoryStore.categoryBudgets[1]?.data.length ? (
+            categoryStore.categoryBudgets[1]?.data.length ? (
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
@@ -534,7 +554,7 @@ const BudgetsView = () => {
                   plusColor="#8490E2"
                   budgetAmount={checkNAN(
                     macroStore.macroGoals[1]?.amount -
-                    categoryStore.categoryBudgets[1]?.total_amount
+                      categoryStore.categoryBudgets[1]?.total_amount
                   )}
                   onClick={() => navigate("/edit-budgets")}
                 />
@@ -545,26 +565,44 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3 mb-8">
           <CategoryCardHeader
             title="Savings"
-            amount={isLoading ? 0 : checkNAN(savingsTotalExpenses)}
-            caption="Saved"
+            amount={
+              isLoading
+                ? 0
+                : Math.max(
+                    checkNAN(essentialBudgetAmount * 3 - savingsTotalExpenses),
+                    0
+                  )
+            }
+            caption="Available"
             currencySymbol={currencySymbol}
             isloading={isLoading}
           />
           <div className="mt-6 flex flex-col">
             {categoryStore.categoryBudgets[2]?.data &&
-              categoryStore.categoryBudgets[2]?.data.length > 0 ? (
+            categoryStore.categoryBudgets[2]?.data.length > 0 ? (
               categoryStore.categoryBudgets[2]?.data.map(
                 (savings: any, i: any) => {
                   return (
                     <SavingsCategoryViewCard
                       key={i}
-                      category={savings?.name}
-                      progressPercentage={isLoading ? 0 : checkNAN(
-                        (savings.expenses / savings?.amount) * 100
-                      )}
-                      icon={savings.category?.emoji}
+                      category={
+                        savings?.name === "Emergency fund"
+                          ? "Rainy day fund"
+                          : ""
+                      }
+                      progressPercentage={
+                        isLoading
+                          ? 0
+                          : checkNAN(
+                              Math.min(
+                                (savings.expenses / savings?.amount) * 100,
+                                100
+                              )
+                            )
+                      }
+                      icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
                       amount={savings?.amount}
-                      budgetAmount={savings.amount}
+                      budgetAmount={essentialBudgetAmount * 3}
                       spentAmount={isLoading ? 0 : savings.expenses}
                       iconBg="bg-skin-iconPrimary"
                       baseBgColor="#E7EDF3"
@@ -572,14 +610,30 @@ const BudgetsView = () => {
                       primaryColor="text-skin-base"
                       fadedColor="text-skin-subtitle"
                       caption="saved"
+                      onClick={() => {
+                        openViewSavingsBudgetSheet(true);
+                        setSavingsGoalData({
+                          spentAmount: savings?.expenses,
+                          totalBudgetAmount: savings?.amount,
+                          progress: checkNAN(
+                            (savings?.expenses / savings?.amount) * 100
+                          ),
+                          category: savings?.name,
+                          emoji: savings.category?.emoji,
+                          startDate: formattedStartDate,
+                          endDate: formattedEndDate,
+                          microGoal: savings?.id,
+                        });
+                      }}
                     />
                   );
                 }
               )
             ) : (
               <SavingsSettingCard
+                emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
                 goal="Create a Rainy day fund goal"
-                add={() => {
+                onClick={() => {
                   navigate("/edit-budgets");
                 }}
               />
@@ -606,6 +660,31 @@ const BudgetsView = () => {
               endDate={budgetDetailsData?.endDate}
               onClick={() => {
                 openViewBudgetSheet(false);
+              }}
+            />
+          }
+          defaultSnap={400}
+        ></BottomSheet>
+        <BottomSheet
+          onDismiss={() => {
+            openViewSavingsBudgetSheet(false);
+          }}
+          open={viewSavingsBudgetSheet}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            <ViewSavingsBudget
+              savedAmount={savingsGoalData?.spentAmount}
+              targetAmount={essentialBudgetAmount * 3}
+              progress={savingsGoalData?.progress}
+              category={savingsGoalData?.category}
+              emoji={savingsGoalData?.emoji}
+              microGoalId={savingsGoalData.microGoal}
+              startDate={savingsGoalData?.startDate}
+              endDate={savingsGoalData?.endDate}
+              onClick={() => {
+                openViewSavingsBudgetSheet(false);
               }}
             />
           }

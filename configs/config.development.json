@@ -1,6 +1,6 @@
 {
   "ENVIRONMENT": "development",
-  "API_URL": "http://localhost:5000",
+  "API_URL": "https://46baedddd189f215fd4e0199006bccb1.serveo.net",
   "TOKEN": null,
   "IDENTIFIER": "user@alvinapp.com",
   "HOST": null,

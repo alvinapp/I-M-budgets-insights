@@ -474,7 +474,7 @@ export const EmptyBudgetSettings = () => {
                       goal="Create a goal"
                       emoji="🎯"
                       amount={savingsBudgetAmount}
-                      add={() => {
+                      onClick={() => {
                         setAddSavings(true);
                         setAllocatedSavings(savingsBudgetAmount);
                         setSavingsList([

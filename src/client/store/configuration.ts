@@ -8,6 +8,7 @@ interface IConfig {
   identifier?: string | null;
   monoPubKey?: string | null;
   settings: string;
+  country: string | null;
 }
 
 const configurationInitialState: IConfig = {
@@ -16,6 +17,7 @@ const configurationInitialState: IConfig = {
   identifier: AppConfig.IDENTIFIER,
   monoPubKey: null,
   settings: '{"balanceView":true,"cardView":true,"transactionsView":true}',
+  country: null,
 };
 
 const useConfigurationStore = create((set) => ({
@@ -30,6 +32,7 @@ const useConfigurationStore = create((set) => ({
           identifier: config.identifier || currentState.identifier,
           monoPubKey: config.monoPubKey || currentState.monoPubKey,
           settings: config.settings || currentState.settings,
+          country: config.country || currentState.country,
         },
       };
       return results;

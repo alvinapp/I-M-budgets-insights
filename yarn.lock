@@ -1517,10 +1517,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@mono.co/connect.js@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@mono.co/connect.js/-/connect.js-0.2.2.tgz#4d45f295b06311683f149ce8487b164a005bd8bb"
-  integrity sha512-W4x1f12ojVibh9g6NtN45qPXt7M809pve6YGpOSzGQbBBGr0aVK40VFeTTEsmvpqe46eG/zlT1Kj7YrcZnvWrA==
+"@mono.co/connect.js@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@mono.co/connect.js/-/connect.js-2.0.2.tgz#fa2bf010411d967c4ba3a1f59941c6723fba7aa5"
+  integrity sha512-VHk0h+SEtjCxK1+GD6wamWEepXHuLBnGavBqaqipxr/Eg/TerF5y/AX9QmWeCpI50ZAUoVbxw66ie7yO0eIUOw==
   dependencies:
     axios "^0.21.1"
 

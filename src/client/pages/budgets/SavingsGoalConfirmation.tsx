@@ -3,20 +3,21 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { SavingsAmountView } from "../components/budget/SavingsAmounView";
 /* @ts-ignore */
 import SlideButton from "react-slide-button";
-import { FiArrowRight, FiChevronRight } from "react-icons/fi";
+import { FiArrowRight, FiChevronRight, FiInfo, FiX } from "react-icons/fi";
 import { getGoalCompletionString } from "client/utils/Formatters";
+import { useSavingsBottomSheetStore } from "client/store/bottomSheetStore";
 interface SavingsGoalConfirmationProps {
-  image?: string;
+  goal?: string;
   monthlyContribution: number;
   targetAmount: number;
   progressPercentage: number;
   onClick: () => void;
 }
 const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
-  image,
   monthlyContribution,
   targetAmount,
   progressPercentage,
+  goal,
   onClick,
 }) => {
   const contributionText = getGoalCompletionString(
@@ -25,12 +26,31 @@ const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
     new Date()
   );
   const { goalCompletionString, estimatedCompletionDate } = contributionText;
+  const savingsBottomSheetStore = useSavingsBottomSheetStore(
+    (state: any) => state
+  );
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row rounded-b-lg h-[8.375rem]">
-        <img src={image} alt="" className=" object-cover" />
+      <div className="flex flex-row rounded-b-lg rounded-3xl h-[8.375rem] bg-rainyDayFund bg-no-repeat bg-cover fixed top-0 left-0 right-0"></div>
+      <div className="flex flex-row justify-between items-center absolute top-10 left-0 right-0 mx-4">
+        <div
+          onClick={() => {
+            savingsBottomSheetStore.setSavingsBottomSheet(false);
+          }}
+        >
+          <FiX color="#ffffff" size="1.5rem" />
+        </div>
+        <div onClick={() => {}}>
+          <FiInfo color="#ffffff" size="1.5rem" />
+        </div>
       </div>
-      <div className="flex flex-row justify-between items-center mx-4 mb-3">
+      <div className="flex flex-row justify-center items-center absolute top-20 left-0 right-0 mx-4">
+        <div>🎯</div>
+        <div className="font-custom text-xl font-medium tracking-title text-skin-white">
+          {goal ?? ""}
+        </div>
+      </div>
+      <div className="flex flex-row justify-between items-center mx-4 mb-3 mt-36">
         <SavingsAmountView
           amount={monthlyContribution}
           caption="Monthly contribution"
