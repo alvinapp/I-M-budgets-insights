@@ -41,6 +41,7 @@ window.addEventListener("message", (event) => {
     identifier: eventData.identifier,
     monoPubKey: eventData.monoPubKey,
     settings: eventData.settings,
+    country: eventData.country,
   };
   if (eventData.styleUrl) {
     var link = document.createElement("link");

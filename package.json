@@ -78,7 +78,7 @@
     "webpack-dev-server": "^4.9.3"
   },
   "dependencies": {
-    "@mono.co/connect.js": "^0.2.2",
+    "@mono.co/connect.js": "2.0.2",
     "@ramonak/react-progress-bar": "^5.0.3",
     "@sentry/browser": "^7.9.0",
     "@types/lodash.debounce": "^4.0.7",

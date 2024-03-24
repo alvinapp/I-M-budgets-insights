@@ -248,12 +248,6 @@ const InsightsView = () => {
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={userStore.user.income - totalBudgetAmount}
-                // spent={90000 + 209000}
-                // budget={totalBudgetAmount}
-                // wantsSpend={209000}
-                // savingsSpend={121000}
-                // essentialsSpend={90000}
-                // unallocatedSpend={userStore.user.income - totalBudgetAmount}
               />
             ) : (
               <OthersSpend
@@ -263,12 +257,6 @@ const InsightsView = () => {
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
                 unallocatedSpend={0}
-                //   spentBudget={90000 + 209000}
-                //   plannedBudget={totalBudgetAmount}
-                //   wantsSpend={209000}
-                //   savingsSpend={121000}
-                //   essentialsSpend={90000}
-                //   unallocatedSpend={0}
               />
             )}
           </div>

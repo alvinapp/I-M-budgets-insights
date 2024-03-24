@@ -613,7 +613,6 @@ export const BudgetSettings = () => {
               loading={savingBudgetDetails}
               click={() => {
                 saveBudgetInfo().then((res) => {
-                  console.log("Save Budget results", res);
                   if (res) {
                     navigator("/budgets-view");
                   } else {
@@ -663,7 +662,15 @@ export const BudgetSettings = () => {
             <SavingsGoalConfirmation
               monthlyContribution={savingsBudgetAmount}
               targetAmount={essentialBudgetAmount * 3}
-              progressPercentage={3}
+              progressPercentage={
+                typeof savingsBudgetAmount === "number" &&
+                savingsBudgetAmount > 0
+                  ? Math.min(
+                      (allocatedSavings / savingsBudgetAmount) * 100,
+                      100
+                    ) // Ensure percentage stays between 0 and 100
+                  : 0
+              }
               onClick={() => {
                 setAllocatedSavings(savingsBudgetAmount);
                 setSavingsSuccess(true);

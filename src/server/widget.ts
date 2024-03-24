@@ -22,6 +22,7 @@ interface IConfig {
   token?: string | null;
   styleUrl?: string | null;
   settings?: string | null;
+  country?: string | null;
 }
 
 interface IWidget {
@@ -52,6 +53,7 @@ const Widget: IWidget = {
       token: url.searchParams.get("token"),
       styleUrl: url.searchParams.get("styleUrl"),
       settings: url.searchParams.get("settings"),
+      country: url.searchParams.get("country"),
     };
     this.config = Object.assign({}, this.config, config);
     this.createIframe();

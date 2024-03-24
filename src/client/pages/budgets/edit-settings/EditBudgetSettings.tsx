@@ -578,7 +578,15 @@ const EditBudgetSettings = () => {
               <SavingsGoalConfirmation
                 monthlyContribution={savingsBudgetAmount}
                 targetAmount={essentialBudgetAmount * 3}
-                progressPercentage={3}
+                progressPercentage={
+                  typeof savingsBudgetAmount === "number" &&
+                  savingsBudgetAmount > 0
+                    ? Math.min(
+                        (allocatedSavings / savingsBudgetAmount) * 100,
+                        100
+                      ) // Ensure percentage stays between 0 and 100
+                    : 0
+                }
                 goal={selectedSavingsGoal.name}
                 onClick={() => {
                   saveBudgetInfo().then((results) => {
