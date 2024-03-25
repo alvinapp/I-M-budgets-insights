@@ -21,7 +21,7 @@ import ExpenditureBarGraph from "../components/ExpenditureBarGraph";
 import SavingsBarGraph from "../components/SavingsBarGraph";
 import CashFlowPieChart from "../components/CashFlowPieChart";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getCashFlow } from "client/api/transactions";
+import { enrichTransactions, getCashFlow } from "client/api/transactions";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
 import useCategoriesStore from "client/store/categoriesStore";
@@ -99,7 +99,11 @@ const InsightsView = () => {
     useCashflowVariablesStore.getState().cashflowVariables;
   const [essentialsArray, setEssentialsArray] = useState<any[]>([]);
   const [wantsArray, setWantsArray] = useState<any[]>([]);
+  const [essentialsData, setEssentialsData] = useState<any[]>([]);
+  const [wantsData, setWantsData] = useState<any[]>([]);
+  const [savingsData, setSavingsData] = useState<any[]>([]);
   const [savingsArray, setSavingsArray] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchCashFlowData = async () => {
       insightsStoreState.setInsightsLoading(true);
@@ -119,6 +123,8 @@ const InsightsView = () => {
         macroTypeDistribution,
         "Essentials"
       );
+      setEssentialsData(essentialsData);
+      setWantsData(wantsData);
       setEssentialsArray(generateLinearProgression(essentialsData));
       setWantsArray(generateLinearProgression(wantsData));
       insightsStoreState.setInsightsLoading(false);
@@ -156,6 +162,10 @@ const InsightsView = () => {
     acc[macroType] = total || 0;
     return acc;
   }, {} as any);
+
+  useEffect(() => {
+    enrichTransactions({ configuration: config });
+  }, []);
 
   const totalExpenses = wantsTotal + essentialsTotal;
   const closeBottomSheet = () => {
@@ -213,7 +223,7 @@ const InsightsView = () => {
         <div className="flex flex-row items-center justify-between mr-5">
           {toggleTabId == 0 ? (
             <AvailableBudgetContainer
-              amount={essentialsTotal + wantsTotal}
+              amount={(essentialsData.reduce((a: number, b: any) => a + b.y, 0) + wantsData.reduce((a: number, b: any) => a + b.y, 0)) ?? 0}
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
             />
@@ -237,6 +247,7 @@ const InsightsView = () => {
                 currencySymbol="₦"
                 essentialsArray={essentialsArray}
                 wantsArray={wantsArray}
+                isLoading={insightsStoreState.insightsLoading}
               />
               <div
                 className="space-x-1"

@@ -10,6 +10,8 @@ import { useNavigate } from "react-router";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import useCashflowVariablesStore from "client/store/cashFlowStore";
 import AnimatedNumber from "./AnimatedNumber";
+import useInsightsStore from "client/store/insightsStore";
+import { format } from "date-fns";
 
 interface CashFlowPieChartProps {
   dimensions: number;
@@ -44,12 +46,13 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   const currencyStore = useCurrencySettingsStore((state: any) => state);
   const cashflowVariables =
     useCashflowVariablesStore.getState().cashflowVariables;
+  const insightsStoreState = useInsightsStore((state) => state);
   return (
     <div
       className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full"
       onClick={() =>
         navigate(
-          `/cashflow?startDate=${cashflowVariables.startDate}&endDate=${cashflowVariables.endDate}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter}`
+          `/cashflow?startDate=${format(insightsStoreState.insightsStartDate, "yyyy-MM-dd")}&endDate=${format(insightsStoreState.insightsEndDate, "yyyy-MM-dd")}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter}`
         )
       }
     >

@@ -4,6 +4,8 @@ import { ApexOptions } from 'apexcharts';
 import { formatNumber } from 'client/utils/Formatters';
 import { format } from 'date-fns';
 import { TransactionEmptyState } from 'client/pages/components/EmptyState';
+import loaderSvg from "../../../assets/images/Loader.svg";
+import CustomLoader from 'client/pages/components/Loader/CustomLoader';
 
 interface DataPoint {
     x: string;
@@ -14,9 +16,10 @@ interface InsightsExpenditureChartProps {
     currencySymbol: string;
     essentialsArray: DataPoint[];
     wantsArray: DataPoint[];
+    isLoading: boolean;
 }
 
-const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({ currencySymbol, essentialsArray, wantsArray }) => {
+const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({ currencySymbol, essentialsArray, wantsArray, isLoading }) => {
     const [options, setOptions] = useState<ApexOptions>({
         chart: {
             type: 'line',
@@ -153,6 +156,17 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({ cur
         ]);
         // update 
     }, [essentialsArray, wantsArray]);
+
+    if (isLoading) {
+        return <div className='shadow-card px-4 py-6 mb-3 rounded-lg mt-2 items-center'>
+            <img src={loaderSvg} alt="loader" id="loader-image" style={{
+                width: '40px',
+                height: '40px',
+                display: 'block',
+                margin: '4.375rem auto'
+            }} />
+        </div>;
+    }
 
     if (!essentialsArray.length && !wantsArray.length) {
         return <div className='shadow-card px-4 py-6 mb-3 rounded-lg mt-2'><TransactionEmptyState label='No data available' /></div>;
