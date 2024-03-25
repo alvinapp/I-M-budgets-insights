@@ -272,7 +272,6 @@ const BudgetsView = () => {
   };
 
   const onDateChangeSelect = (dateRange: any) => {
-    console.log("We are updating the date range");
     setRangeStartDate(dateRange.startDate);
     setStartDate(dateRange.startDate);
     setEndDate(dateRange.endDate);
