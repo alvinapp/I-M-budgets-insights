@@ -68,3 +68,35 @@ export const getMicroDetailsViewData = async ({
     return Promise.reject(reason);
   }
 };
+
+export const enrichTransactions = async ({
+  configuration,
+  start_date,
+  end_date,
+}: {
+  configuration: IConfig;
+  start_date?: string;
+  end_date?: string;
+}) => {
+  try {
+    if (start_date && end_date) {
+      const res = await postData({
+        endpoint: `/transactions/enrich_data/?start_date=${start_date}&end_date=${end_date}`,
+        token: configuration.token,
+        data: {},
+      });
+      return res;
+    } else {
+      const res = await postData({
+        endpoint: `/transactions/enrich_data/`,
+        token: configuration.token,
+        data: {},
+      });
+      return res;
+    }
+  } catch (reason) {
+    Sentry.captureException(reason);
+    console.debug(reason);
+    return Promise.reject(reason);
+  }
+};
