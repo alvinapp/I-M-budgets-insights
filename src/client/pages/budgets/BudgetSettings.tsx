@@ -29,6 +29,7 @@ import SavingsGoalConfirmation from "./SavingsGoalConfirmation";
 import SuccessfullCreatedView from "../components/budget/SuccessfullCreatedView";
 import successIcon from "client/assets/images/success-icon.svg";
 import EditSavingsViewCard from "./edit-settings/EditSavingsViewCard";
+import { checkNAN } from "client/utils/Formatters";
 
 export const BudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -231,11 +232,10 @@ export const BudgetSettings = () => {
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
-            caption={`${
-              typeof userStore.user.income === undefined
-                ? ""
-                : userStore.user.income
-            }`}
+            caption={`${typeof userStore.user.income === undefined
+              ? ""
+              : userStore.user.income
+              }`}
             currencySymbol={currencySymbol}
             onClick={() => navigate("/edit-monthly-income")}
           />
@@ -245,11 +245,10 @@ export const BudgetSettings = () => {
           icon={<FiPieChart />}
           title="Budget split"
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
-          caption={`${
-            typeof categoriesStore.macros?.budget_split
-              ? categoriesStore.macros?.budget_split
-              : ""
-          }`}
+          caption={`${typeof categoriesStore.macros?.budget_split
+            ? categoriesStore.macros?.budget_split
+            : ""
+            }`}
           onClick={() => navigate("/onboard-split-income")}
         />
         <div className="mb-4 mt-5 flex flex-row items-center justify-center px-3.5">
@@ -263,24 +262,23 @@ export const BudgetSettings = () => {
           <BudgetDisplay
             title="Essentials"
             budgetAmount={essentialBudgetAmount}
-            percentageOfBudgetCaption={`${
-              essentialGoals[0]?.share ?? ""
-            }% of overall budget`}
+            percentageOfBudgetCaption={`${essentialGoals[0]?.share ?? ""
+              }% of overall budget`}
             unallocatedCaption="Unallocated"
             unallocatedAmount={
               typeof parseInt(essentialBudgetAmount) === "number" &&
-              essentialBudgetAmount > 0
+                essentialBudgetAmount > 0
                 ? Math.max(essentialBudgetAmount - allocatedEssentials, 0)
                 : 0 // Ensure perc
             }
             allocatedAmount={allocatedEssentials}
             progressPercentage={
               typeof parseInt(essentialBudgetAmount) === "number" &&
-              essentialBudgetAmount > 0
+                essentialBudgetAmount > 0
                 ? Math.min(
-                    (allocatedEssentials / essentialBudgetAmount) * 100,
-                    100
-                  ) // Ensure percentage stays between 0 and 100
+                  (allocatedEssentials / essentialBudgetAmount) * 100,
+                  100
+                ) // Ensure percentage stays between 0 and 100
                 : 0
             }
             indicatorColor="bg-[linear-gradient(159deg,#4053D0_0%,#051AA3_100%)]"
@@ -313,76 +311,108 @@ export const BudgetSettings = () => {
                     amount={data?.amount}
                     selected={isSelected}
                     maxValue={Number.MAX_SAFE_INTEGER}
-                    addValue={(e) =>
-                      updateEssentialsMap(i, {
-                        amount: e,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      })
+                    unallocatedAmount={
+                      typeof parseInt(essentialBudgetAmount) === "number" &&
+                        essentialBudgetAmount > 0
+                        ? Math.max(essentialBudgetAmount - allocatedEssentials, 0)
+                        : 0
+                    }
+                    addValue={(e) => {
+                      console.log("e", e);
+                      const totalAllocated = allocatedEssentials + e;
+                      if (totalAllocated <= essentialBudgetAmount) {
+                        setAllocatedEssentials(totalAllocated);
+                        updateEssentialsMap(i, {
+                          amount: e,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        })
+                      }
+                      else {
+                        showCustomToast({ message: "Budget limit exceeded" });
+                      }
+                    }
                     }
                     increment={() => {
                       setSelectedEssentialId(i);
-                      setAllocatedEssentials(
-                        allocatedEssentials + categoriesStore.incrementalAmount
-                      );
-                      updateEssentialsMap(i, {
-                        amount:
-                          data?.amount + categoriesStore.incrementalAmount,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      });
+                      const newAmount = data?.amount + categoriesStore.incrementalAmount;
+                      const totalAllocated = allocatedEssentials + categoriesStore.incrementalAmount;
+                      console.log("totalAllocated", totalAllocated);
+                      console.log("essentialBudgetAmount", essentialBudgetAmount);
+                      if (totalAllocated <= essentialBudgetAmount) {
+                        setAllocatedEssentials(totalAllocated);
+                        updateEssentialsMap(i, {
+                          amount: newAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      } else {
+                        showCustomToast({ message: "Budget limit exceeded" });
+                      }
                     }}
-                    updateValue={(value) => {
+                    updateValue={(newValue) => {
+                      const oldValue = data?.amount || 0;
+                      const valueDifference = newValue - oldValue;
+
                       setSelectedEssentialId(i);
-                      setAllocatedEssentials(allocatedEssentials + value - 500);
-                      updateEssentialsMap(i, {
-                        amount: value,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      });
+                      const newAllocatedEssentials = Math.max(0, allocatedEssentials + valueDifference);
+
+                      if (newAllocatedEssentials <= essentialBudgetAmount) {
+                        setAllocatedEssentials(newAllocatedEssentials);
+                        updateEssentialsMap(i, {
+                          amount: newValue,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      } else {
+                        showCustomToast({ message: "Budget limit exceeded" });
+                      }
                     }}
+
                     decrement={() => {
-                      setSelectedEssentialId(i);
-                      setAllocatedEssentials(
-                        allocatedEssentials > 0
-                          ? allocatedEssentials -
-                              categoriesStore.incrementalAmount
-                          : 0
-                      );
-                      updateEssentialsMap(i, {
-                        amount:
-                          data?.amount - categoriesStore.incrementalAmount,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      });
+                      if (data?.amount - categoriesStore.incrementalAmount >= 0) {
+                        setSelectedEssentialId(i);
+                        setAllocatedEssentials(
+                          allocatedEssentials > 0
+                            ? allocatedEssentials -
+                            categoriesStore.incrementalAmount
+                            : 0
+                        );
+                        updateEssentialsMap(i, {
+                          amount:
+                            data?.amount - categoriesStore.incrementalAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }
                     }}
                   />
                 );
@@ -396,9 +426,8 @@ export const BudgetSettings = () => {
           <BudgetDisplay
             title="Wants"
             budgetAmount={wantsBudgetAmount}
-            percentageOfBudgetCaption={`${
-              wantsGoals[0]?.share ?? ""
-            }% of overall budget`}
+            percentageOfBudgetCaption={`${wantsGoals[0]?.share ?? ""
+              }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
@@ -432,19 +461,46 @@ export const BudgetSettings = () => {
           <div className="flex flex-col">
             {wantsCategories && wantsCategories.length > 0
               ? wantsCategories.map((category: Category, i: any) => {
-                  const isSelected = i === selectedWantsId;
-                  const data = wantsMapState.get(`data${i}`);
-                  return (
-                    <BudgetSettingCard
-                      key={i}
-                      maxValue={Number.MAX_SAFE_INTEGER}
-                      category={category?.name}
-                      emoji={category?.emoji}
-                      amount={data?.amount}
-                      selected={isSelected}
-                      addValue={(e) =>
+                const isSelected = i === selectedWantsId;
+                const data = wantsMapState.get(`data${i}`);
+                return (
+                  <BudgetSettingCard
+                    key={i}
+                    maxValue={Number.MAX_SAFE_INTEGER}
+                    category={category?.name}
+                    emoji={category?.emoji}
+                    amount={data?.amount}
+                    selected={isSelected}
+                    unallocatedAmount={
+                      typeof wantsBudgetAmount === "number" || wantsBudgetAmount > 0
+                        ? Math.max(wantsBudgetAmount - allocatedWants, 0)
+                        : 0
+                    }
+                    addValue={(e) =>
+                      updateWantsMap(i, {
+                        amount: e,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      })
+                    }
+                    updateValue={(newValue) => {
+                      const oldValue = data?.amount || 0;
+                      const valueDifference = newValue - oldValue;
+
+                      setSelectedWantsId(i);
+                      const newAllocatedWants = Math.max(0, allocatedWants + valueDifference);
+
+                      if (newAllocatedWants <= wantsBudgetAmount) {
+                        setAllocatedWants(newAllocatedWants);
                         updateWantsMap(i, {
-                          amount: e,
+                          amount: newValue,
                           contribution_amount: 0,
                           percentage: 0,
                           category_id: category?.id,
@@ -454,34 +510,19 @@ export const BudgetSettings = () => {
                           order: 0,
                           contribution_at: "",
                           is_contribute_customized: true,
-                        })
+                        });
+                      } else {
+                        showCustomToast({ message: "Budget limit exceeded" });
                       }
-                      updateValue={(value) => {
-                        setSelectedEssentialId(i);
-                        setAllocatedEssentials(
-                          allocatedEssentials + value - 500
-                        );
-                        updateEssentialsMap(i, {
-                          amount: value,
-                          contribution_amount: 0,
-                          percentage: 0,
-                          category_id: category?.id,
-                          name: category?.name,
-                          pseudo_name: category?.name + " " + category?.emoji,
-                          extern_id: category?.id,
-                          order: 0,
-                          contribution_at: "",
-                          is_contribute_customized: true,
-                        });
-                      }}
-                      increment={() => {
-                        setSelectedWantsId(i);
-                        setAllocatedWants(
-                          allocatedWants + categoriesStore.incrementalAmount
-                        );
+                    }}
+                    increment={() => {
+                      setSelectedWantsId(i);
+                      const newAmount = data?.amount + categoriesStore.incrementalAmount;
+                      const totalAllocated = allocatedWants + categoriesStore.incrementalAmount;
+                      if (totalAllocated <= wantsBudgetAmount) {
+                        setAllocatedWants(totalAllocated);
                         updateWantsMap(i, {
-                          amount:
-                            data?.amount + categoriesStore.incrementalAmount,
+                          amount: newAmount,
                           contribution_amount: 0,
                           percentage: 0,
                           category_id: category?.id,
@@ -492,8 +533,12 @@ export const BudgetSettings = () => {
                           contribution_at: "",
                           is_contribute_customized: true,
                         });
-                      }}
-                      decrement={() => {
+                      } else {
+                        showCustomToast({ message: "Budget limit exceeded" });
+                      }
+                    }}
+                    decrement={() => {
+                      if (data?.amount - categoriesStore.incrementalAmount >= 0) {
                         setSelectedWantsId(i);
                         setAllocatedWants(
                           allocatedWants - categoriesStore.incrementalAmount
@@ -511,10 +556,12 @@ export const BudgetSettings = () => {
                           contribution_at: "",
                           is_contribute_customized: true,
                         });
-                      }}
-                    />
-                  );
-                })
+                      }
+
+                    }}
+                  />
+                );
+              })
               : null}
           </div>
         </div>
@@ -522,9 +569,8 @@ export const BudgetSettings = () => {
           <BudgetDisplay
             title="Savings"
             budgetAmount={savingsBudgetAmount}
-            percentageOfBudgetCaption={`${
-              savingsGoals[0]?.share ?? ""
-            }% of overall budget`}
+            percentageOfBudgetCaption={`${savingsGoals[0]?.share ?? ""
+              }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
@@ -544,8 +590,8 @@ export const BudgetSettings = () => {
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-col">
             {savingsCategories &&
-            savingsCategories.length > 0 &&
-            !addSavings ? (
+              savingsCategories.length > 0 &&
+              !addSavings ? (
               savingsCategories.map((category: any, i: number) => {
                 return (
                   <>
@@ -664,11 +710,11 @@ export const BudgetSettings = () => {
               targetAmount={essentialBudgetAmount * 3}
               progressPercentage={
                 typeof savingsBudgetAmount === "number" &&
-                savingsBudgetAmount > 0
+                  savingsBudgetAmount > 0
                   ? Math.min(
-                      (allocatedSavings / savingsBudgetAmount) * 100,
-                      100
-                    ) // Ensure percentage stays between 0 and 100
+                    (allocatedSavings / savingsBudgetAmount) * 100,
+                    100
+                  ) // Ensure percentage stays between 0 and 100
                   : 0
               }
               onClick={() => {
