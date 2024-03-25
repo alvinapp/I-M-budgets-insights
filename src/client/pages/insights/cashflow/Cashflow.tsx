@@ -73,7 +73,7 @@ const Cashflow = () => {
               </div>
               <div
                 className="h-6 w-6 rounded-full flex justify-center items-center"
-                onClick={() => { }}
+                onClick={() => {}}
               >
                 <FiInfo color="#101010" size="1.5rem" />
               </div>
@@ -89,8 +89,8 @@ const Cashflow = () => {
               i === 0
                 ? accountName
                 : i === 1
-                  ? dateFilter
-                  : element.name ?? "All accounts";
+                ? dateFilter
+                : element.name ?? "All accounts";
             return (
               <CashFlowFilterButton
                 label={label}
