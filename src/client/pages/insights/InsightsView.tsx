@@ -439,7 +439,6 @@ function generateLinearProgression(data: DataPoint[]): DataPoint[] {
 
     return linearProgression;
   } catch (error) {
-    console.log(error);
     return data;
   }
 }

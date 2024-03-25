@@ -30,7 +30,9 @@ export const OthersSpend = ({
 }: OthersSpendProps) => {
   const expenditureProgress = calculateSpending(spentBudget, plannedBudget);
   const othersAverageProgress = calculateSpending(319850, plannedBudget);
-  const config = useConfigurationStore((state: any) => state.configuration) as IConfig;
+  const config = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
   const [othersData, setOthersData] = useState<any>(null);
   const [totalUserExpenditure, setTotalUserExpenditure] = useState(0);
   const [totalPeerExpenditure, setTotalPeerExpenditure] = useState(0);
@@ -63,7 +65,11 @@ export const OthersSpend = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchMicrosPercentile({ configuration: config, start_date: startDate, end_date: endDate });
+        const data = await fetchMicrosPercentile({
+          configuration: config,
+          start_date: startDate,
+          end_date: endDate,
+        });
         let totalUserExpenditure = 0;
         let totalPeerExpenditure = 0;
         let userWantsExpenditure = 0;
@@ -114,36 +120,39 @@ export const OthersSpend = ({
         setPeerWantsExpenditure(peerWantsExpenditure);
         setPeerEssentialsExpenditure(peerEssentialsExpenditure);
         setPeerSavingsExpenditure(peerSavingsExpenditure);
-
-        console.log("User Wants Expenditure:", userWantsExpenditure, "User Essential Expenditure:", userEssentialsExpenditure, "User Savings Expenditure:", userSavingsExpenditure);
-        console.log("Peer Wants Expenditure:", peerWantsExpenditure, "Peer Essential Expenditure:", peerEssentialsExpenditure, "Peer Savings Expenditure:", peerSavingsExpenditure);
-
         setTotalUserExpenditure(totalUserExpenditure);
         setTotalPeerExpenditure(totalPeerExpenditure);
-        const userProgress = calculateSpending(totalUserExpenditure, plannedBudget);
-        const peerProgress = calculateSpending(totalPeerExpenditure, plannedBudget);
+        const userProgress = calculateSpending(
+          totalUserExpenditure,
+          plannedBudget
+        );
+        const peerProgress = calculateSpending(
+          totalPeerExpenditure,
+          plannedBudget
+        );
         setUserProgress(userProgress.expenditureProgress);
         setPeerProgress(peerProgress.expenditureProgress);
-        const updatedExpenditureList = expenditureCompareList.map((expenditure) => {
-          // Find the corresponding category in the data object
-          const categoryData = data.find((macro: any) => {
-            const macroName = Object.keys(macro)[0];
-            return macro[macroName].categories.hasOwnProperty(expenditure.name);
-          });
+        const updatedExpenditureList = expenditureCompareList.map(
+          (expenditure) => {
+            // Find the corresponding category in the data object
+            const categoryData = data.find((macro: any) => {
+              const macroName = Object.keys(macro)[0];
+              return macro[macroName].categories.hasOwnProperty(
+                expenditure.name
+              );
+            });
 
-          // If category data is found, update the percentage
-          if (categoryData) {
-            const macroName = Object.keys(categoryData)[0];
-            const category = categoryData[macroName].categories[expenditure.name];
-            expenditure.percentage = category.percentage_difference;
+            // If category data is found, update the percentage
+            if (categoryData) {
+              const macroName = Object.keys(categoryData)[0];
+              const category =
+                categoryData[macroName].categories[expenditure.name];
+              expenditure.percentage = category.percentage_difference;
+            }
+
+            return expenditure;
           }
-
-          return expenditure;
-        });
-        console.log('Total user expenditure:', totalUserExpenditure, 'Total peer expenditure:', totalPeerExpenditure);
-        console.log(updatedExpenditureList);
-
-        console.log(data);
+        );
         setOthersData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -151,9 +160,6 @@ export const OthersSpend = ({
     };
     fetchData();
   }, [config]);
-
-  console.log(othersData);
-
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -180,7 +186,10 @@ export const OthersSpend = ({
               marginRight: 5,
             }}
           ></div>
-          <AmountView caption="Other's avg spend" amount={totalPeerExpenditure} />
+          <AmountView
+            caption="Other's avg spend"
+            amount={totalPeerExpenditure}
+          />
         </div>
         <div className="flex flex-row items-start">
           <div
@@ -231,15 +240,15 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
-            return (
-              <ExpenditureComparisonCard
-                icon={expenditure.emoji}
-                key={i}
-                category={expenditure.name}
-                percentage={expenditure.percentage}
-              />
-            );
-          })
+              return (
+                <ExpenditureComparisonCard
+                  icon={expenditure.emoji}
+                  key={i}
+                  category={expenditure.name}
+                  percentage={expenditure.percentage}
+                />
+              );
+            })
           : null}
       </div>
     </div>
