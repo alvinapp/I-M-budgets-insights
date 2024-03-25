@@ -3,6 +3,7 @@ import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { formatNumber } from "client/utils/Formatters";
 import { format } from "date-fns";
+import { TransactionEmptyState } from "client/pages/components/EmptyState";
 
 interface DataPoint {
   x: string;
@@ -165,7 +166,16 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
         data: totalSpend,
       },
     ]);
+    // update
   }, [essentialsArray, wantsArray]);
+
+  if (!essentialsArray.length && !wantsArray.length) {
+    return (
+      <div className="shadow-card px-4 py-6 mb-3 rounded-lg mt-2">
+        <TransactionEmptyState label="No data available" />
+      </div>
+    );
+  }
 
   return (
     <div>
