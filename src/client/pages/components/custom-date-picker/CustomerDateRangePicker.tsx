@@ -40,18 +40,18 @@ const DatePickerInput = styled.input`
   box-sizing: border-box;
   border: 1px solid #fff;
   border-radius: 8px;
-  //   box-shadow: 0 1px 30px rgb(7 100 137 / 30%);
+  box-shadow: 0 1px 30px rgb(7 100 137 / 30%);
   margin-bottom: 5px;
   outline: none;
 `;
 
 const CalendarModal = styled.div`
   position: fixed; /* Fixed position to ensure it's always centered */
-  top: 50%; /* Center vertically */
+  top: 0%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Center the modal */
   padding: 20px;
-  background: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
   backdrop-filter: blur(10px); /* Apply backdrop blur effect */
   border-radius: 8px;
   z-index: 100;
@@ -132,6 +132,8 @@ interface CustomDateRangePickerProps {
   disabled: boolean;
   restrictToCurrentMonth?: boolean;
   lastUpdatedEnv: "props" | "local";
+  placeholder?: string;
+  isActive: boolean;
 }
 
 const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
@@ -141,6 +143,9 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
   disabled,
   restrictToCurrentMonth,
   lastUpdatedEnv,
+  placeholder,
+  isActive
+
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -257,8 +262,8 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
         dateRange.start &&
         !dateRange.end &&
         hoverDate &&
-        isAfter(hoverDate, dateRange.start) &&
-        isSameMonth(date, hoverDate)
+        isAfter(hoverDate, dateRange.start)
+        // isSameMonth(date, hoverDate)
       ) {
         return isAfter(date, dateRange.start) && isBefore(date, hoverDate);
       }
@@ -309,15 +314,31 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
 
   return (
     <DatePickerWrapper className="font-custom">
-      <IconContainer>
+      {/* <IconContainer>
         <FiCalendar />
       </IconContainer>
       <DatePickerInput
-        value={renderInputValue()}
+        value={placeholder ?? renderInputValue()}
         readOnly
         onClick={() => setIsModalOpen(!isModalOpen)}
         placeholder="Select date range"
-      />
+      /> */}
+      <button
+        className={`${isActive
+          ? "bg-skin-secondaryWithOpacity rounded-full drop-shadow-lg"
+          : " bg-skin-accent2 rounded-full"
+          } px-4 py-1 mr-2 mb-3`}
+        onClick={() => setIsModalOpen(!isModalOpen)}
+      >
+        <div
+          className={`${isActive
+            ? " text-skin-primary font-primary text-xs font-medium tracking-longtext"
+            : " text-skin-subtitle font-primary text-xs font-medium tracking-longtext"
+            }`}
+        >
+          {placeholder ?? renderInputValue()}
+        </div>
+      </button>
       {isModalOpen && (
         <CalendarModal ref={modalRef}>
           <MonthYearSelection>

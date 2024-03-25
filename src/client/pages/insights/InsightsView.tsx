@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBarTitle from "../components/NavBarTitle";
 import BackButton from "../components/BackButton";
 import NavBar from "../components/NavBar";
-import { FiFilter } from "react-icons/fi";
+import { FiCalendar, FiFilter } from "react-icons/fi";
 import { AvailableBudgetContainer } from "../components/budget/AvailableBudgetContainer";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
@@ -136,6 +136,8 @@ const InsightsView = () => {
     insightsStoreState.insightsEndDate,
   ]);
 
+  console.log("insightsStoreState", insightsStoreState);
+
   const [toggleTabId, setToggleTabId] = useState(0);
   const [budgetSpendTabId, setBudgetSpendTabId] = useState(0);
   const navigate = useNavigate();
@@ -185,40 +187,33 @@ const InsightsView = () => {
                   <NavBarTitle title="Insights" fontSize="text-2xl" />
                 </div>
               </div>
-              <div
+              {/* <div
                 className="h-6 w-6 rounded-full flex justify-center items-center"
                 onClick={() => openFilter(true)}
               >
                 <FiFilter color="#101010" size="1.5rem" />
-              </div>
+              </div> */}
             </div>
           }
         />
       </div>
       <div className="flex-grow h-px bg-skin-accent3"></div>
-      {/* <div className="py-3 flex flex-wrap items-center mb-3">
-          {cashflowFilters?.map((element: any, i: number) => {
-            const label =
-              i === 0
-                ? accountName
-                : i === 1
-                  ? dateFilter
-                  : element.name ?? "All accounts";
-            return (
-              <CashFlowFilterButton
-                label={label}
-                icon={element.icon}
-                key={i}
-                isActive={false}
-                onClick={() => {
-                  if (i === 2) {
-                  }
-                }}
-                id={`${i}`}
-              />
-            );
-          })}
-        </div> */}
+      <div className="py-3 flex flex-wrap items-center mx-3.5">
+        <CashFlowFilterButton
+          label={insightsStoreState.insightsActiveInstitutionName}
+          icon={null}
+          key={`all institutions`}
+          isActive={false}
+          onClick={() => openFilter(true)}
+        />
+        <CashFlowFilterButton
+          label={insightsStoreState.insightsDateFilterName}
+          icon={<FiCalendar />}
+          key={`This month`}
+          isActive={false}
+          onClick={() => openFilter(true)}
+        />
+      </div>
       <div className="flex flex-col mt-2 mx-3.5">
         <div className="flex flex-row items-center justify-between mr-5">
           {toggleTabId == 0 ? (

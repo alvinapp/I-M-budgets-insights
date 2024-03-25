@@ -8,6 +8,7 @@ import { dateFilters } from "client/utils/MockData";
 import { useNavigate } from "react-router-dom";
 import useCashflowVariablesStore from "client/store/cashFlowStore";
 import useInsightsStore from "client/store/insightsStore";
+import CustomDateRangePicker from "../components/custom-date-picker/CustomerDateRangePicker";
 type InsightsFiltersProps = {
   accounts?: Array<Account>;
   activeAccount?: Account;
@@ -21,11 +22,11 @@ const InsightsFilters = ({
   closeBottomSheet,
 }: InsightsFiltersProps) => {
   const [activeDateFilter, setActiveDateFilter] = useState({
-    id: 0,
-    name: "All time",
+    id: useInsightsStore.getState().insightsDateFilterId,
+    name: useInsightsStore.getState().insightsDateFilterName,
   });
   const [activeAccountName, setActiveAccountName] = useState(
-    activeAccount?.name
+    useInsightsStore.getState().insightsActiveInstitutionName
   );
   const uniqueAccounts: Account[] | undefined = Array.from(
     new Set(accounts?.map((account) => account.name))
@@ -171,6 +172,7 @@ const InsightsFilters = ({
             />
           );
         })}
+        <CustomDateRangePicker onDateRangeSelect={() => { }} disabled={false} startDate={new Date()} endDate={new Date()} lastUpdatedEnv={'local'} placeholder={'Custom date'} isActive={false} restrictToCurrentMonth={false} />
       </div>
       <div className="mb-6">
         <MainButton
@@ -182,6 +184,8 @@ const InsightsFilters = ({
             useInsightsStore.getState().setInsightsStartDate(new Date(formattedStartDate));
             useInsightsStore.getState().setInsightsEndDate(new Date(formattedEndDate));
             useInsightsStore.getState().setInsightsActiveInstitutionId(activeAccount?.id ?? null);
+            useInsightsStore.getState().setInsightsActiveInstitutionName(activeAccount?.name ?? "All accounts");
+            useInsightsStore.getState().setInsightsDateFilterName(activeDateFilter.name);
             useCashflowVariablesStore.getState().setCashflowVariables({
               startDate: formattedStartDate,
               endDate: formattedEndDate,
