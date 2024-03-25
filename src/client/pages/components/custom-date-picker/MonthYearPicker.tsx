@@ -1,12 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { FiCalendar } from 'react-icons/fi';
-import { format, setYear, setMonth, startOfMonth, endOfMonth, endOfDay, isAfter } from 'date-fns';
+import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
+import { FiCalendar } from "react-icons/fi";
+import {
+  format,
+  setYear,
+  setMonth,
+  startOfMonth,
+  endOfMonth,
+  endOfDay,
+  isAfter,
+} from "date-fns";
 
 interface MonthYearPickerProps {
-    onMonthYearSubmit: (dates: { startDate: Date; endDate: Date }) => void;
-    startDate: Date;
-    endDate: Date;
+  onMonthYearSubmit: (dates: { startDate: Date; endDate: Date }) => void;
+  startDate: Date;
+  endDate: Date;
 }
 
 const MonthYearPickerWrapper = styled.div`
@@ -61,7 +69,8 @@ const Grid = styled.div`
 const Item = styled.div<{ selected: boolean; disabled?: boolean }>`
   padding: 10px;
   text-align: center;
-  background-color: ${({ selected, disabled }) => selected ? "transparent" : disabled ? "#e5e5e5" : "#f0f0f0"};
+  background-color: ${({ selected, disabled }) =>
+    selected ? "transparent" : disabled ? "#e5e5e5" : "#f0f0f0"};
   border: ${({ selected }) => (selected ? "2px solid black" : "none")};
   border-radius: 8px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
@@ -107,126 +116,188 @@ const OptionButton = styled.button`
   }
 `;
 
-const MonthYearPicker: React.FC<MonthYearPickerProps> = ({ onMonthYearSubmit, startDate, endDate }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(startDate);
-    const [dates, setDates] = useState({ startDate: startOfMonth(startDate), endDate: endOfMonth(endDate) });
-    const [selectedMonth, setSelectedMonth] = useState<string>(format(startDate, 'MMM'));
-    const [selectedYear, setSelectedYear] = useState<number>(startDate.getFullYear());
-    const [viewMode, setViewMode] = useState<'month' | 'year'>('month');
+const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
+  onMonthYearSubmit,
+  startDate,
+  endDate,
+}) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(startDate);
+  const [dates, setDates] = useState({
+    startDate: startOfMonth(startDate),
+    endDate: endOfMonth(endDate),
+  });
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    format(startDate, "MMM")
+  );
+  const [selectedYear, setSelectedYear] = useState<number>(
+    startDate.getFullYear()
+  );
+  const [viewMode, setViewMode] = useState<"month" | "year">("month");
 
-    const months: string[] = Array.from({ length: 12 }, (_, i) => format(setMonth(new Date(), i), 'MMM'));
-    const currentYear: number = new Date().getFullYear();
-    const years: number[] = Array.from({ length: 16 }, (_, i) => currentYear - i);
-    const today = new Date();
-    const isCurrentYear = selectedYear === today.getFullYear();
+  const months: string[] = Array.from({ length: 12 }, (_, i) =>
+    format(setMonth(new Date(), i), "MMM")
+  );
+  const currentYear: number = new Date().getFullYear();
+  const years: number[] = Array.from({ length: 16 }, (_, i) => currentYear - i);
+  const today = new Date();
+  const isCurrentYear = selectedYear === today.getFullYear();
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (!modalRef.current?.contains(event.target as Node)) {
-                setSelectedMonth(format(startDate, 'MMM'));
-                setSelectedYear(startDate.getFullYear());
-                setViewMode('month');
-                setIsModalOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    const modalRef = useRef<HTMLDivElement>(null);
-
-    const handleMonthClick = (month: string, isDisabled: boolean) => {
-        if (!isDisabled) {
-            const monthIndex = months.findIndex((m) => m === month);
-            setSelectedMonth(month);
-            setSelectedDate(setMonth(selectedDate, monthIndex));
-        }
-    };
-
-    const handleYearClick = (year: number) => {
-        const newSelectedDate = setYear(selectedDate, year);
-        // If the selected year is the current year and the selected month is beyond the current month, reset the selected month to the current month
-        if (year === new Date().getFullYear() && selectedDate.getMonth() > new Date().getMonth()) {
-            setSelectedDate(new Date());
-            setSelectedMonth(format(new Date(), 'MMM'));
-        } else {
-            setSelectedDate(newSelectedDate);
-        }
-        setSelectedYear(year);
-    };
-
-    useEffect(() => {
-        setDates({ startDate: startOfMonth(startDate), endDate: endOfMonth(endDate) });
-        setSelectedDate(startDate);
-        setSelectedMonth(format(startDate, 'MMM'));
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!modalRef.current?.contains(event.target as Node)) {
+        setSelectedMonth(format(startDate, "MMM"));
         setSelectedYear(startDate.getFullYear());
-    }, [startDate, endDate]);
-
-    const handleSubmit = () => {
-        onMonthYearSubmit({ startDate: startOfMonth(selectedDate), endDate: endOfMonth(selectedDate) });
-        setDates({ startDate: startOfMonth(selectedDate), endDate: endOfMonth(selectedDate) });
-        setViewMode('month');
+        setViewMode("month");
         setIsModalOpen(false);
+      }
     };
 
-    const modalTitle = `${format(startOfMonth(selectedDate), "d")} - ${format(endOfMonth(selectedDate), "do MMMM yyyy")}`;
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-    return (
-        <MonthYearPickerWrapper>
-            <IconAndInputContainer>
-                <IconContainer>
-                    <FiCalendar />
-                </IconContainer>
-                <DatePickerInput
-                    readOnly
-                    value={`${format(dates.startDate, 'MMMM')} ${format(dates.startDate, 'yyyy')}`}
-                    onClick={() => setIsModalOpen(true)}
-                    placeholder="Select Month and Year"
-                    className='font-custom font-medium text-xl text-skin-base tracking-title'
-                />
-            </IconAndInputContainer>
-            {isModalOpen && (
-                <CalendarModal ref={modalRef}>
-                    <div className="font-custom font-medium text-xxxs text-skin-base tracking-title">
-                        Select Month and Year to filter
-                    </div>
-                    <div className="font-custom font-medium text-xl text-skin-base tracking-title mb-2">{modalTitle}</div>
-                    {viewMode === 'month' ? (
-                        <>
-                            <Grid>
-                                {months.map((month, index) => {
-                                    const monthDate = setMonth(new Date(selectedDate.getFullYear(), index), index);
-                                    const isDisabled = isCurrentYear && isAfter(monthDate, endOfDay(new Date()));
-                                    return (<Item key={index} onClick={() => handleMonthClick(month, isDisabled)} selected={month === selectedMonth} disabled={isDisabled}>
-                                        {month}
-                                    </Item>)
-                                })}
-                            </Grid>
-                        </>
-                    ) : (
-                        <Scrollable>
-                            {years.map((year, index) => {
-                                const isDisabled = isCurrentYear && isAfter(setMonth(new Date(year, months.findIndex(m => m === selectedMonth)), months.findIndex(m => m === selectedMonth)), endOfDay(new Date()));
-                                return (
-                                    <Item key={index} onClick={() => !isDisabled && handleYearClick(year)} selected={year === selectedDate.getFullYear()}>
-                                        {year}
-                                    </Item>
-                                );
-                            })}
-                        </Scrollable>
-                    )}
-                    <div className='flex gap-2 mt-4 w-full justify-center items-center flex-row'>
-                        <OptionButton onClick={() => setViewMode('month')}>Month</OptionButton>
-                        <OptionButton onClick={() => setViewMode('year')}>Year</OptionButton>
-                        <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
-                    </div>
-                </CalendarModal>
-            )}
-        </MonthYearPickerWrapper>
-    );
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleMonthClick = (month: string, isDisabled: boolean) => {
+    if (!isDisabled) {
+      const monthIndex = months.findIndex((m) => m === month);
+      setSelectedMonth(month);
+      setSelectedDate(setMonth(selectedDate, monthIndex));
+    }
+  };
+
+  const handleYearClick = (year: number) => {
+    const newSelectedDate = setYear(selectedDate, year);
+    // If the selected year is the current year and the selected month is beyond the current month, reset the selected month to the current month
+    if (
+      year === new Date().getFullYear() &&
+      selectedDate.getMonth() > new Date().getMonth()
+    ) {
+      setSelectedDate(new Date());
+      setSelectedMonth(format(new Date(), "MMM"));
+    } else {
+      setSelectedDate(newSelectedDate);
+    }
+    setSelectedYear(year);
+  };
+
+  useEffect(() => {
+    setDates({
+      startDate: startOfMonth(startDate),
+      endDate: endOfMonth(endDate),
+    });
+    setSelectedDate(startDate);
+    setSelectedMonth(format(startDate, "MMM"));
+    setSelectedYear(startDate.getFullYear());
+  }, [startDate, endDate]);
+
+  const handleSubmit = () => {
+    onMonthYearSubmit({
+      startDate: startOfMonth(selectedDate),
+      endDate: endOfMonth(selectedDate),
+    });
+    setDates({
+      startDate: startOfMonth(selectedDate),
+      endDate: endOfMonth(selectedDate),
+    });
+    setViewMode("month");
+    setIsModalOpen(false);
+  };
+
+  const modalTitle = `${format(startOfMonth(selectedDate), "d")} - ${format(
+    endOfMonth(selectedDate),
+    "do MMMM yyyy"
+  )}`;
+
+  return (
+    <MonthYearPickerWrapper>
+      <IconAndInputContainer>
+        <IconContainer>
+          <FiCalendar />
+        </IconContainer>
+        <DatePickerInput
+          readOnly
+          value={`${format(dates.startDate, "MMMM")} ${format(
+            dates.startDate,
+            "yyyy"
+          )}`}
+          onClick={() => setIsModalOpen(true)}
+          placeholder="Select Month and Year"
+          className="font-custom font-medium text-xl text-skin-base tracking-title focus:outline focus:outline-none border border-none focus:border focus:border-none"
+        />
+      </IconAndInputContainer>
+      {isModalOpen && (
+        <CalendarModal ref={modalRef}>
+          <div className="font-custom font-medium text-xxxs text-skin-base tracking-title">
+            Select Month and Year to filter
+          </div>
+          <div className="font-custom font-medium text-xl text-skin-base tracking-title mb-2">
+            {modalTitle}
+          </div>
+          {viewMode === "month" ? (
+            <>
+              <Grid>
+                {months.map((month, index) => {
+                  const monthDate = setMonth(
+                    new Date(selectedDate.getFullYear(), index),
+                    index
+                  );
+                  const isDisabled =
+                    isCurrentYear && isAfter(monthDate, endOfDay(new Date()));
+                  return (
+                    <Item
+                      key={index}
+                      onClick={() => handleMonthClick(month, isDisabled)}
+                      selected={month === selectedMonth}
+                      disabled={isDisabled}
+                    >
+                      {month}
+                    </Item>
+                  );
+                })}
+              </Grid>
+            </>
+          ) : (
+            <Scrollable>
+              {years.map((year, index) => {
+                const isDisabled =
+                  isCurrentYear &&
+                  isAfter(
+                    setMonth(
+                      new Date(
+                        year,
+                        months.findIndex((m) => m === selectedMonth)
+                      ),
+                      months.findIndex((m) => m === selectedMonth)
+                    ),
+                    endOfDay(new Date())
+                  );
+                return (
+                  <Item
+                    key={index}
+                    onClick={() => !isDisabled && handleYearClick(year)}
+                    selected={year === selectedDate.getFullYear()}
+                  >
+                    {year}
+                  </Item>
+                );
+              })}
+            </Scrollable>
+          )}
+          <div className="flex gap-2 mt-4 w-full justify-center items-center flex-row">
+            <OptionButton onClick={() => setViewMode("month")}>
+              Month
+            </OptionButton>
+            <OptionButton onClick={() => setViewMode("year")}>
+              Year
+            </OptionButton>
+            <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
+          </div>
+        </CalendarModal>
+      )}
+    </MonthYearPickerWrapper>
+  );
 };
 
 export default MonthYearPicker;
-
