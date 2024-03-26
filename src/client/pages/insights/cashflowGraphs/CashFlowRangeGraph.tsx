@@ -62,7 +62,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
                 show: false,
             },
             zoom: {
-                enabled: true,
+                enabled: false,
             },
         },
         plotOptions: {
