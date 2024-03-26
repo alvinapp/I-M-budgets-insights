@@ -19,6 +19,7 @@ import useAccountStore from "client/store/accountStore";
 import Account from "client/models/Account";
 import Accounts from "client/models/Accounts";
 import { format } from "date-fns";
+import { checkNAN } from "client/utils/Formatters";
 
 const Cashflow = () => {
   const navigate = useNavigate();
@@ -50,7 +51,6 @@ const Cashflow = () => {
   const fetchDataFromServer = async () => {
     try {
       setIsLoading(true);
-      console.log("Fetching data...", insightsStoreState.insightsActiveInstitutionId);
       const linkedAccountId = null;
 
       const data = await getMicroDetailsViewData({
@@ -139,8 +139,8 @@ const Cashflow = () => {
               </div>
               <AmountDisplay
                 amount={
-                  earnedData.reduce((a: number, b: number) => a + b, 0) /
-                  earnedData.length
+                  checkNAN(earnedData.reduce((a: number, b: number) => a + b, 0) /
+                    earnedData.length)
                 }
               />
             </div>
@@ -150,8 +150,8 @@ const Cashflow = () => {
               </div>
               <AmountDisplay
                 amount={
-                  spentData.reduce((a: number, b: number) => a + b, 0) /
-                  spentData.length
+                  checkNAN(spentData.reduce((a: number, b: number) => a + b, 0) /
+                    spentData.length)
                 }
               />
             </div>

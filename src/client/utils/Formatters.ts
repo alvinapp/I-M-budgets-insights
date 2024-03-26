@@ -1,3 +1,6 @@
+import { MicroGoalTotal } from "client/api/micros";
+import { MicroGoal } from "client/models/MicroGoal";
+import { IConfig } from "client/store/configuration";
 import { validateLocaleAndSetLanguage } from "typescript";
 
 export const dateFormat = (date: Date, includeYear?: boolean) => {
@@ -262,3 +265,63 @@ export function getGoalCompletionString(
     estimatedCompletionDate,
   };
 }
+
+export const fetchData = async (
+  queryKey: string,
+  fetchFunction: {
+    ({
+      configuration,
+      start_date,
+      end_date,
+    }: {
+      configuration: IConfig;
+      start_date?: string | undefined;
+      end_date?: string | undefined;
+    }): Promise<any>;
+    ({
+      configuration,
+      start_date,
+      end_date,
+    }: {
+      configuration: IConfig;
+      start_date?: string | undefined;
+      end_date?: string | undefined;
+    }): Promise<MicroGoalTotal[]>;
+    ({
+      configuration,
+      start_date,
+      end_date,
+    }: {
+      configuration: IConfig;
+      start_date?: string | undefined;
+      end_date?: string | undefined;
+    }): Promise<any>;
+    ({
+      configuration,
+      start_date,
+      end_date,
+    }: {
+      configuration: IConfig;
+      start_date?: string | undefined;
+      end_date?: string | undefined;
+    }): Promise<MicroGoalTotal[]>;
+    (arg0: { configuration: any; start_date: any; end_date: any }): any;
+  },
+  config: IConfig,
+  formattedStartDate: string,
+  formattedEndDate: string,
+  setDataCallback: {
+    (data: MicroGoal[]): void;
+    (data: MicroGoal[]): void;
+    (arg0: any): void;
+  }
+) => {
+  try {
+    const result = await fetchFunction({
+      configuration: config,
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+    });
+    setDataCallback(result);
+  } catch (error) {}
+};

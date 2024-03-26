@@ -16,7 +16,7 @@ import { useQuery } from "react-query";
 import { fetchBudgetCategories } from "client/api/budget";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useCategoriesStore from "client/store/categoriesStore";
-import { calculateSpending, checkNAN } from "client/utils/Formatters";
+import { calculateSpending, checkNAN, fetchData } from "client/utils/Formatters";
 import useMacroGoalsStore from "client/store/macroGoalStore";
 import { getMacros } from "client/api/macros";
 import settings from "client/assets/images/budgets-insights/Settings.svg";
@@ -40,6 +40,7 @@ import { MicroGoal } from "client/models/MicroGoal";
 import MonthYearPicker from "../components/custom-date-picker/MonthYearPicker";
 import ViewSavingsBudget from "./ViewSavingsBudget";
 import { enrichTransactions } from "client/api/transactions";
+import useInsightsStore from "client/store/insightsStore";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -51,6 +52,7 @@ const BudgetsView = () => {
   const essentialMacro = macroData[0];
   const essentialBudgetAmount = essentialMacro?.amount;
   const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
+  const insightsStoreState = useInsightsStore((state) => state);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -68,69 +70,14 @@ const BudgetsView = () => {
   // Calculate the start_date as the first day of the current month
   const formattedStartDate = format(startDate, "yyyy-MM-dd");
   const formattedEndDate = format(endDate, "yyyy-MM-dd");
+
+  const formattedInsightsStartDate = format(insightsStoreState.insightsStartDate ?? currentMonth, "yyyy-MM-dd");
+  const formattedInsightsEndDate = format(insightsStoreState.insightsEndDate ?? endOfMonth(currentMonth), "yyyy-MM-dd");
+
   const navigateToInsightsView = () => {
     navigate(
-      `/insights-view?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
+      `/insights-view?startDate=${formattedInsightsStartDate}&endDate=${formattedInsightsEndDate}`
     );
-  };
-  const fetchData = async (
-    queryKey: string,
-    fetchFunction: {
-      ({
-        configuration,
-        start_date,
-        end_date,
-      }: {
-        configuration: IConfig;
-        start_date?: string | undefined;
-        end_date?: string | undefined;
-      }): Promise<any>;
-      ({
-        configuration,
-        start_date,
-        end_date,
-      }: {
-        configuration: IConfig;
-        start_date?: string | undefined;
-        end_date?: string | undefined;
-      }): Promise<MicroGoalTotal[]>;
-      ({
-        configuration,
-        start_date,
-        end_date,
-      }: {
-        configuration: IConfig;
-        start_date?: string | undefined;
-        end_date?: string | undefined;
-      }): Promise<any>;
-      ({
-        configuration,
-        start_date,
-        end_date,
-      }: {
-        configuration: IConfig;
-        start_date?: string | undefined;
-        end_date?: string | undefined;
-      }): Promise<MicroGoalTotal[]>;
-      (arg0: { configuration: any; start_date: any; end_date: any }): any;
-    },
-    config: IConfig,
-    formattedStartDate: string,
-    formattedEndDate: string,
-    setDataCallback: {
-      (data: MicroGoal[]): void;
-      (data: MicroGoal[]): void;
-      (arg0: any): void;
-    }
-  ) => {
-    try {
-      const result = await fetchFunction({
-        configuration: config,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      });
-      setDataCallback(result);
-    } catch (error) { }
   };
 
   const { isFetching: fetchingEssentialsBudget } = useQuery(
@@ -143,20 +90,6 @@ const BudgetsView = () => {
         formattedStartDate,
         formattedEndDate,
         categoryStore.setCategoryBudgets
-      ),
-    { enabled: !!config.token }
-  );
-
-  const { isFetching: fetchingMacros } = useQuery(
-    "macros",
-    () =>
-      fetchData(
-        "macros",
-        fetchMicroGoalTotals,
-        config,
-        formattedStartDate,
-        formattedEndDate,
-        setMicroGoals
       ),
     { enabled: !!config.token }
   );
@@ -184,14 +117,6 @@ const BudgetsView = () => {
           formattedStartDate,
           formattedEndDate,
           categoryStore.setCategoryBudgets
-        ),
-        fetchData(
-          "macros",
-          fetchMicroGoalTotals,
-          config,
-          formattedStartDate,
-          formattedEndDate,
-          setMicroGoals
         ),
         fetchMacroGoalsData(),
       ]);

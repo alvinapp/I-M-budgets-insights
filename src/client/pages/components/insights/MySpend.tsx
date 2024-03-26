@@ -8,7 +8,9 @@ import MacroPieChartWithLegend from "../MacroPieChartWithLegend";
 import useMicroGoalsStore from "client/store/microGoalStore";
 import { fetchMicroGoalTotals } from "client/api/micros";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
-import { calculateSpending } from "client/utils/Formatters";
+import { calculateSpending, fetchData } from "client/utils/Formatters";
+import useInsightsStore from "client/store/insightsStore";
+import { format } from "date-fns";
 
 type MySpendProps = {
   spent: number;
@@ -35,18 +37,21 @@ export const MySpend = ({
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
+  const insightsStore = useInsightsStore.getState();
   const expenditureProgress = calculateSpending(spent, budget);
   const startDateObj = startDate ? new Date(startDate) : null;
   const endDateObj = endDate ? new Date(endDate) : null;
 
-  // useEffect(() => {
-  //   const fetchMicroGoalTotalsData = async () => {
-  //     const data = await fetchMicroGoalTotals({ configuration: config });
-  //     setMicroGoals(data);
-  //   };
-
-  //   fetchMicroGoalTotalsData();
-  // }, []);
+  useEffect(() => {
+    fetchData(
+      "macros",
+      fetchMicroGoalTotals,
+      config,
+      format(insightsStore.insightsStartDate, "yyyy-MM-dd"),
+      format(insightsStore.insightsEndDate, "yyyy-MM-dd"),
+      setMicroGoals
+    );
+  }, [startDate, endDate]);
   const budgetColumnWidth = "120px";
   const spentColumnWidth = "20%";
   return (

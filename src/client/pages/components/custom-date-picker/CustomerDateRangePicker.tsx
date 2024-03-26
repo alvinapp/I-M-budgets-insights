@@ -194,24 +194,27 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
     }
   }, [startDate, endDate]);
 
-  const handleDateSelect = useCallback(
-    (date: Date) => {
-      if (
-        dateRange.start &&
-        !dateRange.end &&
-        isBefore(date, dateRange.start)
-      ) {
-        setDateRange({ start: date, end: null });
-      } else if (!dateRange.start || dateRange.end) {
-        setDateRange({ start: date, end: null });
-      } else {
-        setDateRange({ start: dateRange.start, end: date });
-        setLastUpdated("local");
-        setIsModalOpen(false); // Optionally close the modal
-      }
-    },
-    [dateRange]
-  );
+  const handleDateSelect = useCallback((date: Date) => {
+    if (dateRange.start && dateRange.end) {
+      setDateRange({ start: date, end: null });
+    }
+    // Case 1: If there's a start date and the clicked date is the same or not in the expected range
+    else if (dateRange.start && (isSameDay(date, dateRange.start) || dateRange.end || isBefore(date, dateRange.start) || (dateRange.end && isAfter(date, dateRange.end)))) {
+      setDateRange({ start: date, end: null });
+      setIsModalOpen(true); // Keep the modal open for a new selection
+    }
+    // Case 2: No start date set, or end date already set - set/reset start date
+    else if (!dateRange.start || dateRange.end) {
+      setDateRange({ start: date, end: null });
+    }
+    // Case 3: Start date is set, and clicked date is after the start date - set end date
+    else {
+      setDateRange({ start: dateRange.start, end: date });
+      setIsModalOpen(false); // Optionally close the modal upon completing the selection
+    }
+  }, [dateRange, setIsModalOpen]);
+
+
 
   useEffect(() => {
     if (dateRange.start && dateRange.end && lastUpdated === "local") {
