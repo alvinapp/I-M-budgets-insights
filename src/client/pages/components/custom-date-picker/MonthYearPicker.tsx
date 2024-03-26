@@ -38,7 +38,6 @@ const CalendarModal = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  height: 20.313rem;
   width: 20.313rem;
   transform: translate(-50%, -50%);
   padding: 20px;
