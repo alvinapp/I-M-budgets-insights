@@ -5,11 +5,9 @@ import Account from "client/models/Account";
 import { FiCalendar } from "react-icons/fi";
 import MainButton from "../components/MainButton";
 import { dateFilters } from "client/utils/MockData";
-import { useNavigate } from "react-router-dom";
-import useCashflowVariablesStore from "client/store/cashFlowStore";
 import useInsightsStore from "client/store/insightsStore";
 import CustomDateRangePicker from "../components/custom-date-picker/CustomerDateRangePicker";
-import { endOfMonth, format, isSameMonth, isSameYear, isWithinInterval, startOfMonth, subMonths } from "date-fns";
+import { endOfMonth, format, isSameDay, isSameMonth, isSameYear, startOfMonth, subMonths } from "date-fns";
 interface InsightsFiltersProps {
   accounts: any; // replace 'any' with the actual type
   activeAccount: any; // replace 'any' with the actual type
@@ -212,7 +210,6 @@ const InsightsFilters = ({
           title="Apply"
           click={() => {
             useInsightsStore.getState().setInsightsLoading(true);
-            console.log("activeAccount", activeAccount, "activeDateFilter", activeDateFilter)
             closeBottomSheet();
             useInsightsStore.getState().setInsightsLoading(false);
           }}
@@ -238,20 +235,24 @@ const renderInputValue = (startDisplay: any, endDisplay: any): string => {
     : "";
 };
 
-const checkDateRange = (startDate: any, endDate: any) => {
+const checkDateRange = (startDate: Date, endDate: Date) => {
   const today = new Date();
   const currentMonthStart = startOfMonth(today);
   const currentMonthEnd = endOfMonth(today);
   const lastMonthStart = startOfMonth(subMonths(today, 1));
   const lastMonthEnd = endOfMonth(subMonths(today, 1));
 
-  if (isWithinInterval(startDate, { start: currentMonthStart, end: currentMonthEnd }) &&
-    isWithinInterval(endDate, { start: currentMonthStart, end: currentMonthEnd })) {
+  if (
+    isSameDay(startDate, currentMonthStart) &&
+    isSameDay(endDate, currentMonthEnd)
+  ) {
     return "This month";
-  } else if (isWithinInterval(startDate, { start: lastMonthStart, end: lastMonthEnd }) &&
-    isWithinInterval(endDate, { start: lastMonthStart, end: lastMonthEnd })) {
+  } else if (
+    isSameDay(startDate, lastMonthStart) &&
+    isSameDay(endDate, lastMonthEnd)
+  ) {
     return "Last month";
   } else {
-    return ""; // Not a full current or last month
+    return false; // Not exactly matching the start and end of the current or last month
   }
-};
+}

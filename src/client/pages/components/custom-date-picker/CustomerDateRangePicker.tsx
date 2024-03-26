@@ -195,22 +195,25 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
   }, [startDate, endDate]);
 
   const handleDateSelect = useCallback((date: Date) => {
+    // Check if both a start and end date are already selected to form a complete range.
     if (dateRange.start && dateRange.end) {
+      // If a complete range exists, any selected date becomes the new start date,
+      // and the end date is reset.
       setDateRange({ start: date, end: null });
-    }
-    // Case 1: If there's a start date and the clicked date is the same or not in the expected range
-    else if (dateRange.start && (isSameDay(date, dateRange.start) || dateRange.end || isBefore(date, dateRange.start) || (dateRange.end && isAfter(date, dateRange.end)))) {
+    } else if (!dateRange.start) {
+      // If no start date is set, set the selected date as the start date.
       setDateRange({ start: date, end: null });
-      setIsModalOpen(true); // Keep the modal open for a new selection
-    }
-    // Case 2: No start date set, or end date already set - set/reset start date
-    else if (!dateRange.start || dateRange.end) {
-      setDateRange({ start: date, end: null });
-    }
-    // Case 3: Start date is set, and clicked date is after the start date - set end date
-    else {
-      setDateRange({ start: dateRange.start, end: date });
-      setIsModalOpen(false); // Optionally close the modal upon completing the selection
+    } else if (dateRange.start && !dateRange.end) {
+      // If only a start date is set (incomplete range), 
+      // decide whether to set this date as the new end date or reset the start date based on its chronological order.
+      if (isBefore(date, dateRange.start)) {
+        // If the selected date is before the current start date, reset the range with the selected date as the new start.
+        setDateRange({ start: date, end: null });
+      } else {
+        // If the selected date is after the current start date, set it as the end date, completing the range.
+        setDateRange({ start: dateRange.start, end: date });
+        setIsModalOpen(false); // Optionally close the modal upon completing the selection
+      }
     }
   }, [dateRange, setIsModalOpen]);
 
