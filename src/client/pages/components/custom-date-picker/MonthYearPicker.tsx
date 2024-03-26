@@ -25,13 +25,13 @@ const IconContainer = styled.div`
   margin-right: 10px;
 `;
 
-const DatePickerInput = styled.input`
+const DatePickerDiv = styled.div`
   font-size: 16px;
   cursor: pointer;
   box-sizing: border-box;
-  max-width: 8.125rem;
   border-radius: 8px;
   outline: none;
+  padding: 10px;
 `;
 
 const CalendarModal = styled.div`
@@ -89,9 +89,6 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  &:hover {
-    background-color: #e0e0e0;
-  }
 `;
 
 const OptionButton = styled.button`
@@ -102,9 +99,6 @@ const OptionButton = styled.button`
   border: 1px solid #101010;
   border-radius: 5px;
   cursor: pointer;
-  &:hover {
-    background-color: #e0e0e0;
-  }
 `;
 
 const MonthYearPicker: React.FC<MonthYearPickerProps> = ({ onMonthYearSubmit, startDate, endDate }) => {
@@ -179,13 +173,15 @@ const MonthYearPicker: React.FC<MonthYearPickerProps> = ({ onMonthYearSubmit, st
                 <IconContainer>
                     <FiCalendar />
                 </IconContainer>
-                <DatePickerInput
-                    readOnly
-                    value={`${format(dates.startDate, 'MMMM')} ${format(dates.startDate, 'yyyy')}`}
+                <DatePickerDiv
                     onClick={() => setIsModalOpen(true)}
-                    placeholder="Select Month and Year"
-                    className='font-custom font-medium text-xl text-skin-base tracking-title'
-                />
+                    className="font-custom font-medium text-xl text-skin-base tracking-title"
+                >
+                    {`${format(dates.startDate, "MMMM")} ${format(
+                        dates.startDate,
+                        "yyyy"
+                    )}`}
+                </DatePickerDiv>
             </IconAndInputContainer>
             {isModalOpen && (
                 <CalendarModal ref={modalRef}>
