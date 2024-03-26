@@ -194,29 +194,23 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
     }
   }, [startDate, endDate]);
 
-  const handleDateSelect = useCallback((date: Date) => {
-    // Check if both a start and end date are already selected to form a complete range.
-    if (dateRange.start && dateRange.end) {
-      // If a complete range exists, any selected date becomes the new start date,
-      // and the end date is reset.
-      setDateRange({ start: date, end: null });
-    } else if (!dateRange.start) {
-      // If no start date is set, set the selected date as the start date.
-      setDateRange({ start: date, end: null });
-    } else if (dateRange.start && !dateRange.end) {
-      // If only a start date is set (incomplete range), 
-      // decide whether to set this date as the new end date or reset the start date based on its chronological order.
-      if (isBefore(date, dateRange.start)) {
-        // If the selected date is before the current start date, reset the range with the selected date as the new start.
+  const handleDateSelect = useCallback(
+    (date: Date) => {
+      if (dateRange.start && dateRange.end) {
+        // If both start and end dates are set, reset the date range
+        setDateRange({ start: date, end: null });
+      } else if (dateRange.start && !dateRange.end && isBefore(date, dateRange.start)) {
+        // If start date is set but end date is not and the clicked date is before the start date
         setDateRange({ start: date, end: null });
       } else {
-        // If the selected date is after the current start date, set it as the end date, completing the range.
+        // If start date is not set or end date is already set
         setDateRange({ start: dateRange.start, end: date });
-        setIsModalOpen(false); // Optionally close the modal upon completing the selection
+        setLastUpdated("local");
+        setIsModalOpen(false); // Optionally close the modal
       }
-    }
-  }, [dateRange, setIsModalOpen]);
-
+    },
+    [dateRange]
+  );
 
 
   useEffect(() => {
