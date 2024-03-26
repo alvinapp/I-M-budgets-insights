@@ -22,7 +22,7 @@ const IconAndInputContainer = styled.div`
 `;
 
 const IconContainer = styled.div`
-  margin-right: 10px;
+  margin-right: 0px;
 `;
 
 const DatePickerDiv = styled.div`
@@ -66,9 +66,6 @@ const Item = styled.div<{ selected: boolean; disabled?: boolean }>`
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   color: ${({ disabled }) => (disabled ? "#a9a9a9" : "black")};
   pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
-  &:hover {
-    background-color: ${({ disabled }) => (disabled ? "#d3d3d3" : "#e0e0e0")};
-  }
 `;
 
 const Scrollable = styled.div`
