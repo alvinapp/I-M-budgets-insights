@@ -52,8 +52,8 @@ const InsightsFilters = ({
         break;
       default:
         // Custom date or All time, use default values
-        startDate = new Date("2023-09-01");
-        endDate = new Date("2023-11-30");
+        startDate = new Date("2023-01-01");
+        endDate = new Date();
         break;
     }
 
