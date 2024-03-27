@@ -36,7 +36,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
       style={{ display: "flex" }}
     >
       {ratioArray.map((flexValue, index) => (
-        <div key={index} className="flex flex-col" style={{ flex: flexValue }}>
+        <div key={index} className="flex flex-col" style={{ flex: checkNAN(flexValue) }}>
           {isLoading ? (
             <div className="bg-silver animate-pulse h-[1.875rem] rounded-[1.375rem] bg-[#d2d2d2] min-w-[7.5rem]" />
           ) : (
@@ -53,7 +53,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                     : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
               }
               outsideLength={
-                progressPercentage[Object.keys(progressPercentage)[index]]
+                progressPercentage[Object.keys(progressPercentage)[index]] ?? 0
               }
               height={30}
             />

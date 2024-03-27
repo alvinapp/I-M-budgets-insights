@@ -76,16 +76,20 @@ const Widget: IWidget = {
   handleMessage: function (e) {
     e.preventDefault();
     if (!e.data || typeof e.data !== "string") return;
-    const data = JSON.parse(e.data);
-    switch (data.action) {
-      case "init": {
-        if (this.iframe) {
-          window.postMessage(JSON.stringify(this.config), "*");
+    try {
+      const data = JSON.parse(e.data) ?? {};
+      switch (data && data.action) {
+        case "init": {
+          if (this.iframe) {
+            window.postMessage(JSON.stringify(this.config), "*");
+          }
+          break;
         }
-        break;
+        default:
+          break;
       }
-      default:
-        break;
+    } catch (error) {
+      return;
     }
   },
 };
