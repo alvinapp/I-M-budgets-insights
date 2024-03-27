@@ -21,7 +21,6 @@ export const HorizontalDateToggle: React.FC<Props> = ({
   endDate,
   lastUpdatedEnv,
 }) => {
-
   const isNextMonthDisabled = useMemo(() => {
     const today = new Date();
     const nextMonth = addMonths(startDate ?? new Date(), 1);
@@ -38,11 +37,19 @@ export const HorizontalDateToggle: React.FC<Props> = ({
           <FiChevronLeft color="#4E6783" size="1rem" />
         </div>
       </div>
-      <MonthYearPicker onMonthYearSubmit={onDateRangeSelect} startDate={startDate ?? new Date()} endDate={endDate ?? new Date()} />
+      <MonthYearPicker
+        onMonthYearSubmit={onDateRangeSelect}
+        startDate={startDate ?? new Date()}
+        endDate={endDate ?? new Date()}
+      />
       <div
         className="h-10 w-10 rounded-full flex justify-center items-center border border-skin-base cursor-pointer"
         onClick={!isNextMonthDisabled ? onNextMonthClick : undefined}
-        style={{ pointerEvents: isNextMonthDisabled ? "none" : "auto", backgroundColor: isNextMonthDisabled ? "#E0E0E0" : "#fff", border: isNextMonthDisabled ? "#E0E0E0" : "1px solid #101010" }}
+        style={{
+          pointerEvents: isNextMonthDisabled ? "none" : "auto",
+          backgroundColor: isNextMonthDisabled ? "#E0E0E0" : "#fff",
+          border: isNextMonthDisabled ? "#E0E0E0" : "1px solid #101010",
+        }}
       >
         <FiChevronRight color="#4E6783" size="1rem" />
       </div>

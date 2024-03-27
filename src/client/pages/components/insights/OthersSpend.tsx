@@ -159,7 +159,7 @@ export const OthersSpend = ({
       }
     };
     fetchData();
-  }, [config]);
+  }, [config, startDate, endDate]);
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
@@ -240,15 +240,15 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
-              return (
-                <ExpenditureComparisonCard
-                  icon={expenditure.emoji}
-                  key={i}
-                  category={expenditure.name}
-                  percentage={expenditure.percentage}
-                />
-              );
-            })
+            return (
+              <ExpenditureComparisonCard
+                icon={expenditure.emoji}
+                key={i}
+                category={expenditure.name}
+                percentage={expenditure.percentage}
+              />
+            );
+          })
           : null}
       </div>
     </div>

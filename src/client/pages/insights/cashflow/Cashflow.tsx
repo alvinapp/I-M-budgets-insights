@@ -6,12 +6,20 @@ import CashFlowFilterButton from "client/pages/components/insights/CashFlowFilte
 import TotalCashFlowView from "client/pages/components/insights/TotalCashFlowView";
 import { cashflowFilters } from "client/utils/MockData";
 import React, { useEffect, useState } from "react";
-import { FiInfo } from "react-icons/fi";
+import { FiCalendar, FiInfo } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import Graph from "../cashflowGraphs/Graph";
 import CashFlowRangeGraph from "../cashflowGraphs/CashFlowRangeGraph";
 import { getMicroDetailsViewData } from "client/api/transactions";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
+import useInsightsStore from "client/store/insightsStore";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import InsightsFilters from "../InsightsFilters";
+import useAccountStore from "client/store/accountStore";
+import Account from "client/models/Account";
+import Accounts from "client/models/Accounts";
+import { format } from "date-fns";
+import { checkNAN } from "client/utils/Formatters";
 
 const Cashflow = () => {
   const navigate = useNavigate();
@@ -21,18 +29,28 @@ const Cashflow = () => {
   const [spentData, setSpentData] = useState<number[]>([]);
   const [datalabels, setDatalabels] = useState([]);
   const [fullDataLabels, setFullDataLabels] = useState<Date[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const startDate = searchParams.get("startDate");
-  const endDate = searchParams.get("endDate");
-  const accountName = searchParams.get("accountName");
-  const dateFilter = searchParams.get("dateFilter");
+  // const accountName = searchParams.get("accountName");
+  // const dateFilter = searchParams.get("dateFilter");
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
+  const insightsStoreState = useInsightsStore((state) => state);
+  const accountStore = useAccountStore((state: any) => state);
+  const startDate = format(insightsStoreState.insightsStartDate, "yyyy-MM-dd");
+  const endDate = format(insightsStoreState.insightsEndDate, "yyyy-MM-dd");
+  const accounts = accountStore.accounts as Accounts;
+  const filterAccountBy = useAccountStore((state: any) => state.filterBy);
+  const filteredAccount = useAccountStore(
+    (state: any) => state.filter
+  ) as Account;
+  const [filter, openFilter] = useState(false);
 
   const fetchDataFromServer = async () => {
     try {
+      setIsLoading(true);
       const linkedAccountId = null;
 
       const data = await getMicroDetailsViewData({
@@ -48,14 +66,22 @@ const Cashflow = () => {
       setSpentData(data.spentData);
       setFullDataLabels(data.fullDataLabels);
       setDatalabels(data.datalabels);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error("Error fetching data:", error);
     }
   };
 
+  const closeBottomSheet = () => {
+    openFilter(false);
+  };
+
   useEffect(() => {
-    fetchDataFromServer();
-  }, []);
+    setTimeout(() => {
+      fetchDataFromServer();
+    }, 500);
+  }, [startDate, endDate, filteredAccount]);
   const currencySymbol = "₦";
   return (
     <div className="h-screen w-screen">
@@ -84,27 +110,20 @@ const Cashflow = () => {
       <div className="flex-grow h-px bg-skin-accent3 mb-1"></div>
       <div className="flex flex-col mx-3.5">
         <div className="py-3 flex flex-wrap items-center mb-3">
-          {cashflowFilters?.map((element: any, i: number) => {
-            const label =
-              i === 0
-                ? accountName
-                : i === 1
-                ? dateFilter
-                : element.name ?? "All accounts";
-            return (
-              <CashFlowFilterButton
-                label={label}
-                icon={element.icon}
-                key={i}
-                isActive={false}
-                onClick={() => {
-                  if (i === 2) {
-                  }
-                }}
-                id={`${i}`}
-              />
-            );
-          })}
+          <CashFlowFilterButton
+            label={insightsStoreState.insightsActiveInstitutionName}
+            icon={null}
+            key={`all institutions`}
+            isActive={false}
+            onClick={() => openFilter(true)}
+          />
+          <CashFlowFilterButton
+            label={insightsStoreState.insightsDateFilterName}
+            icon={<FiCalendar />}
+            key={`This month`}
+            isActive={false}
+            onClick={() => openFilter(true)}
+          />
         </div>
         <TotalCashFlowView totalAmount={totalEarned + totalSpent} />
         <Graph earned={totalEarned} spent={totalSpent} />
@@ -119,10 +138,10 @@ const Cashflow = () => {
                 - You've made an average of
               </div>
               <AmountDisplay
-                amount={
+                amount={checkNAN(
                   earnedData.reduce((a: number, b: number) => a + b, 0) /
-                  earnedData.length
-                }
+                    earnedData.length
+                )}
               />
             </div>
             <div className="flex flex-row">
@@ -130,21 +149,43 @@ const Cashflow = () => {
                 - You've spent an average of
               </div>
               <AmountDisplay
-                amount={
+                amount={checkNAN(
                   spentData.reduce((a: number, b: number) => a + b, 0) /
-                  spentData.length
-                }
+                    spentData.length
+                )}
               />
             </div>
           </div>
         </div>
         <CashFlowRangeGraph
-          earnedData={earnedData}
-          spentData={spentData}
-          datalabels={datalabels}
-          fullDataLabels={fullDataLabels}
+          earnedData={isLoading ? [] : earnedData}
+          spentData={isLoading ? [] : spentData}
+          datalabels={isLoading ? [] : datalabels}
+          fullDataLabels={isLoading ? [] : fullDataLabels}
           currencySymbol={currencySymbol}
         />
+      </div>
+      <div className="mb-5">
+        <BottomSheet
+          onDismiss={() => {
+            openFilter(false);
+          }}
+          open={filter}
+          style={{
+            borderRadius: 24,
+          }}
+          children={
+            <InsightsFilters
+              accounts={accounts}
+              activeAccount={filteredAccount}
+              onClick={(account: Account) => {
+                filterAccountBy(account);
+              }}
+              closeBottomSheet={closeBottomSheet}
+            />
+          }
+          defaultSnap={400}
+        ></BottomSheet>
       </div>
     </div>
   );

@@ -6,31 +6,27 @@ export const getCashFlow = async ({
   configuration,
   start_date,
   end_date,
+  linkedAccountId,
 }: {
   configuration: IConfig;
   start_date?: string;
   end_date?: string;
+  linkedAccountId?: any;
 }) => {
   try {
     let res;
+    let endpoint = "/transactions/cash_flow/";
     if (start_date && end_date) {
-      res = await fetchData({
-        endpoint: `/transactions/cash_flow/?start_date=${start_date}&end_date=${end_date}`,
-        token: configuration.token,
-        publicKey: configuration.publicKey,
-      });
-    } else {
-      res = await fetchData({
-        endpoint: `/transactions/cash_flow/`,
-        token: configuration.token,
-        publicKey: configuration.publicKey,
-      });
+      endpoint += `?start_date=${start_date}&end_date=${end_date}`;
     }
-    // const res = await fetchData({
-    //   endpoint: `/transactions/cash_flow/`,
-    //   token: configuration.token,
-    //   publicKey: configuration.publicKey,
-    // });
+    if (linkedAccountId) {
+      endpoint += `&linked_account_id=${linkedAccountId}`;
+    }
+    res = await fetchData({
+      endpoint: endpoint,
+      token: configuration.token,
+      publicKey: configuration.publicKey,
+    });
     return res;
   } catch (reason: any) {
     Sentry.captureException(reason);
