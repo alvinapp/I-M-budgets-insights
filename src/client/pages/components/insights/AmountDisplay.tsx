@@ -1,5 +1,6 @@
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import React from "react";
+import AnimatedNumber from "../AnimatedNumber";
 type AmountDisplayProps = {
   amount: number;
 };
@@ -8,7 +9,8 @@ const AmountDisplay = ({ amount }: AmountDisplayProps) => {
   return (
     <div className="relative">
       <div className="font-medium font-primary text-tiny tracking-wide">
-        {amount.toLocaleString("en-us")}
+        {/* {amount.toLocaleString("en-us")} */}
+        <AnimatedNumber target={amount} duration={500} />
         <sup
           style={{
             fontSize: "11px",
