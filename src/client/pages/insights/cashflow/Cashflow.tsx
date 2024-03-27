@@ -99,7 +99,7 @@ const Cashflow = () => {
               </div>
               <div
                 className="h-6 w-6 rounded-full flex justify-center items-center"
-                onClick={() => { }}
+                onClick={() => {}}
               >
                 <FiInfo color="#101010" size="1.5rem" />
               </div>

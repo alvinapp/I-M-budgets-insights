@@ -105,7 +105,7 @@
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
     "react-icons": "^4.9.0",
-    "react-loader-spinner": "^5.3.4",
+    "react-loader-spinner": "^6.1.6",
     "react-loading-skeleton": "^3.1.0",
     "react-lottie": "^1.2.3",
     "react-mobile-datepicker": "^4.0.2",

@@ -1,6 +1,4 @@
 import React from "react";
-import { BallTriangle } from "react-loader-spinner";
-
 type SuccessButonProps = {
   label?: string;
   click?: () => void;
