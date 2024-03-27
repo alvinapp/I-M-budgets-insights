@@ -7,7 +7,15 @@ import MainButton from "../components/MainButton";
 import { dateFilters } from "client/utils/MockData";
 import useInsightsStore from "client/store/insightsStore";
 import CustomDateRangePicker from "../components/custom-date-picker/CustomerDateRangePicker";
-import { endOfMonth, format, isSameDay, isSameMonth, isSameYear, startOfMonth, subMonths } from "date-fns";
+import {
+  endOfMonth,
+  format,
+  isSameDay,
+  isSameMonth,
+  isSameYear,
+  startOfMonth,
+  subMonths,
+} from "date-fns";
 interface InsightsFiltersProps {
   accounts: any; // replace 'any' with the actual type
   activeAccount: any; // replace 'any' with the actual type
@@ -97,7 +105,11 @@ const InsightsFilters = ({
     },
   };
 
-  const uniqueAccounts = [...new Map(accounts?.map((account: { name: any; }) => [account.name, account])).values()];
+  const uniqueAccounts = [
+    ...new Map(
+      accounts?.map((account: { name: any }) => [account.name, account])
+    ).values(),
+  ];
   uniqueAccounts.unshift(allAccounts);
 
   const selectedDateFilterName = insightsStore.insightsDateFilterName;
@@ -105,20 +117,27 @@ const InsightsFilters = ({
   const handleAccountSelection = (selectedAccount: Account) => {
     setUpdate(!update);
     // Update insights store with the selected account details
-    useInsightsStore.getState().setInsightsActiveInstitutionId(selectedAccount?.id ?? null);
-    useInsightsStore.getState().setInsightsActiveInstitutionName(selectedAccount?.name ?? "All accounts");
+    useInsightsStore
+      .getState()
+      .setInsightsActiveInstitutionId(selectedAccount?.id ?? null);
+    useInsightsStore
+      .getState()
+      .setInsightsActiveInstitutionName(
+        selectedAccount?.name ?? "All accounts"
+      );
   };
 
   const handleDateFilterSelection = (selectedFilter: any) => {
     setUpdate(!update);
     // Now, calculate the date range based on the selected filter
-    const { formattedStartDate, formattedEndDate } = calculateDateRange(selectedFilter);
-    useInsightsStore.getState().setInsightsStartDate(new Date(formattedStartDate));
+    const { formattedStartDate, formattedEndDate } =
+      calculateDateRange(selectedFilter);
+    useInsightsStore
+      .getState()
+      .setInsightsStartDate(new Date(formattedStartDate));
     useInsightsStore.getState().setInsightsEndDate(new Date(formattedEndDate));
     useInsightsStore.getState().setInsightsDateFilterName(selectedFilter.name);
   };
-
-  console.log("activeDateFilter", activeDateFilter);
 
   return (
     <div className="flex flex-col mt-6 mx-4">
@@ -190,17 +209,27 @@ const InsightsFilters = ({
               if (dateFilterName) {
                 insightsStore.setInsightsDateFilterName(dateFilterName);
               } else {
-                insightsStore.setInsightsDateFilterName(renderInputValue(date.start, date.end));
+                insightsStore.setInsightsDateFilterName(
+                  renderInputValue(date.start, date.end)
+                );
               }
               insightsStore.setInsightsStartDate(date.start);
               insightsStore.setInsightsEndDate(date.end);
             }
           }}
           disabled={false}
-          startDate={insightsStore.insightsStartDate ? format(insightsStore.insightsStartDate, "yyyy-MM-dd") : ''}
-          endDate={insightsStore.insightsEndDate ? format(insightsStore.insightsEndDate, "yyyy-MM-dd") : ''}
-          lastUpdatedEnv={'local'}
-          placeholder={'Custom date'}
+          startDate={
+            insightsStore.insightsStartDate
+              ? format(insightsStore.insightsStartDate, "yyyy-MM-dd")
+              : ""
+          }
+          endDate={
+            insightsStore.insightsEndDate
+              ? format(insightsStore.insightsEndDate, "yyyy-MM-dd")
+              : ""
+          }
+          lastUpdatedEnv={"local"}
+          placeholder={"Custom date"}
           isActive={false}
           restrictToCurrentMonth={false}
         />
@@ -255,4 +284,4 @@ const checkDateRange = (startDate: Date, endDate: Date) => {
   } else {
     return false; // Not exactly matching the start and end of the current or last month
   }
-}
+};

@@ -135,9 +135,6 @@ const InsightsView = () => {
     insightsStoreState.insightsStartDate,
     insightsStoreState.insightsEndDate,
   ]);
-
-  console.log("insightsStoreState", insightsStoreState);
-
   const [toggleTabId, setToggleTabId] = useState(0);
   const [budgetSpendTabId, setBudgetSpendTabId] = useState(0);
   const navigate = useNavigate();
@@ -218,7 +215,10 @@ const InsightsView = () => {
         <div className="flex flex-row items-center justify-between mr-5">
           {toggleTabId == 0 ? (
             <AvailableBudgetContainer
-              amount={(essentialsData.reduce((a: number, b: any) => a + b.y, 0) + wantsData.reduce((a: number, b: any) => a + b.y, 0)) ?? 0}
+              amount={
+                essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
+                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+              }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
             />

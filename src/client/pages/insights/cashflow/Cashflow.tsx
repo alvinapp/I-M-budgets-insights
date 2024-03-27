@@ -138,10 +138,10 @@ const Cashflow = () => {
                 - You've made an average of
               </div>
               <AmountDisplay
-                amount={
-                  checkNAN(earnedData.reduce((a: number, b: number) => a + b, 0) /
-                    earnedData.length)
-                }
+                amount={checkNAN(
+                  earnedData.reduce((a: number, b: number) => a + b, 0) /
+                    earnedData.length
+                )}
               />
             </div>
             <div className="flex flex-row">
@@ -149,10 +149,10 @@ const Cashflow = () => {
                 - You've spent an average of
               </div>
               <AmountDisplay
-                amount={
-                  checkNAN(spentData.reduce((a: number, b: number) => a + b, 0) /
-                    spentData.length)
-                }
+                amount={checkNAN(
+                  spentData.reduce((a: number, b: number) => a + b, 0) /
+                    spentData.length
+                )}
               />
             </div>
           </div>

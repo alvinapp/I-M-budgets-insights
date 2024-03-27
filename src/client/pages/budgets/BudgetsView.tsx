@@ -294,12 +294,7 @@ const BudgetsView = () => {
           />
         </div>
       </div>
-      <div className="flex-grow h-px bg-skin-accent3 mt-3">
-        {/* <MonthYearPicker onMonthYearSubmit={(date) => {
-          console.log("This is the date range", date);
-          onDateChangeSelect(date);
-        }} startDate={activePeriodRange.startDate} endDate={activePeriodRange.endDate} /> */}
-      </div>
+      <div className="flex-grow h-px bg-skin-accent3 mt-3"></div>
       <div className="flex flex-col mx-3.5  mt-8">
         <div className="flex flex-row items-center justify-between">
           <AvailableBudgetContainer
