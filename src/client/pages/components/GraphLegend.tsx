@@ -12,7 +12,7 @@ const GraphLegend: React.FC<GraphLegendProps> = ({
   isGradient = false,
 }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div className="flex flex-row items-center">
       <div
         style={{
           background: isGradient ? `url(${color})` : color,
@@ -22,7 +22,7 @@ const GraphLegend: React.FC<GraphLegendProps> = ({
           marginRight: 4,
         }}
       ></div>
-      <span className="font-primary text-xs text-skin-subtitle">{label}</span>
+      <div className="font-primary text-xs text-skin-base">{label}</div>
     </div>
   );
 };

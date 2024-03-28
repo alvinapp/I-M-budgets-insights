@@ -182,7 +182,7 @@ export const OthersSpend = ({
               height: 10,
               marginTop: 10,
               borderRadius: 10,
-              backgroundColor: "#cac969",
+              background: "#101010",
               marginRight: 5,
             }}
           ></div>
@@ -198,7 +198,7 @@ export const OthersSpend = ({
               height: 10,
               marginTop: 10,
               borderRadius: 10,
-              backgroundColor: "#6f89a5",
+              background: "#6f89a5",
               marginRight: 5,
             }}
           ></div>
@@ -240,15 +240,15 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
-            return (
-              <ExpenditureComparisonCard
-                icon={expenditure.emoji}
-                key={i}
-                category={expenditure.name}
-                percentage={expenditure.percentage}
-              />
-            );
-          })
+              return (
+                <ExpenditureComparisonCard
+                  icon={expenditure.emoji}
+                  key={i}
+                  category={expenditure.name}
+                  percentage={expenditure.percentage}
+                />
+              );
+            })
           : null}
       </div>
     </div>

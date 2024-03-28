@@ -63,7 +63,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         x: formattedDates[index],
         y: value,
       })),
-      color: "#0d40b0",
+      color: "#71EBD7",
     },
     {
       name: "Spent",
@@ -71,7 +71,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         x: formattedDates[index],
         y: value,
       })),
-      color: "#11b1bf",
+      color: "#4C4C4C",
     },
   ];
 

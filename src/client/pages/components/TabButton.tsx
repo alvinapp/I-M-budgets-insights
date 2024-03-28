@@ -14,14 +14,14 @@ const TabButton = ({
   return (
     <div
       className={`${
-        isActive ? " bg-[#F0F3FE] rounded-full" : "bg-transparent"
-      } px-6 py-3`}
+        isActive ? " bg-[rgb(155,176,247,0.3)] rounded-full" : "bg-transparent"
+      } py-3 w-[11.375rem]`}
       onClick={onClick}
     >
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center justify-center">
         <div
           className={`${
-            isActive ? "text-skin-primary" : "text-skin-subtitle"
+            isActive ? "text-skin-primary" : "text-skin-base"
           } mr-2`}
         >
           {children}
@@ -29,8 +29,8 @@ const TabButton = ({
         <div
           className={`${
             isActive
-              ? "text-skin-primary font-custom text-sm font-medium tracking-tab_text"
-              : "text-skin-subtitle font-custom text-sm font-medium tracking-tab_text"
+              ? "text-[#001D82] font-custom text-sm font-medium tracking-tab_text"
+              : "text-skin-base font-custom text-sm font-medium tracking-tab_text"
           }`}
         >
           {label}

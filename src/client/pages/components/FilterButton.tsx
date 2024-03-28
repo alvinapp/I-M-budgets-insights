@@ -11,7 +11,7 @@ const FilterButton = ({ label, onClick, isActive, id }: FilterButtonProps) => {
         isActive
           ? "bg-skin-secondaryWithOpacity rounded-full drop-shadow-lg"
           : " bg-skin-accent2 rounded-full"
-      } px-4 py-1 mr-2 mb-3`}
+      } px-4 py-2 mr-2 mb-3`}
       onClick={onClick}
       id={`${id}`}
     >
@@ -19,7 +19,7 @@ const FilterButton = ({ label, onClick, isActive, id }: FilterButtonProps) => {
         className={`${
           isActive
             ? " text-skin-primary font-primary text-xs font-medium tracking-longtext"
-            : " text-skin-subtitle font-primary text-xs font-medium tracking-longtext"
+            : " text-skin-base font-primary text-xs font-medium tracking-longtext"
         }`}
       >
         {label}

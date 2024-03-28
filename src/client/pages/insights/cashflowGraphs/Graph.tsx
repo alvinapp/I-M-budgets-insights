@@ -40,7 +40,10 @@ const Graph: FC<Props> = ({ earned, spent }) => {
       <div className="graphContainer">
         <div
           className="bar"
-          style={{ height: `${earnedHeight}%`, backgroundColor: "#0d40b0" }}
+          style={{
+            height: `${earnedHeight}%`,
+            background: "linear-gradient(180deg, #71EBD7 0%, #3ED1AE 100%)",
+          }}
         >
           <div className={`barValue${showEarnedValue ? " show" : ""}`}>
             + <AnimatedNumber target={earned} duration={500} />
@@ -48,7 +51,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
         </div>
         <div
           className="bar"
-          style={{ height: `${spentHeight}%`, backgroundColor: "#11b1bf" }}
+          style={{ height: `${spentHeight}%`, background: "#4C4C4C" }}
         >
           <div className={`barValue${showSpentValue ? " show" : ""}`}>
             - <AnimatedNumber target={Math.abs(spent)} duration={500} />
@@ -57,13 +60,18 @@ const Graph: FC<Props> = ({ earned, spent }) => {
       </div>
       <div className="legend">
         <div className="font-primary text-xs text-skin-subtitle font-medium tracking-subtitle">
-          <span style={{ backgroundColor: "#0d40b0" }}></span> Total earned
+          <span
+            style={{
+              background: "linear-gradient(180deg, #71EBD7 0%, #3ED1AE 100%)",
+            }}
+          ></span>{" "}
+          Total earned
         </div>
         <div
           style={{ marginLeft: "1rem" }}
           className="font-primary text-xs text-skin-subtitle font-medium tracking-subtitle"
         >
-          <span style={{ backgroundColor: "#11b1bf" }}></span> Total spent
+          <span style={{ background: "#4C4C4C" }}></span> Total spent
         </div>
       </div>
     </div>

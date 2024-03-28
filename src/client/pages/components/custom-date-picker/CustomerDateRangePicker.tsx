@@ -113,15 +113,15 @@ const Day = styled.div<{
     props.isToday
       ? "black"
       : props.isInRange
-        ? "#fff"
-        : props.isCurrentMonth
-          ? "black"
-          : "#ccc"};
+      ? "#fff"
+      : props.isCurrentMonth
+      ? "black"
+      : "#ccc"};
   border-radius: 50%;
   border: ${(props) => (props.isSelected ? "2px solid #101010" : "none")};
   &:hover {
     background: ${(props) =>
-    !props.isSelected && props.isHovered ? "#c4c4c4" : ""};
+      !props.isSelected && props.isHovered ? "#c4c4c4" : ""};
   }
 `;
 
@@ -150,7 +150,7 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
   restrictToCurrentMonth,
   lastUpdatedEnv,
   isActive,
-  placeholder
+  placeholder,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -214,11 +214,16 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
         setDateRange({ start: date, end: null });
       } else {
         setDateRange({ start: dateRange.start, end: date });
-        const dateFilterName = checkDateRange(dateRange.start ?? new Date(), date);
+        const dateFilterName = checkDateRange(
+          dateRange.start ?? new Date(),
+          date
+        );
         if (dateFilterName) {
           insightsStore.setInsightsDateFilterName(dateFilterName);
         } else {
-          insightsStore.setInsightsDateFilterName(renderDateInputValue(dateRange.start, date));
+          insightsStore.setInsightsDateFilterName(
+            renderDateInputValue(dateRange.start, date)
+          );
         }
         insightsStore.setInsightsStartDate(dateRange.start ?? new Date());
         insightsStore.setInsightsEndDate(date);
@@ -329,17 +334,19 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
         placeholder="Select date range"
       /> */}
       <button
-        className={`${isActive
-          ? "bg-skin-secondaryWithOpacity rounded-full drop-shadow-lg"
-          : " bg-skin-accent2 rounded-full"
-          } px-4 py-1 mr-2 mb-3`}
+        className={`${
+          isActive
+            ? "bg-skin-secondaryWithOpacity rounded-full drop-shadow-lg"
+            : " bg-skin-accent2 rounded-full"
+        } px-4 py-1 mr-2 mb-3`}
         onClick={() => setIsModalOpen(!isModalOpen)}
       >
         <div
-          className={`${isActive
-            ? " text-skin-primary font-primary text-xs font-medium tracking-longtext"
-            : " text-skin-subtitle font-primary text-xs font-medium tracking-longtext"
-            }`}
+          className={`${
+            isActive
+              ? " text-skin-primary font-primary text-xs font-medium tracking-longtext"
+              : " text-skin-base font-primary text-xs font-medium tracking-longtext"
+          }`}
         >
           {placeholder}
         </div>
@@ -441,4 +448,4 @@ const checkDateRange = (startDate: Date, endDate: Date) => {
   } else {
     return false; // Not exactly matching the start and end of the current or last month
   }
-}
+};

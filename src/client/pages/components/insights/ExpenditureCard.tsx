@@ -28,7 +28,9 @@ export const ExpenditureCard = ({
       {/* Category and transactions section */}
       <div className="flex flex-row items-center">
         {/* Icon */}
-        <div className="mr-2">{icon}</div>
+        <div className="h-6 w-6 rounded-full bg-[#E8E3DC] mr-2 flex justify-center items-center">
+          {icon}
+        </div>
         {/* Category and transaction count */}
         <div className="flex flex-col">
           <div className="font-medium font-primary text-xs text-skin-base tracking-subtitle mb-1">
@@ -48,7 +50,7 @@ export const ExpenditureCard = ({
           style={{ width: budgetColumnWidth }}
         >
           <div className="relative">
-            <span className="font-medium font-primary text-xs text-skin-base tracking-widest">
+            <span className="font-semibold font-primary text-xs text-skin-subtitle tracking-widest">
               <AnimatedNumber target={budget ?? 0} duration={500} />
               <sup className=" text-xxxs align-super font-medium ml-[-10%]">
                 {currencySymbol}
@@ -62,7 +64,7 @@ export const ExpenditureCard = ({
           style={{ width: spentColumnWidth }}
         >
           <div className="relative">
-            <span className="font-bold font-primary text-xs text-skin-base tracking-widest">
+            <span className="font-semibold font-primary text-xs text-skin-base tracking-widest">
               <AnimatedNumber target={spent ?? 0} duration={500} />
               <sup className=" text-xxxs align-super font-medium ml-[-10%]">
                 {currencySymbol}

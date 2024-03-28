@@ -20,6 +20,7 @@ import Account from "client/models/Account";
 import Accounts from "client/models/Accounts";
 import { format } from "date-fns";
 import { checkNAN } from "client/utils/Formatters";
+import { BsBank } from "react-icons/bs";
 
 const Cashflow = () => {
   const navigate = useNavigate();
@@ -97,12 +98,6 @@ const Cashflow = () => {
                   <NavBarTitle title="Cash flow" fontSize="text-2xl" />
                 </div>
               </div>
-              <div
-                className="h-6 w-6 rounded-full flex justify-center items-center"
-                onClick={() => {}}
-              >
-                <FiInfo color="#101010" size="1.5rem" />
-              </div>
             </div>
           }
         />
@@ -112,8 +107,8 @@ const Cashflow = () => {
         <div className="py-3 flex flex-wrap items-center mb-3">
           <CashFlowFilterButton
             label={insightsStoreState.insightsActiveInstitutionName}
-            icon={null}
-            key={`all institutions`}
+            icon={<BsBank color="#101010" />}
+            key={`All accounts`}
             isActive={false}
             onClick={() => openFilter(true)}
           />

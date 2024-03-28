@@ -26,10 +26,10 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
   const circumference = normalizedRadius * 2 * Math.PI;
 
   const items = [
-    { percentage: (unallocated / total) * 100, color: "#d1ddea" },
-    { percentage: (savings / total) * 100, color: "#0dacb9" },
-    { percentage: (wants / total) * 100, color: "#9db2c6" },
-    { percentage: (essentials / total) * 100, color: "#0d44b5" },
+    { percentage: (unallocated / total) * 100, color: "#C3C3C3" },
+    { percentage: (savings / total) * 100, color: "#71EBD7" },
+    { percentage: (wants / total) * 100, color: "#8490E2" },
+    { percentage: (essentials / total) * 100, color: "#4053D05" },
   ];
 
   let cumulativePercentage = 0;

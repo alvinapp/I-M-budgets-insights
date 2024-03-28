@@ -2,22 +2,14 @@ import React, { useEffect, useState } from "react";
 import NavBarTitle from "../components/NavBarTitle";
 import BackButton from "../components/BackButton";
 import NavBar from "../components/NavBar";
-import { FiCalendar, FiFilter } from "react-icons/fi";
+import { FiCalendar } from "react-icons/fi";
 import { AvailableBudgetContainer } from "../components/budget/AvailableBudgetContainer";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
-import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
 import Toggle from "../components/insights/Toggle";
-import {
-  budgetSpendTabs,
-  cashflowFilters,
-  expenditureList,
-  insightsToggleTabs,
-} from "client/utils/MockData";
+import { budgetSpendTabs, insightsToggleTabs } from "client/utils/MockData";
 import TabFilter from "../components/TabFilter";
 import { MySpend } from "../components/insights/MySpend";
 import { OthersSpend } from "../components/insights/OthersSpend";
-import { ExpenditureCard } from "../components/insights/ExpenditureCard";
-import ExpenditureBarGraph from "../components/ExpenditureBarGraph";
 import SavingsBarGraph from "../components/SavingsBarGraph";
 import CashFlowPieChart from "../components/CashFlowPieChart";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -41,6 +33,7 @@ import InsightsExpenditureChart from "./insightsChart/InsightsExpenditureChart";
 import GraphLegend from "../components/GraphLegend";
 import useInsightsStore from "client/store/insightsStore";
 import { format } from "date-fns";
+import { BsBank } from "react-icons/bs";
 
 const InsightsView = () => {
   const location = useLocation();
@@ -198,14 +191,14 @@ const InsightsView = () => {
       <div className="py-3 flex flex-wrap items-center mx-3.5">
         <CashFlowFilterButton
           label={insightsStoreState.insightsActiveInstitutionName}
-          icon={null}
-          key={`all institutions`}
+          icon={<BsBank color="#101010" />}
+          key={`All accounts`}
           isActive={false}
           onClick={() => openFilter(true)}
         />
         <CashFlowFilterButton
           label={insightsStoreState.insightsDateFilterName}
-          icon={<FiCalendar />}
+          icon={<FiCalendar color="#101010" />}
           key={`This month`}
           isActive={false}
           onClick={() => openFilter(true)}
@@ -215,7 +208,10 @@ const InsightsView = () => {
         <div className="flex flex-row items-center justify-between mr-5">
           {toggleTabId == 0 ? (
             <AvailableBudgetContainer
-              amount={(essentialsData.reduce((a: number, b: any) => a + b.y, 0) + wantsData.reduce((a: number, b: any) => a + b.y, 0)) ?? 0}
+              amount={
+                essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
+                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+              }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
             />
@@ -236,7 +232,7 @@ const InsightsView = () => {
           {toggleTabId === 0 ? (
             <div className="flex flex-col w-full justify-center">
               <InsightsExpenditureChart
-                currencySymbol="₦"
+                currencySymbol={currencySymbol}
                 essentialsArray={essentialsArray}
                 wantsArray={wantsArray}
                 isLoading={insightsStoreState.insightsLoading}
@@ -250,9 +246,15 @@ const InsightsView = () => {
                   gap: "1.25rem",
                 }}
               >
-                <GraphLegend color="#0131A1" label="Essentials spend" />
-                <GraphLegend color="#9DB1C6" label="Wants spend" />
-                <GraphLegend color="#101010" label="Total spend" />
+                <GraphLegend
+                  color="linear-gradient(124.2deg, #4053D0 0%, #051AA3 100%)"
+                  label="Essentials spend"
+                />
+                <GraphLegend
+                  color="linear-gradient(124.2deg, #8490E2 0%, #3B4381 100%)"
+                  label="Wants spend"
+                />
+                <GraphLegend color="#F99E36" label="Over limit" />
               </div>
             </div>
           ) : (
@@ -290,7 +292,7 @@ const InsightsView = () => {
           <div className="text-base text-skin-base font-medium tracking-title font-custom">
             Budget spend
           </div>
-          <div className="mt-4.5 mx-2">
+          <div className="mt-4.5">
             <TabFilter
               tabs={budgetSpendTabs}
               activeTab={budgetSpendTabId}

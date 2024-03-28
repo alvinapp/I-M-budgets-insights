@@ -52,7 +52,15 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
       className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full"
       onClick={() =>
         navigate(
-          `/cashflow?startDate=${format(insightsStoreState.insightsStartDate, "yyyy-MM-dd")}&endDate=${format(insightsStoreState.insightsEndDate, "yyyy-MM-dd")}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter}`
+          `/cashflow?startDate=${format(
+            insightsStoreState.insightsStartDate,
+            "yyyy-MM-dd"
+          )}&endDate=${format(
+            insightsStoreState.insightsEndDate,
+            "yyyy-MM-dd"
+          )}&accountName=${cashflowVariables.accountName}&dateFilter=${
+            cashflowVariables.dateFilter
+          }`
         )
       }
     >
@@ -76,7 +84,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           <g transform={`translate(${radius}, ${radius})`}>
             {["moneyIn", "moneyOut"].map((type, index) => {
               const percentage = (values[type] / total) * 100;
-              const color = type === "moneyIn" ? "#0099A6" : "#F99E36";
+              const color = type === "moneyIn" ? "#71EBD7" : "#4C4C4C";
 
               const startX =
                 normalizedRadius *
@@ -185,7 +193,10 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                 </div> */}
                 <div className="font-custom text-2xl font-medium text-skin-neutral2">
                   {/* {checkNAN(moneyIn + moneyOut).toLocaleString("en-US")} */}
-                  <AnimatedNumber target={(moneyIn + moneyOut) ?? 0} duration={500} />
+                  <AnimatedNumber
+                    target={moneyIn + moneyOut ?? 0}
+                    duration={500}
+                  />
                   <sup
                     style={{
                       fontSize: "12px",
@@ -206,12 +217,12 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           </div>
           <div className="flex flex-row items-start mt-5">
             <PercentageItem
-              color="#0099A6"
+              color="linear-gradient(180deg, #71EBD7 0%, #3ED1AE 100%)"
               percentage={Number(moneyInPercentage)}
               label="Money in"
             />
             <PercentageItem
-              color="#F99E36"
+              color="#4C4C4C"
               percentage={Number(moneyOutPercentage)}
               label="Money out"
             />

@@ -7,7 +7,7 @@ type TabFilterProps = {
 };
 const TabFilter = ({ tabs, activeTab, onClick }: TabFilterProps) => {
   return (
-    <div className="flex flex-row justify-between items-center w-full">
+    <div className="flex flex-row items-center bg-[#F2F2F2] rounded-full">
       {tabs?.map((element: any, i) => {
         const isActive = element.id == activeTab;
         return (

@@ -23,7 +23,7 @@ const PercentageItem: React.FC<PercentageItemProps> = ({
       >
         <div
           style={{
-            backgroundColor: color,
+            background: color,
             borderRadius: "50%",
             width: 13,
             height: 13,
@@ -32,7 +32,9 @@ const PercentageItem: React.FC<PercentageItemProps> = ({
         ></div>
         <div className="flex flex-col items-start">
           <span className="font-custom font-medium text-base text-skin-base">
-            <AnimatedNumber target={(percentage) ?? 0} duration={500} />{'%'}</span>
+            <AnimatedNumber target={percentage ?? 0} duration={500} />
+            {"%"}
+          </span>
           <span className="font-primary text-xs text-skin-subtitle font-medium">
             {label}
           </span>

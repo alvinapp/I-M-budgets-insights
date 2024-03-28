@@ -78,7 +78,7 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
           </div>
           <div
             className="vs-tooltip-progress-bar-progress2"
-            style={{ ...progressStyle2, backgroundColor: "#cac969" }}
+            style={{ ...progressStyle2, backgroundColor: "#101010" }}
           >
             <div className="vs-tooltip-progress-bar-circle2"></div>
           </div>
