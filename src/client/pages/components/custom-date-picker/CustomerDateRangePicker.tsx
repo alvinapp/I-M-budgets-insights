@@ -16,8 +16,10 @@ import {
   isSameDay,
   isBefore,
   isAfter,
+  subMonths,
 } from "date-fns";
 import CustomSelectDropdown from "./CustomSelectDropDown";
+import useInsightsStore from "client/store/insightsStore";
 
 const DatePickerWrapper = styled.div`
   position: relative;
@@ -40,25 +42,29 @@ const DatePickerInput = styled.input`
   box-sizing: border-box;
   border: 1px solid #fff;
   border-radius: 8px;
-  box-shadow: 0 1px 30px rgb(7 100 137 / 30%);
+  //   box-shadow: 0 1px 30px rgb(7 100 137 / 30%);
   margin-bottom: 5px;
   outline: none;
 `;
 
 const CalendarModal = styled.div`
-  position: fixed; /* Fixed position to ensure it's always centered */
-  top: 0%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center the modal */
+  position: fixed; /* Continue using fixed positioning */
+  top: 50%; /* Set top to 50% of the viewport height */
+  left: 50%; /* Set left to 50% of the viewport width */
+  transform: translate(-50%, -50%); /* Center the modal perfectly */
   padding: 20px;
-  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-  backdrop-filter: blur(10px); /* Apply backdrop blur effect */
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
   border-radius: 8px;
-  z-index: 100;
+  z-index: 100; /* Ensure this z-index is higher than the parent modal if needed */
   box-shadow: 0 1px 30px rgb(7 100 137 / 30%);
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: auto; /* Or a specific width if needed */
+  max-width: 100%; /* Ensure it doesn't overflow the viewport */
+  max-height: 100%; /* Ensure it doesn't overflow the viewport */
+  overflow: auto;
 `;
 
 const CalendarHeader = styled.div`
@@ -132,8 +138,8 @@ interface CustomDateRangePickerProps {
   disabled: boolean;
   restrictToCurrentMonth?: boolean;
   lastUpdatedEnv: "props" | "local";
-  placeholder?: string;
   isActive: boolean;
+  placeholder: string;
 }
 
 const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
@@ -143,9 +149,8 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
   disabled,
   restrictToCurrentMonth,
   lastUpdatedEnv,
-  placeholder,
-  isActive
-
+  isActive,
+  placeholder
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -156,8 +161,11 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [startMonth, setStartMonth] = useState<Date>(new Date());
   const [lastUpdated, setLastUpdated] = useState<"props" | "local">(
-    lastUpdatedEnv ?? "local"
+    lastUpdatedEnv ?? "props"
   );
+
+  const insightsStore = useInsightsStore();
+
   const modalRef = useRef<HTMLDivElement>(null);
 
   const months = Array.from(new Array(12), (_, index) => index);
@@ -196,38 +204,35 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
 
   const handleDateSelect = useCallback(
     (date: Date) => {
-      if (dateRange.start && dateRange.end) {
-        // If both start and end dates are set, reset the date range
+      if (
+        dateRange.start &&
+        !dateRange.end &&
+        isBefore(date, dateRange.start)
+      ) {
         setDateRange({ start: date, end: null });
-      } else if (dateRange.start && !dateRange.end && isBefore(date, dateRange.start)) {
-        // If start date is set but end date is not and the clicked date is before the start date
+      } else if (!dateRange.start || dateRange.end) {
         setDateRange({ start: date, end: null });
       } else {
-        // If start date is not set or end date is already set
         setDateRange({ start: dateRange.start, end: date });
-        setLastUpdated("local");
+        const dateFilterName = checkDateRange(dateRange.start ?? new Date(), date);
+        if (dateFilterName) {
+          insightsStore.setInsightsDateFilterName(dateFilterName);
+        } else {
+          insightsStore.setInsightsDateFilterName(renderDateInputValue(dateRange.start, date));
+        }
+        insightsStore.setInsightsStartDate(dateRange.start ?? new Date());
+        insightsStore.setInsightsEndDate(date);
         setIsModalOpen(false); // Optionally close the modal
       }
     },
     [dateRange]
   );
 
-
   useEffect(() => {
     if (dateRange.start && dateRange.end && lastUpdated === "local") {
       onDateRangeSelect(dateRange);
     }
   }, [dateRange, lastUpdated]);
-
-  useEffect(() => {
-    if (
-      (startDate !== dateRange.start || endDate !== dateRange.end) &&
-      lastUpdated !== "props"
-    ) {
-      setDateRange({ start: startDate, end: endDate });
-      setLastUpdated("props");
-    }
-  }, [startDate, endDate, lastUpdated, dateRange]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -262,8 +267,8 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
         dateRange.start &&
         !dateRange.end &&
         hoverDate &&
-        isAfter(hoverDate, dateRange.start)
-        // isSameMonth(date, hoverDate)
+        isAfter(hoverDate, dateRange.start) &&
+        isSameMonth(date, hoverDate)
       ) {
         return isAfter(date, dateRange.start) && isBefore(date, hoverDate);
       }
@@ -318,7 +323,7 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
         <FiCalendar />
       </IconContainer>
       <DatePickerInput
-        value={placeholder ?? renderInputValue()}
+        value={renderInputValue()}
         readOnly
         onClick={() => setIsModalOpen(!isModalOpen)}
         placeholder="Select date range"
@@ -336,7 +341,7 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
             : " text-skin-subtitle font-primary text-xs font-medium tracking-longtext"
             }`}
         >
-          {placeholder ?? renderInputValue()}
+          {placeholder}
         </div>
       </button>
       {isModalOpen && (
@@ -401,3 +406,39 @@ const CustomDateRangePicker: React.FC<CustomDateRangePickerProps> = ({
 };
 
 export default CustomDateRangePicker;
+
+const renderDateInputValue = (startDisplay: any, endDisplay: any): string => {
+  const formattedStart = startDisplay
+    ? isSameYear(startDisplay, endDisplay) &&
+      isSameMonth(startDisplay, endDisplay)
+      ? format(startDisplay, "MMM, d")
+      : format(startDisplay, "MMM d, yyyy")
+    : "";
+  const formattedEnd = endDisplay ? format(endDisplay, "MMM d, yyyy") : "";
+
+  return formattedStart && formattedEnd
+    ? `${formattedStart} - ${formattedEnd}`
+    : "";
+};
+
+const checkDateRange = (startDate: Date, endDate: Date) => {
+  const today = new Date();
+  const currentMonthStart = startOfMonth(today);
+  const currentMonthEnd = endOfMonth(today);
+  const lastMonthStart = startOfMonth(subMonths(today, 1));
+  const lastMonthEnd = endOfMonth(subMonths(today, 1));
+
+  if (
+    isSameDay(startDate, currentMonthStart) &&
+    isSameDay(endDate, currentMonthEnd)
+  ) {
+    return "This month";
+  } else if (
+    isSameDay(startDate, lastMonthStart) &&
+    isSameDay(endDate, lastMonthEnd)
+  ) {
+    return "Last month";
+  } else {
+    return false; // Not exactly matching the start and end of the current or last month
+  }
+}

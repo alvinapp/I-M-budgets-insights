@@ -10,10 +10,10 @@ import { MemoryRouter } from "react-router-dom";
 declare var AppConfig: AppConfig;
 
 window.addEventListener("DOMContentLoaded", (event) => {
-  Sentry.init({
-    dsn: "https://49fd015f35b4456bac1b0d0a5174bf2b@o1001447.ingest.sentry.io/6631517",
-    environment: AppConfig.ENVIRONMENT,
-  });
+  // Sentry.init({
+  //   dsn: "https://49fd015f35b4456bac1b0d0a5174bf2b@o1001447.ingest.sentry.io/6631517",
+  //   environment: AppConfig.ENVIRONMENT,
+  // });
   window.parent.postMessage(JSON.stringify({ action: "init" }), "*");
   window.removeEventListener("DOMContentLoaded", () => null);
 });
@@ -34,7 +34,12 @@ const ServerApp = (config: IConfig) => {
 window.addEventListener("message", (event) => {
   event.preventDefault();
   if (!event.data || typeof event.data !== "string") return;
-  const eventData = JSON.parse(event.data);
+  let eventData;
+  try {
+    eventData = JSON.parse(event.data);
+  } catch {
+    return;
+  }
   if ("action" in eventData) return;
   const config: IConfig = {
     publicKey: eventData.publicKey,
