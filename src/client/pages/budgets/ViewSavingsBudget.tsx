@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { AmountView } from "../components/insights/AmountView";
-import { FiX } from "react-icons/fi";
+import { FiInfo, FiX } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { fetchBudgetCategoriesTransactions } from "client/api/budget";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
@@ -11,6 +11,7 @@ import { BudgetTransaction } from "client/models/Budget";
 import TransactionCardSkeleton from "../components/BudgetTransactionCardSkeleton";
 import BudgetTransactionCardSkeleton from "../components/BudgetTransactionCardSkeleton";
 import { TransactionEmptyState } from "../components/EmptyState";
+import flag from "../../assets/images/flag.png";
 interface ViewSavingsBudgetProps {
   progress: number;
   savedAmount: number;
@@ -54,13 +55,19 @@ const ViewSavingsBudget: React.FC<ViewSavingsBudgetProps> = ({
   );
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row justify-center items-center mt-4 mb-8">
-        <div className="mr-3">{emoji}</div>
-        <div className="font-custom font-medium text-xl tracking-title">
+      <div className="flex flex-row rounded-b-lg rounded-3xl h-[8.375rem] bg-rainyDayFund bg-no-repeat bg-cover fixed top-0 left-0 right-0 backdrop-brightness-50"></div>
+      <div className="flex flex-row justify-end items-center absolute top-8 left-0 right-0 mx-4">
+        <div onClick={() => {}}>
+          <FiInfo color="#ffffff" size="1.5rem" />
+        </div>
+      </div>
+      <div className="flex flex-row justify-center items-center absolute top-16 left-0 right-0 mx-4">
+        <div className="mr-2">{emoji}</div>
+        <div className="font-custom font-medium text-xl tracking-title text-skin-white">
           {category ?? ""}
         </div>
       </div>
-      <div className="flex flex-row justify-between items-center mx-4 mb-3">
+      <div className="flex flex-row justify-between items-center mx-4 mb-3 mt-36">
         <AmountView
           amount={savedAmount}
           caption="Saved so far"
@@ -71,6 +78,11 @@ const ViewSavingsBudget: React.FC<ViewSavingsBudgetProps> = ({
           caption="Target amount"
           flex="items-end"
         />
+      </div>
+      <div className="flex flex-row justify-end items-center mr-4">
+        <div className="w-4">
+          <img src={flag} alt="" />
+        </div>
       </div>
       <ProgressBar
         className="mx-4"

@@ -735,6 +735,7 @@ export const BudgetSettings = () => {
                     ) // Ensure percentage stays between 0 and 100
                   : 0
               }
+              emoji="🎯"
               onClick={() => {
                 setAllocatedSavings(savingsBudgetAmount);
                 setSavingsSuccess(true);

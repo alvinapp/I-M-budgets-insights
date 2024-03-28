@@ -3,14 +3,16 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { SavingsAmountView } from "../components/budget/SavingsAmounView";
 /* @ts-ignore */
 import SlideButton from "react-slide-button";
-import { FiArrowRight, FiChevronRight, FiInfo, FiX } from "react-icons/fi";
+import { FiChevronRight, FiInfo, FiX } from "react-icons/fi";
 import { getGoalCompletionString } from "client/utils/Formatters";
 import { useSavingsBottomSheetStore } from "client/store/bottomSheetStore";
+import flag from "../../assets/images/flag.png";
 interface SavingsGoalConfirmationProps {
   goal?: string;
   monthlyContribution: number;
   targetAmount: number;
   progressPercentage: number;
+  emoji: string;
   onClick: () => void;
 }
 const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
@@ -19,6 +21,7 @@ const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
   progressPercentage,
   goal,
   onClick,
+  emoji,
 }) => {
   const contributionText = getGoalCompletionString(
     monthlyContribution,
@@ -45,7 +48,7 @@ const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
         </div>
       </div>
       <div className="flex flex-row justify-center items-center absolute top-20 left-0 right-0 mx-4">
-        <div>🎯</div>
+        <div>{emoji}</div>
         <div className="font-custom text-xl font-medium tracking-title text-skin-white">
           {goal ?? ""}
         </div>
@@ -61,6 +64,11 @@ const SavingsGoalConfirmation: React.FC<SavingsGoalConfirmationProps> = ({
           caption="Target amount"
           flex="items-end"
         />
+      </div>
+      <div className="flex flex-row justify-end items-center mr-4">
+        <div className="w-4">
+          <img src={flag} alt="" />
+        </div>
       </div>
       <ProgressBar
         className="mx-4"

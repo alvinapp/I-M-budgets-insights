@@ -233,10 +233,11 @@ const EditBudgetSettings = () => {
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
-            caption={`${budgetSettingsStore.monthlyIncome !== 0
-              ? budgetSettingsStore.monthlyIncome.toString()
-              : userStore.user?.income?.toString() ?? ""
-              }`}
+            caption={`${
+              budgetSettingsStore.monthlyIncome !== 0
+                ? budgetSettingsStore.monthlyIncome.toString()
+                : userStore.user?.income?.toString() ?? ""
+            }`}
             currencySymbol={currencySymbol}
             onClick={() => navigate("/edit-monthly-income")}
           />
@@ -265,24 +266,25 @@ const EditBudgetSettings = () => {
           <BudgetDisplay
             title="Essentials"
             budgetAmount={essentialBudgetAmount ?? 0}
-            percentageOfBudgetCaption={`${essentialGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              essentialGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
               typeof parseInt(essentialBudgetAmount) === "number" &&
-                essentialBudgetAmount > 0
+              essentialBudgetAmount > 0
                 ? Math.max(essentialBudgetAmount - allocatedEssentials, 0)
                 : 0 // Ensure perc
             }
             allocatedAmount={allocatedEssentials}
             progressPercentage={
               typeof parseInt(essentialBudgetAmount) === "number" &&
-                essentialBudgetAmount > 0
+              essentialBudgetAmount > 0
                 ? Math.min(
-                  (allocatedEssentials / essentialBudgetAmount) * 100,
-                  100
-                ) // Ensure percentage stays between 0 and 100
+                    (allocatedEssentials / essentialBudgetAmount) * 100,
+                    100
+                  ) // Ensure percentage stays between 0 and 100
                 : 0
             }
             progressColor="#051AA3"
@@ -304,84 +306,96 @@ const EditBudgetSettings = () => {
           </div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[0] &&
-              categoriesStore.categoryBudgets[0].data?.length > 0
+            categoriesStore.categoryBudgets[0].data?.length > 0
               ? categoriesStore.categoryBudgets[0].data.map(
-                (category: any, i: any) => {
-                  const data = essentialsMapState.get(`data${i}`);
-                  const initialAmount = category?.amount || 0;
-                  const adjustment = data?.amount || 0;
+                  (category: any, i: any) => {
+                    const data = essentialsMapState.get(`data${i}`);
+                    const initialAmount = category?.amount || 0;
+                    const adjustment = data?.amount || 0;
 
-                  return (
-                    <BudgetSettingCard
-                      key={i}
-                      category={category?.name}
-                      emoji={category?.category.emoji}
-                      amount={data?.amount}
-                      maxValue={Number.MAX_SAFE_INTEGER}
-                      unallocatedAmount={
-                        typeof parseInt(essentialBudgetAmount) === "number" &&
+                    return (
+                      <BudgetSettingCard
+                        key={i}
+                        category={category?.name}
+                        emoji={category?.category.emoji}
+                        amount={data?.amount}
+                        maxValue={Number.MAX_SAFE_INTEGER}
+                        unallocatedAmount={
+                          typeof parseInt(essentialBudgetAmount) === "number" &&
                           essentialBudgetAmount > 0
-                          ? Math.max(essentialBudgetAmount - allocatedEssentials, 0)
-                          : 0
-                      }
-                      addValue={(e) => {
-                        updateEssentialsMap(i, {
-                          ...data,
-                          amount: e,
-                        });
-                        setAllocatedEssentials(
-                          allocatedEssentials + e
-                        );
-                      }}
-                      updateValue={(newValue) => {
-                        const oldValue = data?.amount || 0;
-                        const valueDifference = newValue - oldValue;
-
-                        const newAllocatedEssentials = Math.max(0, allocatedEssentials + valueDifference);
-
-                        if (newAllocatedEssentials <= essentialBudgetAmount) {
-                          setAllocatedEssentials(newAllocatedEssentials);
+                            ? Math.max(
+                                essentialBudgetAmount - allocatedEssentials,
+                                0
+                              )
+                            : 0
+                        }
+                        addValue={(e) => {
                           updateEssentialsMap(i, {
                             ...data,
-                            amount: newValue,
+                            amount: e,
                           });
-                        } else {
-                          showCustomToast({ message: "Budget limit exceeded" });
-                        }
-                      }}
-                      increment={() => {
-                        const newAmount = (data?.amount || 0) + categoriesStore.incrementalAmount;
-                        const totalAllocated = allocatedEssentials + categoriesStore.incrementalAmount;
+                          setAllocatedEssentials(allocatedEssentials + e);
+                        }}
+                        updateValue={(newValue) => {
+                          const oldValue = data?.amount || 0;
+                          const valueDifference = newValue - oldValue;
 
-                        if (totalAllocated <= essentialBudgetAmount) {
-                          setAllocatedEssentials(totalAllocated);
+                          const newAllocatedEssentials = Math.max(
+                            0,
+                            allocatedEssentials + valueDifference
+                          );
 
+                          if (newAllocatedEssentials <= essentialBudgetAmount) {
+                            setAllocatedEssentials(newAllocatedEssentials);
+                            updateEssentialsMap(i, {
+                              ...data,
+                              amount: newValue,
+                            });
+                          } else {
+                            showCustomToast({
+                              message: "Budget limit exceeded",
+                            });
+                          }
+                        }}
+                        increment={() => {
+                          const newAmount =
+                            (data?.amount || 0) +
+                            categoriesStore.incrementalAmount;
+                          const totalAllocated =
+                            allocatedEssentials +
+                            categoriesStore.incrementalAmount;
+
+                          if (totalAllocated <= essentialBudgetAmount) {
+                            setAllocatedEssentials(totalAllocated);
+
+                            updateEssentialsMap(i, {
+                              ...data,
+                              amount: newAmount,
+                            });
+                          } else {
+                            // If the new total allocated budget exceeds the limit
+                            showCustomToast({
+                              message: "Budget limit exceeded",
+                            });
+                          }
+                        }}
+                        decrement={() => {
                           updateEssentialsMap(i, {
                             ...data,
-                            amount: newAmount,
+                            amount: Math.max(
+                              adjustment - categoriesStore.incrementalAmount,
+                              0
+                            ),
                           });
-                        } else {
-                          // If the new total allocated budget exceeds the limit
-                          showCustomToast({ message: "Budget limit exceeded" });
-                        }
-                      }}
-                      decrement={() => {
-                        updateEssentialsMap(i, {
-                          ...data,
-                          amount: Math.max(
-                            adjustment - categoriesStore.incrementalAmount,
-                            0
-                          ),
-                        });
-                        setAllocatedEssentials(
-                          allocatedEssentials -
-                          categoriesStore.incrementalAmount
-                        );
-                      }}
-                    />
-                  );
-                }
-              )
+                          setAllocatedEssentials(
+                            allocatedEssentials -
+                              categoriesStore.incrementalAmount
+                          );
+                        }}
+                      />
+                    );
+                  }
+                )
               : null}
           </div>
         </div>
@@ -389,8 +403,9 @@ const EditBudgetSettings = () => {
           <BudgetDisplay
             title="Wants"
             budgetAmount={wantsBudgetAmount ?? 0}
-            percentageOfBudgetCaption={`${wantsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              wantsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
@@ -423,79 +438,90 @@ const EditBudgetSettings = () => {
           </div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[1] &&
-              categoriesStore.categoryBudgets[1].data?.length > 0
+            categoriesStore.categoryBudgets[1].data?.length > 0
               ? categoriesStore.categoryBudgets[1].data.map(
-                (category: any, i: any) => {
-                  const data = wantsMapState.get(`data${i}`);
-                  const initialAmount = category?.amount || 0;
-                  const adjustment = data?.amount || 0;
+                  (category: any, i: any) => {
+                    const data = wantsMapState.get(`data${i}`);
+                    const initialAmount = category?.amount || 0;
+                    const adjustment = data?.amount || 0;
 
-                  return (
-                    <BudgetSettingCard
-                      key={i}
-                      category={category?.name}
-                      emoji={category?.category.emoji}
-                      amount={data?.amount}
-                      maxValue={Number.MAX_SAFE_INTEGER}
-                      unallocatedAmount={
-                        typeof wantsBudgetAmount === "number" || wantsBudgetAmount > 0
-                          ? Math.max(wantsBudgetAmount - allocatedWants, 0) // Ensure percentage stays between 0 and 100
-                          : 0
-                      }
-                      addValue={(e) => {
-                        updateWantsMap(i, {
-                          ...data,
-                          amount: e,
-                        });
-                        setAllocatedWants(allocatedWants + e);
-                      }}
-                      updateValue={(newValue) => {
-                        const oldValue = data?.amount || 0;
-                        const valueDifference = newValue - oldValue;
-
-                        const newAllocatedWnats = Math.max(0, allocatedWants + valueDifference);
-
-                        if (newAllocatedWnats <= essentialBudgetAmount) {
-                          setAllocatedWants(newAllocatedWnats);
+                    return (
+                      <BudgetSettingCard
+                        key={i}
+                        category={category?.name}
+                        emoji={category?.category.emoji}
+                        amount={data?.amount}
+                        maxValue={Number.MAX_SAFE_INTEGER}
+                        unallocatedAmount={
+                          typeof wantsBudgetAmount === "number" ||
+                          wantsBudgetAmount > 0
+                            ? Math.max(wantsBudgetAmount - allocatedWants, 0) // Ensure percentage stays between 0 and 100
+                            : 0
+                        }
+                        addValue={(e) => {
                           updateWantsMap(i, {
                             ...data,
-                            amount: newValue,
+                            amount: e,
                           });
-                        } else {
-                          showCustomToast({ message: "Budget limit exceeded" });
-                        }
-                      }}
-                      increment={() => {
-                        const newAmount = (data?.amount || 0) + categoriesStore.incrementalAmount;
-                        const totalAllocated = allocatedWants + categoriesStore.incrementalAmount;
+                          setAllocatedWants(allocatedWants + e);
+                        }}
+                        updateValue={(newValue) => {
+                          const oldValue = data?.amount || 0;
+                          const valueDifference = newValue - oldValue;
 
-                        if (totalAllocated <= wantsBudgetAmount) {
-                          setAllocatedWants(totalAllocated);
+                          const newAllocatedWnats = Math.max(
+                            0,
+                            allocatedWants + valueDifference
+                          );
 
+                          if (newAllocatedWnats <= essentialBudgetAmount) {
+                            setAllocatedWants(newAllocatedWnats);
+                            updateWantsMap(i, {
+                              ...data,
+                              amount: newValue,
+                            });
+                          } else {
+                            showCustomToast({
+                              message: "Budget limit exceeded",
+                            });
+                          }
+                        }}
+                        increment={() => {
+                          const newAmount =
+                            (data?.amount || 0) +
+                            categoriesStore.incrementalAmount;
+                          const totalAllocated =
+                            allocatedWants + categoriesStore.incrementalAmount;
+
+                          if (totalAllocated <= wantsBudgetAmount) {
+                            setAllocatedWants(totalAllocated);
+
+                            updateWantsMap(i, {
+                              ...data,
+                              amount: newAmount,
+                            });
+                          } else {
+                            showCustomToast({
+                              message: "Budget limit exceeded",
+                            });
+                          }
+                        }}
+                        decrement={() => {
                           updateWantsMap(i, {
                             ...data,
-                            amount: newAmount,
+                            amount: Math.max(
+                              adjustment - categoriesStore.incrementalAmount,
+                              0
+                            ),
                           });
-                        } else {
-                          showCustomToast({ message: "Budget limit exceeded" });
-                        }
-                      }}
-                      decrement={() => {
-                        updateWantsMap(i, {
-                          ...data,
-                          amount: Math.max(
-                            adjustment - categoriesStore.incrementalAmount,
-                            0
-                          ),
-                        });
-                        setAllocatedWants(
-                          allocatedWants - categoriesStore.incrementalAmount
-                        );
-                      }}
-                    />
-                  );
-                }
-              )
+                          setAllocatedWants(
+                            allocatedWants - categoriesStore.incrementalAmount
+                          );
+                        }}
+                      />
+                    );
+                  }
+                )
               : null}
           </div>
         </div>
@@ -503,8 +529,9 @@ const EditBudgetSettings = () => {
           <BudgetDisplay
             title="Savings"
             budgetAmount={savingsBudgetAmount ?? 0}
-            percentageOfBudgetCaption={`${savingsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              savingsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
@@ -524,7 +551,7 @@ const EditBudgetSettings = () => {
           <div className="border mt-6 mb-4.5"></div>
           <div className="flex flex-col">
             {categoriesStore.categoryBudgets[2] &&
-              categoriesStore.categoryBudgets[2].data?.length === 0 ? (
+            categoriesStore.categoryBudgets[2].data?.length === 0 ? (
               <>
                 <div className="flex flex-row items-center mb-4">
                   <div className="text-xs tracking-wide font-medium text-skin-subtitle font-primary">
@@ -624,13 +651,14 @@ const EditBudgetSettings = () => {
                 targetAmount={essentialBudgetAmount * 3}
                 progressPercentage={
                   typeof savingsBudgetAmount === "number" &&
-                    savingsBudgetAmount > 0
+                  savingsBudgetAmount > 0
                     ? Math.min(
-                      (allocatedSavings / savingsBudgetAmount) * 100,
-                      100
-                    ) // Ensure percentage stays between 0 and 100
+                        (allocatedSavings / savingsBudgetAmount) * 100,
+                        100
+                      ) // Ensure percentage stays between 0 and 100
                     : 0
                 }
+                emoji="🎯"
                 goal={selectedSavingsGoal.name}
                 onClick={() => {
                   saveBudgetInfo().then((results) => {
