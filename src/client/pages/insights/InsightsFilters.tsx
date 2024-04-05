@@ -7,7 +7,8 @@ import MainButton from "../components/MainButton";
 import { dateFilters } from "client/utils/MockData";
 import useInsightsStore from "client/store/insightsStore";
 import CustomDateRangePicker from "../components/custom-date-picker/CustomerDateRangePicker";
-import { format, } from "date-fns";
+import { format } from "date-fns";
+import { BsBank } from "react-icons/bs";
 interface InsightsFiltersProps {
   accounts: any; // replace 'any' with the actual type
   activeAccount: any; // replace 'any' with the actual type
@@ -100,15 +101,24 @@ const InsightsFilters = ({
   const handleAccountSelection = (selectedAccount: Account) => {
     setUpdate(!update);
     // Update insights store with the selected account details
-    useInsightsStore.getState().setInsightsActiveInstitutionId(selectedAccount?.id ?? null);
-    useInsightsStore.getState().setInsightsActiveInstitutionName(selectedAccount?.name ?? "All accounts");
+    useInsightsStore
+      .getState()
+      .setInsightsActiveInstitutionId(selectedAccount?.id ?? null);
+    useInsightsStore
+      .getState()
+      .setInsightsActiveInstitutionName(
+        selectedAccount?.name ?? "All accounts"
+      );
   };
 
   const handleDateFilterSelection = (selectedFilter: any) => {
     setUpdate(!update);
     // Now, calculate the date range based on the selected filter
-    const { formattedStartDate, formattedEndDate } = calculateDateRange(selectedFilter);
-    useInsightsStore.getState().setInsightsStartDate(new Date(formattedStartDate));
+    const { formattedStartDate, formattedEndDate } =
+      calculateDateRange(selectedFilter);
+    useInsightsStore
+      .getState()
+      .setInsightsStartDate(new Date(formattedStartDate));
     useInsightsStore.getState().setInsightsEndDate(new Date(formattedEndDate));
     useInsightsStore.getState().setInsightsDateFilterName(selectedFilter.name);
   };
@@ -126,7 +136,7 @@ const InsightsFilters = ({
       </div>
       <div className="flex flex-row justify-start items-center mt-10">
         <div className="font-custom text-skin-base font-medium tracking-title text-base mr-1">
-          <img src={bank} alt="Bank" />
+          <BsBank color="#101010" />
         </div>
         <div className="font-custom text-skin-base font-medium tracking-title text-base">
           My accounts
@@ -177,12 +187,20 @@ const InsightsFilters = ({
           />
         ))}
         <CustomDateRangePicker
-          onDateRangeSelect={() => { }}
+          onDateRangeSelect={() => {}}
           disabled={false}
-          startDate={insightsStore.insightsStartDate ? format(insightsStore.insightsStartDate, "yyyy-MM-dd") : ''}
-          endDate={insightsStore.insightsEndDate ? format(insightsStore.insightsEndDate, "yyyy-MM-dd") : ''}
-          lastUpdatedEnv={'props'}
-          placeholder={'Custom date'}
+          startDate={
+            insightsStore.insightsStartDate
+              ? format(insightsStore.insightsStartDate, "yyyy-MM-dd")
+              : ""
+          }
+          endDate={
+            insightsStore.insightsEndDate
+              ? format(insightsStore.insightsEndDate, "yyyy-MM-dd")
+              : ""
+          }
+          lastUpdatedEnv={"props"}
+          placeholder={"Custom date"}
           isActive={false}
           restrictToCurrentMonth={false}
         />

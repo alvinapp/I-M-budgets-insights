@@ -19,10 +19,10 @@ const webPackConfig = (env) => {
   const devServerHeaders = {
     "Access-Control-Allow-Origin": "*", // Allow requests from all domains
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS", // Allow various HTTP methods
-    "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization", // Allow common headers
+    "Access-Control-Allow-Headers":
+      "X-Requested-With, Content-Type, Authorization", // Allow common headers
     "Access-Control-Allow-Credentials": "true", // Allow sending cookies
   };
-
 
   const _config = {
     entry: {
@@ -108,6 +108,7 @@ const webPackConfig = (env) => {
         minRatio: 0.8,
         deleteOriginalAssets: false,
       }),
+      new webpack.HotModuleReplacementPlugin(),
     ],
   };
 

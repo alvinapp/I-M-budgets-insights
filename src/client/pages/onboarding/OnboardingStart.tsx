@@ -150,10 +150,11 @@ const OnboardingStart = () => {
           <div className="fixed bottom-5 left-0 right-0 mx-4">
             <MainButton
               isDisabled={!configurations.monoPubKey && !configurations.token}
-              title="Link account"
+              // title="Link account"
+              title="Start budgeting"
               click={() => {
-                // navigate("/onboard-add-income");
-                onClick();
+                navigate("/onboard-add-income");
+                // onClick();
               }}
             />
           </div>
