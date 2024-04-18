@@ -44,6 +44,7 @@ export const OthersSpend = ({
   const [peerWantsExpenditure, setPeerWantsExpenditure] = useState(0);
   const [peerEssentialsExpenditure, setPeerEssentialsExpenditure] = useState(0);
   const [peerSavingsExpenditure, setPeerSavingsExpenditure] = useState(0);
+  const [spendingMessage, setSpendingMessage] = useState("");
 
   const startDateObj = startDate ? new Date(startDate) : null;
   const endDateObj = endDate ? new Date(endDate) : null;
@@ -61,6 +62,28 @@ export const OthersSpend = ({
     macro_percentage_difference: number;
     categories: { [category: string]: CategoryData };
   }
+
+  console.log("user progress", userProgress);
+  console.log("peer progress", peerProgress);
+
+
+  const updateSpendingMessage = () => {
+    const userProgress = totalUserExpenditure;
+    const peerProgress = totalPeerExpenditure;
+    const percentageDifference = ((userProgress - peerProgress) / peerProgress) * 100;
+
+    if (Math.abs(percentageDifference) <= 15) {
+      setSpendingMessage("🎉 Nice! You're spending on par with others like you per category.");
+    } else if (percentageDifference < -15) {
+      setSpendingMessage("Nice! You're spending less than others like you across your budget. Way to go!");
+    } else if (percentageDifference > 15) {
+      setSpendingMessage("Heads up! You're currently spending above average compared to others like you.");
+    }
+  };
+
+  useEffect(() => {
+    updateSpendingMessage();
+  }, [totalUserExpenditure, totalPeerExpenditure]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -164,7 +187,7 @@ export const OthersSpend = ({
     <div className="flex flex-col">
       <div className="flex flex-row">
         <div className="font-primary text-skin-base text-sm tracking-listtile_subtitle">
-          🎉 Nice! You're spending on par with others like you per category.
+          {spendingMessage === "" ? "Calculating your budget spending against your peers, please wait..." : spendingMessage}
         </div>
       </div>
       <div className="mt-2.5 flex flex-row">
@@ -172,6 +195,7 @@ export const OthersSpend = ({
           othersProgressSpend={userProgress ?? 0}
           myProgressSpend={peerProgress ?? 0}
           startDate={startDateObj ?? new Date()}
+          endDate={endDateObj ?? new Date()}
         />
       </div>
       <div className="mt-3 flex flex-row justify-between items-center">
@@ -240,15 +264,15 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
-              return (
-                <ExpenditureComparisonCard
-                  icon={expenditure.emoji}
-                  key={i}
-                  category={expenditure.name}
-                  percentage={expenditure.percentage}
-                />
-              );
-            })
+            return (
+              <ExpenditureComparisonCard
+                icon={expenditure.emoji}
+                key={i}
+                category={expenditure.name}
+                percentage={expenditure.percentage}
+              />
+            );
+          })
           : null}
       </div>
     </div>

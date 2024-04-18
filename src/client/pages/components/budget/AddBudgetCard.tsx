@@ -42,9 +42,8 @@ export const AddBudgetCard = ({
         <div className="flex flex-row items-center mt-2">
           <div className="relative">
             <div
-              className={`font-primary text-sm ${
-                fadedColor ?? "text-skin-base"
-              } font-medium`}
+              className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+                } font-medium`}
             >
               {budgetAmount?.toLocaleString("en-us")}{" "}
               <sup className=" align-super -ml-1 text-xxs">

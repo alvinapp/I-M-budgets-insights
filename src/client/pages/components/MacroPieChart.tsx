@@ -25,11 +25,57 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
+  // Update: Handle all values being zero by drawing a grey doughnut
+  if (total === 0) {
+    return (
+      <svg height={dimensions} width={dimensions}>
+        <g transform={`translate(${radius}, ${radius})`}>
+          <circle
+            r={normalizedRadius}
+            fill="none"
+            stroke="#515151" // Grey color
+            strokeWidth={strokeWidth}
+            strokeDasharray={`${circumference} ${circumference}`}
+            strokeDashoffset={0}
+          />
+          <foreignObject
+            x={-radius}
+            y={-radius}
+            width={radius * 2}
+            height={radius * 2}
+            xmlns="http://www.w3.org/1999/xhtml"
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                borderRadius: "50%",
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src={macroBudget}
+                alt="icon"
+                style={{ width: "24px", height: "24px" }}
+              />
+              <div className="font-primary text-xxxxxs text-skin-subtitle tracking-longest_text">
+                <span>Budget spread</span>
+              </div>
+            </div>
+          </foreignObject>
+        </g>
+      </svg>
+    );
+  }
+
   const items = [
     { percentage: (unallocated / total) * 100, color: "#C3C3C3" },
     { percentage: (savings / total) * 100, color: "#71EBD7" },
     { percentage: (wants / total) * 100, color: "#8490E2" },
-    { percentage: (essentials / total) * 100, color: "#4053D05" },
+    { percentage: (essentials / total) * 100, color: "#4053D0" },
   ];
 
   let cumulativePercentage = 0;
@@ -38,6 +84,8 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
     <svg height={dimensions} width={dimensions}>
       <g transform={`translate(${radius}, ${radius})`}>
         {items.map((item, index) => {
+          if (item.percentage === 0) return null; // Skip rendering for 0% segments
+
           const startX =
             normalizedRadius *
             Math.cos((2 * Math.PI * cumulativePercentage) / 100);
@@ -85,8 +133,8 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
               alignItems: "center",
               justifyContent: "center",
               height: "100%",
-              borderRadius: "50%", // Makes the content circular
-              overflow: "hidden", // Ensures that content does not overflow outside the circle
+              borderRadius: "50%",
+              overflow: "hidden",
             }}
           >
             <img
@@ -95,7 +143,7 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
               style={{ width: "24px", height: "24px" }}
             />
             <div className="font-primary text-xxxxxs text-skin-subtitle tracking-longest_text">
-              <span>Overall budget split</span>
+              <span>Budget spread</span>
             </div>
           </div>
         </foreignObject>

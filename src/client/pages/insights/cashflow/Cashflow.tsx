@@ -134,8 +134,8 @@ const Cashflow = () => {
               </div>
               <AmountDisplay
                 amount={checkNAN(
-                  earnedData.reduce((a: number, b: number) => a + b, 0) /
-                    earnedData.length
+                  earnedData?.reduce((a: number, b: number) => a + b, 0) /
+                  earnedData.length
                 )}
               />
             </div>
@@ -145,8 +145,8 @@ const Cashflow = () => {
               </div>
               <AmountDisplay
                 amount={checkNAN(
-                  spentData.reduce((a: number, b: number) => a + b, 0) /
-                    spentData.length
+                  spentData?.reduce((a: number, b: number) => a + b, 0) /
+                  spentData.length
                 )}
               />
             </div>

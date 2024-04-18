@@ -210,7 +210,7 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
@@ -251,10 +251,10 @@ const InsightsView = () => {
                   label="Essentials spend"
                 />
                 <GraphLegend
-                  color="linear-gradient(124.2deg, #8490E2 0%, #3B4381 100%)"
+                  color="#9DB1C6"
                   label="Wants spend"
                 />
-                <GraphLegend color="#F99E36" label="Over limit" />
+                <GraphLegend color="#101010" label="Total spend" />
               </div>
             </div>
           ) : (
