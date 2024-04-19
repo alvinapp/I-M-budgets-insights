@@ -8,6 +8,7 @@ import InsightsVsTooltipProgressBar from "./VsProgress/InsightsVsTooltipProgress
 import { calculateSpending } from "client/utils/Formatters";
 import { fetchMicrosPercentile } from "client/api/micros";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
+import { differenceInMonths, startOfMonth, endOfMonth, differenceInDays } from "date-fns";
 type OthersSpendProps = {
   spentBudget: number;
   plannedBudget: number;
@@ -20,7 +21,7 @@ type OthersSpendProps = {
 };
 export const OthersSpend = ({
   spentBudget,
-  plannedBudget,
+  plannedBudget: initialBudget,
   wantsSpend,
   essentialsSpend,
   savingsSpend,
@@ -28,8 +29,6 @@ export const OthersSpend = ({
   startDate,
   endDate,
 }: OthersSpendProps) => {
-  const expenditureProgress = calculateSpending(spentBudget, plannedBudget);
-  const othersAverageProgress = calculateSpending(319850, plannedBudget);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -44,10 +43,68 @@ export const OthersSpend = ({
   const [peerWantsExpenditure, setPeerWantsExpenditure] = useState(0);
   const [peerEssentialsExpenditure, setPeerEssentialsExpenditure] = useState(0);
   const [peerSavingsExpenditure, setPeerSavingsExpenditure] = useState(0);
+  const [numberOfMonths, setNumberOfMonths] = useState(1);
+  const [budget, setBudget] = useState(initialBudget);
+  const [estimatedBudget, setEstimatedBudget] = useState(false);
   const [spendingMessage, setSpendingMessage] = useState("");
 
   const startDateObj = startDate ? new Date(startDate) : null;
   const endDateObj = endDate ? new Date(endDate) : null;
+
+  const claculateTheNumberOfMonths = () => {
+    if (!startDateObj || !endDateObj) return;
+    const numberOfMonths = differenceInMonths(endDateObj, startDateObj) + 1;
+    setNumberOfMonths(numberOfMonths);
+  };
+
+  const calculateEstimatedBudget = async () => {
+    if (!startDateObj || !endDateObj) return;
+
+    await claculateTheNumberOfMonths();
+
+    const startIsMonthStart = startDateObj.getDate() === startOfMonth(startDateObj).getDate();
+    const endIsMonthEnd =
+      endDateObj.getDate() === endOfMonth(endDateObj).getDate();
+    if (startIsMonthStart && endIsMonthEnd && startDateObj.getMonth() === endDateObj.getMonth()) {
+      setBudget(initialBudget);
+      setEstimatedBudget(false);
+    } else {
+      const days = differenceInDays(endDateObj, startDateObj);
+      if (days <= 30) {
+        // If the duration is less than or equal to a month
+        //If the days are in the same month, assume that the budget is divided equally between the start and end dates, multiply the daily budget by the number of days
+        if (startDateObj.getMonth() === endDateObj.getMonth() && startDateObj.getFullYear() === endDateObj.getFullYear()) {
+          const totalDaysInMonth = new Date(endDateObj.getFullYear(), endDateObj.getMonth() + 1, 0).getDate();
+          const dailyBudget = initialBudget / totalDaysInMonth;
+          const adjustedBudget = dailyBudget * days;
+          setBudget(adjustedBudget);
+          setEstimatedBudget(true);
+        }//If the days are in different months, assume that the budget is divided equally between 30 days, multiply the daily budget by the number of days
+        else if (startDateObj.getMonth() !== endDateObj.getMonth()) {
+          const dailyBudget = initialBudget / 30;
+          const adjustedBudget = dailyBudget * days;
+          setBudget(adjustedBudget);
+          setEstimatedBudget(true);
+        }
+      } else if (days > 30) {
+        // If the duration is more than a month
+        const months = Math.ceil(days / 30);
+        const adjustedBudget = initialBudget * months;
+        setBudget(adjustedBudget);
+        setEstimatedBudget(true);
+      }
+    }
+    const userProgress = calculateSpending(
+      totalUserExpenditure,
+      budget
+    );
+    const peerProgress = calculateSpending(
+      totalPeerExpenditure,
+      budget
+    );
+    setUserProgress(userProgress.expenditureProgress);
+    setPeerProgress(peerProgress.expenditureProgress);
+  };
 
   interface CategoryData {
     percentile: number;
@@ -62,10 +119,6 @@ export const OthersSpend = ({
     macro_percentage_difference: number;
     categories: { [category: string]: CategoryData };
   }
-
-  console.log("user progress", userProgress);
-  console.log("peer progress", peerProgress);
-
 
   const updateSpendingMessage = () => {
     const userProgress = totalUserExpenditure;
@@ -84,6 +137,10 @@ export const OthersSpend = ({
   useEffect(() => {
     updateSpendingMessage();
   }, [totalUserExpenditure, totalPeerExpenditure]);
+
+  useEffect(() => {
+    calculateEstimatedBudget();
+  }, [startDate, endDate, initialBudget, totalUserExpenditure, totalPeerExpenditure]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,16 +202,6 @@ export const OthersSpend = ({
         setPeerSavingsExpenditure(peerSavingsExpenditure);
         setTotalUserExpenditure(totalUserExpenditure);
         setTotalPeerExpenditure(totalPeerExpenditure);
-        const userProgress = calculateSpending(
-          totalUserExpenditure,
-          plannedBudget
-        );
-        const peerProgress = calculateSpending(
-          totalPeerExpenditure,
-          plannedBudget
-        );
-        setUserProgress(userProgress.expenditureProgress);
-        setPeerProgress(peerProgress.expenditureProgress);
         const updatedExpenditureList = expenditureCompareList.map(
           (expenditure) => {
             // Find the corresponding category in the data object
