@@ -60,7 +60,7 @@ export const OthersSpend = ({
   const calculateEstimatedBudget = async () => {
     if (!startDateObj || !endDateObj) return;
 
-    await claculateTheNumberOfMonths();
+    claculateTheNumberOfMonths();
 
     const startIsMonthStart = startDateObj.getDate() === startOfMonth(startDateObj).getDate();
     const endIsMonthEnd =
