@@ -5,10 +5,10 @@ import { ExpenditureComparisonCard } from "./ExpenditureComparisonCard";
 import { expenditureCompareList } from "client/utils/MockData";
 import MacroPieChartWithLegend from "../MacroPieChartWithLegend";
 import InsightsVsTooltipProgressBar from "./VsProgress/InsightsVsTooltipProgress";
-import { calculateSpending } from "client/utils/Formatters";
+import { calculateSpending, checkNAN } from "client/utils/Formatters";
 import { fetchMicrosPercentile } from "client/api/micros";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
-import { differenceInMonths, startOfMonth, endOfMonth, differenceInDays } from "date-fns";
+import { differenceInMonths, startOfMonth, endOfMonth, differenceInDays, set } from "date-fns";
 type OthersSpendProps = {
   spentBudget: number;
   plannedBudget: number;
@@ -35,8 +35,8 @@ export const OthersSpend = ({
   const [othersData, setOthersData] = useState<any>(null);
   const [totalUserExpenditure, setTotalUserExpenditure] = useState(0);
   const [totalPeerExpenditure, setTotalPeerExpenditure] = useState(0);
-  const [peerProgress, setPeerProgress] = useState(0);
-  const [userProgress, setUserProgress] = useState(0);
+  const [peerProgress, setPeerProgress] = useState();
+  const [userProgress, setUserProgress] = useState();
   const [userWantsExpenditure, setUserWantsExpenditure] = useState(0);
   const [userEssentialsExpenditure, setUserEssentialsExpenditure] = useState(0);
   const [userSavingsExpenditure, setUserSavingsExpenditure] = useState(0);
@@ -47,6 +47,7 @@ export const OthersSpend = ({
   const [budget, setBudget] = useState(initialBudget);
   const [estimatedBudget, setEstimatedBudget] = useState(false);
   const [spendingMessage, setSpendingMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const startDateObj = startDate ? new Date(startDate) : null;
   const endDateObj = endDate ? new Date(endDate) : null;
@@ -120,121 +121,127 @@ export const OthersSpend = ({
     categories: { [category: string]: CategoryData };
   }
 
-  const updateSpendingMessage = () => {
-    const userProgress = totalUserExpenditure;
-    const peerProgress = totalPeerExpenditure;
-    const percentageDifference = ((userProgress - peerProgress) / peerProgress) * 100;
+  // TODO: fix this function here 
+  const fetchDataAndUpdateState = async () => {
+    try {
+      setIsLoading(true);
+      const data = await fetchMicrosPercentile({
+        configuration: config,
+        start_date: startDate,
+        end_date: endDate,
+      });
 
-    if (Math.abs(percentageDifference) <= 15) {
-      setSpendingMessage("🎉 Nice! You're spending on par with others like you per category.");
-    } else if (percentageDifference < -15) {
-      setSpendingMessage("Nice! You're spending less than others like you across your budget. Way to go!");
-    } else if (percentageDifference > 15) {
-      setSpendingMessage("Heads up! You're currently spending above average compared to others like you.");
+      let totalUserExpenditure = 0;
+      let totalPeerExpenditure = 0;
+      let userWantsExpenditure = 0;
+      let userEssentialsExpenditure = 0;
+      let userSavingsExpenditure = 0;
+      let peerWantsExpenditure = 0;
+      let peerEssentialsExpenditure = 0;
+      let peerSavingsExpenditure = 0;
+
+      data.forEach((macro: any) => {
+        const macroName = Object.keys(macro)[0]; // Assuming the name is the key
+        const macroData = macro[macroName];
+
+        totalUserExpenditure += macroData.total_user_expenditure_per_macro;
+        totalPeerExpenditure += macroData.total_peer_expenditure_per_macro;
+
+        // Check if the macro name is Wants, Essentials, or Savings
+        if (macroName === "Wants") {
+          userWantsExpenditure += macroData.total_user_expenditure_per_macro;
+          peerWantsExpenditure += macroData.total_peer_expenditure_per_macro;
+        } else if (macroName === "Essentials") {
+          userEssentialsExpenditure += macroData.total_user_expenditure_per_macro;
+          peerEssentialsExpenditure += macroData.total_peer_expenditure_per_macro;
+        } else if (macroName === "Savings") {
+          userSavingsExpenditure += macroData.total_user_expenditure_per_macro;
+          peerSavingsExpenditure += macroData.total_peer_expenditure_per_macro;
+        }
+      });
+
+      setTotalUserExpenditure(totalUserExpenditure);
+      setTotalPeerExpenditure(totalPeerExpenditure);
+      setUserWantsExpenditure(userWantsExpenditure);
+      setUserEssentialsExpenditure(userEssentialsExpenditure);
+      setUserSavingsExpenditure(userSavingsExpenditure);
+      setPeerWantsExpenditure(peerWantsExpenditure);
+      setPeerEssentialsExpenditure(peerEssentialsExpenditure);
+      setPeerSavingsExpenditure(peerSavingsExpenditure);
+      const updatedExpenditureList = expenditureCompareList.map(
+        (expenditure) => {
+          // Find the corresponding category in the data object
+          const categoryData = data.find((macro: any) => {
+            const macroName = Object.keys(macro)[0];
+            return macro[macroName].categories.hasOwnProperty(
+              expenditure.name
+            );
+          });
+
+          // If category data is found, update the percentage
+          if (categoryData) {
+            const macroName = Object.keys(categoryData)[0];
+            const category =
+              categoryData[macroName].categories[expenditure.name];
+            expenditure.percentage = category.percentage_difference;
+          }
+
+          return expenditure;
+        }
+      );
+      setOthersData(data);
+      // calculateEstimatedBudget();
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error fetching data:", error);
+      setSpendingMessage("Failed to load expenditure data. Please try again later.");
     }
   };
 
-  useEffect(() => {
-    updateSpendingMessage();
-  }, [totalUserExpenditure, totalPeerExpenditure]);
+
+  const calculateProgressAndSetMessage = (userExpenditure: number, peerExpenditure: number) => {
+    const percentageDifference = ((userExpenditure - peerExpenditure) / peerExpenditure) * 100;
+    determineMessage(userExpenditure, percentageDifference);
+  };
 
   useEffect(() => {
     calculateEstimatedBudget();
+    calculateProgressAndSetMessage(totalUserExpenditure, totalPeerExpenditure);
   }, [startDate, endDate, initialBudget, totalUserExpenditure, totalPeerExpenditure]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchMicrosPercentile({
-          configuration: config,
-          start_date: startDate,
-          end_date: endDate,
-        });
-        let totalUserExpenditure = 0;
-        let totalPeerExpenditure = 0;
-        let userWantsExpenditure = 0;
-        let userEssentialsExpenditure = 0;
-        let userSavingsExpenditure = 0;
-        let peerWantsExpenditure = 0;
-        let peerEssentialsExpenditure = 0;
-        let peerSavingsExpenditure = 0;
+  const determineMessage = (userExpenditure: number, percentageDifference: number | null) => {
+    if (userExpenditure === 0) {
+      setSpendingMessage("You have no expenses registered for this period. Add some expenses to get started.");
+      return;
+    }
 
-        // Iterate over data
-        data.forEach((macro: any) => {
-          const macroData = Object.values(macro)[0] as MacroData;
-          totalUserExpenditure += macroData.total_user_expenditure_per_macro;
-          totalPeerExpenditure += macroData.total_peer_expenditure_per_macro;
-        });
-
-        // Iterate over data to get total user expenditure for Wants, Essentials, and Savings; do the same for peer expenditure for Wants, Essentials, and Savings
-        data.forEach((macro: any) => {
-          const macroName = Object.keys(macro)[0];
-          const macroData = macro[macroName];
-          const categories = macroData.categories;
-
-          // Check if the macro name is Wants, Essentials, or Savings
-          if (macroName === "Wants") {
-            for (const category in categories) {
-              const categoryData = categories[category];
-              userWantsExpenditure += categoryData.user_expenditure;
-              peerWantsExpenditure += categoryData.peer_total_expenditure;
-            }
-          } else if (macroName === "Essentials") {
-            for (const category in categories) {
-              const categoryData = categories[category];
-              userEssentialsExpenditure += categoryData.user_expenditure;
-              peerEssentialsExpenditure += categoryData.peer_total_expenditure;
-            }
-          } else if (macroName === "Savings") {
-            for (const category in categories) {
-              const categoryData = categories[category];
-              userSavingsExpenditure += categoryData.user_expenditure;
-              peerSavingsExpenditure += categoryData.peer_total_expenditure;
-            }
-          }
-        });
-
-        setUserWantsExpenditure(userWantsExpenditure);
-        setUserEssentialsExpenditure(userEssentialsExpenditure);
-        setUserSavingsExpenditure(userSavingsExpenditure);
-        setPeerWantsExpenditure(peerWantsExpenditure);
-        setPeerEssentialsExpenditure(peerEssentialsExpenditure);
-        setPeerSavingsExpenditure(peerSavingsExpenditure);
-        setTotalUserExpenditure(totalUserExpenditure);
-        setTotalPeerExpenditure(totalPeerExpenditure);
-        const updatedExpenditureList = expenditureCompareList.map(
-          (expenditure) => {
-            // Find the corresponding category in the data object
-            const categoryData = data.find((macro: any) => {
-              const macroName = Object.keys(macro)[0];
-              return macro[macroName].categories.hasOwnProperty(
-                expenditure.name
-              );
-            });
-
-            // If category data is found, update the percentage
-            if (categoryData) {
-              const macroName = Object.keys(categoryData)[0];
-              const category =
-                categoryData[macroName].categories[expenditure.name];
-              expenditure.percentage = category.percentage_difference;
-            }
-
-            return expenditure;
-          }
-        );
-        setOthersData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+    let message = "Calculating your budget spending against your peers, please wait...";
+    if (percentageDifference !== null) {
+      if (Math.abs(percentageDifference) <= 15) {
+        message = "🎉 Nice! You're spending on par with others like you per category.";
+      } else if (percentageDifference < -15) {
+        message = "Nice! You're spending less than others like you across your budget. Way to go!";
+      } else if (percentageDifference > 15) {
+        message = "Heads up! You're currently spending above average compared to others like you.";
       }
-    };
-    fetchData();
-  }, [config, startDate, endDate]);
+    }
+
+    setSpendingMessage(message);
+  };
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      fetchDataAndUpdateState();
+    }
+  }, [startDate, endDate, config]);
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
         <div className="font-primary text-skin-base text-sm tracking-listtile_subtitle">
-          {spendingMessage === "" ? "Calculating your budget spending against your peers, please wait..." : spendingMessage}
+          {isLoading
+            ? "Calculating your budget spending against your peers, please wait..."
+            : spendingMessage || "Ready to view spending insights!"}
         </div>
       </div>
       <div className="mt-2.5 flex flex-row">

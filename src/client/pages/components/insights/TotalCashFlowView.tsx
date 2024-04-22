@@ -12,7 +12,7 @@ const TotalCashFlowView = ({ totalAmount }: TotalCashFlowViewProps) => {
           {currencySymbol.currencySymbol}
         </div> */}
         <div className="text-3xl tracking-title font-custom font-medium text-skin-base">
-          {totalAmount?.toLocaleString("en-us")}
+          {totalAmount ? Number(totalAmount).toLocaleString("en-US", { maximumFractionDigits: 0 }) : ''}
           <sup
             style={{
               fontSize: "14px",

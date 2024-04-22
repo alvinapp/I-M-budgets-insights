@@ -25,19 +25,57 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
+  const emptyItems = [
+    { percentage: 70, color: "#e0e0e0" },
+    { percentage: 30, color: "#f2f2f2" },
+  ];
+
+  let cumulativePercentage = 0;
+
   // Update: Handle all values being zero by drawing a grey doughnut
   if (total === 0) {
     return (
       <svg height={dimensions} width={dimensions}>
         <g transform={`translate(${radius}, ${radius})`}>
-          <circle
-            r={normalizedRadius}
-            fill="none"
-            stroke="#515151" // Grey color
-            strokeWidth={strokeWidth}
-            strokeDasharray={`${circumference} ${circumference}`}
-            strokeDashoffset={0}
-          />
+          {emptyItems.map((item, index) => {
+            if (item.percentage === 0) return null; // Skip rendering for 0% segments
+
+            const startX =
+              normalizedRadius *
+              Math.cos((2 * Math.PI * cumulativePercentage) / 100);
+            const startY =
+              normalizedRadius *
+              Math.sin((2 * Math.PI * cumulativePercentage) / 100);
+
+            const endX =
+              normalizedRadius *
+              Math.cos(
+                (2 * Math.PI * (cumulativePercentage + item.percentage)) / 100
+              );
+            const endY =
+              normalizedRadius *
+              Math.sin(
+                (2 * Math.PI * (cumulativePercentage + item.percentage)) / 100
+              );
+
+            const largeArcFlag = item.percentage > 50 ? 1 : 0;
+
+            cumulativePercentage += item.percentage;
+
+            return (
+              <path
+                key={index}
+                d={`M ${startX} ${startY} A ${normalizedRadius} ${normalizedRadius} 0 ${largeArcFlag} 1 ${endX} ${endY}`}
+                fill="none"
+                stroke={item.color}
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                style={{
+                  filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
+                }}
+              />
+            );
+          })}
           <foreignObject
             x={-radius}
             y={-radius}
@@ -78,8 +116,6 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
     { percentage: (essentials / total) * 100, color: "#4053D0" },
   ];
 
-  let cumulativePercentage = 0;
-
   return (
     <svg height={dimensions} width={dimensions}>
       <g transform={`translate(${radius}, ${radius})`}>
@@ -116,6 +152,9 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
               stroke={item.color}
               strokeWidth={strokeWidth}
               strokeLinecap="round"
+              style={{
+                filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
+              }}
             />
           );
         })}
@@ -152,4 +191,4 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
   );
 };
 
-export default MacroPieChart;
+export default MacroPieChart

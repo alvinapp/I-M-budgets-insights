@@ -157,13 +157,7 @@ export const MySpend = ({
     <div className="flex flex-col">
       <div className="flex flex-row">
         <div className="font-primary text-skin-base text-sm tracking-listtile_subtitle">
-          {spent > 0 ? (spendingMessage || "Calculating your budget...") : `You have no expenses registered for this period starting ${new Date(startDate).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-          })} to ${new Date(endDate).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-          })}`}
+          {spent > 0 ? (spendingMessage || "Calculating your budget...") : "You have no expenses registered for this period. Add some expenses to get started."}
         </div>
       </div>
       <div className="mt-2.5 flex flex-row">
@@ -192,42 +186,46 @@ export const MySpend = ({
         />
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
-      <div className="flex flex-row items-center justify-between mb-6">
-        <div className="font-medium font-primary text-xs text-skin-subtitle tracking-wide">
-          Categories
-        </div>
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center">
-            <div
-              className="font-medium font-primary text-xs text-skin-subtitle tracking-wide items-end"
-              style={{ width: budgetColumnWidth }}
-            >
-              {estimatedBudget ? "Est Budget" : "Budget"}
-            </div>
-            <div
-              className="font-medium font-primary text-xs text-skin-subtitle tracking-wide items-end"
-              style={{ width: spentColumnWidth }}
-            >
-              Spent
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="flex flex-col">
-        {microGoals && microGoals.length > 0
-          ? microGoals.map((microGoal, i: number) => {
-            return (
-              microGoal.total_transactions > 0 && <ExpenditureCard
-                transactions={microGoal.number_of_transactions}
-                icon={microGoal.emoji}
-                budget={microGoal.amount * numberOfMonths}
-                spent={microGoal.total_transactions}
-                key={i}
-                category={microGoal.name}
-              />
-            );
-          })
-          : null}
+        {microGoals && microGoals.length > 0 ? (
+          <>
+            {microGoals.some((microGoal) => microGoal.total_transactions > 0) && (
+              <div className="flex flex-row items-center justify-between mb-6">
+                <div className="font-medium font-primary text-xs text-skin-subtitle tracking-wide">
+                  Categories
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex flex-row items-center">
+                    <div
+                      className="font-medium font-primary text-xs text-skin-subtitle tracking-wide items-end"
+                      style={{ width: budgetColumnWidth }}
+                    >
+                      {estimatedBudget ? "Est Budget" : "Budget"}
+                    </div>
+                    <div
+                      className="font-medium font-primary text-xs text-skin-subtitle tracking-wide items-end"
+                      style={{ width: spentColumnWidth }}
+                    >
+                      Spent
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {microGoals.map((microGoal, i: number) =>
+              microGoal.total_transactions > 0 ? (
+                <ExpenditureCard
+                  transactions={microGoal.number_of_transactions}
+                  icon={microGoal.emoji}
+                  budget={microGoal.amount * numberOfMonths}
+                  spent={microGoal.total_transactions}
+                  key={i}
+                  category={microGoal.name}
+                />
+              ) : null
+            )}
+          </>
+        ) : null}
       </div>
     </div>
   );
