@@ -10,15 +10,19 @@ interface MacroPieChartProps {
     savings: number;
     unallocated: number;
   };
+  isLoading: boolean;
 }
 
 const MacroPieChart: React.FC<MacroPieChartProps> = ({
   dimensions,
   doughnutThickness,
   values,
+  isLoading,
 }) => {
   const { wants, essentials, savings, unallocated } = values;
   const total = wants + essentials + savings + unallocated;
+
+  console.log("isLoading macros", isLoading);
 
   const radius = dimensions / 2;
   const strokeWidth = doughnutThickness;
@@ -31,6 +35,66 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
   ];
 
   let cumulativePercentage = 0;
+
+  if (isLoading) {
+    const animationStyles = `
+        @keyframes smoothRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    `;
+    return (
+      <div>
+        <svg height={dimensions} width={dimensions} style={{
+          animation: "smoothRotate 2s linear infinite",
+          transformOrigin: "center center",
+        }}>
+          <g transform={`translate(${radius}, ${radius})`}>
+            {emptyItems.map((item, index) => {
+              if (item.percentage === 0) return null; // Skip rendering for 0% segments
+
+              const startX =
+                normalizedRadius *
+                Math.cos((2 * Math.PI * cumulativePercentage) / 100);
+              const startY =
+                normalizedRadius *
+                Math.sin((2 * Math.PI * cumulativePercentage) / 100);
+
+              const endX =
+                normalizedRadius *
+                Math.cos(
+                  (2 * Math.PI * (cumulativePercentage + item.percentage)) / 100
+                );
+              const endY =
+                normalizedRadius *
+                Math.sin(
+                  (2 * Math.PI * (cumulativePercentage + item.percentage)) / 100
+                );
+
+              const largeArcFlag = item.percentage > 50 ? 1 : 0;
+
+              cumulativePercentage += item.percentage;
+
+              return (
+                <path
+                  key={index}
+                  d={`M ${startX} ${startY} A ${normalizedRadius} ${normalizedRadius} 0 ${largeArcFlag} 1 ${endX} ${endY}`}
+                  fill="none"
+                  stroke={item.color}
+                  strokeWidth={strokeWidth}
+                  strokeLinecap="round"
+                  style={{
+                    filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
+                  }}
+                />
+              );
+            })}
+          </g>
+        </svg>
+        <style>{animationStyles}</style>
+      </div>
+    );
+  }
 
   // Update: Handle all values being zero by drawing a grey doughnut
   if (total === 0) {

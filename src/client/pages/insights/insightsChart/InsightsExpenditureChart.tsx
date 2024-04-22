@@ -25,6 +25,7 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
   wantsArray,
   isLoading,
 }) => {
+  const [dataArrayLength, setDataArrayLength] = useState();
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
       type: "line",
@@ -148,10 +149,17 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
   ]);
 
   useEffect(() => {
-    const [updatedEssentialsArray, updatedWantsArray] = alignDataArrays(
+    const [arrayLength, updatedEssentialsArray, updatedWantsArray] = alignDataArrays(
       essentialsArray,
       wantsArray
     );
+
+    console.log('updatedEssentialsArray >>>>>', updatedEssentialsArray);
+    console.log('updatedWantsArray >>>>>', updatedWantsArray);
+    console.log("arrayLength >>>>>", arrayLength, arrayLength && dataArrayLength !== arrayLength);
+    if (arrayLength && dataArrayLength !== arrayLength) {
+      setDataArrayLength(arrayLength);
+    }
     const totalSpend = calculateTotalSpend(
       updatedEssentialsArray,
       updatedWantsArray
@@ -171,7 +179,7 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
       },
     ]);
     // update
-  }, [essentialsArray, wantsArray]);
+  }, [essentialsArray, wantsArray, dataArrayLength]);
 
   if (isLoading) {
     return (
@@ -243,7 +251,7 @@ interface DataPoint {
 function alignDataArrays(
   essentials: DataPoint[],
   wants: DataPoint[]
-): [DataPoint[], DataPoint[]] {
+): [any, DataPoint[], DataPoint[]] {
   // if (essentials.length === 0 || wants.length === 0) {
   //     return [essentials, wants];
   // }
@@ -261,7 +269,7 @@ function alignDataArrays(
 function alignMonthDataArrays(
   essentials: DataPoint[],
   wants: DataPoint[]
-): [DataPoint[], DataPoint[]] {
+): [any, DataPoint[], DataPoint[]] {
   // Helper to increment a month
   const incrementMonth = (ym: string): string => {
     let [year, month] = ym.split("-").map(Number);
@@ -308,15 +316,79 @@ function alignMonthDataArrays(
   };
 
   return [
+    null,
     alignArray(essentials, earliestMonth, latestMonth),
     alignArray(wants, earliestMonth, latestMonth),
   ];
 }
 
+// function alignDayDataArrays(essentials: DataPoint[], wants: DataPoint[]): [number, DataPoint[], DataPoint[]] {
+//   const isMonthly = essentials.concat(wants).every((dp) => dp.x.length === 7);
+
+//   console.log("isMonthly", isMonthly);
+
+//   const incrementDate = (date: Date, monthly: boolean): Date => {
+//     return monthly ? new Date(date.getFullYear(), date.getMonth() + 1, 1)
+//       : new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+//   };
+
+//   const parseDateString = (dateStr: string): Date => {
+//     return new Date(dateStr + (dateStr.length === 7 ? "-01" : ""));
+//   };
+
+//   const allDates = essentials.concat(wants).map((dp) => parseDateString(dp.x).getTime());
+//   console.log("allDates values", essentials.concat(wants).map((dp) => parseDateString(dp.x)));
+//   console.log("Length allDates values", essentials.concat(wants).map((dp) => dp.x).length);
+//   const lengthOfDateArrays = essentials.concat(wants).map((dp) => dp.x).length;
+//   let minDate = new Date(Math.min(...allDates));
+//   let maxDate = new Date(Math.max(...allDates));
+//   maxDate.setHours(23, 59, 59, 999); // Ensure maxDate includes the entire last day
+
+//   const alignArray = (array: DataPoint[], start: Date, end: Date, monthly: boolean): DataPoint[] => {
+//     const result: DataPoint[] = [];
+//     const dateMap = new Map<string, DataPoint>();
+//     array.forEach((dp) => dateMap.set(dp.x, dp));
+
+//     for (
+//       let currentDate = new Date(start);
+//       currentDate <= end;
+//       currentDate = incrementDate(currentDate, monthly)
+//     ) {
+//       const dateKey = monthly
+//         ? currentDate.toISOString().substring(0, 7)
+//         : currentDate.toISOString().substring(0, 10);
+//       if (dateMap.has(dateKey)) {
+//         // Add existing data point from the map
+//         result.push(dateMap.get(dateKey)!);
+//       } else if (!result.find((dp) => dp.x === dateKey)) {
+//         // Avoid duplicates
+//         // For monthly data with future dates, y should be 0, otherwise carry forward the last y
+//         const y =
+//           monthly && currentDate > parseDateString(array[array.length - 1].x)
+//             ? 0
+//             : result.length > 0
+//               ? result[result.length - 1].y
+//               : 0;
+//         result.push({ x: dateKey, y });
+//       } else {
+//         const lastAmount = result[result.length - 1].y;
+//         result.push({ x: dateKey, y: lastAmount });
+//       }
+//     }
+
+//     return result.sort((a, b) => a.x.localeCompare(b.x)); // Ensure sorted result
+//   };
+
+//   const updatedEssentials = alignArray(essentials, minDate, maxDate, isMonthly);
+//   const updatedWants = alignArray(wants, minDate, maxDate, isMonthly);
+
+//   return [lengthOfDateArrays, updatedEssentials, updatedWants];
+// }
+
 function alignDayDataArrays(
   essentials: DataPoint[],
   wants: DataPoint[]
-): [DataPoint[], DataPoint[]] {
+): [number, DataPoint[], DataPoint[]] {
   // Determine if the dates are monthly or daily
   const isMonthly = essentials.concat(wants).every((dp) => dp.x.length === 7);
 
@@ -335,6 +407,7 @@ function alignDayDataArrays(
   const allDates = essentials
     .concat(wants)
     .map((dp) => parseDateString(dp.x).getTime());
+  const lengthOfDateArrays = essentials.concat(wants).map((dp) => dp.x).length;
   const minDate = new Date(Math.min(...allDates));
   const maxDate = new Date(Math.max(...allDates));
 
@@ -382,5 +455,5 @@ function alignDayDataArrays(
   const updatedEssentials = alignArray(essentials, minDate, maxDate, isMonthly);
   const updatedWants = alignArray(wants, minDate, maxDate, isMonthly);
 
-  return [updatedEssentials, updatedWants];
+  return [lengthOfDateArrays, updatedEssentials, updatedWants];
 }

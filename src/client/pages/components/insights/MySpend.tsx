@@ -21,6 +21,7 @@ type MySpendProps = {
   unallocatedSpend: number;
   startDate: string;
   endDate: string;
+  isLoading: boolean;
 };
 
 export const MySpend = ({
@@ -32,6 +33,7 @@ export const MySpend = ({
   unallocatedSpend,
   startDate,
   endDate,
+  isLoading,
 }: MySpendProps) => {
   const microGoals = useMicroGoalsStore((state) => state.microGoals);
   const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
@@ -178,11 +180,12 @@ export const MySpend = ({
           doughnutThickness={14}
           showComparison={false}
           values={{
-            wants: wantsSpend,
-            essentials: essentialsSpend,
-            savings: savingsSpend,
-            unallocated: unallocatedSpend,
+            wants: isLoading ? 0 : wantsSpend,
+            essentials: isLoading ? 0 : essentialsSpend,
+            savings: isLoading ? 0 : savingsSpend,
+            unallocated: isLoading ? 0 : unallocatedSpend,
           }}
+          isLoading={isLoading}
         />
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>

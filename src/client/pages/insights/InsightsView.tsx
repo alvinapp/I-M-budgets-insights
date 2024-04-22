@@ -99,6 +99,7 @@ const InsightsView = () => {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchCashFlowData = async () => {
+      setIsLoading(true);
       insightsStoreState.setInsightsLoading(true);
       const data = await getCashFlow({
         configuration: config,
@@ -121,9 +122,17 @@ const InsightsView = () => {
       setEssentialsArray(generateLinearProgression(essentialsData));
       setWantsArray(generateLinearProgression(wantsData));
       insightsStoreState.setInsightsLoading(false);
+      setIsLoading(false);
       setCashFlowData(data);
     };
-    fetchCashFlowData();
+    fetchCashFlowData().then(() => {
+      insightsStoreState.setInsightsLoading(false);
+      setIsLoading(false);
+    }).catch((error) => {
+      insightsStoreState.setInsightsLoading(false);
+      setIsLoading(false);
+      console.error("Error fetching data:", error);
+    })
   }, [
     insightsStoreState.insightsStartDate,
     insightsStoreState.insightsEndDate,
@@ -286,6 +295,7 @@ const InsightsView = () => {
                 ? 0
                 : cashFlowData?.total_change || 0
             }
+            isLoading={isLoading}
           />
         </div>
         <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
@@ -316,6 +326,7 @@ const InsightsView = () => {
                   format(insightsStoreState.insightsEndDate, "yyyy-MM-dd") ??
                   undefined
                 }
+                isLoading={isLoading}
               />
             ) : (
               <OthersSpend

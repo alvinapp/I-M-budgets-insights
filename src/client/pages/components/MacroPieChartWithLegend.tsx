@@ -18,6 +18,7 @@ interface MacroPieChartWithLegendProps {
   peerValues?: Values;
   showComparison?: boolean;
   showUnallocated?: boolean;
+  isLoading: boolean;
 }
 
 const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
@@ -27,6 +28,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
   peerValues,
   showComparison,
   showUnallocated,
+  isLoading
 }) => {
   const total =
     values.wants + values.essentials + values.savings + values.unallocated;
@@ -75,6 +77,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
         dimensions={dimensions}
         doughnutThickness={doughnutThickness}
         values={values}
+        isLoading={isLoading}
       />
       <div className="flex flex-col justify-between space-y-2">
         <MacroPieChartLegend

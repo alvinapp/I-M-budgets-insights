@@ -246,8 +246,8 @@ export const OthersSpend = ({
       </div>
       <div className="mt-2.5 flex flex-row">
         <InsightsVsTooltipProgressBar
-          othersProgressSpend={userProgress ?? 0}
-          myProgressSpend={peerProgress ?? 0}
+          othersProgressSpend={!isLoading ? userProgress ?? 0 : 0}
+          myProgressSpend={!isLoading ? peerProgress ?? 0 : 0}
           startDate={startDateObj ?? new Date()}
           endDate={endDateObj ?? new Date()}
         />
@@ -266,7 +266,7 @@ export const OthersSpend = ({
           ></div>
           <AmountView
             caption="Other's avg spend"
-            amount={totalPeerExpenditure}
+            amount={!isLoading ? totalPeerExpenditure : 0}
           />
         </div>
         <div className="flex flex-row items-start">
@@ -280,7 +280,7 @@ export const OthersSpend = ({
               marginRight: 5,
             }}
           ></div>
-          <AmountView caption="My spend" amount={totalUserExpenditure} />
+          <AmountView caption="My spend" amount={!isLoading ? totalUserExpenditure : 0} />
         </div>
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>
@@ -291,17 +291,18 @@ export const OthersSpend = ({
           showComparison={true}
           showUnallocated={false}
           values={{
-            wants: userWantsExpenditure,
-            essentials: userEssentialsExpenditure,
-            savings: userSavingsExpenditure,
-            unallocated: unallocatedSpend,
+            wants: !isLoading ? userWantsExpenditure : 0,
+            essentials: !isLoading ? userEssentialsExpenditure : 0,
+            savings: !isLoading ? userSavingsExpenditure : 0,
+            unallocated: !isLoading ? unallocatedSpend : 0,
           }}
           peerValues={{
-            wants: peerWantsExpenditure,
-            essentials: peerEssentialsExpenditure,
-            savings: peerSavingsExpenditure,
-            unallocated: unallocatedSpend,
+            wants: !isLoading ? peerWantsExpenditure : 0,
+            essentials: !isLoading ? peerEssentialsExpenditure : 0,
+            savings: !isLoading ? peerSavingsExpenditure : 0,
+            unallocated: !isLoading ? unallocatedSpend : 0,
           }}
+          isLoading={isLoading}
         />
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-4.5 mb-6"></div>
@@ -323,7 +324,7 @@ export const OthersSpend = ({
                 icon={expenditure.emoji}
                 key={i}
                 category={expenditure.name}
-                percentage={expenditure.percentage}
+                percentage={!isLoading ? expenditure.percentage : 0}
               />
             );
           })
