@@ -32,7 +32,7 @@ import CashFlowFilterButton from "../components/insights/CashFlowFilterButton";
 import InsightsExpenditureChart from "./insightsChart/InsightsExpenditureChart";
 import GraphLegend from "../components/GraphLegend";
 import useInsightsStore from "client/store/insightsStore";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { BsBank } from "react-icons/bs";
 
 const InsightsView = () => {
@@ -101,29 +101,41 @@ const InsightsView = () => {
     const fetchCashFlowData = async () => {
       setIsLoading(true);
       insightsStoreState.setInsightsLoading(true);
-      const data = await getCashFlow({
+      await getCashFlow({
         configuration: config,
         start_date:
           format(insightsStoreState.insightsStartDate, "yyyy-MM-dd") ||
           undefined,
         end_date:
           format(insightsStoreState.insightsEndDate, "yyyy-MM-dd") || undefined,
-      });
-      const macroTypeDistribution = convertTransactionsToDataSeries(
-        data.transactions
-      );
-      const wantsData = getDataForMacroName(macroTypeDistribution, "Wants");
-      const essentialsData = getDataForMacroName(
-        macroTypeDistribution,
-        "Essentials"
-      );
-      setEssentialsData(essentialsData);
-      setWantsData(wantsData);
-      setEssentialsArray(generateLinearProgression(essentialsData));
-      setWantsArray(generateLinearProgression(wantsData));
-      insightsStoreState.setInsightsLoading(false);
-      setIsLoading(false);
-      setCashFlowData(data);
+      }).then((data) => {
+        const macroTypeDistribution = convertTransactionsToDataSeries(
+          data.transactions
+        );
+        const wantsData = getDataForMacroName(macroTypeDistribution, "Wants");
+        const essentialsData = getDataForMacroName(
+          macroTypeDistribution,
+          "Essentials"
+        );
+        const savingsData = getDataForMacroName(macroTypeDistribution, "Savings");
+        setEssentialsData(essentialsData);
+        setWantsData(wantsData);
+        setSavingsData(savingsData);
+        const essentialsArray = generateLinearProgression(essentialsData);
+        const wantsArray = generateLinearProgression(wantsData);
+        const savingsArray = generateLinearProgression(savingsData);
+        setEssentialsArray(essentialsArray);
+        setWantsArray(wantsArray);
+        setSavingsArray(savingsArray);
+        setCashFlowData(data);
+      }).finally(() => {
+        insightsStoreState.setInsightsLoading(false);
+        setIsLoading(false);
+      }).catch((error) => {
+        insightsStoreState.setInsightsLoading(false);
+        setIsLoading(false);
+        console.error("Error fetching data:", error);
+      })
     };
     fetchCashFlowData().then(() => {
       insightsStoreState.setInsightsLoading(false);
@@ -242,8 +254,8 @@ const InsightsView = () => {
             <div className="flex flex-col w-full justify-center">
               <InsightsExpenditureChart
                 currencySymbol={currencySymbol}
-                essentialsArray={essentialsArray}
-                wantsArray={wantsArray}
+                essentialsArray={insightsStoreState.insightsLoading ? [] : essentialsArray}
+                wantsArray={insightsStoreState.insightsLoading ? [] : wantsArray}
                 isLoading={insightsStoreState.insightsLoading}
               />
               <div

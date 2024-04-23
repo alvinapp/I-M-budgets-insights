@@ -64,27 +64,21 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
                             <span style="height: 10px; width: 10px; background-color: #0131A1; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
                             <span style="color: #0131A1;margin-right: 5px;">Essentials:</span>
                         </div>
-                        <span> ${essentialsValue
-            .toFixed(2)
-            .toLocaleString("en")}</span>
+                        <span> ${essentialsValue?.toFixed(2).toLocaleString("en")}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                         <div style="display: flex; align-items: center;">
                             <span style="height: 10px; width: 10px; background-color: #9DB1C6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
                             <span style="color: #9DB1C6;margin-right: 5px;">Wants:</span>
                         </div>
-                        <span> ${wantsValue
-            .toFixed(2)
-            .toLocaleString("en")}</span>
+                        <span> ${wantsValue?.toFixed(2).toLocaleString("en")}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center;">
                             <span style="height: 10px; width: 10px; background-color: #101010; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
                             <span style="color: #101010;margin-right: 5px;">Total:</span>
                         </div>
-                        <span> ${totalSpendValue
-            .toFixed(2)
-            .toLocaleString("en")}</span>
+                        <span> ${totalSpendValue?.toFixed(2).toLocaleString("en")}</span>
                     </div>
                     <hr style="margin: 8px 0; border-top: 1px solid #90A4AE;" />
                     <div style="padding-top: 5px; color: #101010; text-align: center;" class="title">${formattedDate}</div>
@@ -149,17 +143,18 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
   ]);
 
   useEffect(() => {
+    if (!essentialsArray.length && !wantsArray.length) {
+      return;
+    }
     const [arrayLength, updatedEssentialsArray, updatedWantsArray] = alignDataArrays(
       essentialsArray,
       wantsArray
     );
 
-    console.log('updatedEssentialsArray >>>>>', updatedEssentialsArray);
-    console.log('updatedWantsArray >>>>>', updatedWantsArray);
-    console.log("arrayLength >>>>>", arrayLength, arrayLength && dataArrayLength !== arrayLength);
     if (arrayLength && dataArrayLength !== arrayLength) {
       setDataArrayLength(arrayLength);
     }
+
     const totalSpend = calculateTotalSpend(
       updatedEssentialsArray,
       updatedWantsArray
@@ -178,6 +173,8 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
         data: totalSpend,
       },
     ]);
+
+    console.log("series >>>>>", series);
     // update
   }, [essentialsArray, wantsArray, dataArrayLength]);
 
@@ -322,138 +319,58 @@ function alignMonthDataArrays(
   ];
 }
 
-// function alignDayDataArrays(essentials: DataPoint[], wants: DataPoint[]): [number, DataPoint[], DataPoint[]] {
-//   const isMonthly = essentials.concat(wants).every((dp) => dp.x.length === 7);
+function alignDayDataArrays(essentials: DataPoint[], wants: DataPoint[]): [number, DataPoint[], DataPoint[]] {
+  if (essentials.length === 0 && wants.length === 0) {
+    return [0, [], []];
+  }
 
-//   console.log("isMonthly", isMonthly);
-
-//   const incrementDate = (date: Date, monthly: boolean): Date => {
-//     return monthly ? new Date(date.getFullYear(), date.getMonth() + 1, 1)
-//       : new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-//   };
-
-//   const parseDateString = (dateStr: string): Date => {
-//     return new Date(dateStr + (dateStr.length === 7 ? "-01" : ""));
-//   };
-
-//   const allDates = essentials.concat(wants).map((dp) => parseDateString(dp.x).getTime());
-//   console.log("allDates values", essentials.concat(wants).map((dp) => parseDateString(dp.x)));
-//   console.log("Length allDates values", essentials.concat(wants).map((dp) => dp.x).length);
-//   const lengthOfDateArrays = essentials.concat(wants).map((dp) => dp.x).length;
-//   let minDate = new Date(Math.min(...allDates));
-//   let maxDate = new Date(Math.max(...allDates));
-//   maxDate.setHours(23, 59, 59, 999); // Ensure maxDate includes the entire last day
-
-//   const alignArray = (array: DataPoint[], start: Date, end: Date, monthly: boolean): DataPoint[] => {
-//     const result: DataPoint[] = [];
-//     const dateMap = new Map<string, DataPoint>();
-//     array.forEach((dp) => dateMap.set(dp.x, dp));
-
-//     for (
-//       let currentDate = new Date(start);
-//       currentDate <= end;
-//       currentDate = incrementDate(currentDate, monthly)
-//     ) {
-//       const dateKey = monthly
-//         ? currentDate.toISOString().substring(0, 7)
-//         : currentDate.toISOString().substring(0, 10);
-//       if (dateMap.has(dateKey)) {
-//         // Add existing data point from the map
-//         result.push(dateMap.get(dateKey)!);
-//       } else if (!result.find((dp) => dp.x === dateKey)) {
-//         // Avoid duplicates
-//         // For monthly data with future dates, y should be 0, otherwise carry forward the last y
-//         const y =
-//           monthly && currentDate > parseDateString(array[array.length - 1].x)
-//             ? 0
-//             : result.length > 0
-//               ? result[result.length - 1].y
-//               : 0;
-//         result.push({ x: dateKey, y });
-//       } else {
-//         const lastAmount = result[result.length - 1].y;
-//         result.push({ x: dateKey, y: lastAmount });
-//       }
-//     }
-
-//     return result.sort((a, b) => a.x.localeCompare(b.x)); // Ensure sorted result
-//   };
-
-//   const updatedEssentials = alignArray(essentials, minDate, maxDate, isMonthly);
-//   const updatedWants = alignArray(wants, minDate, maxDate, isMonthly);
-
-//   return [lengthOfDateArrays, updatedEssentials, updatedWants];
-// }
-
-function alignDayDataArrays(
-  essentials: DataPoint[],
-  wants: DataPoint[]
-): [number, DataPoint[], DataPoint[]] {
-  // Determine if the dates are monthly or daily
   const isMonthly = essentials.concat(wants).every((dp) => dp.x.length === 7);
+  const parseDateString = (dateStr: string): Date => new Date(dateStr + (dateStr.length === 7 ? "-01" : ""));
 
-  // Helper to increment date by month or day
-  const incrementDate = (date: Date, monthly: boolean): Date => {
-    return monthly
-      ? new Date(date.getFullYear(), date.getMonth() + 1, 1)
-      : new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-  };
+  // Parsing all dates directly
+  const allDates = essentials.concat(wants).map(dp => parseDateString(dp.x));
 
-  // Parse the date strings to Date objects, assuming day 1 for monthly data
-  const parseDateString = (dateStr: string): Date =>
-    new Date(dateStr + (dateStr.length === 7 ? "-01" : ""));
-
-  // Calculate the overall date range across both arrays
-  const allDates = essentials
-    .concat(wants)
-    .map((dp) => parseDateString(dp.x).getTime());
-  const lengthOfDateArrays = essentials.concat(wants).map((dp) => dp.x).length;
-  const minDate = new Date(Math.min(...allDates));
-  const maxDate = new Date(Math.max(...allDates));
-
-  // Align an array within the date range
-  const alignArray = (
-    array: DataPoint[],
-    start: Date,
-    end: Date,
-    monthly: boolean
-  ): DataPoint[] => {
+  const alignArray = (array: DataPoint[], dates: Date[], monthly: boolean): DataPoint[] => {
     const result: DataPoint[] = [];
-    const dateMap = new Map<string, DataPoint>();
-    array.forEach((dp) => dateMap.set(dp.x, dp));
+    const dateMap = new Map();
 
-    for (
-      let currentDate = new Date(start);
-      currentDate <= end;
-      currentDate = incrementDate(currentDate, monthly)
-    ) {
-      const dateKey = monthly
-        ? currentDate.toISOString().substring(0, 7)
-        : currentDate.toISOString().substring(0, 10);
-      if (dateMap.has(dateKey)) {
-        // Add existing data point from the map
-        result.push(dateMap.get(dateKey)!);
-      } else if (!result.find((dp) => dp.x === dateKey)) {
-        // Avoid duplicates
-        // For monthly data with future dates, y should be 0, otherwise carry forward the last y
-        const y =
-          monthly && currentDate > parseDateString(array[array.length - 1].x)
-            ? 0
-            : result.length > 0
-              ? result[result.length - 1].y
-              : 0;
-        result.push({ x: dateKey, y });
-      } else {
-        const lastAmount = result[result.length - 1].y;
-        result.push({ x: dateKey, y: lastAmount });
+    // Fill map with all relevant dates
+    dates.forEach(date => {
+      const dateKey = monthly ? date.toISOString().substring(0, 7) : date.toISOString().substring(0, 10);
+      dateMap.set(dateKey, { x: dateKey, y: 0 }); // Initialize all dates with 0
+    });
+
+    // Set actual values from the data
+    array.forEach(dp => {
+      const key = monthly ? dp.x.substring(0, 7) : dp.x.substring(0, 10);
+      if (dateMap.has(key)) {
+        dateMap.set(key, { x: key, y: dp.y });
       }
-    }
+    });
 
-    return result.sort((a, b) => a.x.localeCompare(b.x)); // Ensure sorted result
+    // Carry forward the last known value if any dates were initialized to 0
+    let lastValue = 0;
+    dates.sort((a, b) => a.getTime() - b.getTime()).forEach(date => {
+      const dateKey = monthly ? date.toISOString().substring(0, 7) : date.toISOString().substring(0, 10);
+      const currentValue = dateMap.get(dateKey);
+      if (currentValue.y === 0 && lastValue !== 0) {
+        dateMap.set(dateKey, { x: dateKey, y: lastValue });
+      } else {
+        lastValue = currentValue.y;
+      }
+    });
+
+    // Convert map to sorted array
+    result.push(...dateMap.values());
+    // sort dates in ascending order
+    result.sort((a, b) => a.x.localeCompare(b.x));
+    return result;
   };
 
-  const updatedEssentials = alignArray(essentials, minDate, maxDate, isMonthly);
-  const updatedWants = alignArray(wants, minDate, maxDate, isMonthly);
+  const updatedEssentials = alignArray(essentials, allDates, isMonthly);
+  const updatedWants = alignArray(wants, allDates, isMonthly);
+
+  const lengthOfDateArrays = updatedEssentials.length + updatedWants.length;
 
   return [lengthOfDateArrays, updatedEssentials, updatedWants];
 }
