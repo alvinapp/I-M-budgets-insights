@@ -22,8 +22,6 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
   const { wants, essentials, savings, unallocated } = values;
   const total = wants + essentials + savings + unallocated;
 
-  console.log("isLoading macros", isLoading);
-
   const radius = dimensions / 2;
   const strokeWidth = doughnutThickness;
   const normalizedRadius = radius - strokeWidth * 2;

@@ -34,6 +34,7 @@ import GraphLegend from "../components/GraphLegend";
 import useInsightsStore from "client/store/insightsStore";
 import { format, set } from "date-fns";
 import { BsBank } from "react-icons/bs";
+import InsightsSavingsChart from "./insightsChart/InsightsSavingsChart";
 
 const InsightsView = () => {
   const location = useLocation();
@@ -279,15 +280,36 @@ const InsightsView = () => {
               </div>
             </div>
           ) : (
-            <SavingsBarGraph
-              previousMonthSavings={previousSavingsTotalExpenses}
-              currentMonthSavings={savingsTotal}
-              savingsTarget={savingsTotalBudgetAmount}
-              budgetLimit={userStore.user.income}
-              currentMonthDate={
-                insightsStoreState.insightsStartDate ?? new Date()
-              }
-            />
+            // <SavingsBarGraph
+            //   previousMonthSavings={previousSavingsTotalExpenses}
+            //   currentMonthSavings={savingsTotal}
+            //   savingsTarget={savingsTotalBudgetAmount}
+            //   budgetLimit={userStore.user.income}
+            //   currentMonthDate={
+            //     insightsStoreState.insightsStartDate ?? new Date()
+            //   }
+            // />
+            <div className="flex flex-col w-full justify-center">
+              <InsightsSavingsChart
+                currencySymbol={currencySymbol}
+                savingsArray={insightsStoreState.insightsLoading ? [] : savingsArray}
+                isLoading={insightsStoreState.insightsLoading}
+              />
+              <div
+                className="space-x-1"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  margin: "0px 10px 2px 10px",
+                  gap: "1.25rem",
+                }}
+              >
+                <GraphLegend
+                  color="#0099A6"
+                  label="Savings"
+                />
+              </div>
+            </div>
           )}
         </div>
         <div className="flex flex-row">

@@ -12,17 +12,15 @@ interface DataPoint {
   y: number;
 }
 
-interface InsightsExpenditureChartProps {
+interface InsightsSavingsChartProps {
   currencySymbol: string;
-  essentialsArray: DataPoint[];
-  wantsArray: DataPoint[];
+  savingsArray: DataPoint[];
   isLoading: boolean;
 }
 
-const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
+const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
   currencySymbol,
-  essentialsArray,
-  wantsArray,
+  savingsArray,
   isLoading,
 }) => {
   const [dataArrayLength, setDataArrayLength] = useState();
@@ -55,30 +53,14 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
             : format(w.config.series[0].data[dataPointIndex].x, "MMM, yyyy");
 
         const essentialsValue = w.config.series[0].data[dataPointIndex]?.y;
-        const wantsValue = w.config.series[1].data[dataPointIndex]?.y;
-        const totalSpendValue = essentialsValue + wantsValue;
 
         return `<div style="padding: 10px; background-color: #f4f9fb; border-radius: 8px; font-size: 14px;" class="custom-tooltip">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                         <div style="display: flex; align-items: center;">
-                            <span style="height: 10px; width: 10px; background-color: #0131A1; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #0131A1;margin-right: 5px;">Essentials:</span>
+                            <span style="height: 10px; width: 10px; background-color: #0099A6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
+                            <span style="color: #0099A6;margin-right: 5px;">Savings:</span>
                         </div>
                         <span> ${essentialsValue?.toFixed(2).toLocaleString("en")}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <div style="display: flex; align-items: center;">
-                            <span style="height: 10px; width: 10px; background-color: #9DB1C6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #9DB1C6;margin-right: 5px;">Wants:</span>
-                        </div>
-                        <span> ${wantsValue?.toFixed(2).toLocaleString("en")}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; align-items: center;">
-                            <span style="height: 10px; width: 10px; background-color: #101010; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #101010;margin-right: 5px;">Total:</span>
-                        </div>
-                        <span> ${totalSpendValue?.toFixed(2).toLocaleString("en")}</span>
                     </div>
                     <hr style="margin: 8px 0; border-top: 1px solid #90A4AE;" />
                     <div style="padding-top: 5px; color: #101010; text-align: center;" class="title">${formattedDate}</div>
@@ -123,32 +105,19 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
 
   const [series, setSeries] = useState([
     {
-      name: "Essentials spend",
+      name: "Savings spend",
       type: "line",
-      data: essentialsArray,
-      color: "#0131A1",
-    },
-    {
-      name: "Wants spend",
-      type: "line",
-      data: wantsArray,
-      color: "#9DB1C6",
-    },
-    {
-      name: "Total spend",
-      type: "line",
-      data: calculateTotalSpend(essentialsArray, wantsArray),
-      color: "#101010",
-    },
+      data: savingsArray,
+      color: "#0099A6",
+    }
   ]);
 
   useEffect(() => {
-    if (!essentialsArray.length && !wantsArray.length) {
+    if (!savingsArray.length) {
       return;
     }
-    const [arrayLength, updatedEssentialsArray, updatedWantsArray] = alignDataArrays(
-      essentialsArray,
-      wantsArray
+    const [arrayLength, updatedsavingsArray] = alignDataArrays(
+      savingsArray,
     );
 
     if (arrayLength && dataArrayLength !== arrayLength) {
@@ -156,24 +125,15 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
     }
 
     const totalSpend = calculateTotalSpend(
-      updatedEssentialsArray,
-      updatedWantsArray
+      updatedsavingsArray,
     );
     setSeries([
       {
         ...series[0],
-        data: updatedEssentialsArray,
-      },
-      {
-        ...series[1],
-        data: updatedWantsArray,
-      },
-      {
-        ...series[2],
-        data: totalSpend,
-      },
+        data: updatedsavingsArray,
+      }
     ]);
-  }, [essentialsArray, wantsArray, dataArrayLength]);
+  }, [savingsArray, dataArrayLength]);
 
   if (isLoading) {
     return (
@@ -193,7 +153,7 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
     );
   }
 
-  if (!essentialsArray.length && !wantsArray.length) {
+  if (!savingsArray.length) {
     return (
       <div className="shadow-card px-4 py-6 mb-3 rounded-lg mt-2">
         <TransactionEmptyState label="No data available" />
@@ -214,22 +174,16 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
   );
 };
 
-export default InsightsExpenditureChart;
+export default InsightsSavingsChart;
 
 const calculateTotalSpend = (
-  essentials: { x: any; y: any }[],
-  wants: { x: any; y: any }[]
+  savings: { x: any; y: any }[],
 ) => {
   // Create a map to sum values by the same date/month
   const totalsMap = new Map();
 
-  // Add essentials to the map
-  essentials.forEach(({ x, y }) => {
-    totalsMap.set(x, (totalsMap.get(x) || 0) + y);
-  });
-
-  // Add wants to the map, summing with existing essentials
-  wants.forEach(({ x, y }) => {
+  // Add savings to the map
+  savings.forEach(({ x, y }) => {
     totalsMap.set(x, (totalsMap.get(x) || 0) + y);
   });
 
@@ -243,27 +197,25 @@ interface DataPoint {
 }
 
 function alignDataArrays(
-  essentials: DataPoint[],
-  wants: DataPoint[]
-): [any, DataPoint[], DataPoint[]] {
-  // if (essentials.length === 0 || wants.length === 0) {
-  //     return [essentials, wants];
+  savings: DataPoint[],
+): [any, DataPoint[]] {
+  // if (savings.length === 0 || wants.length === 0) {
+  //     return [savings, wants];
   // }
 
   // Determine if the data is monthly or daily
-  const isMonthly = [...essentials, ...wants].every((dp) => dp.x.length === 7);
+  const isMonthly = [...savings].every((dp) => dp.x.length === 7);
 
   if (isMonthly) {
-    return alignMonthDataArrays(essentials, wants);
+    return alignMonthDataArrays(savings);
   } else {
-    return alignDayDataArrays(essentials, wants);
+    return alignDayDataArrays(savings);
   }
 }
 
 function alignMonthDataArrays(
-  essentials: DataPoint[],
-  wants: DataPoint[]
-): [any, DataPoint[], DataPoint[]] {
+  savings: DataPoint[],
+): [any, DataPoint[]] {
   // Helper to increment a month
   const incrementMonth = (ym: string): string => {
     let [year, month] = ym.split("-").map(Number);
@@ -276,7 +228,7 @@ function alignMonthDataArrays(
   };
 
   // Determine the range of dates
-  const allMonths = [...essentials, ...wants].map((dp) => dp.x);
+  const allMonths = [...savings].map((dp) => dp.x);
   const earliestMonth = Math.min(
     ...allMonths.map((ym) => new Date(ym).getTime())
   );
@@ -311,21 +263,20 @@ function alignMonthDataArrays(
 
   return [
     null,
-    alignArray(essentials, earliestMonth, latestMonth),
-    alignArray(wants, earliestMonth, latestMonth),
+    alignArray(savings, earliestMonth, latestMonth)
   ];
 }
 
-function alignDayDataArrays(essentials: DataPoint[], wants: DataPoint[]): [number, DataPoint[], DataPoint[]] {
-  if (essentials.length === 0 && wants.length === 0) {
-    return [0, [], []];
+function alignDayDataArrays(savings: DataPoint[],): [number, DataPoint[]] {
+  if (savings.length === 0) {
+    return [0, []];
   }
 
-  const isMonthly = essentials.concat(wants).every((dp) => dp.x.length === 7);
+  const isMonthly = savings.every((dp) => dp.x.length === 7);
   const parseDateString = (dateStr: string): Date => new Date(dateStr + (dateStr.length === 7 ? "-01" : ""));
 
   // Parsing all dates directly
-  const allDates = essentials.concat(wants).map(dp => parseDateString(dp.x));
+  const allDates = savings.map(dp => parseDateString(dp.x));
 
   const alignArray = (array: DataPoint[], dates: Date[], monthly: boolean): DataPoint[] => {
     const result: DataPoint[] = [];
@@ -364,10 +315,9 @@ function alignDayDataArrays(essentials: DataPoint[], wants: DataPoint[]): [numbe
     return result;
   };
 
-  const updatedEssentials = alignArray(essentials, allDates, isMonthly);
-  const updatedWants = alignArray(wants, allDates, isMonthly);
+  const updatedEssentials = alignArray(savings, allDates, isMonthly);
 
-  const lengthOfDateArrays = updatedEssentials.length + updatedWants.length;
+  const lengthOfDateArrays = updatedEssentials.length;
 
-  return [lengthOfDateArrays, updatedEssentials, updatedWants];
+  return [lengthOfDateArrays, updatedEssentials];
 }

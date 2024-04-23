@@ -82,7 +82,7 @@ export const MySpend = ({
         if (spent > recomendedSpend) {
           setSpendingMessage("🙁🏼 Heads up! You're currently spending above the recommended budget by " + (spent - recomendedSpend));
         } else if (spent > 0 && spent < recomendedSpend) {
-          setSpendingMessage("🙌🏼 Sweet! You 're well within your recommended budget limit for this month.");
+          setSpendingMessage("🙌🏼 Sweet! You're well within your recommended budget limit for this month.");
         }
       } else {
         const currentDate = endDateObj.getDate();
@@ -90,7 +90,7 @@ export const MySpend = ({
         if (spent > recomendedSpend) {
           setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by " + (spent - recomendedSpend));
         } else if (spent > 0 && spent < recomendedSpend) {
-          setSpendingMessage("🙌🏼 Sweet! You 're well within your overall budget limit for this month.");
+          setSpendingMessage("🙌🏼 Sweet! You're well within your overall budget limit for this month.");
         }
       }
       setBudget(initialBudget);
@@ -107,7 +107,7 @@ export const MySpend = ({
           if (spent > adjustedBudget) {
             setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by " + (spent - adjustedBudget));
           } else {
-            setSpendingMessage("🙌🏼 Sweet! You 're well within your overall budget limit for this period.");
+            setSpendingMessage("🙌🏼 Sweet! You're well within your overall budget limit for this period.");
           }
           setBudget(adjustedBudget);
           setEstimatedBudget(true);
@@ -118,7 +118,7 @@ export const MySpend = ({
           if (spent > adjustedBudget) {
             setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by " + (spent - adjustedBudget));
           } else if (spent > 0 && spent < adjustedBudget) {
-            setSpendingMessage("🙌🏼 Sweet! You 're well within your overall budget limit for this period.");
+            setSpendingMessage("🙌🏼 Sweet! You're well within your overall budget limit for this period.");
           }
           setBudget(adjustedBudget);
           setEstimatedBudget(true);
@@ -130,7 +130,7 @@ export const MySpend = ({
         if (spent > adjustedBudget) {
           setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by " + (spent - adjustedBudget));
         } else if (spent > 0 && spent < adjustedBudget) {
-          setSpendingMessage("🙌🏼 Sweet! You 're well within your overall budget limit for this period.");
+          setSpendingMessage("🙌🏼 Sweet! You're well within your overall budget limit for this period.");
         }
         setBudget(adjustedBudget);
         setEstimatedBudget(true);

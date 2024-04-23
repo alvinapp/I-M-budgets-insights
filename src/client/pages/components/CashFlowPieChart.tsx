@@ -34,8 +34,6 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
 }) => {
   let { moneyIn, moneyOut } = values;
 
-  console.log("isLoading", isLoading);
-
   const emptyValus = { "moneyInEmpty": 100000, "moneyOutEmpty": 30000 }
   const totalEmpty = emptyValus.moneyInEmpty + emptyValus.moneyOutEmpty
   const navigate = useNavigate();
