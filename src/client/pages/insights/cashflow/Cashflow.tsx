@@ -25,8 +25,8 @@ import { BsBank } from "react-icons/bs";
 const Cashflow = () => {
   const navigate = useNavigate();
   const [earnedData, setEarnedData] = useState<number[]>([]);
-  const [totalEarned, setTotalEarned] = useState(0);
-  const [totalSpent, setTotalSpent] = useState(0);
+  const [totalEarned, setTotalEarned] = useState();
+  const [totalSpent, setTotalSpent] = useState();
   const [spentData, setSpentData] = useState<number[]>([]);
   const [datalabels, setDatalabels] = useState([]);
   const [fullDataLabels, setFullDataLabels] = useState<Date[]>([]);
@@ -74,6 +74,7 @@ const Cashflow = () => {
     }
   };
 
+
   const closeBottomSheet = () => {
     openFilter(false);
   };
@@ -120,45 +121,93 @@ const Cashflow = () => {
             onClick={() => openFilter(true)}
           />
         </div>
-        <TotalCashFlowView totalAmount={totalEarned + totalSpent} />
-        <Graph earned={totalEarned} spent={totalSpent} />
-        <div className="mt-6">
-          <div className="flex flex-col rounded-lg bg-skin-base p-4 shadow-card">
-            <div className="font-medium font-primary text-tiny tracking-wide mb-4">
-              {/* In the last {earnedData.length} months: */}
-              In the selected period:
-            </div>
-            <div className="flex flex-row">
-              <div className="font-medium font-primary text-tiny tracking-wide mb-2 mr-1">
-                - You've made an average of
+        {isLoading ? <>
+          <TotalCashFlowView totalAmount={(totalEarned && totalSpent) ? (totalEarned + totalSpent) : 0} />
+          <Graph earned={(totalEarned) ? totalEarned : 0} spent={(totalSpent) ? totalSpent : 0} />
+          <div className="mt-6">
+            <div className="flex flex-col rounded-lg bg-skin-base p-4 shadow-card">
+              <div className="font-medium font-primary text-tiny tracking-wide mb-4">
+                {/* In the last {earnedData.length} months: */}
+                In the selected period:
               </div>
-              <AmountDisplay
-                amount={checkNAN(
-                  earnedData?.reduce((a: number, b: number) => a + b, 0) /
-                  earnedData.length
-                )}
-              />
-            </div>
-            <div className="flex flex-row">
-              <div className="font-medium font-primary text-tiny tracking-wide mr-2">
-                - You've spent an average of
+              <div className="flex flex-row">
+                <div className="font-medium font-primary text-tiny tracking-wide mb-2 mr-1">
+                  - You've made an average of
+                </div>
+                <AmountDisplay
+                  amount={checkNAN(
+                    earnedData?.reduce((a: number, b: number) => a + b, 0) /
+                    earnedData.length
+                  )}
+                />
               </div>
-              <AmountDisplay
-                amount={checkNAN(
-                  spentData?.reduce((a: number, b: number) => a + b, 0) /
-                  spentData.length
-                )}
-              />
+              <div className="flex flex-row">
+                <div className="font-medium font-primary text-tiny tracking-wide mr-2">
+                  - You've spent an average of
+                </div>
+                <AmountDisplay
+                  amount={checkNAN(
+                    spentData?.reduce((a: number, b: number) => a + b, 0) /
+                    spentData.length
+                  )}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <CashFlowRangeGraph
-          earnedData={isLoading ? [] : earnedData}
-          spentData={isLoading ? [] : spentData}
-          datalabels={isLoading ? [] : datalabels}
-          fullDataLabels={isLoading ? [] : fullDataLabels}
-          currencySymbol={currencySymbol}
-        />
+          <CashFlowRangeGraph
+            earnedData={[]}
+            spentData={[]}
+            datalabels={[]}
+            fullDataLabels={[]}
+            currencySymbol={currencySymbol}
+          />
+        </> : totalEarned && totalSpent && (totalEarned + totalSpent) > 0 ? <div>
+          <TotalCashFlowView totalAmount={totalEarned + totalSpent} />
+          <Graph earned={totalEarned} spent={totalSpent} />
+          <div className="mt-6">
+            <div className="flex flex-col rounded-lg bg-skin-base p-4 shadow-card">
+              <div className="font-medium font-primary text-tiny tracking-wide mb-4">
+                {/* In the last {earnedData.length} months: */}
+                In the selected period:
+              </div>
+              <div className="flex flex-row">
+                <div className="font-medium font-primary text-tiny tracking-wide mb-2 mr-1">
+                  - You've made an average of
+                </div>
+                <AmountDisplay
+                  amount={checkNAN(
+                    earnedData?.reduce((a: number, b: number) => a + b, 0) /
+                    earnedData.length
+                  )}
+                />
+              </div>
+              <div className="flex flex-row">
+                <div className="font-medium font-primary text-tiny tracking-wide mr-2">
+                  - You've spent an average of
+                </div>
+                <AmountDisplay
+                  amount={checkNAN(
+                    spentData?.reduce((a: number, b: number) => a + b, 0) /
+                    spentData.length
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+          <CashFlowRangeGraph
+            earnedData={earnedData}
+            spentData={spentData}
+            datalabels={datalabels}
+            fullDataLabels={fullDataLabels}
+            currencySymbol={currencySymbol}
+          />
+        </div> : (totalEarned && totalSpent && (totalEarned + totalSpent)) === 0 ?
+          <div className="flex-grow flex items-center justify-center">
+            <div className="font-medium font-primary text-tiny tracking-wide text-center mx-auto flex flex-col items-center justify-center" style={{ minHeight: '70vh' }}>
+              No cash flow data available yet! As soon as you have money inflows and outflows, your total earnings and spending for the selected period will be shown here.
+            </div>
+          </div> : null
+        }
       </div>
       <div className="mb-5">
         <BottomSheet
