@@ -2,6 +2,15 @@ import { create } from "zustand";
 
 const useBottomSheetStore = create((set) => ({
   successBottomSheet: false,
+  disableEventPointers: false,
+  setDisableEventPointers: (add: boolean) => {
+    return set(() => {
+      const result = {
+        disableEventPointers: add,
+      };
+      return result;
+    });
+  },
   setSuccessBottomSheet: (open: boolean) => {
     return set(() => {
       const result = {

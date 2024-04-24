@@ -13,6 +13,8 @@ import { GoalMacroType, setMacro } from "client/api/goals";
 import SliderThumbComponent from "../components/SliderThumbComponent";
 import debounce from "lodash.debounce";
 import useBottomSheetStore from "client/store/bottomSheetStore";
+import userStore from "client/store/userStore";
+import useUserStore from "client/store/userStore";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
@@ -21,8 +23,11 @@ const OnboardingSplitIncome = () => {
   ) as IConfig;
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
   const budgetSettingsStore = useBudgetSettingsStore();
-  const { monthlyIncome, currency, incomeSplit } = budgetSettingsStore;
-
+  const userStore = useUserStore((state: any) => state);
+  const { currency, incomeSplit } = budgetSettingsStore;
+  const [monthlyIncome, setMonthlyIncomeValue] = useState(
+    userStore.user.income
+  );
   const [essentialsRatio, setEssentialsRatio] = useState(
     incomeSplit.essentials
   );
@@ -34,7 +39,6 @@ const OnboardingSplitIncome = () => {
     wantsRatio,
     savingsRatio,
   });
-
   const setDebouncedRatioDebounced = useRef(
     debounce((newRatio) => setDebouncedRatio(newRatio), 300)
   ).current;
@@ -72,10 +76,8 @@ const OnboardingSplitIncome = () => {
     new Array(length).fill(1).map((_, i) => i + 1);
   const calculateIncomeAmount = (incomeRatio: number) =>
     Math.floor((incomeRatio / 100) * monthlyIncome);
-
   const saveOnboardingData = async () => {
     await setIncome({ incomeAmount: monthlyIncome, configuration });
-
     const macros: [GoalMacroType, number][] = [
       ["Essentials", essentialsRatio],
       ["Wants", wantsRatio],
@@ -288,10 +290,7 @@ const OnboardingSplitIncome = () => {
             </div>
             <div className="justify-self-end font-medium text-2xl text-skin-base">
               <div className="relative">
-                <div
-                  className="absolute -right-3 -top-0.5 font-custom font-medium text-xs text-skin-base"
-                  style={{ top: "-0.5rem" }}
-                >
+                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
                   {currency ?? ""}
                 </div>
                 <div className="font-custom font-medium text-2xl text-skin-base">
@@ -330,7 +329,7 @@ const OnboardingSplitIncome = () => {
             </div>
             <div className="justify-self-end font-medium text-2xl text-skin-base">
               <div className="relative">
-                <div className="absolute -right-3 -top-0.5 font-custom font-medium text-xs text-skin-base">
+                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
                   {currency ?? ""}
                 </div>
                 <div className="font-custom font-medium text-2xl text-skin-base">
@@ -367,10 +366,7 @@ const OnboardingSplitIncome = () => {
             </div>
             <div className="justify-self-end font-medium text-2xl text-skin-base">
               <div className="relative">
-                <div
-                  className="absolute -right-3 -top-0.5 font-custom font-medium text-xs text-skin-base"
-                  style={{ top: "-0.5rem" }}
-                >
+                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
                   {currency ?? ""}
                 </div>
                 <div className="font-custom font-medium text-2xl text-skin-base">

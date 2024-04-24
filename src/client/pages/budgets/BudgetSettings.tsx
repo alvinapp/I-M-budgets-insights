@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ArrowBackButton from "../components/ArrowBack";
 import NavBar from "../components/NavBar";
 import NavBarTitle from "../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +28,6 @@ import SavingsGoalConfirmation from "./SavingsGoalConfirmation";
 import SuccessfullCreatedView from "../components/budget/SuccessfullCreatedView";
 import successIcon from "client/assets/images/success-icon.svg";
 import EditSavingsViewCard from "./edit-settings/EditSavingsViewCard";
-import { checkNAN } from "client/utils/Formatters";
 
 export const BudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -214,8 +212,15 @@ export const BudgetSettings = () => {
   );
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
   const [savingsSuccess, setSavingsSuccess] = useState(false);
+  useEffect(() => {
+    if (bottomSheetStore?.successBottomSheet) {
+      document
+        .getElementById("budget-container")
+        ?.classList.remove("disable-interaction");
+    }
+  }, []);
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-screen" aria-hidden="true" tabIndex={-1}>
       <NavBar
         children={
           <div className="flex flex-row items-center justify-between border border-b-1 pt-4 pb-2">
@@ -225,7 +230,7 @@ export const BudgetSettings = () => {
           </div>
         }
       />
-      <div className="flex flex-col mx-3.5">
+      <div className="flex flex-col mx-3.5" id="budget-container">
         <div className="mb-3 mt-7">
           <GeneralInfoCard
             iconBg="bg-skin-iconPrimary"
@@ -582,7 +587,7 @@ export const BudgetSettings = () => {
               : null}
           </div>
         </div>
-        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
+        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-40">
           <BudgetDisplay
             title="Savings"
             budgetAmount={savingsBudgetAmount}
@@ -664,12 +669,13 @@ export const BudgetSettings = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-row mt-18 justify-center items-center">
-          <div className="font-primary text-sm font-medium tracking-wide text-skin-base">
-            *Setup at least 3 categories
+
+        <div className="fixed bottom-0 left-0 right-0 px-3.5 flex flex-col bg-skin-base mt-18 pb-5 pt-4">
+          <div className="flex flex-row justify-center items-center">
+            <div className="font-primary text-sm font-medium tracking-wide text-skin-base mb-2">
+              *Setup at least 3 categories
+            </div>
           </div>
-        </div>
-        <div className="mt-2 mb-5">
           {listCheckForEntries.length >= 3 ? (
             <MainButton
               title="All set"
@@ -716,7 +722,7 @@ export const BudgetSettings = () => {
             <SuccessfullCreatedView
               image={successIcon}
               title="Whoop! Goal created"
-              caption="Duis aute categorize in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident."
+              caption="Great start! Your savings journey has just begun. Every coin saved is a step closer to your dream. We’re here to help you make it happen."
               onClick={() => {
                 savingsBottomSheetStore.setSavingsBottomSheet(false);
                 setSavingsSuccess(false);
@@ -756,6 +762,13 @@ export const BudgetSettings = () => {
         }}
         children={<OnboardingSuccess />}
         defaultSnap={400}
+        onSpringEnd={(event) => {
+          if (event.type === "CLOSE") {
+            document
+              .getElementById("budget-container")
+              ?.classList.remove("disable-interaction");
+          }
+        }}
       ></BottomSheet>
     </div>
   );

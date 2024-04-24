@@ -242,6 +242,10 @@ input[type="number"] {
 }
 
 /* Bottom sheet overlay custom styles */
+.disable-interaction {
+  pointer-events: none;
+}
+
 [data-rsbs-overlay] {
   margin-bottom: 2rem;
   margin-left: 0.6875rem;
@@ -251,6 +255,7 @@ input[type="number"] {
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
 }
+
 [ball-testid] > svg {
   color: #101010;
 }
