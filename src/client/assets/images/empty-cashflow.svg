@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="110px" viewBox="0 0 70 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Chart-CF@1x</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="8" height="104" rx="3.41333333"></rect>
+        <filter x="-62.5%" y="-3.8%" width="225.0%" height="109.6%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.764705882   0 0 0 0 0.764705882   0 0 0 0 0.764705882  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-3" x="1.26144928" y="1.70666667" width="8.01855072" height="104" rx="3.41333333"></rect>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#71EBD7" offset="0%"></stop>
+            <stop stop-color="#3ED1AE" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-6" x="1.26144928" y="1.70666667" width="8.01855072" height="104" rx="3.41333333"></rect>
+        <rect id="path-8" x="1.26144928" y="1.70666667" width="8.01855072" height="79" rx="3.41333333"></rect>
+        <rect id="path-10" x="1.26144928" y="1.70666667" width="8.01855072" height="79" rx="3.41333333"></rect>
+        <rect id="path-12" x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+        <filter x="-62.5%" y="-5.1%" width="225.0%" height="112.7%" filterUnits="objectBoundingBox" id="filter-13">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.764705882   0 0 0 0 0.764705882   0 0 0 0 0.764705882  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-14" x="1.26144928" y="1.70666667" width="8.01855072" height="79" rx="3.41333333"></rect>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-16">
+            <stop stop-color="#71EBD7" offset="0%"></stop>
+            <stop stop-color="#3ED1AE" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-17" x="1.26144928" y="1.70666667" width="8.01855072" height="79" rx="3.41333333"></rect>
+        <rect id="path-19" x="1.26144928" y="1.70666667" width="8.01855072" height="60" rx="3.41333333"></rect>
+        <rect id="path-21" x="1.26144928" y="1.70666667" width="8.01855072" height="60" rx="3.41333333"></rect>
+        <rect id="path-23" x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+        <filter x="-62.5%" y="-5.1%" width="225.0%" height="112.7%" filterUnits="objectBoundingBox" id="filter-24">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.764705882   0 0 0 0 0.764705882   0 0 0 0 0.764705882  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-25" x="1.26144928" y="1.70666667" width="8.01855072" height="79" rx="3.41333333"></rect>
+        <rect id="path-27" x="1.26144928" y="1.70666667" width="8.01855072" height="79" rx="3.41333333"></rect>
+        <rect id="path-29" x="1.26144928" y="1.70666667" width="8.01855072" height="60" rx="3.41333333"></rect>
+        <rect id="path-31" x="1.26144928" y="1.70666667" width="8.01855072" height="60" rx="3.41333333"></rect>
+    </defs>
+    <g id="Categorization" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Insights.CF.ES" transform="translate(-180, -330)">
+            <g id="Chart-CF" transform="translate(183, 332)">
+                <g id="Group-12" transform="translate(50, 0)">
+                    <g id="Component*-/-Bar*-/-Depth-#1-Copy" transform="translate(-1.2707, -1.7067)">
+                        <g id="Shadow" transform="translate(1.2707, 1.7067)">
+                            <g fill="black" fill-opacity="1">
+                                <use filter="url(#filter-2)" xlink:href="#path-1"></use>
+                            </g>
+                            <rect id="Fill" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="8" height="104" rx="3.41333333"></rect>
+                            <g id="Outline-Tint" fill="#FFFFFF" fill-opacity="0">
+                                <rect id="Outline" x="0" y="0" width="8" height="104" rx="3.41333333"></rect>
+                            </g>
+                        </g>
+                        <g id="Essentials">
+                            <rect id="Mask:hvr" fill-opacity="0" fill="#FFFFFF" x="0" y="-2.88657986e-15" width="10.56" height="107.413333" rx="3.41333333"></rect>
+                            <mask id="mask-4" fill="white">
+                                <use xlink:href="#path-3"></use>
+                            </mask>
+                            <use id="Mask" fill="#FFFFFF" xlink:href="#path-3"></use>
+                            <mask id="mask-7" fill="white">
+                                <use xlink:href="#path-6"></use>
+                            </mask>
+                            <use id="Bar" fill="url(#linearGradient-5)" xlink:href="#path-6"></use>
+                        </g>
+                    </g>
+                    <g id="Component*-/-Bar*-/-Depth-#1-Copy-2" transform="translate(5.7293, 23.2933)">
+                        <g id="Shadow" transform="translate(1.2707, 1.7067)">
+                            <rect x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+                            <rect id="Fill" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+                            <g id="Outline-Tint" fill="#FFFFFF" fill-opacity="0">
+                                <rect id="Outline" x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+                            </g>
+                        </g>
+                        <g id="Essentials">
+                            <rect id="Mask:hvr" fill-opacity="0" fill="#FFFFFF" x="0" y="-2.88657986e-15" width="10.56" height="82.4133333" rx="3.41333333"></rect>
+                            <mask id="mask-9" fill="white">
+                                <use xlink:href="#path-8"></use>
+                            </mask>
+                            <use id="Mask" fill="#FFFFFF" xlink:href="#path-8"></use>
+                            <mask id="mask-11" fill="white">
+                                <use xlink:href="#path-10"></use>
+                            </mask>
+                            <use id="Bar" fill="#4C4C4C" xlink:href="#path-10"></use>
+                        </g>
+                    </g>
+                </g>
+                <g id="Group-12-Copy" transform="translate(0, 25)">
+                    <g id="Component*-/-Bar*-/-Depth-#1-Copy" transform="translate(-1.2707, -1.7067)">
+                        <g id="Shadow" transform="translate(1.2707, 1.7067)">
+                            <g fill="black" fill-opacity="1">
+                                <use filter="url(#filter-13)" xlink:href="#path-12"></use>
+                            </g>
+                            <rect id="Fill" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+                            <g id="Outline-Tint" fill="#FFFFFF" fill-opacity="0">
+                                <rect id="Outline" x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+                            </g>
+                        </g>
+                        <g id="Essentials">
+                            <rect id="Mask:hvr" fill-opacity="0" fill="#FFFFFF" x="0" y="-2.88657986e-15" width="10.56" height="82.4133333" rx="3.41333333"></rect>
+                            <mask id="mask-15" fill="white">
+                                <use xlink:href="#path-14"></use>
+                            </mask>
+                            <use id="Mask" fill="#FFFFFF" xlink:href="#path-14"></use>
+                            <mask id="mask-18" fill="white">
+                                <use xlink:href="#path-17"></use>
+                            </mask>
+                            <use id="Bar" fill="url(#linearGradient-16)" xlink:href="#path-17"></use>
+                        </g>
+                    </g>
+                    <g id="Component*-/-Bar*-/-Depth-#1-Copy-2" transform="translate(5.7293, 17.2933)">
+                        <g id="Shadow" transform="translate(1.2707, 1.7067)">
+                            <rect x="0" y="0" width="8" height="60" rx="3.41333333"></rect>
+                            <rect id="Fill" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="8" height="60" rx="3.41333333"></rect>
+                            <g id="Outline-Tint" fill="#FFFFFF" fill-opacity="0">
+                                <rect id="Outline" x="0" y="0" width="8" height="60" rx="3.41333333"></rect>
+                            </g>
+                        </g>
+                        <g id="Essentials" transform="translate(0, -0)">
+                            <rect id="Mask:hvr" fill-opacity="0" fill="#FFFFFF" x="0" y="6.66133815e-16" width="10.56" height="63.4133333" rx="3.41333333"></rect>
+                            <mask id="mask-20" fill="white">
+                                <use xlink:href="#path-19"></use>
+                            </mask>
+                            <use id="Mask" fill="#FFFFFF" xlink:href="#path-19"></use>
+                            <mask id="mask-22" fill="white">
+                                <use xlink:href="#path-21"></use>
+                            </mask>
+                            <use id="Bar" fill="#4C4C4C" xlink:href="#path-21"></use>
+                        </g>
+                    </g>
+                </g>
+                <g id="Group-12-Copy-2" transform="translate(25, 25)">
+                    <g id="Component*-/-Bar*-/-Depth-#1-Copy" transform="translate(-1.2707, -1.7067)">
+                        <g id="Shadow" transform="translate(1.2707, 1.7067)">
+                            <g fill="black" fill-opacity="1">
+                                <use filter="url(#filter-24)" xlink:href="#path-23"></use>
+                            </g>
+                            <rect id="Fill" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+                            <g id="Outline-Tint" fill="#FFFFFF" fill-opacity="0">
+                                <rect id="Outline" x="0" y="0" width="8" height="79" rx="3.41333333"></rect>
+                            </g>
+                        </g>
+                        <g id="Essentials">
+                            <rect id="Mask:hvr" fill-opacity="0" fill="#FFFFFF" x="0" y="-2.88657986e-15" width="10.56" height="82.4133333" rx="3.41333333"></rect>
+                            <mask id="mask-26" fill="white">
+                                <use xlink:href="#path-25"></use>
+                            </mask>
+                            <use id="Mask" fill="#FFFFFF" xlink:href="#path-25"></use>
+                            <mask id="mask-28" fill="white">
+                                <use xlink:href="#path-27"></use>
+                            </mask>
+                            <use id="Bar" fill="url(#linearGradient-16)" xlink:href="#path-27"></use>
+                        </g>
+                    </g>
+                    <g id="Component*-/-Bar*-/-Depth-#1-Copy-2" transform="translate(5.7293, 17.2933)">
+                        <g id="Shadow" transform="translate(1.2707, 1.7067)">
+                            <rect x="0" y="0" width="8" height="60" rx="3.41333333"></rect>
+                            <rect id="Fill" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="8" height="60" rx="3.41333333"></rect>
+                            <g id="Outline-Tint" fill="#FFFFFF" fill-opacity="0">
+                                <rect id="Outline" x="0" y="0" width="8" height="60" rx="3.41333333"></rect>
+                            </g>
+                        </g>
+                        <g id="Essentials" transform="translate(0, -0)">
+                            <rect id="Mask:hvr" fill-opacity="0" fill="#FFFFFF" x="0" y="6.66133815e-16" width="10.56" height="63.4133333" rx="3.41333333"></rect>
+                            <mask id="mask-30" fill="white">
+                                <use xlink:href="#path-29"></use>
+                            </mask>
+                            <use id="Mask" fill="#FFFFFF" xlink:href="#path-29"></use>
+                            <mask id="mask-32" fill="white">
+                                <use xlink:href="#path-31"></use>
+                            </mask>
+                            <use id="Bar" fill="#4C4C4C" xlink:href="#path-31"></use>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -14,6 +14,7 @@ import { getMicroDetailsViewData } from "client/api/transactions";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useInsightsStore from "client/store/insightsStore";
 import { BottomSheet } from "react-spring-bottom-sheet";
+import emptyCashFlow from "../../../assets/images/empty-cashflow.png";
 import InsightsFilters from "../InsightsFilters";
 import useAccountStore from "client/store/accountStore";
 import Account from "client/models/Account";
@@ -204,7 +205,12 @@ const Cashflow = () => {
         </div> : (totalEarned && totalSpent && (totalEarned + totalSpent)) === 0 ?
           <div className="flex-grow flex items-center justify-center">
             <div className="font-medium font-primary text-tiny tracking-wide text-center mx-auto flex flex-col items-center justify-center" style={{ minHeight: '70vh' }}>
-              No cash flow data available yet! As soon as you have money inflows and outflows, your total earnings and spending for the selected period will be shown here.
+              <div className="w-50 h-[6rem]">
+                <img src={emptyCashFlow} alt="Empty Cash Flow" className="w-full h-full object-cover object-center" />
+              </div>
+              <p>
+                No cash flow data available yet! As soon as you have money inflows and outflows, your total earnings and spending for the selected period will be shown here.
+              </p>
             </div>
           </div> : null
         }
