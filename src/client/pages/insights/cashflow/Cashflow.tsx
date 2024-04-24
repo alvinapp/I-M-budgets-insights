@@ -205,7 +205,7 @@ const Cashflow = () => {
         </div> : (totalEarned && totalSpent && (totalEarned + totalSpent)) === 0 ?
           <div className="flex-grow flex items-center justify-center">
             <div className="font-medium font-primary text-tiny tracking-wide text-center mx-auto flex flex-col items-center justify-center" style={{ minHeight: '70vh' }}>
-              <div className="w-50 h-[6rem]">
+              <div className="w-50 h-[6rem] mb-2">
                 <img src={emptyCashFlow} alt="Empty Cash Flow" className="w-full h-full object-cover object-center" />
               </div>
               <p>

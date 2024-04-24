@@ -173,7 +173,18 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   // Render an empty chart if both moneyIn and moneyOut are zero
   if (total === 0) {
     return (
-      <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full">
+      <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full" onClick={() =>
+        navigate(
+          `/cashflow?startDate=${format(
+            insightsStoreState.insightsStartDate,
+            "yyyy-MM-dd"
+          )}&endDate=${format(
+            insightsStoreState.insightsEndDate,
+            "yyyy-MM-dd"
+          )}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter
+          }`
+        )
+      }>
         <div className="flex flex-row justify-start items-center pl-3.5">
           <h2 className="font-custom text-base font-medium">Cash flow</h2>
           <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>
