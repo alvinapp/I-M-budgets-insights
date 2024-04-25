@@ -3,6 +3,7 @@
 import React, { FC, useState, useEffect } from "react";
 import "./Graph.css";
 import AnimatedNumber from "client/pages/components/AnimatedNumber";
+import { checkNAN } from "client/utils/Formatters";
 
 interface Props {
   earned: number;
@@ -41,20 +42,20 @@ const Graph: FC<Props> = ({ earned, spent }) => {
         <div
           className="bar"
           style={{
-            height: `${earnedHeight}%`,
+            height: `${checkNAN(earnedHeight)}%`,
             background: "linear-gradient(180deg, #71EBD7 0%, #3ED1AE 100%)",
           }}
         >
           <div className={`barValue${showEarnedValue ? " show" : ""}`}>
-            + <AnimatedNumber target={earned} duration={500} />
+            + <AnimatedNumber target={parseInt((earned).toFixed(0))} duration={500} />
           </div>
         </div>
         <div
           className="bar"
-          style={{ height: `${spentHeight}%`, background: "#4C4C4C" }}
+          style={{ height: `${checkNAN(spentHeight)}%`, background: "#4C4C4C" }}
         >
           <div className={`barValue${showSpentValue ? " show" : ""}`}>
-            - <AnimatedNumber target={Math.abs(spent)} duration={500} />
+            - <AnimatedNumber target={Math.abs(parseInt((spent).toFixed(0)))} duration={500} />
           </div>
         </div>
       </div>

@@ -32,8 +32,9 @@ import CashFlowFilterButton from "../components/insights/CashFlowFilterButton";
 import InsightsExpenditureChart from "./insightsChart/InsightsExpenditureChart";
 import GraphLegend from "../components/GraphLegend";
 import useInsightsStore from "client/store/insightsStore";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { BsBank } from "react-icons/bs";
+import InsightsSavingsChart from "./insightsChart/InsightsSavingsChart";
 
 const InsightsView = () => {
   const location = useLocation();
@@ -99,31 +100,52 @@ const InsightsView = () => {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchCashFlowData = async () => {
+      setIsLoading(true);
       insightsStoreState.setInsightsLoading(true);
-      const data = await getCashFlow({
+      await getCashFlow({
         configuration: config,
         start_date:
           format(insightsStoreState.insightsStartDate, "yyyy-MM-dd") ||
           undefined,
         end_date:
           format(insightsStoreState.insightsEndDate, "yyyy-MM-dd") || undefined,
-      });
-      const macroTypeDistribution = convertTransactionsToDataSeries(
-        data.transactions
-      );
-      const wantsData = getDataForMacroName(macroTypeDistribution, "Wants");
-      const essentialsData = getDataForMacroName(
-        macroTypeDistribution,
-        "Essentials"
-      );
-      setEssentialsData(essentialsData);
-      setWantsData(wantsData);
-      setEssentialsArray(generateLinearProgression(essentialsData));
-      setWantsArray(generateLinearProgression(wantsData));
-      insightsStoreState.setInsightsLoading(false);
-      setCashFlowData(data);
+      }).then((data) => {
+        const macroTypeDistribution = convertTransactionsToDataSeries(
+          data.transactions
+        );
+        const wantsData = getDataForMacroName(macroTypeDistribution, "Wants");
+        const essentialsData = getDataForMacroName(
+          macroTypeDistribution,
+          "Essentials"
+        );
+        const savingsData = getDataForMacroName(macroTypeDistribution, "Savings");
+        setEssentialsData(essentialsData);
+        setWantsData(wantsData);
+        setSavingsData(savingsData);
+        const essentialsArray = generateLinearProgression(essentialsData);
+        const wantsArray = generateLinearProgression(wantsData);
+        const savingsArray = generateLinearProgression(savingsData);
+        setEssentialsArray(essentialsArray);
+        setWantsArray(wantsArray);
+        setSavingsArray(savingsArray);
+        setCashFlowData(data);
+      }).finally(() => {
+        insightsStoreState.setInsightsLoading(false);
+        setIsLoading(false);
+      }).catch((error) => {
+        insightsStoreState.setInsightsLoading(false);
+        setIsLoading(false);
+        console.error("Error fetching data:", error);
+      })
     };
-    fetchCashFlowData();
+    fetchCashFlowData().then(() => {
+      insightsStoreState.setInsightsLoading(false);
+      setIsLoading(false);
+    }).catch((error) => {
+      insightsStoreState.setInsightsLoading(false);
+      setIsLoading(false);
+      console.error("Error fetching data:", error);
+    })
   }, [
     insightsStoreState.insightsStartDate,
     insightsStoreState.insightsEndDate,
@@ -210,7 +232,7 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
@@ -233,8 +255,8 @@ const InsightsView = () => {
             <div className="flex flex-col w-full justify-center">
               <InsightsExpenditureChart
                 currencySymbol={currencySymbol}
-                essentialsArray={essentialsArray}
-                wantsArray={wantsArray}
+                essentialsArray={insightsStoreState.insightsLoading ? [] : essentialsArray}
+                wantsArray={insightsStoreState.insightsLoading ? [] : wantsArray}
                 isLoading={insightsStoreState.insightsLoading}
               />
               <div
@@ -251,22 +273,43 @@ const InsightsView = () => {
                   label="Essentials spend"
                 />
                 <GraphLegend
-                  color="linear-gradient(124.2deg, #8490E2 0%, #3B4381 100%)"
+                  color="#9DB1C6"
                   label="Wants spend"
                 />
-                <GraphLegend color="#F99E36" label="Over limit" />
+                <GraphLegend color="#101010" label="Total spend" />
               </div>
             </div>
           ) : (
-            <SavingsBarGraph
-              previousMonthSavings={previousSavingsTotalExpenses}
-              currentMonthSavings={savingsTotal}
-              savingsTarget={savingsTotalBudgetAmount}
-              budgetLimit={userStore.user.income}
-              currentMonthDate={
-                insightsStoreState.insightsStartDate ?? new Date()
-              }
-            />
+            // <SavingsBarGraph
+            //   previousMonthSavings={previousSavingsTotalExpenses}
+            //   currentMonthSavings={savingsTotal}
+            //   savingsTarget={savingsTotalBudgetAmount}
+            //   budgetLimit={userStore.user.income}
+            //   currentMonthDate={
+            //     insightsStoreState.insightsStartDate ?? new Date()
+            //   }
+            // />
+            <div className="flex flex-col w-full justify-center">
+              <InsightsSavingsChart
+                currencySymbol={currencySymbol}
+                savingsArray={insightsStoreState.insightsLoading ? [] : savingsArray}
+                isLoading={insightsStoreState.insightsLoading}
+              />
+              <div
+                className="space-x-1"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  margin: "0px 10px 2px 10px",
+                  gap: "1.25rem",
+                }}
+              >
+                <GraphLegend
+                  color="#0099A6"
+                  label="Savings"
+                />
+              </div>
+            </div>
           )}
         </div>
         <div className="flex flex-row">
@@ -286,6 +329,7 @@ const InsightsView = () => {
                 ? 0
                 : cashFlowData?.total_change || 0
             }
+            isLoading={isLoading}
           />
         </div>
         <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
@@ -316,6 +360,7 @@ const InsightsView = () => {
                   format(insightsStoreState.insightsEndDate, "yyyy-MM-dd") ??
                   undefined
                 }
+                isLoading={isLoading}
               />
             ) : (
               <OthersSpend

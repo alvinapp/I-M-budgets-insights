@@ -30,13 +30,12 @@ export const ExpenditureComparisonCard = ({
       </div>
       <div className="flex flex-col">
         <div className="flex flex-row items-center">
-          <div className="flex flex-col">
+          {percentage == 0 ? null : <div className="flex flex-col">
             <div
-              className={`flex justify-center items-center rounded-full h-4.5 w-4.5  mr-2.5 bg-[#C3C3C3] ${
-                percentage < 0
-                  ? "border border-[#101010]"
-                  : "border border-[#056489]"
-              }`}
+              className={`flex justify-center items-center rounded-full h-4.5 w-4.5  mr-2.5 bg-[#C3C3C3] ${percentage < 0
+                ? "border border-[#101010]"
+                : "border border-[#056489]"
+                }`}
             >
               {percentage < 0 ? (
                 <FiArrowDownRight color="#101010" size="0.75rem" />
@@ -46,12 +45,11 @@ export const ExpenditureComparisonCard = ({
                 <FiArrowUpRight color="#056489" size="0.75rem" />
               )}
             </div>
-          </div>
+          </div>}
           <div className="flex flex-col">
             <div
-              className={`font-bold font-primary text-xs ${
-                percentage < 0 ? "text-[#101010]" : "text-[#056489]"
-              } tracking-widest`}
+              className={`font-bold font-primary text-xs ${percentage < 0 ? "text-[#101010]" : "text-[#056489]"
+                } tracking-widest`}
             >
               {`${percentage > 0 ? "+" : ""}`}
               <span>
