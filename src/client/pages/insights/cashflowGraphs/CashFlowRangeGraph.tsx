@@ -3,6 +3,7 @@ import ReactApexChart from "react-apexcharts";
 import { format, isSameMonth } from "date-fns";
 import { ApexOptions } from "apexcharts";
 import { formatNumber } from "client/utils/Formatters";
+import loaderSvg from "../../../assets/images/Loader.svg";
 
 interface Props {
   earnedData: number[];
@@ -19,8 +20,10 @@ const CashFlowRangeGraph: React.FC<Props> = ({
   currencySymbol,
 }) => {
   // State to track whether data is loaded
-  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
-  const [formattedDates, setFormattedDates] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [formattedDates, setFormattedDates] = useState<string[]>([]);
+  const [seriesData, setSeriesData] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Check if all necessary data is available
@@ -29,51 +32,55 @@ const CashFlowRangeGraph: React.FC<Props> = ({
       spentData.length > 0 &&
       fullDataLabels.length > 0
     ) {
-      const finalFormattedDates: any = fullDataLabels?.map((date: any) => {
-        const parts = date.split(" ");
-        let formattedDate;
-        if (parts.length === 2) {
-          const monthIndex =
-            new Date(Date.parse(parts[0] + " 1, 2000")).getMonth() + 1;
-          formattedDate = `${parts[1]}-${monthIndex
-            .toString()
-            .padStart(2, "0")}-01`;
-        } else if (parts.length === 3) {
-          const monthIndex =
-            new Date(Date.parse(parts[0] + " 1, 2000")).getMonth() + 1;
-          const day = parts[1];
-          const year = `20${parts[2]}`;
-          formattedDate = `${year}-${monthIndex
-            .toString()
-            .padStart(2, "0")}-${day.padStart(2, "0")}`;
-        }
-        return formattedDate;
-      });
-      setFormattedDates(finalFormattedDates);
-      setDataLoaded(true);
+      try {
+        const finalFormattedDates: any = fullDataLabels?.map((date: any) => {
+          const parts = date.split(" ");
+          let formattedDate;
+          if (parts.length === 2) {
+            const monthIndex =
+              new Date(Date.parse(parts[0] + " 1, 2000")).getMonth() + 1;
+            formattedDate = `${parts[1]}-${monthIndex.toString().padStart(2, "0")}-01`;
+          } else if (parts.length === 3) {
+            const monthIndex =
+              new Date(Date.parse(parts[0] + " 1, 2000")).getMonth() + 1;
+            const day = parts[1];
+            const year = `20${parts[2]}`;
+            formattedDate = `${year}-${monthIndex.toString().padStart(2, "0")}-${day.padStart(2, "0")}`;
+          }
+          return formattedDate;
+        });
+        setFormattedDates(finalFormattedDates);
+        setDataLoaded(true);
+      } catch (e) {
+        setError("Error: " + e);
+        console.log("xxxxxxxxxxxx", e);
+      }
     }
   }, [earnedData, spentData, fullDataLabels]);
 
-  // Convert Date objects to the expected string format
-
-  const series = [
-    {
-      name: "Earned",
-      data: earnedData.map((value, index) => ({
-        x: formattedDates[index],
-        y: value,
-      })),
-      color: "#71EBD7",
-    },
-    {
-      name: "Spent",
-      data: spentData.map((value, index) => ({
-        x: formattedDates[index],
-        y: value,
-      })),
-      color: "#4C4C4C",
-    },
-  ];
+  useEffect(() => {
+    if (dataLoaded) {
+      const newSeries = [
+        {
+          name: "Earned",
+          data: earnedData.map((value, index) => ({
+            x: formattedDates[index] || '', // Provide a fallback if index is out of bounds
+            y: value,
+          })),
+          color: "#71EBD7",
+        },
+        {
+          name: "Spent",
+          data: spentData.map((value, index) => ({
+            x: formattedDates[index] || '', // Provide a fallback if index is out of bounds
+            y: value,
+          })),
+          color: "#4C4C4C",
+        },
+      ];
+      setSeriesData(newSeries);
+    }
+  }, [dataLoaded, formattedDates, earnedData, spentData]);
 
   const options: ApexOptions = {
     chart: {
@@ -134,17 +141,13 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         }
         return `<div style="padding: 10px; background-color: #f4f9fb; border-radius: 8px;" class="custom-tooltip">
                         <div style="display: flex; align-items: center; color: #101010; text-align: right; font-weight: bold;">
-                            <span> + ${earnedValue
-                              .toFixed(2)
-                              .toLocaleString("en")}</span>
+                            <span> + ${earnedValue.toFixed(2).toLocaleString("en")}</span>
                             <sup style="color: #101010; font-size: 10px; font-weight: bold;">
                                 ${currencySymbol}
                             </sup>
                         </div>
                         <div style="display: flex; align-items: center; color: #101010; text-align: right;font-weight: bold;">
-                            <span> - ${spentValue
-                              .toFixed(2)
-                              .toLocaleString("en")}</span>
+                            <span> - ${spentValue.toFixed(2).toLocaleString("en")}</span>
                             <sup style="color: #101010; font-size: 10px; font-weight: bold;">
                                 ${currencySymbol}
                             </sup>
@@ -159,16 +162,29 @@ const CashFlowRangeGraph: React.FC<Props> = ({
     },
   };
 
-  return (
-    <div style={{ display: dataLoaded ? "block" : "none" }}>
-      <ReactApexChart
-        options={options}
-        series={series}
-        type="bar"
-        height={300}
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return dataLoaded ? (
+    <div>
+      <ReactApexChart options={options} series={seriesData} type="bar" height={300} />
+    </div>
+  ) : (
+    <div className="shadow-card px-4 py-6 mb-3 rounded-lg mt-2 items-center">
+      <img
+        src={loaderSvg}
+        alt="loader"
+        id="loader-image"
+        style={{
+          width: "40px",
+          height: "40px",
+          display: "block",
+          margin: "4.375rem auto",
+        }}
       />
     </div>
-  );
+  );;
 };
 
 export default CashFlowRangeGraph;

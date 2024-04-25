@@ -6,6 +6,7 @@ interface TooltipProgressBarProps {
   othersProgressSpend: number;
   myProgressSpend: number; // Added second progress
   startDate: Date;
+  endDate: Date;
 }
 
 const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
@@ -13,18 +14,27 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   othersProgressSpend,
   myProgressSpend, // Added second progress
   startDate,
+  endDate
 }) => {
-  const date = startDate ?? new Date();
-  const currentDay = date.getDate();
-  const daysInMonth = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    0
-  ).getDate();
-  const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
-  const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const now = new Date();
+  const currentDay = now.getDate();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfCurrentMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+  // Check if the period is exactly one month and matches the current month
+  const isCurrentFullMonth =
+    startDate?.getDate() === startOfCurrentMonth.getDate() &&
+    endDate?.getDate() === endOfCurrentMonth.getDate();
 
   const progress = (currentDay / daysInMonth) * 100;
+
+  const defaultCircleSize = 10;
+  let myCircleSize = defaultCircleSize;
+
+  if (othersProgressSpend === 100 && myProgressSpend === 100) {
+    myCircleSize += 4;
+  }
 
   const progressStyle: CSSProperties = {
     backgroundColor: "#6f89a5",
@@ -56,13 +66,13 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     <div className="flex flex-col w-full">
       <div className="flex flex-row justify-between items-center">
         <div className="font-primary text-xs text-skin-subtitle font-medium tracking-wide">
-          {monthStart.toLocaleDateString("en-US", {
+          {startDate.toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
           })}
         </div>
         <div className="font-primary text-xs text-skin-subtitle font-medium tracking-wide">
-          {monthEnd.toLocaleDateString("en-US", {
+          {endDate.toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
           })}
@@ -74,7 +84,10 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
             className="vs-tooltip-progress-bar-progress"
             style={{ ...progressStyle, backgroundColor: "#6f89a5" }}
           >
-            <div className="vs-tooltip-progress-bar-circle"></div>
+            <div className="vs-tooltip-progress-bar-circle" style={{
+              width: `${myCircleSize}px`,
+              height: `${myCircleSize}px`,
+            }}></div>
           </div>
           <div
             className="vs-tooltip-progress-bar-progress2"
@@ -82,15 +95,17 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
           >
             <div className="vs-tooltip-progress-bar-circle2"></div>
           </div>
-          <div
-            className="dotted-divider-container"
-            style={{ left: `calc(${Math.ceil(progress)}%)` }}
-          >
-            <div className="dotted-divider"></div>
-          </div>
-          <div className="tooltip" style={tooltipStyle}>
-            Today
-          </div>
+          {isCurrentFullMonth && <>
+            <div
+              className="dotted-divider-container"
+              style={{ left: `calc(${Math.ceil(progress)}%)` }}
+            >
+              <div className="dotted-divider"></div>
+            </div>
+            <div className="tooltip" style={tooltipStyle}>
+              Today
+            </div>
+          </>}
         </div>
       </div>
     </div>

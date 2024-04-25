@@ -150,11 +150,9 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({
               ry="5"
             />
             <polygon
-              points={`${x + 23},${tooltipPosY + tooltipHeight + 5 + yOffset} ${
-                x + 19
-              },${tooltipPosY + tooltipHeight + yOffset} ${x + 27},${
-                tooltipPosY + tooltipHeight + yOffset
-              }`}
+              points={`${x + 23},${tooltipPosY + tooltipHeight + 5 + yOffset} ${x + 19
+                },${tooltipPosY + tooltipHeight + yOffset} ${x + 27},${tooltipPosY + tooltipHeight + yOffset
+                }`}
               fill="#101a25"
               stroke="#101a25"
               strokeWidth="1"
@@ -314,7 +312,7 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({
       >
         <GraphLegend color="#0131A1" label="Essentials spend" />
         <GraphLegend color="#9DB1C6" label="Wants spend" />
-        <GraphLegend color="#f99e36" label="Over limit" />
+        <GraphLegend color="#101010" label="Total spend" />
       </div>
     </div>
   );
@@ -378,9 +376,8 @@ export const ChangeIndicator: React.FC<Props> = ({
 
       {/* Conditionally render the arrow icon */}
       <g
-        transform={`translate(${graphWidth - 157 - xOffset}, ${
-          graphHeight - 87
-        }) scale(1.5)`}
+        transform={`translate(${graphWidth - 157 - xOffset}, ${graphHeight - 87
+          }) scale(1.5)`}
       >
         {isIncrease ? (
           <FiArrowUpRight color="#565656" strokeWidth="1" />
