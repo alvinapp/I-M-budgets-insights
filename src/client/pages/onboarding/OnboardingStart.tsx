@@ -15,6 +15,7 @@ import CustomLoader from "../components/Loader/CustomLoader";
 import { checkIfUserHasMicros } from "client/api/budget";
 import MonoConnect from "@mono.co/connect.js";
 import { getMonoPubKey, postCode } from "client/api/mono";
+import BackButton from "../components/BackButton";
 
 const OnboardingStart = () => {
   const navigate = useNavigate();
@@ -51,29 +52,29 @@ const OnboardingStart = () => {
         });
     }
   }, [configurations.monoPubKey, configurations.country, setMonoPubKey]);
-  const monoConnect = useMemo(() => {
-    if (!configurations.monoPubKey && !configurations.token) {
-      return null;
-    }
-    const monoInstance = new MonoConnect({
-      onClose: () => {},
-      onLoad: () => {},
-      onSuccess: ({ code }: any) => {
-        postCode(configurations, code, configurations.country ?? "Nigeria");
-        navigate("/onboard-add-income");
-      },
-      key: configurations.monoPubKey,
-    });
-    monoInstance.setup();
+  // const monoConnect = useMemo(() => {
+  //   if (!configurations.monoPubKey && !configurations.token) {
+  //     return null;
+  //   }
+  //   const monoInstance = new MonoConnect({
+  //     onClose: () => {},
+  //     onLoad: () => {},
+  //     onSuccess: ({ code }: any) => {
+  //       postCode(configurations, code, configurations.country ?? "Nigeria");
+  //       navigate("/onboard-add-income");
+  //     },
+  //     key: configurations.monoPubKey,
+  //   });
+  //   monoInstance.setup();
 
-    return monoInstance;
-  }, [configurations.monoPubKey, configurations.token]);
+  //   return monoInstance;
+  // }, [configurations.monoPubKey, configurations.token]);
 
-  const onClick = () => {
-    if (monoConnect) {
-      monoConnect.open();
-    }
-  };
+  // const onClick = () => {
+  //   if (monoConnect) {
+  //     monoConnect.open();
+  //   }
+  // };
   const setUser = useUserStore((state) => state.setUser);
   // add loading
   const [loading, setLoading] = useState(false);
@@ -122,14 +123,14 @@ const OnboardingStart = () => {
             <NavBar
               children={
                 <div className="flex flex-row items-center justify-between pt-5">
-                  <CloseButton onClick={() => navigate(-1)} />
-                  <NavBarTitle title="Create Monthly Budget" />
+                  <BackButton onClick={() => navigate(-1)} />
+                  <NavBarTitle title="" />
                   <div className="h-6 w-6 rounded-full"></div>
                 </div>
               }
             />
             <div className="flex-grow h-px bg-skin-accent3"></div>
-            <div className="flex flex-col mx-6 absolute top-28 left-0 right-0">
+            <div className="flex flex-col mx-6 absolute left-0 right-0">
               <div className="flex flex-row justify-center mt-4">
                 <div
                   className="w-96 h-96 bg-cover bg-local bg-center"
@@ -137,26 +138,39 @@ const OnboardingStart = () => {
                 ></div>
               </div>
               <div className="mt-6">
-                <div className="flex flex-row justify-center mx-4 font-custom text-xl text-center font-medium tracking-title text-skin-base">
-                  Unlock easy spend tracking and savings.
+                <div className="flex flex-row justify-center font-custom text-xl text-start font-semibold tracking-title text-skin-base mr-10">
+                  Start budgeting on I&M On the Go by adding your account
                 </div>
-                <div className="flex flex-row justify-center items center text-sm font-primary tracking-wide text-center text-skin-base mt-3 font-normal">
-                  Set individual savings schedules or fun savings rules for each
-                  goal you have.
+                <div className="flex flex-row justify-center items center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-normal mr-8">
+                  Add your main account and Mpesa wallet to effortlessly balance
+                  your daily spending around your I&M savings and payment
+                  schedules using our powerful new budgeting and insights
+                  features.
+                </div>
+                <div className="flex flex-row items-center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-normal mb-40">
+                  In partnership with alvin
                 </div>
               </div>
             </div>
           </div>
-          <div className="fixed bottom-5 left-0 right-0 mx-4">
-            <MainButton
-              isDisabled={!configurations.monoPubKey && !configurations.token}
-              // title="Link account"
-              title="Start budgeting"
-              click={() => {
-                navigate("/onboard-add-income");
-                // onClick();
-              }}
-            />
+          <div className="fixed bottom-4 left-0 right-0 mx-4 bg-skin-base">
+            <div className="flex flex-col">
+              <div className="text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-normal ml-2">
+                By tapping "Add my first account", I agree to I&M's
+              </div>
+              <div className="text-skin-primary text-sm font-primary tracking-wide text-start font-normal ml-2 mb-2">
+                Terms of Use
+              </div>
+              <MainButton
+                isDisabled={!configurations.monoPubKey && !configurations.token}
+                // title="Link account"
+                title="Add my first account"
+                click={() => {
+                  navigate("/onboard-add-income");
+                  // onClick();
+                }}
+              />
+            </div>
           </div>
         </>
       )}

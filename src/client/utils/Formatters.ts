@@ -1,6 +1,7 @@
 import { MicroGoalTotal } from "client/api/micros";
 import { MicroGoal } from "client/models/MicroGoal";
 import { IConfig } from "client/store/configuration";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { validateLocaleAndSetLanguage } from "typescript";
 
 export const dateFormat = (date: Date, includeYear?: boolean) => {
@@ -324,4 +325,23 @@ export const fetchData = async (
     });
     setDataCallback(result);
   } catch (error) {}
+};
+
+// Set default income value based on country and currency
+
+export const setDefaultIncomeValue = (currency: string) => {
+  const defaultValues = {
+    Nigeria: 10000,
+    Kenya: 5000,
+  };
+  const currencySymbol = useCurrencySettingsStore((state: any) => state);
+  if (currencySymbol.currencySymbol === currency) {
+    return defaultValues.Nigeria;
+  } else {
+    return defaultValues.Kenya;
+  }
+};
+
+export const formatToLocaleString = (value: number) => {
+  return Number(value).toLocaleString("en-US");
 };

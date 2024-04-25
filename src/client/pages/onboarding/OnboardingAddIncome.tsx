@@ -10,35 +10,41 @@ import MonthlyIncomeInput from "../components/onboarding/MonthlyIncomeInput";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import { useMutation, useQuery } from "react-query";
 import { postData } from "client/api/api";
+import { setDefaultIncomeValue } from "client/utils/Formatters";
 
 const OnboardingAddIncome = () => {
   const navigate = useNavigate();
   const budgetSettingsStore = useBudgetSettingsStore();
-  const [loading, setLoading] = useState(false);
   const { currency } = budgetSettingsStore;
   const configuration = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
+  const defaultIncome = setDefaultIncomeValue(currency);
   const [monthlyIncomeValue, setMonthlyIncomeValue] = useState(
-    budgetSettingsStore.monthlyIncome || 50000
+    budgetSettingsStore.monthlyIncome || defaultIncome
   );
 
-  const postIncome = async (amount: number) => {
-    setLoading(true);
+  const postIncome = async (amount: any) => {
+    const finalAmount = parseInt(amount);
     try {
       const response = await postData({
         endpoint: "/users/income",
         token: configuration.token,
-        data: { amount },
+        data: { amount: finalAmount },
       });
-      setLoading(false);
+      return response;
     } catch (error) {
       console.error(error);
-      setLoading(false);
     }
   };
-
-  const { mutate: addIncome } = useMutation(postIncome);
+  const { isFetching: settingIncome, refetch: addIncome } = useQuery(
+    "set-monthly-income",
+    () => postIncome(monthlyIncomeValue),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">
@@ -62,9 +68,6 @@ const OnboardingAddIncome = () => {
             We need to use this as a base calculation for your overall monthly
             budget. You can always modify later.
             <br></br>
-            {/* <a href="/404-not-found" className="underline">
-              Learn More
-            </a> */}
           </div>
         </div>
       </div>
@@ -84,11 +87,16 @@ const OnboardingAddIncome = () => {
         <MainButton
           title="Continue"
           isDisabled={false}
-          loading={loading}
+          loading={settingIncome}
           click={() => {
             budgetSettingsStore.setMonthlyIncome(monthlyIncomeValue);
-            addIncome(monthlyIncomeValue);
-            navigate("/onboard-split-income");
+            addIncome().then((response: any) => {
+              if (response?.data.errors) {
+                return;
+              } else {
+                navigate("/onboard-split-income");
+              }
+            });
           }}
         />
       </div>

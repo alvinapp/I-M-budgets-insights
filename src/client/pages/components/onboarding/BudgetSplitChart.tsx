@@ -165,12 +165,8 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
               overflow: "hidden",
             }}
           >
-            <img
-              src={macroBudget}
-              alt="icon"
-              style={{ width: "24px", height: "24px" }}
-            />
-            <div className="font-primary text-sm tracking-wide mt-2 text-skin-white font-medium">
+            <img src={macroBudget} alt="icon" className="w-6 h-6" />
+            <div className="font-primary text-sm tracking-wide mt-2 text-skin-base font-medium">
               <span>Overall budget split</span>
             </div>
           </div>
