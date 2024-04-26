@@ -15,6 +15,8 @@ import debounce from "lodash.debounce";
 import useBottomSheetStore from "client/store/bottomSheetStore";
 import userStore from "client/store/userStore";
 import useUserStore from "client/store/userStore";
+import { reformatBudgetSplit } from "client/utils/Formatters";
+import useCategoriesStore from "client/store/categoriesStore";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
@@ -23,16 +25,22 @@ const OnboardingSplitIncome = () => {
   ) as IConfig;
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
   const budgetSettingsStore = useBudgetSettingsStore();
+  const categoriesStore = useCategoriesStore((state: any) => state);
   const userStore = useUserStore((state: any) => state);
   const { currency, incomeSplit } = budgetSettingsStore;
   const [monthlyIncome, setMonthlyIncomeValue] = useState(
     userStore.user.income
   );
+  const split = reformatBudgetSplit(categoriesStore.macros?.budget_split ?? "");
   const [essentialsRatio, setEssentialsRatio] = useState(
-    incomeSplit.essentials
+    parseInt(split[0]) ?? incomeSplit.essentials
   );
-  const [wantsRatio, setWantsRatio] = useState(incomeSplit.wants);
-  const [savingsRatio, setSavingsRatio] = useState(incomeSplit.savings);
+  const [wantsRatio, setWantsRatio] = useState(
+    parseInt(split[1]) ?? incomeSplit.wants
+  );
+  const [savingsRatio, setSavingsRatio] = useState(
+    parseInt(split[2]) ?? incomeSplit.savings
+  );
   const [showPercentage, setShowPercentage] = useState(false);
   const [debouncedRatio, setDebouncedRatio] = useState({
     essentialsRatio,
@@ -131,6 +139,9 @@ const OnboardingSplitIncome = () => {
 
       // Redirect to success page
       bottomSheetStore.setSuccessBottomSheet(true);
+      document
+        .getElementById("budget-container")
+        ?.classList.add("disable-interaction");
       navigate("/budget-settings");
     } catch (error) {
       console.error(error);

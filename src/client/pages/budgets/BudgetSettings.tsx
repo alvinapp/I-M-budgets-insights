@@ -28,6 +28,7 @@ import SavingsGoalConfirmation from "./SavingsGoalConfirmation";
 import SuccessfullCreatedView from "../components/budget/SuccessfullCreatedView";
 import successIcon from "client/assets/images/success-icon.svg";
 import EditSavingsViewCard from "./edit-settings/EditSavingsViewCard";
+import { reformatBudgetSplit } from "client/utils/Formatters";
 
 export const BudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -216,9 +217,10 @@ export const BudgetSettings = () => {
     if (bottomSheetStore?.successBottomSheet) {
       document
         .getElementById("budget-container")
-        ?.classList.remove("disable-interaction");
+        ?.classList.add("disable-interaction");
     }
   }, []);
+
   return (
     <div className="h-screen w-screen" aria-hidden="true" tabIndex={-1}>
       <NavBar
@@ -237,11 +239,7 @@ export const BudgetSettings = () => {
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
-            caption={`${
-              typeof userStore.user.income === undefined
-                ? ""
-                : userStore.user.income
-            }`}
+            caption={`${userStore.user.income ?? ""}`}
             currencySymbol={currencySymbol}
             onClick={() => navigate("/edit-monthly-income")}
           />
@@ -251,11 +249,7 @@ export const BudgetSettings = () => {
           icon={<FiPieChart />}
           title="Budget split"
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
-          caption={`${
-            typeof categoriesStore.macros?.budget_split
-              ? categoriesStore.macros?.budget_split
-              : ""
-          }`}
+          caption={`${categoriesStore.macros?.budget_split ?? ""}`}
           onClick={() => navigate("/onboard-split-income")}
         />
         <div className="mb-4 mt-5 flex flex-row items-center justify-center px-3.5">
@@ -670,7 +664,7 @@ export const BudgetSettings = () => {
           </div>
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 px-3.5 flex flex-col bg-skin-base mt-18 pb-5 pt-4">
+        <div className="fixed bottom-0 left-0 right-0 px-3.5 flex flex-col bg-skin-base pb-5 pt-4">
           <div className="flex flex-row justify-center items-center">
             <div className="font-primary text-sm font-medium tracking-wide text-skin-base mb-2">
               *Setup at least 3 categories

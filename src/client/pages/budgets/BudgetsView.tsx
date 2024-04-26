@@ -18,6 +18,7 @@ import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useCategoriesStore from "client/store/categoriesStore";
 import {
   calculateSpending,
+  calculateTotalMacroBudget,
   checkNAN,
   fetchData,
 } from "client/utils/Formatters";
@@ -54,7 +55,12 @@ const BudgetsView = () => {
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
   const macroData = macroGoalStore.macroGoals ?? [];
   const essentialMacro = macroData[0];
+  const wantsMacro = macroData[1];
+  console.log(wantsMacro);
+  const savingsMacro = macroData[2];
   const essentialBudgetAmount = essentialMacro?.amount;
+  const wantsBudgetAmount = essentialMacro?.amount;
+  const savingsBudgetAmount = savingsMacro?.amount;
   const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
   const insightsStoreState = useInsightsStore((state) => state);
   const config = useConfigurationStore(
@@ -302,8 +308,11 @@ const BudgetsView = () => {
               Math.max(
                 0,
                 essentialTotalBudgetAmount +
-                  wantsTotalBudgetAmount -
-                  (essentialTotalExpenses + wantsTotalExpenses)
+                  wantsTotalBudgetAmount +
+                  savingsTotalBudgetAmount -
+                  (essentialTotalExpenses +
+                    wantsTotalExpenses +
+                    savingsTotalExpenses)
               )
             )}
             subtitle="Available budget"
@@ -332,7 +341,7 @@ const BudgetsView = () => {
         </div>
         <div className="mt-2">
           <MacroProgressBarsContainer
-            ratios={`${categoryStore.categoryBudgets[0]?.percentage}/${categoryStore.categoryBudgets[1]?.percentage}/${categoryStore.categoryBudgets[2]?.percentage}`}
+            ratios={`33/33/33`}
             budgetAmount={{
               wantsBudget: essentialTotalExpenses,
               essentialsBudget: wantsTotalExpenses,
@@ -412,7 +421,9 @@ const BudgetsView = () => {
           </div>
           <div className="flex flex-col">
             {essentialBudgets?.length !==
-            categoryStore.categoryBudgets[0]?.data.length ? (
+              categoryStore.categoryBudgets[0]?.data.length &&
+            calculateTotalMacroBudget(essentialBudgets, essentialBudgetAmount) >
+              0 ? (
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
@@ -482,7 +493,8 @@ const BudgetsView = () => {
           </div>
           <div className="flex flex-col">
             {wantsBudgets?.length !==
-            categoryStore.categoryBudgets[1]?.data.length ? (
+              categoryStore.categoryBudgets[1]?.data.length &&
+            calculateTotalMacroBudget(wantsBudgets, wantsBudgetAmount) > 0 ? (
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
