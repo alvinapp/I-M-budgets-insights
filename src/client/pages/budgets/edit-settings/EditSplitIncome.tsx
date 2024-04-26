@@ -12,6 +12,8 @@ import { setIncome, completeOnboarding } from "client/api/users";
 import { GoalMacroType, setMacro } from "client/api/goals";
 import SliderThumbComponent from "../../components/SliderThumbComponent";
 import debounce from "lodash.debounce";
+import { reformatBudgetSplit } from "client/utils/Formatters";
+import useCategoriesStore from "client/store/categoriesStore";
 
 const EditSplitIncome = () => {
   const navigate = useNavigate();
@@ -21,12 +23,17 @@ const EditSplitIncome = () => {
 
   const budgetSettingsStore = useBudgetSettingsStore();
   const { monthlyIncome, currency, incomeSplit } = budgetSettingsStore;
-
+  const categoriesStore = useCategoriesStore((state: any) => state);
+  const split = reformatBudgetSplit(categoriesStore.macros?.budget_split ?? "");
   const [essentialsRatio, setEssentialsRatio] = useState(
-    incomeSplit.essentials
+    parseInt(split[0]) ?? incomeSplit.essentials
   );
-  const [wantsRatio, setWantsRatio] = useState(incomeSplit.wants);
-  const [savingsRatio, setSavingsRatio] = useState(incomeSplit.savings);
+  const [wantsRatio, setWantsRatio] = useState(
+    parseInt(split[1]) ?? incomeSplit.wants
+  );
+  const [savingsRatio, setSavingsRatio] = useState(
+    parseInt(split[2]) ?? incomeSplit.savings
+  );
   const [showPercentage, setShowPercentage] = useState(false);
   const [debouncedRatio, setDebouncedRatio] = useState({
     essentialsRatio,

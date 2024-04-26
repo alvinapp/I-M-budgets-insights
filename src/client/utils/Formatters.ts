@@ -345,3 +345,23 @@ export const setDefaultIncomeValue = (currency: string) => {
 export const formatToLocaleString = (value: number) => {
   return Number(value).toLocaleString("en-US");
 };
+
+//Reformat Budget Split
+export const reformatBudgetSplit = (ratio: string) => {
+  const splitRatio = ratio.split("/");
+  return splitRatio;
+};
+//check if available budget is zero
+export const calculateTotalMacroBudget = (
+  budgets: Array<any>,
+  allocatedBudget: number
+) => {
+  let totalAllocatedBudget = 0;
+
+  if (budgets && budgets.length > 0) {
+    budgets.forEach((essential) => {
+      totalAllocatedBudget += essential.amount;
+    });
+  }
+  return allocatedBudget - totalAllocatedBudget;
+};

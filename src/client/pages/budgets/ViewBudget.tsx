@@ -101,7 +101,7 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
             );
           })
         ) : fetchingTransactions ? (
-          Array(10)
+          Array(3)
             .fill("a")
             .map((_, i) => {
               return <BudgetTransactionCardSkeleton key={i} />;

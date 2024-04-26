@@ -221,7 +221,7 @@ const EditBudgetSettings = () => {
               className="h-6 w-6 rounded-full flex items-center justify-center"
               onClick={() => navigate("/view-info")}
             >
-              <FiInfo color="#101010" size="1.5rem" />
+              {/* <FiInfo color="#101010" size="1.5rem" /> */}
             </div>
           </div>
         }
