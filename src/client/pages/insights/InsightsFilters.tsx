@@ -8,7 +8,7 @@ import { dateFilters } from "client/utils/MockData";
 import useInsightsStore from "client/store/insightsStore";
 import CustomDateRangePicker from "../components/custom-date-picker/CustomerDateRangePicker";
 import { format } from "date-fns";
-import { BsBank } from "react-icons/bs";
+import bankIcon from "../../assets/images/budgets-insights/bank.svg";
 interface InsightsFiltersProps {
   accounts: any; // replace 'any' with the actual type
   activeAccount: any; // replace 'any' with the actual type
@@ -136,7 +136,7 @@ const InsightsFilters = ({
       </div>
       <div className="flex flex-row justify-start items-center mt-10">
         <div className="font-custom text-skin-base font-medium tracking-title text-base mr-1">
-          <BsBank color="#101010" />
+          <img src={bankIcon} alt="" />
         </div>
         <div className="font-custom text-skin-base font-medium tracking-title text-base">
           My accounts

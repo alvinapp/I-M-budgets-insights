@@ -30,12 +30,12 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   doughnutThickness,
   values,
   percentageChange,
-  isLoading
+  isLoading,
 }) => {
   let { moneyIn, moneyOut } = values;
 
-  const emptyValus = { "moneyInEmpty": 100000, "moneyOutEmpty": 30000 }
-  const totalEmpty = emptyValus.moneyInEmpty + emptyValus.moneyOutEmpty
+  const emptyValus = { moneyInEmpty: 100000, moneyOutEmpty: 30000 };
+  const totalEmpty = emptyValus.moneyInEmpty + emptyValus.moneyOutEmpty;
   const navigate = useNavigate();
   const total = moneyIn + moneyOut;
   const moneyOutPercentage =
@@ -64,17 +64,21 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
       <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full">
         <style>{animationStyles}</style>
         <div className="flex flex-row justify-start items-center pl-3.5">
-          <h2 className="font-custom text-base font-medium">Cash flow</h2>
+          <h2 className="font-custom text-base font-medium">Cashflow</h2>
           <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>
             <FiChevronRight size="0.625rem" />
           </div>
         </div>
         <div className="flex flex-row items-start">
           {/*TODO: update this section to take the 70% and 30% */}
-          <svg height={dimensions} width={dimensions} style={{
-            animation: "smoothRotate 2s linear infinite",
-            transformOrigin: "center center",
-          }}>
+          <svg
+            height={dimensions}
+            width={dimensions}
+            style={{
+              animation: "smoothRotate 2s linear infinite",
+              transformOrigin: "center center",
+            }}
+          >
             <defs>
               <linearGradient
                 id="moneyInGradient"
@@ -85,7 +89,11 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
               </linearGradient>
             </defs>
             <g transform={`translate(${radius}, ${radius})`}>
-              {(["moneyInEmpty", "moneyOutEmpty"] as Array<keyof typeof emptyValus>).map((type, index) => {
+              {(
+                ["moneyInEmpty", "moneyOutEmpty"] as Array<
+                  keyof typeof emptyValus
+                >
+              ).map((type, index) => {
                 const percentage = (emptyValus[type] / totalEmpty) * 100;
                 const color = type === "moneyInEmpty" ? "#e0e0e0" : "#f2f2f2";
 
@@ -125,7 +133,6 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                   />
                 );
               })}
-
             </g>
           </svg>
           <div className="flex flex-col items-start">
@@ -146,7 +153,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
               </div>
               <div className="flex flex-row">
                 <div className="font-primary text-xs text-skin-subtitle font-medium tracking-longest_text">
-                  {"Total cash flow"}
+                  {"Total cashflow"}
                 </div>
               </div>
             </div>
@@ -173,20 +180,24 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   // Render an empty chart if both moneyIn and moneyOut are zero
   if (total === 0) {
     return (
-      <div className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full" onClick={() =>
-        navigate(
-          `/cashflow?startDate=${format(
-            insightsStoreState.insightsStartDate,
-            "yyyy-MM-dd"
-          )}&endDate=${format(
-            insightsStoreState.insightsEndDate,
-            "yyyy-MM-dd"
-          )}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter
-          }`
-        )
-      }>
+      <div
+        className="shadow-card pt-5 rounded-lg pr-2.5 flex flex-col w-full"
+        onClick={() =>
+          navigate(
+            `/cashflow?startDate=${format(
+              insightsStoreState.insightsStartDate,
+              "yyyy-MM-dd"
+            )}&endDate=${format(
+              insightsStoreState.insightsEndDate,
+              "yyyy-MM-dd"
+            )}&accountName=${cashflowVariables.accountName}&dateFilter=${
+              cashflowVariables.dateFilter
+            }`
+          )
+        }
+      >
         <div className="flex flex-row justify-start items-center pl-3.5">
-          <h2 className="font-custom text-base font-medium">Cash flow</h2>
+          <h2 className="font-custom text-base font-medium">Cashflow</h2>
           <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>
             <FiChevronRight size="0.625rem" />
           </div>
@@ -204,7 +215,11 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
               </linearGradient>
             </defs>
             <g transform={`translate(${radius}, ${radius})`}>
-              {(["moneyInEmpty", "moneyOutEmpty"] as Array<keyof typeof emptyValus>).map((type, index) => {
+              {(
+                ["moneyInEmpty", "moneyOutEmpty"] as Array<
+                  keyof typeof emptyValus
+                >
+              ).map((type, index) => {
                 const percentage = (emptyValus[type] / totalEmpty) * 100;
                 const color = type === "moneyInEmpty" ? "#e0e0e0" : "#f2f2f2";
 
@@ -244,7 +259,6 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                   />
                 );
               })}
-
             </g>
           </svg>
           <div className="flex flex-col items-start">
@@ -265,7 +279,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
               </div>
               <div className="flex flex-row">
                 <div className="font-primary text-xs text-skin-subtitle font-medium tracking-longest_text">
-                  {"Total cash flow"}
+                  {"Total cashflow"}
                 </div>
               </div>
             </div>
@@ -300,13 +314,14 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           )}&endDate=${format(
             insightsStoreState.insightsEndDate,
             "yyyy-MM-dd"
-          )}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter
+          )}&accountName=${cashflowVariables.accountName}&dateFilter=${
+            cashflowVariables.dateFilter
           }`
         )
       }
     >
       <div className="flex flex-row justify-start items-center pl-3.5">
-        <h2 className="font-custom text-base font-medium">Cash flow</h2>
+        <h2 className="font-custom text-base font-medium">Cashflow</h2>
         <div style={{ transform: "scale(1.25)", marginLeft: "0.2em" }}>
           <FiChevronRight size="0.625rem" />
         </div>
@@ -455,7 +470,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             </div>
             <div className="flex flex-row">
               <div className="font-primary text-xs text-skin-subtitle font-medium tracking-longest_text">
-                {"Total cash flow"}
+                {"Total cashflow"}
               </div>
             </div>
           </div>

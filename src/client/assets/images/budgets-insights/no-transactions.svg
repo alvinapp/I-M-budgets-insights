@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="25px" viewBox="0 0 24 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icon Placeholder</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-25, -11)">
+            <g id="Icon-Placeholder" transform="translate(25, 11.1184)">
+                <rect id="Box-24pt" x="0" y="0" width="24" height="24"></rect>
+                <path d="M20,6 L20,7.57142857 L7.2,7.57142857 L7.2,6 L20,6 Z M20,10.7142857 L20,12.2857143 L7.2,12.2857143 L7.2,10.7142857 L20,10.7142857 Z M20,15.4285714 L20,17 L7.2,17 L7.2,15.4285714 L20,15.4285714 Z M5.6,6 L5.6,7.57142857 L4,7.57142857 L4,6 L5.6,6 Z M5.6,10.7142857 L5.6,12.2857143 L4,12.2857143 L4,10.7142857 L5.6,10.7142857 Z M5.6,15.4285714 L5.6,17 L4,17 L4,15.4285714 L5.6,15.4285714 Z" id="🎨-Icon-Style" fill="#878787"></path>
+            </g>
+        </g>
+    </g>
+</svg>
