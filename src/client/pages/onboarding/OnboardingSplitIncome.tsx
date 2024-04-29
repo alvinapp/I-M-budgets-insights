@@ -29,17 +29,17 @@ const OnboardingSplitIncome = () => {
   const userStore = useUserStore((state: any) => state);
   const { currency, incomeSplit } = budgetSettingsStore;
   const [monthlyIncome, setMonthlyIncomeValue] = useState(
-    userStore.user.income
+    budgetSettingsStore.monthlyIncome
   );
   const split = reformatBudgetSplit(categoriesStore.macros?.budget_split ?? "");
   const [essentialsRatio, setEssentialsRatio] = useState(
-    parseInt(split[0]) ?? incomeSplit.essentials
+    split ? parseInt(split[0]) : incomeSplit.essentials
   );
   const [wantsRatio, setWantsRatio] = useState(
-    parseInt(split[1]) ?? incomeSplit.wants
+    split ? parseInt(split[1]) : incomeSplit.wants
   );
   const [savingsRatio, setSavingsRatio] = useState(
-    parseInt(split[2]) ?? incomeSplit.savings
+    split ? parseInt(split[2]) : incomeSplit.savings
   );
   const [showPercentage, setShowPercentage] = useState(false);
   const [debouncedRatio, setDebouncedRatio] = useState({
@@ -155,8 +155,8 @@ const OnboardingSplitIncome = () => {
       type === "essentials"
         ? essentialsRatio
         : type === "wants"
-        ? wantsRatio
-        : savingsRatio;
+          ? wantsRatio
+          : savingsRatio;
     const change = newValue - oldValue;
 
     if (newValue === totalRatio) {
