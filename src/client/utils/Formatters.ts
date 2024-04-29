@@ -349,6 +349,9 @@ export const formatToLocaleString = (value: number) => {
 //Reformat Budget Split
 export const reformatBudgetSplit = (ratio: string) => {
   const splitRatio = ratio.split("/");
+  if (splitRatio.length === 1 && splitRatio[0] === "") {
+    return false;
+  }
   return splitRatio;
 };
 //check if available budget is zero
