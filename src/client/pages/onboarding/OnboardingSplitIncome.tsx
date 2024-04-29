@@ -29,7 +29,7 @@ const OnboardingSplitIncome = () => {
   const userStore = useUserStore((state: any) => state);
   const { currency, incomeSplit } = budgetSettingsStore;
   const [monthlyIncome, setMonthlyIncomeValue] = useState(
-    userStore.user.income
+    budgetSettingsStore.monthlyIncome
   );
   const split = reformatBudgetSplit(categoriesStore.macros?.budget_split ?? "");
   const [essentialsRatio, setEssentialsRatio] = useState(
