@@ -277,6 +277,11 @@ function alignMonthDataArrays(
 
   // Determine the range of dates
   const allMonths = [...essentials, ...wants].map((dp) => dp.x);
+  if (allMonths.length === 1) {
+    const previousMonth = new Date(allMonths[0]);
+    previousMonth.setMonth(previousMonth.getMonth() - 1);
+    allMonths.unshift(previousMonth.toISOString().substring(0, 7));
+  }
   const earliestMonth = Math.min(
     ...allMonths.map((ym) => new Date(ym).getTime())
   );
@@ -326,6 +331,10 @@ function alignDayDataArrays(essentials: DataPoint[], wants: DataPoint[]): [numbe
 
   // Parsing all dates directly
   const allDates = essentials.concat(wants).map(dp => parseDateString(dp.x));
+
+  if (allDates.length === 1) {
+    allDates.unshift(new Date(allDates[0].getTime() - (24 * 60 * 60 * 1000)));
+  }
 
   const alignArray = (array: DataPoint[], dates: Date[], monthly: boolean): DataPoint[] => {
     const result: DataPoint[] = [];

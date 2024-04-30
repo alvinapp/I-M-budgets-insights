@@ -319,13 +319,16 @@ export const OthersSpend = ({
       <div className="flex flex-col">
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
+            const isGoingOut = expenditure?.name === "Going out";
             return (
-              <ExpenditureComparisonCard
-                icon={expenditure.emoji}
-                key={i}
-                category={expenditure.name}
-                percentage={!isLoading ? expenditure.percentage : 0}
-              />
+              <React.Fragment key={i}>
+                <ExpenditureComparisonCard
+                  icon={isGoingOut ? "🤩" : expenditure.emoji}
+                  key={i}
+                  category={isGoingOut ? "Entertainment" : expenditure.name}
+                  percentage={!isLoading ? expenditure.percentage : 0}
+                />
+              </React.Fragment>
             );
           })
           : null}

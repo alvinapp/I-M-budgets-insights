@@ -9,6 +9,7 @@ import uncategorized from "client/assets/images/uncategorized.svg";
 import { BudgetTransaction } from "client/models/Budget";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 const CategoryEmoji = ({ category }: { category: Category }) => {
+  const isGoingOut = category.name === "Going out";
   if (!category)
     return (
       <div
@@ -21,7 +22,7 @@ const CategoryEmoji = ({ category }: { category: Category }) => {
 
   return (
     <div className="rounded-full w-9 h-9 flex justify-center  bg-skin-secondary1WithOpacity items-center">
-      <Emoji symbol={category.emoji} label={category.name} />
+      <Emoji symbol={isGoingOut ? "🤩" : category.emoji} label={isGoingOut ? "Entertainment" : category.name} />
     </div>
   );
 };

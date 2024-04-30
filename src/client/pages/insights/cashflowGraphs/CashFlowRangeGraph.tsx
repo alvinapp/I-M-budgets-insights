@@ -91,7 +91,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         show: false,
       },
       zoom: {
-        enabled: true,
+        enabled: false,
       },
     },
     plotOptions: {
@@ -141,13 +141,13 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         }
         return `<div style="padding: 10px; background-color: #f4f9fb; border-radius: 8px;" class="custom-tooltip">
                         <div style="display: flex; align-items: center; color: #101010; text-align: right; font-weight: bold;">
-                            <span> + ${earnedValue.toFixed(2).toLocaleString("en")}</span>
+                            <span> + ${Number(earnedValue).toLocaleString("en-US", { maximumFractionDigits: 2, })}</span>
                             <sup style="color: #101010; font-size: 10px; font-weight: bold;">
                                 ${currencySymbol}
                             </sup>
                         </div>
                         <div style="display: flex; align-items: center; color: #101010; text-align: right;font-weight: bold;">
-                            <span> - ${spentValue.toFixed(2).toLocaleString("en")}</span>
+                            <span> - ${Number(spentValue).toLocaleString("en-US", { maximumFractionDigits: 2, })}</span>
                             <sup style="color: #101010; font-size: 10px; font-weight: bold;">
                                 ${currencySymbol}
                             </sup>

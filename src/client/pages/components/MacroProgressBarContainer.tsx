@@ -38,7 +38,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
       {ratioArray.map((flexValue, index) => (
         <div key={index} className="flex flex-col" style={{ flex: checkNAN(flexValue) }}>
           {isLoading ? (
-            <div className="bg-silver animate-pulse h-[1.875rem] rounded-[1.375rem] bg-[#d2d2d2] min-w-[7.5rem]" />
+            <div className="bg-silver animate-pulse h-[1.875rem] rounded-[1.375rem] bg-[#d2d2d2] min-w-[7rem]" />
           ) : (
             <MacroProgressBar
               flexValue={1}
