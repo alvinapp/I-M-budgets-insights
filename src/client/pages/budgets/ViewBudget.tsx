@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { AmountView } from "../components/insights/AmountView";
 import { FiX } from "react-icons/fi";
@@ -38,20 +38,29 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
+  const [fetchingData, setFetchingData] = useState(false);
   const [transactions, setTransactions] = useState<BudgetTransaction[]>([]);
-  const { isFetching: fetchingTransactions } = useQuery(
-    "fetching-budgetTransactions",
-    () =>
-      fetchBudgetCategoriesTransactions({
-        configuration: config,
-        start_date: startDate,
-        end_date: endDate,
-        microgoalId: microGoalId,
-      }).then((res) => {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setFetchingData(true);
+        const res = await fetchBudgetCategoriesTransactions({
+          configuration: config,
+          start_date: startDate,
+          end_date: endDate,
+          microgoalId: microGoalId,
+        });
         setTransactions(res?.transactions);
-      }),
-    { refetchOnWindowFocus: false }
-  );
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setFetchingData(false);
+      }
+    };
+
+    fetchData();
+  }, [config, startDate, endDate, microGoalId]);
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-center items-center mt-4 mb-8">
@@ -84,7 +93,13 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
         <div className="font-custom font-medium text-base tracking-title mb-3">
           Recent activity
         </div>
-        {transactions && transactions.length > 0 ? (
+        {fetchingData ? (
+          Array(3)
+            .fill("a")
+            .map((_, i) => {
+              return <BudgetTransactionCardSkeleton key={i} />;
+            })
+        ) : transactions && transactions.length > 0 ? (
           transactions
             .sort((a, b) => new Date(b.transacted_at).getTime() - new Date(a.transacted_at).getTime())
             .map((transaction: BudgetTransaction, index) => {
@@ -101,12 +116,6 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
                   type={transaction?.type}
                 />
               );
-            })
-        ) : fetchingTransactions ? (
-          Array(3)
-            .fill("a")
-            .map((_, i) => {
-              return <BudgetTransactionCardSkeleton key={i} />;
             })
         ) : (
           <TransactionEmptyState label="No recent transactions registered!" />
