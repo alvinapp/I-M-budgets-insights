@@ -60,8 +60,10 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
   };
 
   function calculatePercentageDifference(userValue: any, peerValue: any) {
-    if (peerValue === 0 || peerValue === undefined) {
+    if ((peerValue === 0 || peerValue === undefined) && userValue === 0) {
       return 0;
+    } else if ((peerValue === 0 || peerValue === undefined) && userValue > 0) {
+      return 100;
     }
     return ((userValue - peerValue) / peerValue) * 100;
   }

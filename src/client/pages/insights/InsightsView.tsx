@@ -189,7 +189,7 @@ const InsightsView = () => {
     enrichTransactions({ configuration: config });
   }, []);
 
-  const totalExpenses = wantsTotal + essentialsTotal;
+  const totalExpenses = wantsTotal + essentialsTotal + savingsTotal;
   const closeBottomSheet = () => {
     openFilter(false);
   };
@@ -240,7 +240,7 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}

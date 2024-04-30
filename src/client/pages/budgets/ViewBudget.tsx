@@ -38,7 +38,7 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<BudgetTransaction[]>([]);
   const { isFetching: fetchingTransactions } = useQuery(
     "fetching-budgetTransactions",
     () =>
@@ -80,26 +80,28 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
         bgColor={`${progreesBgColor ?? "#0131A1"}`}
         isLabelVisible={false}
       />
-      <div className="flex flex-col p-4 mt-4 rounded-lg shadow-card mx-4">
+      <div className="flex flex-col p-4 mt-4 rounded-lg shadow-card mx-4" style={{ maxHeight: "300px", overflowY: "auto" }}>
         <div className="font-custom font-medium text-base tracking-title mb-3">
           Recent activity
         </div>
         {transactions && transactions.length > 0 ? (
-          transactions.slice(0, 7).map((transaction: BudgetTransaction) => {
-            return (
-              <BudgetTransactionCard
-                id={transaction?.id}
-                amount={transaction?.amount}
-                merchant={{
-                  id: transaction.merchant?.id,
-                  name: transaction.merchant?.name,
-                }}
-                category={transaction?.category}
-                transacted_at={transaction?.transacted_at}
-                type={transaction?.type}
-              />
-            );
-          })
+          transactions
+            .sort((a, b) => new Date(b.transacted_at).getTime() - new Date(a.transacted_at).getTime())
+            .map((transaction: BudgetTransaction, index) => {
+              return (
+                <BudgetTransactionCard
+                  id={transaction?.id}
+                  amount={transaction?.amount}
+                  merchant={{
+                    id: transaction.merchant?.id,
+                    name: transaction.merchant?.name,
+                  }}
+                  category={transaction?.category}
+                  transacted_at={transaction?.transacted_at}
+                  type={transaction?.type}
+                />
+              );
+            })
         ) : fetchingTransactions ? (
           Array(3)
             .fill("a")

@@ -80,7 +80,7 @@ export const MySpend = ({
         const currentDate = now.getDate();
         const recomendedSpend = dailyBudget * currentDate;
         if (spent > recomendedSpend) {
-          setSpendingMessage("🙁🏼 Heads up! You're currently spending above the recommended budget by " + (spent - recomendedSpend));
+          setSpendingMessage("🙁🏼 Heads up! You're currently spending above the recommended budget by KES " + (spent - recomendedSpend).toLocaleString());
         } else if (spent > 0 && spent < recomendedSpend) {
           setSpendingMessage("🙌🏼 Sweet! You're well within your recommended budget limit for this month.");
         }
@@ -88,7 +88,7 @@ export const MySpend = ({
         const currentDate = endDateObj.getDate();
         const recomendedSpend = dailyBudget * currentDate;
         if (spent > recomendedSpend) {
-          setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by " + (spent - recomendedSpend));
+          setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by KES " + (spent - recomendedSpend).toLocaleString());
         } else if (spent > 0 && spent < recomendedSpend) {
           setSpendingMessage("🙌🏼 Sweet! You're well within your overall budget limit for this month.");
         }
@@ -105,7 +105,7 @@ export const MySpend = ({
           const dailyBudget = initialBudget / totalDaysInMonth;
           const adjustedBudget = dailyBudget * days;
           if (spent > adjustedBudget) {
-            setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by " + (spent - adjustedBudget));
+            setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by KES " + (spent - adjustedBudget).toLocaleString());
           } else {
             setSpendingMessage("🙌🏼 Sweet! You're well within your overall budget limit for this period.");
           }
@@ -116,7 +116,7 @@ export const MySpend = ({
           const dailyBudget = initialBudget / 30;
           const adjustedBudget = dailyBudget * days;
           if (spent > adjustedBudget) {
-            setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by " + (spent - adjustedBudget));
+            setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by KES " + (spent - adjustedBudget).toLocaleString());
           } else if (spent > 0 && spent < adjustedBudget) {
             setSpendingMessage("🙌🏼 Sweet! You're well within your overall budget limit for this period.");
           }
@@ -128,7 +128,7 @@ export const MySpend = ({
         const months = Math.ceil(days / 30);
         const adjustedBudget = initialBudget * months;
         if (spent > adjustedBudget) {
-          setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by " + (spent - adjustedBudget));
+          setSpendingMessage("🙁🏼 Heads up! You're spending above your budget by KES " + (spent - adjustedBudget).toLocaleString());
         } else if (spent > 0 && spent < adjustedBudget) {
           setSpendingMessage("🙌🏼 Sweet! You're well within your overall budget limit for this period.");
         }
@@ -215,18 +215,21 @@ export const MySpend = ({
                 </div>
               </div>
             )}
-            {microGoals.map((microGoal, i: number) =>
-              microGoal.total_transactions > 0 ? (
-                <ExpenditureCard
-                  transactions={microGoal.number_of_transactions}
-                  icon={microGoal.emoji}
-                  budget={microGoal.amount * numberOfMonths}
-                  spent={microGoal.total_transactions}
-                  key={i}
-                  category={microGoal.name}
-                />
-              ) : null
-            )}
+            {microGoals.map((microGoal, i) => {
+              const isGoingOut = microGoal?.name === "Going out";
+              return microGoal.total_transactions > 0 ? (
+                <React.Fragment key={i}>
+                  <ExpenditureCard
+                    transactions={microGoal.number_of_transactions}
+                    icon={isGoingOut ? "🤩" : microGoal.emoji}
+                    budget={microGoal.amount * numberOfMonths}
+                    spent={microGoal.total_transactions}
+                    key={i}
+                    category={isGoingOut ? "Entertainment" : microGoal.name}
+                  />
+                </React.Fragment>
+              ) : null;
+            })}
           </>
         ) : null}
       </div>
