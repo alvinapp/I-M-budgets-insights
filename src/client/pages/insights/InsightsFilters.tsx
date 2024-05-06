@@ -129,7 +129,7 @@ const InsightsFilters = ({
         <div className="text-xs font-primary font-medium text-skin-base tracking-longtext">
           Clear
         </div>
-        <div className="font-custom text-skin-base font-medium tracking-title text-base">
+        <div className="font-custom text-skin-base font-medium tracking-title text-base mr-8">
           Filter by
         </div>
         <div className="flex flex-col"></div>
