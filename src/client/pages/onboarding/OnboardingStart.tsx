@@ -41,12 +41,12 @@ const OnboardingStart = () => {
         setMonoPubKey(data.key);
         configuration.monoPubKey = data.key;
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
   useEffect(() => {
     if (!configurations.monoPubKey) {
       fetchMonoToken({ configuration: configurations, setMonoPubKey })
-        .then(() => {})
+        .then(() => { })
         .catch((error) => {
           console.error("Failed to fetch Mono public key:", error);
         });
@@ -166,7 +166,7 @@ const OnboardingStart = () => {
                 // title="Link account"
                 title="Add my first account"
                 click={() => {
-                  navigate("/onboard-add-income");
+                  navigate("/onboard-select-account");
                   // onClick();
                 }}
               />
