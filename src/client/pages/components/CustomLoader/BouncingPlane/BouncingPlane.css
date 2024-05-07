@@ -1,0 +1,44 @@
+.plane-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* height: 300px; */
+    position: relative;
+    overflow: hidden;
+}
+
+.plane-background {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transform: scale(1.8);
+}
+
+.bouncing-plane {
+    animation: bouncing 1s infinite;
+    z-index: 2;
+    transform: scale(1.8);
+    margin: -8%
+}
+
+/* @keyframes bouncing {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translate(0, 0);
+      transition-timing-function: ease-in-out; 
+    }
+  
+    40% {
+      transform: translate(14px, -14px);
+      transition-timing-function: ease-in-out; 
+    }
+  
+    60% {
+      transform: translate(7px, -7px);
+      transition-timing-function: ease-in-out; 
+    }
+  } */
+  
+  
