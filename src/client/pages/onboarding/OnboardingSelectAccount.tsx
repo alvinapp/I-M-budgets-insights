@@ -12,6 +12,7 @@ const OnboardingSelectAccount = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const startLoading = () => {
+        setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
             navigate("/onboard-add-income");
