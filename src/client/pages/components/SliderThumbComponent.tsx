@@ -1,8 +1,11 @@
 import React from "react";
 import { FiMoreVertical } from "react-icons/fi";
+import { GoLock } from "react-icons/go";
 
 interface SliderThumbComponentProps {
   valueNow: number;
+  backgroundColor?: string;
+  isLocked?: boolean;
   showPercentage?: boolean;
   props?: any;
 }
@@ -10,8 +13,11 @@ interface SliderThumbComponentProps {
 const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
   valueNow,
   showPercentage,
+  isLocked,
+  backgroundColor,
   props,
 }) => {
+  console.log("background color", backgroundColor);
   return (
     <div
       {...props}
@@ -32,15 +38,17 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
           height: "19px",
           width: "19px",
           borderRadius: "50%",
-          backgroundColor: "#144CBC",
+          backgroundColor: backgroundColor ? backgroundColor : "#144CBC",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           margin: "-3px",
         }}
-      >
-        <FiMoreVertical color="white" height={15} width={5} style={{ marginRight: "-8px" }} />
-        <FiMoreVertical color="white" height={15} width={5} style={{ marginLeft: "1px" }} />
+      >{isLocked ?
+        <GoLock color="white" height={15} width={5} />
+        : <>
+          <FiMoreVertical color="white" height={15} width={5} style={{ marginRight: "-8px" }} />
+          <FiMoreVertical color="white" height={15} width={5} style={{ marginLeft: "1px" }} /></>}
       </div>
       <div
         style={{
@@ -53,7 +61,7 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
       >
         {showPercentage ? <div
           style={{
-            background: "linear-gradient(124.2deg, #144CBC 0%, #0131A1 100%)",
+            background: "#101010",
             color: "white",
             padding: "4px",
             borderRadius: "50%",
@@ -76,7 +84,7 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
               transform: "translateX(-50%)",
               width: 0,
               height: 0,
-              borderTop: "6px solid #0131A1",
+              borderTop: "6px solid #101010",
               borderRight: "6px solid transparent",
               borderLeft: "6px solid transparent",
             }}

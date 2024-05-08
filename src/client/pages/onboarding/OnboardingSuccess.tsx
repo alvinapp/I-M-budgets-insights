@@ -2,17 +2,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import Lottie from "react-lottie";
 import { useNavigate } from "react-router-dom";
 import Clouds from "client/assets/json_lottie/clouds.json";
+import { BallTriangle } from "react-loader-spinner";
+import { useQuery } from "react-query";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
+import { showCustomToast } from "client/utils/Toast";
 import SuccessButton from "../components/SuccessButton";
 import BudgetSplitChart from "../components/onboarding/BudgetSplitChart";
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
 import useUserStore from "client/store/userStore";
-import { capitalize } from "client/utils/Formatters";
-import successLoader from "client/assets/images/success-loader.svg";
-import useBottomSheetStore from "client/store/bottomSheetStore";
-import cloud1 from "client/assets/images/cloud1.svg";
-import cloud2 from "client/assets/images/cloud2.svg";
-const OnboardingSuccess = () => {
+const BookingSuccess = () => {
+  const navigate = useNavigate();
+
   const configurations = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -23,14 +23,14 @@ const OnboardingSuccess = () => {
   const timeOutCallback = useCallback(() => {
     setTimer((currTimer): number => currTimer - 1);
   }, []);
-  // const cloudImage = {
-  //   loop: true,
-  //   autoplay: true,
-  //   animationData: Clouds,
-  //   rendererSettings: {
-  //     preserveAspectRatio: "xMidYMid slice",
-  //   },
-  // };
+  const cloudImage = {
+    loop: true,
+    autoplay: true,
+    animationData: Clouds,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
   // turn is loading off after 2 seconds
   useEffect(() => {
     setTimeout(() => {
@@ -40,54 +40,56 @@ const OnboardingSuccess = () => {
 
   useEffect(() => {
     timer > 0 && setTimeout(timeOutCallback, 2000);
-    if (timer === 0) {
-      // navigate("/view-flight-details");
-    }
+    // if (timer === 0) {
+    //   navigate("/budget-settings");
+    // }
   }, [timer, timeOutCallback]);
-  const chartDimensions = 250;
-  const doughnutThickness = 20;
+  const chartDimensions = 230;
+  const doughnutThickness = 18;
   const budgetValues = { ...budgetSettingsStore.incomeSplit };
-  const bottomSheetStore = useBottomSheetStore((state: any) => state);
   return (
-    <div className="">
-      {/* <div className="w-full">
-        <img src={cloud1} />
-        <img src={cloud2} />
-      </div> */}
-      <div className="flex flex-col">
-        <div className="flex flex-row ml-4">
+    <div className="h-screen bg-connectSuccessBg bg-cover w-screen relative">
+      <div className="absolute w-full h-full">
+        <Lottie options={cloudImage} />
+      </div>
+      <div className="flex flex-col mx-9 absolute top-28 left-0 right-0">
+        <div className="mt-10 flex flex-row justify-center align-center">
           <BudgetSplitChart
             dimensions={chartDimensions}
             doughnutThickness={doughnutThickness}
             values={budgetValues}
           />
         </div>
-        <div className="mt-4 flex flex-row justify-center mx-4">
-          <div className="font-custom text-skin-base text-xl text-center font-medium">
-            Great job, {capitalize(user.first_name)}!
+        <div className="mt-15 flex flex-row justify-center mx-4">
+          <div className="font-workSans text-skin-white text-xl text-center font-semibold">
+            Great job, {user.first_name}!
           </div>
         </div>
-        <div className="text-sm font-primary tracking-wide text-skin-base text-center mt-4 font-normal mx-4">
+        <div className="text-xxxs font-poppins tracking-longtext text-skin-white text-center mt-4">
           This looks like a very balanced budget and a great roadmap for you to
           hit your financial goals. We'll notify you whenever you may be
           overspending in category so you can stay on track.
         </div>
       </div>
-      <div className="flex flex-col justify-end items-center mx-3.5 mt-4">
-        {loading ? (
-          <div className="mb-6">
-            <img src={successLoader} alt="" />
-          </div>
+      <div className="fixed bottom-0 left-0 right-0 flex flex-col justify-end items-center mx-3.5">
+        {!loading ? (
+          <>
+            <SuccessButton label="Maybe later" click={() => navigate("/budgets-view")} style={{
+              border: "1px solid #fff",
+              color: "#c9e0ea",
+              backgroundColor: "transparent",
+            }} />
+            <SuccessButton label="Add category budgets" click={() => navigate("/budget-settings")} style={{
+              marginTop: -8,
+            }} />
+          </>
         ) : (
-          <SuccessButton
-            label="Ok"
-            click={() => {
-              bottomSheetStore.setSuccessBottomSheet(false);
-            }}
-          />
+          <SuccessButton loading={true} style={{
+            backgroundColor: "#CDE0E7",
+          }} />
         )}
       </div>
     </div>
   );
 };
-export default OnboardingSuccess;
+export default BookingSuccess;

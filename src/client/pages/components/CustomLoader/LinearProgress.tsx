@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
+import { BallTriangle } from "react-loader-spinner";
 
 const Container = styled.div`
   position: fixed;
@@ -81,19 +82,21 @@ const LinearProgress = ({
         <Container>
             <ContentWrapper>
                 <ProgressBar duration={duration} color={color} />
-                <div
-                    className="font-poppins"
-                    style={{
-                        color: "#101010",
-                        textAlign: "center",
-                        marginTop: "1rem",
-                        // fontWeight: 500,
-                        // animation: `fadeInOut ${(duration * 1000) / messages.length / 1.2}ms infinite`,
-                    }}
-                >
-                    {currentMessageIndex === -1
-                        ? "Processing your request..."
-                        : messages[currentMessageIndex]}
+                <div className="w-full flex justify-center items-center flex-row gap-2" style={{ marginTop: "1rem" }}>
+                    <div
+                        className="font-poppins"
+                        style={{
+                            color: "#101010",
+                            textAlign: "center",
+                            // fontWeight: 500,
+                            // animation: `fadeInOut ${(duration * 1000) / messages.length / 1.2}ms infinite`,
+                        }}
+                    >
+                        {currentMessageIndex === -1
+                            ? "Processing your request..."
+                            : messages[currentMessageIndex]}
+                    </div>
+                    <BallTriangle height={18} width={18} color={color} visible={true} />
                 </div>
             </ContentWrapper>
         </Container>

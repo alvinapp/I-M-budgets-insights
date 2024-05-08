@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './BouncingPlane.css';
 import planeBackground from 'client/assets/images/plane_backg.png';
-import planePNG from 'client/assets/images/connect-success-icon.svg';
+import planePNG from 'client/assets/images/successHand.svg';
 
 const BouncingPlane = () => {
   const planeRef = useRef<HTMLImageElement>(null);

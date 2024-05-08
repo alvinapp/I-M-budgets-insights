@@ -26,11 +26,11 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
   const items = [
     {
       percentage: (essentials / total) * 100,
-      color: "#4053D0",
+      color: "#33cbc0",
       label: "Essentials",
     },
-    { percentage: (wants / total) * 100, color: "#8490E2", label: "Wants" },
-    { percentage: (savings / total) * 100, color: "#71EBD7", label: "Savings" },
+    { percentage: (wants / total) * 100, color: "#6786c3", label: "Wants" },
+    { percentage: (savings / total) * 100, color: "#CB960F", label: "Debt repayment" },
   ];
 
   let cumulativePercentage = 0;
@@ -54,13 +54,13 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
             (normalizedRadius + 15) *
             Math.cos(
               (2 * Math.PI * (cumulativePercentage + item.percentage / 2.5)) /
-                100
+              100
             );
           const controlPointY =
             (normalizedRadius + 15) *
             Math.sin(
               (2 * Math.PI * (cumulativePercentage + item.percentage / 2.5)) /
-                100
+              100
             );
 
           const labelX =
@@ -108,7 +108,7 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
               />
               <path
                 d={`M ${middleX} ${middleY} Q ${controlPointX} ${controlPointY}, ${labelX} ${labelY}`}
-                stroke="#101010"
+                stroke="#ffffff"
                 strokeOpacity={0.5}
                 strokeWidth="2"
                 fill="none"
@@ -122,23 +122,17 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
                 <div style={{ textAlign: "center" }}>
                   <div
                     className="font-primary text-sm tracking-wide text-skin-base font-medium"
-                    // style={{
-                    //   fontSize: "12px",
-                    //   color: "white",
-                    //   fontFamily: "Poppins",
-                    //   fontWeight: "medium",
-                    // }}
+                    style={{
+                      color: "white",
+                    }}
                   >
                     {item.label}
                   </div>
                   <div
                     className="font-primary text-sm tracking-wide text-skin-base font-medium"
-                    // style={{
-                    //   fontSize: "12px",
-                    //   color: "white",
-                    //   fontFamily: "Poppins",
-                    //   fontWeight: "medium",
-                    // }}
+                    style={{
+                      color: "white",
+                    }}
                   >
                     ({item.percentage.toFixed(0)}%)
                   </div>
@@ -166,7 +160,7 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
             }}
           >
             <img src={macroBudget} alt="icon" className="w-6 h-6" />
-            <div className="font-primary text-sm tracking-wide mt-2 text-skin-base font-medium">
+            <div style={{ color: "white" }} className="font-primary text-sm tracking-wide mt-2 text-white font-medium">
               <span>Overall budget split</span>
             </div>
           </div>

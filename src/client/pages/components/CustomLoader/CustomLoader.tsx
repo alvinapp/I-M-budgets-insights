@@ -1,7 +1,6 @@
 import React from 'react';
 import BouncingPlane from './BouncingPlane/BouncingPlane';
 import LinearProgress from './LinearProgress';
-import { BallTriangle } from "react-loader-spinner";
 
 interface LoadingScreenProps {
     duration: number;
@@ -21,13 +20,10 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ duration, color, messages
 
     return (
         <div>
-            <div style={{ marginTop: planeMarginTop }}>
+            <div style={{ marginTop: planeMarginTop, }}>
                 <BouncingPlane />
             </div>
             <LinearProgress color={color} duration={duration} messages={messages} />
-            <div style={{ ...ballTriangleStyle } as React.CSSProperties}>
-                <BallTriangle height={18} width={18} color={color} visible={true} />
-            </div>
         </div>
     )
 }

@@ -5,7 +5,7 @@ import NavBar from "../components/NavBar";
 import ArrowBackButton from "../components/ArrowBack";
 import AccountCard from "../components/AccountCard";
 import { useState } from "react";
-import LinearProgress from "../components/CustomLoader/LinearProgress";
+import LoadingScreen from "../components/CustomLoader/CustomLoader";
 
 const OnboardingSelectAccount = () => {
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ const OnboardingSelectAccount = () => {
 
     return (
         <div className="h-screen w-screen relative no-scrollbar">
-            {isLoading ? <LinearProgress messages={messages} duration={3} color="#00beaf" /> : <>
+            {isLoading ? <LoadingScreen messages={messages} duration={3} color="#00beaf" /> : <>
                 <NavBar
                     children={
                         <div className="flex flex-row items-center justify-between pt-6 pb-2 pr-6">
@@ -36,7 +36,7 @@ const OnboardingSelectAccount = () => {
                 />
                 <div className="flex-grow h-px bg-skin-accent3"></div>
                 <div className="flex flex-col mt-3 items-left">
-                    <div className="rounded-full h-11 w-11 bg-skin-iconPrimary flex justify-center items-center mx-3.5">
+                    <div className="rounded-full shadow h-11 w-11 bg-skin-iconPrimary flex justify-center items-center mx-3.5">
                         <FiCloud color="#101010" />
                     </div>
                     <div className="font-custom font-medium text-2xl mt-1.5 mx-3.5 text-skin-base">
