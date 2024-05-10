@@ -287,8 +287,8 @@ export const BudgetSettings = () => {
                 ? Math.min((allocatedSavings / savingsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
                 : 0
             }
-            indicatorColor="bg-[#84C1B2]"
-            progressColor="#84C1B2"
+            indicatorColor="bg-[#CB960F]"
+            progressColor="#CB960F"
           />
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-col">
@@ -383,8 +383,8 @@ export const BudgetSettings = () => {
                 ) // Ensure percentage stays between 0 and 100
                 : 0
             }
-            indicatorColor="bg-[linear-gradient(159deg,#4053D0_0%,#051AA3_100%)]"
-            progressColor="#051AA3"
+            indicatorColor="bg-[#00AB9E]"
+            progressColor="#00AB9E"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-primary text-xs tracking-wider font-medium">
@@ -548,8 +548,8 @@ export const BudgetSettings = () => {
                 ? Math.min((allocatedWants / wantsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
                 : 0
             }
-            indicatorColor="bg-[linear-gradient(159deg,#8490E2_0%,#3B4381_100%)]"
-            progressColor="#3B4381"
+            indicatorColor="bg-[#345DAF]"
+            progressColor="#345DAF"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-primary text-xs tracking-wider font-medium">

@@ -152,122 +152,159 @@ const OnboardingSplitIncome = () => {
 
   const handleSliderChange = (newValue: number, type: string) => {
     const totalRatio = 100;
+    const fixedSavingsRatio = 45;  // Fixed savings ratio
+
+    if (type === "savings") {
+      console.error("Savings ratio is fixed and cannot be changed.");
+      return; // Prevent any changes to savings
+    }
+
     const oldValue =
       type === "essentials"
         ? essentialsRatio
-        : type === "wants"
-          ? wantsRatio
-          : savingsRatio;
+        : wantsRatio;
+
     const change = newValue - oldValue;
 
-    if (newValue === totalRatio) {
-      switch (type) {
-        case "essentials":
-          setWantsRatio(0);
-          setSavingsRatio(0);
-          break;
-        case "wants":
-          setEssentialsRatio(0);
-          setSavingsRatio(0);
-          break;
-        case "savings":
-          setEssentialsRatio(0);
-          setWantsRatio(0);
-          break;
-        default:
-          break;
+    if (newValue === totalRatio - fixedSavingsRatio) {
+      if (type === "essentials") {
+        setWantsRatio(0);
+      } else if (type === "wants") {
+        setEssentialsRatio(0);
       }
+      setSavingsRatio(fixedSavingsRatio);
       return;
     }
 
-    if (oldValue === totalRatio) {
-      const primaryRatio = (totalRatio - newValue) * 0.7;
-      const secondaryRatio = (totalRatio - newValue) * 0.3;
-      switch (type) {
-        case "essentials":
-          setWantsRatio(primaryRatio);
-          setSavingsRatio(secondaryRatio);
-          break;
-        case "wants":
-          setEssentialsRatio(primaryRatio);
-          setSavingsRatio(secondaryRatio);
-          break;
-        case "savings":
-          setEssentialsRatio(primaryRatio);
-          setWantsRatio(secondaryRatio);
-          break;
-        default:
-          break;
+    if (oldValue === totalRatio - fixedSavingsRatio) {
+      const adjustedRatio = totalRatio - fixedSavingsRatio - newValue;
+      if (type === "essentials") {
+        setWantsRatio(adjustedRatio);
+      } else if (type === "wants") {
+        setEssentialsRatio(adjustedRatio);
       }
+      setSavingsRatio(fixedSavingsRatio);
       return;
     }
 
-    const allocateChange = (
-      primaryType: string,
-      secondaryType: string,
-      change: number
-    ) => {
-      const primaryChange = (change * 7) / 10;
-      const secondaryChange = change - primaryChange;
-
-      switch (primaryType) {
-        case "essentials":
-          setEssentialsRatio(Math.max(essentialsRatio + primaryChange, 0));
-          break;
-        case "wants":
-          setWantsRatio(Math.max(wantsRatio + primaryChange, 0));
-          break;
-        case "savings":
-          setSavingsRatio(Math.max(savingsRatio + primaryChange, 0));
-          break;
-        default:
-          break;
-      }
-
-      switch (secondaryType) {
-        case "essentials":
-          setEssentialsRatio(Math.max(essentialsRatio + secondaryChange, 0));
-          break;
-        case "wants":
-          setWantsRatio(Math.max(wantsRatio + secondaryChange, 0));
-          break;
-        case "savings":
-          setSavingsRatio(Math.max(savingsRatio + secondaryChange, 0));
-          break;
-        default:
-          break;
+    const allocateChange = (change: number) => {
+      // Proportionally allocate change to the non-affected ratio
+      if (type === "essentials") {
+        setWantsRatio(Math.max(wantsRatio - change, 0));
+      } else if (type === "wants") {
+        setEssentialsRatio(Math.max(essentialsRatio - change, 0));
       }
     };
 
-    switch (type) {
-      case "essentials":
-        if (change > 0) {
-          allocateChange("wants", "savings", -change);
-        } else {
-          allocateChange("savings", "wants", -change);
-        }
-        setEssentialsRatio(newValue);
-        break;
-      case "wants":
-        if (change > 0) {
-          allocateChange("essentials", "savings", -change);
-        } else {
-          allocateChange("savings", "essentials", -change);
-        }
-        setWantsRatio(newValue);
-        break;
-      case "savings":
-        if (change > 0) {
-          allocateChange("essentials", "wants", -change);
-        } else {
-          allocateChange("wants", "essentials", -change);
-        }
-        setSavingsRatio(newValue);
-        break;
-      default:
-        break;
+    // Apply the new value and allocate change to the other ratio
+    if (type === "essentials") {
+      setEssentialsRatio(Math.max(newValue, 0));
+      allocateChange(change);
+    } else if (type === "wants") {
+      setWantsRatio(Math.max(newValue, 0));
+      allocateChange(change);
     }
+
+    // Ensure savings ratio is always fixed at 45
+    setSavingsRatio(fixedSavingsRatio);
   };
+
+
+  // const handleSliderChange = (newValue: number, type: string) => {
+  //   const totalRatio = 100;
+  //   const fixedSavingsRatio = 45;
+
+  //   const oldValue =
+  //     type === "essentials"
+  //       ? essentialsRatio
+  //       : type === "wants"
+  //         ? wantsRatio
+  //         : fixedSavingsRatio;
+
+  //   if (type === "savings") {
+  //     console.error("Savings ratio is fixed and cannot be changed.");
+  //     return; // Prevent any changes to savings
+  //   }
+
+  //   const change = newValue - oldValue;
+
+  //   if (newValue === totalRatio) {
+  //     switch (type) {
+  //       case "essentials":
+  //         setWantsRatio(0);
+  //         break;
+  //       case "wants":
+  //         setEssentialsRatio(0);
+  //         break;
+  //     }
+  //     setSavingsRatio(fixedSavingsRatio);
+  //     return;
+  //   }
+
+  //   if (oldValue === totalRatio) {
+  //     const remainingRatio = totalRatio - fixedSavingsRatio;
+  //     const primaryRatio = remainingRatio * 0.7;
+  //     const secondaryRatio = remainingRatio * 0.3;
+  //     switch (type) {
+  //       case "essentials":
+  //         setWantsRatio(primaryRatio);
+  //         break;
+  //       case "wants":
+  //         setEssentialsRatio(primaryRatio);
+  //         break;
+  //     }
+  //     setSavingsRatio(fixedSavingsRatio);
+  //     return;
+  //   }
+
+  //   const allocateChange = (
+  //     primaryType: string,
+  //     secondaryType: string,
+  //     change: number
+  //   ) => {
+  //     const remainingRatio = totalRatio - fixedSavingsRatio;
+  //     const primaryChange = (remainingRatio * change / (oldValue + change)) * 0.7;
+  //     const secondaryChange = change - primaryChange;
+
+  //     switch (primaryType) {
+  //       case "essentials":
+  //         setEssentialsRatio(Math.max(essentialsRatio + primaryChange, 0));
+  //         break;
+  //       case "wants":
+  //         setWantsRatio(Math.max(wantsRatio + primaryChange, 0));
+  //         break;
+  //     }
+
+  //     switch (secondaryType) {
+  //       case "essentials":
+  //         setEssentialsRatio(Math.max(essentialsRatio + secondaryChange, 0));
+  //         break;
+  //       case "wants":
+  //         setWantsRatio(Math.max(wantsRatio + secondaryChange, 0));
+  //         break;
+  //     }
+  //   };
+
+  //   switch (type) {
+  //     case "essentials":
+  //       if (change > 0) {
+  //         allocateChange("wants", "savings", -change);
+  //       } else {
+  //         allocateChange("savings", "wants", -change);
+  //       }
+  //       setEssentialsRatio(newValue);
+  //       break;
+  //     case "wants":
+  //       if (change > 0) {
+  //         allocateChange("essentials", "savings", -change);
+  //       } else {
+  //         allocateChange("savings", "essentials", -change);
+  //       }
+  //       setWantsRatio(newValue);
+  //       break;
+  //   }
+  //   setSavingsRatio(fixedSavingsRatio); // Ensure savings ratio is always fixed
+  // };
 
   return (
     <div className="flex flex-col">
@@ -334,7 +371,7 @@ const OnboardingSplitIncome = () => {
               0
             </div>
             <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
-              {formatCurrency(calculateIncomeAmount(savingsRatio))}
+              {formatCurrency(monthlyIncome)}
             </div>
           </div>
           <div className="mt-4"><DebtInfo loanValue={calculateIncomeAmount(savingsRatio)} currency={currency} /></div>
@@ -376,7 +413,7 @@ const OnboardingSplitIncome = () => {
               0
             </div>
             <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
-              {formatCurrency(calculateIncomeAmount(essentialsRatio))}
+              {formatCurrency(monthlyIncome)}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 w-full mt-6 mb-32">
@@ -417,7 +454,7 @@ const OnboardingSplitIncome = () => {
               0
             </div>
             <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
-              {formatCurrency(calculateIncomeAmount(wantsRatio))}
+              {formatCurrency(monthlyIncome)}
             </div>
           </div>
         </div>

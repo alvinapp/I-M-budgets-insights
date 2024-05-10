@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './BouncingPlane.css';
-import planeBackground from 'client/assets/images/plane_backg.png';
+import planeBackground from 'client/assets/images/Thumbs-up.png';
 import planePNG from 'client/assets/images/successHand.svg';
 
 const BouncingPlane = () => {

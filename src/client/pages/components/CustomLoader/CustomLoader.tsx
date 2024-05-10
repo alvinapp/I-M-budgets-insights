@@ -1,5 +1,6 @@
 import React from 'react';
 import BouncingPlane from './BouncingPlane/BouncingPlane';
+import Clouds from "client/assets/json_lottie/clouds.json";
 import LinearProgress from './LinearProgress';
 
 interface LoadingScreenProps {
@@ -16,6 +17,15 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ duration, color, messages
         bottom: '5%',
         left: '50%',
         transform: 'translateX(-50%)',
+    };
+
+    const cloudImage = {
+        loop: true,
+        autoplay: true,
+        animationData: Clouds,
+        rendererSettings: {
+            preserveAspectRatio: "xMidYMid slice",
+        },
     };
 
     return (

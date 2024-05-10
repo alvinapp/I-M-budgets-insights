@@ -40,9 +40,9 @@ const BookingSuccess = () => {
 
   useEffect(() => {
     timer > 0 && setTimeout(timeOutCallback, 2000);
-    // if (timer === 0) {
-    //   navigate("/budget-settings");
-    // }
+    if (timer === 0) {
+      navigate("/budget-settings");
+    }
   }, [timer, timeOutCallback]);
   const chartDimensions = 230;
   const doughnutThickness = 18;

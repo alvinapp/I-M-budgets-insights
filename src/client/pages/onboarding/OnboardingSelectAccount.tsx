@@ -20,8 +20,8 @@ const OnboardingSelectAccount = () => {
     };
 
     const messages = [
-        "Connecting your account...",
-        "Syncing your transactions...",
+        "Connecting your account",
+        "Syncing your transactions",
     ]
 
     return (

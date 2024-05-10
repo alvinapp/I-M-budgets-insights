@@ -93,7 +93,7 @@ const LinearProgress = ({
                         }}
                     >
                         {currentMessageIndex === -1
-                            ? "Processing your request..."
+                            ? "Processing your request"
                             : messages[currentMessageIndex]}
                     </div>
                     <BallTriangle height={18} width={18} color={color} visible={true} />

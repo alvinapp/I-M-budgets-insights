@@ -40,7 +40,7 @@ const EditSavingsViewCard: React.FC<EditSavingsViewCardProps> = ({
         <div className="flex flex-row items-center">
           <div className="font-primary text-sm text-skin-base font-medium">
             {amount?.toLocaleString("en-us")}
-            <sup className=" align-super -ml-1 text-xxxs">
+            <sup className=" align-super -ml-1 text-xxxxs">
               {currencySymbol ?? ""}
             </sup>
           </div>

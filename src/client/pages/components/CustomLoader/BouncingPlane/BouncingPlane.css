@@ -8,13 +8,10 @@
 }
 
 .plane-background {
-  width: 100%;
-  height: auto;
   position: absolute;
-  top: 0;
   left: 0;
   z-index: 1;
-  transform: scale(2);
+  transform: scale(0.5);
 }
 
 .bouncing-plane {
@@ -22,6 +19,7 @@
   z-index: 2;
   transform: scale(0.3);
   margin: -18%;
+  visibility: hidden;
 }
 
 /* @keyframes bouncing {
