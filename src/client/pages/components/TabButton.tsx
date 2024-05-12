@@ -14,7 +14,7 @@ const TabButton = ({
   return (
     <div
       className={`${
-        isActive ? " bg-[rgb(155,176,247,0.3)] rounded-full" : "bg-transparent"
+        isActive ? " bg-[rgb(0,190,105,0.2)] rounded-full" : "bg-transparent"
       } py-3 w-[11.375rem]`}
       onClick={onClick}
     >
@@ -29,7 +29,7 @@ const TabButton = ({
         <div
           className={`${
             isActive
-              ? "text-[#001D82] font-custom text-sm font-medium tracking-tab_text"
+              ? "text-[#101010] font-custom text-sm font-medium tracking-tab_text"
               : "text-skin-base font-custom text-sm font-medium tracking-tab_text"
           }`}
         >

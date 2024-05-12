@@ -13,9 +13,9 @@ export const AmountView = ({ amount, caption, flex }: AmountViewProps) => {
   return (
     <div className={`flex flex-col ${flex ?? "items-start"}`}>
       <div className="relative">
-        <div className="font-custom text-lg text-skin-base font-medium">
+        <div className="font-custom text-lg text-skin-base font-semibold">
           <AnimatedNumber target={amount} duration={500} />
-          <sup className=" text-xs align-super -ml-1">
+          <sup className=" text-[9px] align-super -ml-1">
             {currencySymbol ? currencySymbol : ""}
           </sup>
         </div>

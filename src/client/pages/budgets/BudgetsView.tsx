@@ -28,8 +28,6 @@ import settings from "client/assets/images/budgets-insights/Settings.svg";
 import { AddBudgetCard } from "../components/budget/AddBudgetCard";
 import useMacrosStore from "client/store/macroGoalStore";
 import useMicroGoalsStore from "client/store/microGoalStore";
-import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
-import SavingsCategoryViewCard from "../components/budget/SavingsCategoryViewCard";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import ViewBudget from "./ViewBudget";
 import {
@@ -43,6 +41,12 @@ import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
 import ViewSavingsBudget from "./ViewSavingsBudget";
 import { enrichTransactions } from "client/api/transactions";
 import useInsightsStore from "client/store/insightsStore";
+import { DebtRepaymentCard } from "../components/budget/DebtRepaymentCard";
+import { allTimeDebt, debt, debtOverviewTabs } from "client/utils/MockData";
+import TabFilter from "../components/TabFilter";
+import { divide } from "lodash";
+import ViewDebt from "../components/ViewDebt";
+import LoanDetails from "../components/LoanDetails";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -234,7 +238,7 @@ const BudgetsView = () => {
   );
   const macroStore = useMacrosStore((state: any) => state);
   const [viewBudgetSheet, openViewBudgetSheet] = useState(false);
-  const [viewSavingsBudgetSheet, openViewSavingsBudgetSheet] = useState(false);
+  const [viewDebtSheet, openViewDebtSheet] = useState(false);
   const budgetDetails = {
     spentAmount: 0,
     totalBudgetAmount: 0,
@@ -245,18 +249,21 @@ const BudgetsView = () => {
     endDate: formattedEndDate,
     microGoal: 0,
   };
-  const savingsGoalDetails = {
-    spentAmount: 0,
-    totalBudgetAmount: 0,
-    progress: 0,
-    category: "",
-    emoji: "",
-    startDate: formattedStartDate,
-    endDate: formattedEndDate,
-    microGoal: 0,
+  const debtDetails = {
+    id: 0,
+    name: "",
+    amount: 0,
+    paid: 0,
+    percentage: 0,
+    loanDetails: {},
+    recentActivities: {},
   };
   const [budgetDetailsData, setBudgetDetailsData] = useState(budgetDetails);
-  const [savingsGoalData, setSavingsGoalData] = useState(savingsGoalDetails);
+  const [debtDetailsData, setDebtDetailsData] = useState(debtDetails);
+  const [debtViewTabId, setDebtViewTabId] = useState(0);
+  const totalDebt = debt.reduce((accumulator, item) => {
+    return (accumulator += item.amount);
+  }, 0);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -366,75 +373,93 @@ const BudgetsView = () => {
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
           <CategoryCardHeader
             title="Debt Repayment"
-            amount={checkNAN(
-              Math.max(0, wantsTotalBudgetAmount - wantsTotalExpenses)
-            )}
+            amount={checkNAN(totalDebt)}
             caption="Available"
             currencySymbol={currencySymbol}
             isloading={isLoading}
           />
-          <div className="mt-6 flex flex-col">
-            {wantsBudgets && wantsBudgets.length > 0
-              ? wantsBudgets.map((want: any, i: any) => {
-                  const isGoingOut = want?.name === "Going out";
-                  return (
-                    <CategoryViewCard
-                      key={i}
-                      category={isGoingOut ? "Entertainment" : want?.name}
-                      progressPercentage={
-                        isLoading
-                          ? 0
-                          : checkNAN((want?.expenses / want?.amount) * 100)
-                      }
-                      icon={isGoingOut ? "🤩" : want.category?.emoji}
-                      amount={want?.amount}
-                      budgetAmount={want?.amount}
-                      spentAmount={isLoading ? 0 : want?.expenses}
-                      iconBg="bg-skin-iconPrimary"
-                      baseBgColor="#E7EDF3"
-                      bgColor="#6F89A5"
-                      primaryColor="text-skin-base"
-                      fadedColor="text-skin-subtitle"
-                      onClick={() => {
-                        openViewBudgetSheet(true);
-                        setBudgetDetailsData({
-                          spentAmount: want?.expenses,
-                          totalBudgetAmount: want?.amount,
-                          progress: checkNAN(
-                            (want?.expenses / want?.amount) * 100
-                          ),
-                          category: isGoingOut ? "Entertainment" : want?.name,
-                          emoji: isGoingOut ? "🤩" : want.category?.emoji,
-                          startDate: formattedStartDate,
-                          endDate: formattedEndDate,
-                          microGoal: want?.id,
-                        });
-                      }}
-                    />
-                  );
-                })
-              : null}
+          <div className="mt-4">
+            <TabFilter
+              tabs={debtOverviewTabs}
+              activeTab={debtViewTabId}
+              onClick={(tab: any) => setDebtViewTabId(tab.id)}
+            />
           </div>
-          <div className="flex flex-col">
-            {wantsBudgets?.length !==
-              categoryStore.categoryBudgets[1]?.data.length &&
-            calculateTotalMacroBudget(wantsBudgets, wantsBudgetAmount) > 0 ? (
-              <>
-                <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
-                <AddBudgetCard
-                  fadedColor="text-skin-subtitle"
-                  icon="🚀"
-                  iconBg="bg-skin-icon-primary"
-                  plusColor="#8490E2"
-                  budgetAmount={checkNAN(
-                    macroStore.macroGoals[1]?.amount -
-                      categoryStore.categoryBudgets[1]?.total_amount
-                  )}
-                  onClick={() => navigate("/edit-budgets")}
-                />
-              </>
-            ) : null}
-          </div>
+          {debtViewTabId === 0 ? (
+            <div className="mt-6 flex flex-col">
+              {debt && debt.length > 0
+                ? debt.map((debt: any, i: any) => {
+                    return (
+                      <DebtRepaymentCard
+                        key={i}
+                        category={debt?.name}
+                        progressPercentage={
+                          isLoading ? 0 : checkNAN(debt?.percentage)
+                        }
+                        amount={debt?.amount}
+                        budgetAmount={debt?.amount}
+                        spentAmount={debt?.paid}
+                        iconBg="bg-skin-iconPrimary"
+                        baseBgColor="#E7EDF3"
+                        bgColor="#6F89A5"
+                        primaryColor="text-skin-base"
+                        fadedColor="text-skin-subtitle"
+                        caption="repaid"
+                        onClick={() => {
+                          openViewDebtSheet(true);
+                          setDebtDetailsData({
+                            id: debt?.id,
+                            name: debt?.name,
+                            amount: debt?.amount,
+                            paid: debt?.paid,
+                            percentage: debt?.percentage,
+                            loanDetails: debt?.loanDetails,
+                            recentActivities: debt?.recentActivity,
+                          });
+                        }}
+                      />
+                    );
+                  })
+                : null}
+            </div>
+          ) : (
+            <div className="mt-6 flex flex-col">
+              {allTimeDebt && debt.length > 0
+                ? allTimeDebt.map((debt: any, i: any) => {
+                    return (
+                      <DebtRepaymentCard
+                        key={i}
+                        category={debt?.name}
+                        progressPercentage={
+                          isLoading ? 0 : checkNAN(debt?.percentage)
+                        }
+                        amount={debt?.amount}
+                        budgetAmount={debt?.amount}
+                        spentAmount={debt?.paid}
+                        iconBg="bg-skin-iconPrimary"
+                        baseBgColor="#E7EDF3"
+                        bgColor="#6F89A5"
+                        primaryColor="text-skin-base"
+                        fadedColor="text-skin-subtitle"
+                        caption="repaid"
+                        onClick={() => {
+                          openViewDebtSheet(true);
+                          setDebtDetailsData({
+                            id: debt?.id,
+                            name: debt?.name,
+                            amount: debt?.amount,
+                            paid: debt?.paid,
+                            percentage: debt?.percentage,
+                            loanDetails: debt?.loanDetails,
+                            recentActivities: debt?.recentActivity,
+                          });
+                        }}
+                      />
+                    );
+                  })
+                : null}
+            </div>
+          )}
         </div>
         <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
           <CategoryCardHeader
@@ -510,7 +535,7 @@ const BudgetsView = () => {
             ) : null}
           </div>
         </div>
-        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
+        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3 mb-5">
           <CategoryCardHeader
             title="Wants"
             amount={checkNAN(
@@ -610,28 +635,22 @@ const BudgetsView = () => {
         ></BottomSheet>
         <BottomSheet
           onDismiss={() => {
-            openViewSavingsBudgetSheet(false);
+            openViewDebtSheet(false);
           }}
-          open={viewSavingsBudgetSheet}
+          open={viewDebtSheet}
           style={{
             borderRadius: 24,
           }}
           children={
-            <ViewSavingsBudget
-              savedAmount={savingsGoalData?.spentAmount}
-              targetAmount={essentialBudgetAmount * 3}
-              progress={savingsGoalData?.progress}
-              category={
-                savingsGoalData?.category === "Emergency fund"
-                  ? "Rainy day fund goal"
-                  : ""
-              }
-              emoji={savingsGoalData?.emoji}
-              microGoalId={savingsGoalData.microGoal}
-              startDate={savingsGoalData?.startDate}
-              endDate={savingsGoalData?.endDate}
+            <ViewDebt
+              repaid={debtDetailsData?.paid}
+              outStandingDebt={debtDetailsData?.amount}
+              progress={debtDetailsData?.percentage}
+              name={debtDetailsData?.name}
+              loanDetails={debtDetailsData?.loanDetails}
+              recentActivities={debtDetailsData?.recentActivities}
               onClick={() => {
-                openViewSavingsBudgetSheet(false);
+                openViewDebtSheet(false);
               }}
             />
           }

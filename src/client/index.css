@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @import "react-circular-progressbar/dist/styles.css";
 @import "react-spring-bottom-sheet/dist/style.css";
 @import "rc-slider/assets/index.css";
@@ -9,18 +10,17 @@
 @import "react-toastify/dist/ReactToastify.css";
 
 @font-face {
-  font-family: "NeueMontreal";
-  src: url("./assets/fonts/PPNeueMontreal-Bold.ttf") format("ttf"),
-    url("./assets/fonts/PPNeueMontreal-Light.ttf") format("ttf"),
-    url("./assets/fonts/PPNeueMontreal-Medium.ttf") format("ttf"),
-    url("./assets/fonts/PPNeueMontreal-Regular.ttf") format("ttf"),
-    url("./assets/fonts/PPNeueMontreal-SemiBold.ttf") format("ttf"),
-    url("./assets/fonts/PPNeueMontreal-Thin.ttf") format("ttf");
+  font-family: "Hanken Grotesk";
+  src: url("./assets/fonts/HankenGrotesk-Black.ttf"),
+    url("./assets/fonts/HankenGrotesk-Bold.ttf"),
+    url("./assets/fonts/HankenGrotesk-SemiBold.ttf"),
+    url("./assets/fonts/HankenGrotesk-Medium.ttf"),
+    url("./assets/fonts/HankenGrotesk-Regular.ttf");
 }
 
 @layer base {
   :root {
-    --color-text-base: #101010;
+    --color-text-base: #394455;
     --color-text-white: #ffffff;
     /* --color-text-primary: #04506e; */
     --color-text-primary: #0a3eaf;

@@ -168,6 +168,14 @@ export const budgetSpendTabs = [
   { id: 0, name: "My spend", icon: <FiActivity /> },
   { id: 1, name: "Vs others", icon: <FiTrendingUp /> },
 ];
+export const debtOverviewTabs = [
+  { id: 0, name: "This month" },
+  { id: 1, name: "All time" },
+];
+export const debtDetailsActivityTabs = [
+  { id: 0, name: "Loan details" },
+  { id: 1, name: "Recent activity" },
+];
 export const expenditureList = [
   {
     id: 0,
@@ -419,4 +427,59 @@ export const cashflowFilters = [
   { id: 0, name: "All accounts", icon: null },
   { id: 1, name: "Last 3 month", icon: <FiCalendar /> },
   // { id: 2, name: "Clear", icon: null },
+];
+
+export const debt = [
+  {
+    id: 0,
+    name: "Auto loan",
+    amount: 17500,
+    paid: 5000,
+    percentage: 29,
+    loanDetails: {
+      monthlyPayment: 10000,
+      totalRepaid: 100000,
+      outstandingBalance: 20000,
+      annualInterestRate: 18,
+      estimatedPayoffTime: "7 years 9months",
+      nextPaymentDueDate: "24.04.2024",
+    },
+    recentActivity: [
+      {
+        id: 0,
+        merchant: "Card Repayment",
+        amount: 10000,
+        transactedAt: "08 Jan 2024",
+      },
+    ],
+  },
+  {
+    id: 0,
+    name: "Mortgage",
+    amount: 40000,
+    paid: 10000,
+    percentage: 25,
+    loanDetails: {
+      monthlyPayment: 10000,
+      totalRepaid: 100000,
+      outstandingBalance: 20000,
+      annualInterestRate: 18,
+      estimatedPayoffTime: "7 years 9months",
+      nextPaymentDueDate: "24.04.2024",
+    },
+    recentActivity: [
+      {
+        id: 0,
+        merchant: "Card Repayment",
+        amount: 10000,
+        transactedAt: "08 Jan 2024",
+      },
+    ],
+  },
+];
+
+export const allTimeDebt = [
+  { id: 0, name: "Credit card", amount: 10000, paid: 10000, percentage: 100 },
+  { id: 0, name: "Auto loan", amount: 17500, paid: 5000, percentage: 29 },
+  { id: 0, name: "Mortgage", amount: 40000, paid: 10000, percentage: 25 },
 ];
