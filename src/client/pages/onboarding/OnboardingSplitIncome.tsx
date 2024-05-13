@@ -15,8 +15,9 @@ import debounce from "lodash.debounce";
 import useBottomSheetStore from "client/store/bottomSheetStore";
 import userStore from "client/store/userStore";
 import useUserStore from "client/store/userStore";
-import { reformatBudgetSplit } from "client/utils/Formatters";
+import { formatCurrency, reformatBudgetSplit } from "client/utils/Formatters";
 import useCategoriesStore from "client/store/categoriesStore";
+import DebtInfo from "../components/DebtInfo";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
@@ -142,7 +143,7 @@ const OnboardingSplitIncome = () => {
       document
         .getElementById("budget-container")
         ?.classList.add("disable-interaction");
-      navigate("/budget-settings");
+      navigate("/onboard-success");
     } catch (error) {
       console.error(error);
       // Handle the error
@@ -151,122 +152,159 @@ const OnboardingSplitIncome = () => {
 
   const handleSliderChange = (newValue: number, type: string) => {
     const totalRatio = 100;
+    const fixedSavingsRatio = 45;  // Fixed savings ratio
+
+    if (type === "savings") {
+      console.error("Savings ratio is fixed and cannot be changed.");
+      return; // Prevent any changes to savings
+    }
+
     const oldValue =
       type === "essentials"
         ? essentialsRatio
-        : type === "wants"
-          ? wantsRatio
-          : savingsRatio;
+        : wantsRatio;
+
     const change = newValue - oldValue;
 
-    if (newValue === totalRatio) {
-      switch (type) {
-        case "essentials":
-          setWantsRatio(0);
-          setSavingsRatio(0);
-          break;
-        case "wants":
-          setEssentialsRatio(0);
-          setSavingsRatio(0);
-          break;
-        case "savings":
-          setEssentialsRatio(0);
-          setWantsRatio(0);
-          break;
-        default:
-          break;
+    if (newValue === totalRatio - fixedSavingsRatio) {
+      if (type === "essentials") {
+        setWantsRatio(0);
+      } else if (type === "wants") {
+        setEssentialsRatio(0);
       }
+      setSavingsRatio(fixedSavingsRatio);
       return;
     }
 
-    if (oldValue === totalRatio) {
-      const primaryRatio = (totalRatio - newValue) * 0.7;
-      const secondaryRatio = (totalRatio - newValue) * 0.3;
-      switch (type) {
-        case "essentials":
-          setWantsRatio(primaryRatio);
-          setSavingsRatio(secondaryRatio);
-          break;
-        case "wants":
-          setEssentialsRatio(primaryRatio);
-          setSavingsRatio(secondaryRatio);
-          break;
-        case "savings":
-          setEssentialsRatio(primaryRatio);
-          setWantsRatio(secondaryRatio);
-          break;
-        default:
-          break;
+    if (oldValue === totalRatio - fixedSavingsRatio) {
+      const adjustedRatio = totalRatio - fixedSavingsRatio - newValue;
+      if (type === "essentials") {
+        setWantsRatio(adjustedRatio);
+      } else if (type === "wants") {
+        setEssentialsRatio(adjustedRatio);
       }
+      setSavingsRatio(fixedSavingsRatio);
       return;
     }
 
-    const allocateChange = (
-      primaryType: string,
-      secondaryType: string,
-      change: number
-    ) => {
-      const primaryChange = (change * 7) / 10;
-      const secondaryChange = change - primaryChange;
-
-      switch (primaryType) {
-        case "essentials":
-          setEssentialsRatio(Math.max(essentialsRatio + primaryChange, 0));
-          break;
-        case "wants":
-          setWantsRatio(Math.max(wantsRatio + primaryChange, 0));
-          break;
-        case "savings":
-          setSavingsRatio(Math.max(savingsRatio + primaryChange, 0));
-          break;
-        default:
-          break;
-      }
-
-      switch (secondaryType) {
-        case "essentials":
-          setEssentialsRatio(Math.max(essentialsRatio + secondaryChange, 0));
-          break;
-        case "wants":
-          setWantsRatio(Math.max(wantsRatio + secondaryChange, 0));
-          break;
-        case "savings":
-          setSavingsRatio(Math.max(savingsRatio + secondaryChange, 0));
-          break;
-        default:
-          break;
+    const allocateChange = (change: number) => {
+      // Proportionally allocate change to the non-affected ratio
+      if (type === "essentials") {
+        setWantsRatio(Math.max(wantsRatio - change, 0));
+      } else if (type === "wants") {
+        setEssentialsRatio(Math.max(essentialsRatio - change, 0));
       }
     };
 
-    switch (type) {
-      case "essentials":
-        if (change > 0) {
-          allocateChange("wants", "savings", -change);
-        } else {
-          allocateChange("savings", "wants", -change);
-        }
-        setEssentialsRatio(newValue);
-        break;
-      case "wants":
-        if (change > 0) {
-          allocateChange("essentials", "savings", -change);
-        } else {
-          allocateChange("savings", "essentials", -change);
-        }
-        setWantsRatio(newValue);
-        break;
-      case "savings":
-        if (change > 0) {
-          allocateChange("essentials", "wants", -change);
-        } else {
-          allocateChange("wants", "essentials", -change);
-        }
-        setSavingsRatio(newValue);
-        break;
-      default:
-        break;
+    // Apply the new value and allocate change to the other ratio
+    if (type === "essentials") {
+      setEssentialsRatio(Math.max(newValue, 0));
+      allocateChange(change);
+    } else if (type === "wants") {
+      setWantsRatio(Math.max(newValue, 0));
+      allocateChange(change);
     }
+
+    // Ensure savings ratio is always fixed at 45
+    setSavingsRatio(fixedSavingsRatio);
   };
+
+
+  // const handleSliderChange = (newValue: number, type: string) => {
+  //   const totalRatio = 100;
+  //   const fixedSavingsRatio = 45;
+
+  //   const oldValue =
+  //     type === "essentials"
+  //       ? essentialsRatio
+  //       : type === "wants"
+  //         ? wantsRatio
+  //         : fixedSavingsRatio;
+
+  //   if (type === "savings") {
+  //     console.error("Savings ratio is fixed and cannot be changed.");
+  //     return; // Prevent any changes to savings
+  //   }
+
+  //   const change = newValue - oldValue;
+
+  //   if (newValue === totalRatio) {
+  //     switch (type) {
+  //       case "essentials":
+  //         setWantsRatio(0);
+  //         break;
+  //       case "wants":
+  //         setEssentialsRatio(0);
+  //         break;
+  //     }
+  //     setSavingsRatio(fixedSavingsRatio);
+  //     return;
+  //   }
+
+  //   if (oldValue === totalRatio) {
+  //     const remainingRatio = totalRatio - fixedSavingsRatio;
+  //     const primaryRatio = remainingRatio * 0.7;
+  //     const secondaryRatio = remainingRatio * 0.3;
+  //     switch (type) {
+  //       case "essentials":
+  //         setWantsRatio(primaryRatio);
+  //         break;
+  //       case "wants":
+  //         setEssentialsRatio(primaryRatio);
+  //         break;
+  //     }
+  //     setSavingsRatio(fixedSavingsRatio);
+  //     return;
+  //   }
+
+  //   const allocateChange = (
+  //     primaryType: string,
+  //     secondaryType: string,
+  //     change: number
+  //   ) => {
+  //     const remainingRatio = totalRatio - fixedSavingsRatio;
+  //     const primaryChange = (remainingRatio * change / (oldValue + change)) * 0.7;
+  //     const secondaryChange = change - primaryChange;
+
+  //     switch (primaryType) {
+  //       case "essentials":
+  //         setEssentialsRatio(Math.max(essentialsRatio + primaryChange, 0));
+  //         break;
+  //       case "wants":
+  //         setWantsRatio(Math.max(wantsRatio + primaryChange, 0));
+  //         break;
+  //     }
+
+  //     switch (secondaryType) {
+  //       case "essentials":
+  //         setEssentialsRatio(Math.max(essentialsRatio + secondaryChange, 0));
+  //         break;
+  //       case "wants":
+  //         setWantsRatio(Math.max(wantsRatio + secondaryChange, 0));
+  //         break;
+  //     }
+  //   };
+
+  //   switch (type) {
+  //     case "essentials":
+  //       if (change > 0) {
+  //         allocateChange("wants", "savings", -change);
+  //       } else {
+  //         allocateChange("savings", "wants", -change);
+  //       }
+  //       setEssentialsRatio(newValue);
+  //       break;
+  //     case "wants":
+  //       if (change > 0) {
+  //         allocateChange("essentials", "savings", -change);
+  //       } else {
+  //         allocateChange("savings", "essentials", -change);
+  //       }
+  //       setWantsRatio(newValue);
+  //       break;
+  //   }
+  //   setSavingsRatio(fixedSavingsRatio); // Ensure savings ratio is always fixed
+  // };
 
   return (
     <div className="flex flex-col">
@@ -287,102 +325,21 @@ const OnboardingSplitIncome = () => {
           Whoop! Here is your recommended budget split.
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
-          <div className="text-sm font-primary text-skin-base tracking-wide mt-6 font-regular mx-3.5">
-            The best practice for budgeting is 50% of your income for
-            Essentials, 30% for Wants, then 20% for Savings. However, you can
-            personalize your budget split below.
+          <div className="text-xs font-primary text-skin-base tracking-wide mt-6 font-regular mx-3.5">
+            We recommend keeping 50% of your take-home income for Essential expenses, then 30% for Wants, then about 20% toward Savings or Debt repayments.
             <br></br>
           </div>
         </div>
         <div className="flex flex-col mt-12 mx-6">
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="justify-self-start font-medium text-2xl text-skin-base">
-              Essentials
+              Debt repayment
             </div>
             <div className="justify-self-end font-medium text-2xl text-skin-base">
-              <div className="relative">
-                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
-                  {currency ?? ""}
-                </div>
-                <div className="font-custom font-medium text-2xl text-skin-base">
-                  {calculateIncomeAmount(essentialsRatio)?.toLocaleString(
-                    "en-us"
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="col-span-2">
-              <ReactSlider
-                value={essentialsRatio}
-                className="horizontal-slider"
-                marks={generateSliderValues()}
-                markClassName="example-mark"
-                min={0}
-                max={100}
-                thumbClassName="example-thumb"
-                trackClassName="example-track"
-                renderThumb={(props, state) => (
-                  <SliderThumbComponent
-                    valueNow={state.valueNow}
-                    props={props}
-                    showPercentage={showPercentage}
-                  />
-                )}
-                onBeforeChange={() => setShowPercentage(true)}
-                onAfterChange={() => setShowPercentage(false)}
-                onChange={(value) => handleSliderChange(value, "essentials")}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4 w-full mt-16">
-            <div className="justify-self-start font-medium text-2xl text-skin-base">
-              Wants
-            </div>
-            <div className="justify-self-end font-medium text-2xl text-skin-base">
-              <div className="relative">
-                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
-                  {currency ?? ""}
-                </div>
-                <div className="font-custom font-medium text-2xl text-skin-base">
-                  {calculateIncomeAmount(wantsRatio)?.toLocaleString("en-us")}
-                </div>
-              </div>
-            </div>
-            <div className="col-span-2">
-              <ReactSlider
-                value={wantsRatio}
-                className="horizontal-slider"
-                marks={generateSliderValues()}
-                markClassName="example-mark"
-                min={0}
-                max={100}
-                thumbClassName="example-thumb"
-                trackClassName="example-track"
-                renderThumb={(props, state) => (
-                  <SliderThumbComponent
-                    valueNow={state.valueNow}
-                    props={props}
-                    showPercentage={showPercentage}
-                  />
-                )}
-                onBeforeChange={() => setShowPercentage(true)}
-                onAfterChange={() => setShowPercentage(false)}
-                onChange={(value) => handleSliderChange(value, "wants")}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4 w-full mt-16 mb-32">
-            <div className="justify-self-start font-medium text-2xl text-skin-base">
-              Savings
-            </div>
-            <div className="justify-self-end font-medium text-2xl text-skin-base">
-              <div className="relative">
-                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
-                  {currency ?? ""}
-                </div>
-                <div className="font-custom font-medium text-2xl text-skin-base">
-                  {calculateIncomeAmount(savingsRatio)?.toLocaleString("en-us")}
-                </div>
+              <div className="font-custom font-medium text-2xl text-skin-base">
+                {calculateIncomeAmount(savingsRatio)?.toLocaleString(
+                  "en-us"
+                )}<sup className="align-super -ml-1 text-xxxs">{currency ?? ""}</sup>
               </div>
             </div>
             <div className="col-span-2">
@@ -400,12 +357,104 @@ const OnboardingSplitIncome = () => {
                     valueNow={state.valueNow}
                     props={props}
                     showPercentage={showPercentage}
+                    backgroundColor="#CB960F"
+                    isLocked={true}
                   />
                 )}
                 onBeforeChange={() => setShowPercentage(true)}
                 onAfterChange={() => setShowPercentage(false)}
                 onChange={(value) => handleSliderChange(value, "savings")}
+                disabled={true}
               />
+            </div>
+            <div className="justify-self-start text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+              0
+            </div>
+            <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+              {formatCurrency(monthlyIncome)}
+            </div>
+          </div>
+          <div className="mt-4"><DebtInfo loanValue={calculateIncomeAmount(savingsRatio)} currency={currency} /></div>
+          <div className="grid grid-cols-2 gap-4 w-full mt-6">
+            <div className="justify-self-start font-medium text-2xl text-skin-base">
+              Essentials
+            </div>
+            <div className="justify-self-end font-medium text-2xl text-skin-base">
+              <div className="font-custom font-medium text-2xl text-skin-base">
+                {calculateIncomeAmount(essentialsRatio)?.toLocaleString(
+                  "en-us"
+                )}<sup className="align-super -ml-1 text-xxxs">{currency ?? ""}</sup>
+              </div>
+            </div>
+            <div className="col-span-2">
+              <ReactSlider
+                value={essentialsRatio}
+                className="horizontal-slider"
+                marks={generateSliderValues()}
+                markClassName="example-mark"
+                min={0}
+                max={100}
+                thumbClassName="example-thumb"
+                trackClassName="essential-track"
+                renderThumb={(props, state) => (
+                  <SliderThumbComponent
+                    valueNow={state.valueNow}
+                    props={props}
+                    showPercentage={showPercentage}
+                    backgroundColor="#00AB9E"
+                  />
+                )}
+                onBeforeChange={() => setShowPercentage(true)}
+                onAfterChange={() => setShowPercentage(false)}
+                onChange={(value) => handleSliderChange(value, "essentials")}
+              />
+            </div>
+            <div className="justify-self-start text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+              0
+            </div>
+            <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+              {formatCurrency(monthlyIncome)}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 w-full mt-6 mb-32">
+            <div className="justify-self-start font-medium text-2xl text-skin-base">
+              Wants
+            </div>
+            <div className="justify-self-end font-medium text-2xl text-skin-base">
+              <div className="font-custom font-medium text-2xl text-skin-base">
+                {calculateIncomeAmount(wantsRatio)?.toLocaleString(
+                  "en-us"
+                )}<sup className="align-super -ml-1 text-xxxs">{currency ?? ""}</sup>
+              </div>
+            </div>
+            <div className="col-span-2">
+              <ReactSlider
+                value={wantsRatio}
+                className="horizontal-slider"
+                marks={generateSliderValues()}
+                markClassName="example-mark"
+                min={0}
+                max={100}
+                thumbClassName="example-thumb"
+                trackClassName="wants-track"
+                renderThumb={(props, state) => (
+                  <SliderThumbComponent
+                    valueNow={state.valueNow}
+                    props={props}
+                    showPercentage={showPercentage}
+                    backgroundColor="#345DAF"
+                  />
+                )}
+                onBeforeChange={() => setShowPercentage(true)}
+                onAfterChange={() => setShowPercentage(false)}
+                onChange={(value) => handleSliderChange(value, "wants")}
+              />
+            </div>
+            <div className="justify-self-start text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+              0
+            </div>
+            <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+              {formatCurrency(monthlyIncome)}
             </div>
           </div>
         </div>

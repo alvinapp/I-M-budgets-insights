@@ -14,8 +14,8 @@
                                 <g id="02.02-Buttons/Primary-Small/Circle/Default" transform="translate(12.043796, 12.000000) scale(1, -1) translate(-12.043796, -12.000000) ">
                                     <g id="Shape/Circle">
                                         <rect id="Shadow" x="0" y="0" width="24.0875912" height="24" rx="12"></rect>
-                                        <rect id="Fill" fill="#565656" opacity="0.2" x="0" y="0" width="24.0875912" height="24" rx="12"></rect>
-                                        <g id="Outline-Tint" stroke="#565656" stroke-width="1.2">
+                                        <rect id="Fill" fill="#4a77ad" opacity="0.2" x="0" y="0" width="24.0875912" height="24" rx="12"></rect>
+                                        <g id="Outline-Tint" stroke="#ffffff" stroke-width="1.2">
                                             <rect id="Outline" x="0.6" y="0.6" width="22.8875912" height="22.8" rx="11.4"></rect>
                                         </g>
                                     </g>
@@ -23,7 +23,7 @@
                                         <mask id="mask-2" fill="white">
                                             <use xlink:href="#path-1"></use>
                                         </mask>
-                                        <use id="Combined-Shape" fill="#565656" xlink:href="#path-1"></use>
+                                        <use id="Combined-Shape" fill="#ffff" xlink:href="#path-1"></use>
                                     </g>
                                 </g>
                             </g>

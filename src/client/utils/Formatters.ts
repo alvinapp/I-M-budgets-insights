@@ -217,7 +217,7 @@ interface GoalCompletionResult {
   estimatedCompletionDate: string;
 }
 
-function formatCurrency(value: number): string {
+export function formatCurrency(value: number): string {
   if (value >= 1e6) {
     return `${(value / 1e6).toFixed(1)}m`;
   } else if (value >= 1000) {

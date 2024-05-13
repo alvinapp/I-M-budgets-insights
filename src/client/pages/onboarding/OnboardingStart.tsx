@@ -5,7 +5,7 @@ import CloseButton from "../components/CloseButton";
 import MainButton from "../components/MainButton";
 import NavBar from "../components/NavBar";
 import NavBarTitle from "../components/NavBarTitle";
-import splashImage from "../../assets/images/money-in-one-app.svg";
+import splashImage from "../../assets/images/onboarding-graphic.png";
 import getToken from "client/api/token";
 import { useConfigurationStore, IConfig } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
@@ -41,12 +41,12 @@ const OnboardingStart = () => {
         setMonoPubKey(data.key);
         configuration.monoPubKey = data.key;
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
   useEffect(() => {
     if (!configurations.monoPubKey) {
       fetchMonoToken({ configuration: configurations, setMonoPubKey })
-        .then(() => {})
+        .then(() => { })
         .catch((error) => {
           console.error("Failed to fetch Mono public key:", error);
         });
@@ -132,10 +132,9 @@ const OnboardingStart = () => {
             <div className="flex-grow h-px bg-skin-accent3"></div>
             <div className="flex flex-col mx-6 absolute left-0 right-0">
               <div className="flex flex-row justify-center mt-4">
-                <div
-                  className="w-96 h-96 bg-cover bg-local bg-center"
-                  style={{ backgroundImage: `url(${splashImage})` }}
-                ></div>
+                <div className="w-96 h-96 bg-cover bg-center overflow-hidden">
+                  <img src={splashImage} className="w-full h-[90%]" alt="Splash" style={{ marginTop: '2rem' }} />
+                </div>
               </div>
               <div className="mt-6">
                 <div className="flex flex-row justify-center font-custom text-xl text-start font-semibold tracking-title text-skin-base mr-10">
@@ -166,7 +165,7 @@ const OnboardingStart = () => {
                 // title="Link account"
                 title="Add my first account"
                 click={() => {
-                  navigate("/onboard-add-income");
+                  navigate("/onboard-select-account");
                   // onClick();
                 }}
               />
