@@ -36,7 +36,11 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
       style={{ display: "flex" }}
     >
       {ratioArray.map((flexValue, index) => (
-        <div key={index} className="flex flex-col" style={{ flex: checkNAN(flexValue) }}>
+        <div
+          key={index}
+          className="flex flex-col"
+          style={{ flex: checkNAN(flexValue) }}
+        >
           {isLoading ? (
             <div className="bg-silver animate-pulse h-[1.875rem] rounded-[1.375rem] bg-[#d2d2d2] min-w-[7rem]" />
           ) : (
@@ -47,10 +51,10 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
               }
               bgColorTop={
                 index === 0
-                  ? "linear-gradient(159deg, #4053D0 0%, #051AA3 100%)"
+                  ? "#00AB9E"
                   : index === 1
-                    ? "linear-gradient(159deg, #8490E2 0%, #3B4381 100%)"
-                    : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
+                  ? "#345DAF"
+                  : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
               }
               outsideLength={
                 progressPercentage[Object.keys(progressPercentage)[index]] ?? 0
@@ -60,10 +64,17 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           )}
           <div className="flex flex-col justify-end items-start mt-3">
             <div className="relative flex items-end">
-              <div
-                className="font-custom font-medium text-base text-skin-base"
-              >
-                <AnimatedNumber target={isLoading ? 0 : checkNAN(budgetAmount[Object.keys(budgetAmount)[index]] ?? 0)} duration={500} />
+              <div className="font-custom font-medium text-base text-skin-base">
+                <AnimatedNumber
+                  target={
+                    isLoading
+                      ? 0
+                      : checkNAN(
+                          budgetAmount[Object.keys(budgetAmount)[index]] ?? 0
+                        )
+                  }
+                  duration={500}
+                />
                 <sup
                   style={{
                     fontSize: "12px",

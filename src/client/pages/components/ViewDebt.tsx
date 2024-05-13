@@ -12,6 +12,7 @@ import {
 import ActionButton from "./ActionButton";
 import LoanDetails from "./LoanDetails";
 import SegmentedProgressBar from "./SegmentedProgress";
+import ActivityCard from "./ActivityCard";
 interface ViewDebtProps {
   progress: number;
   repaid: number;
@@ -117,7 +118,17 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
               nextPaymentDueDate={loanDetails?.nextPaymentDueDate}
             />
           ) : (
-            <div></div>
+            <>
+              {recentActivities.map((activity: any, index: number) => {
+                return (
+                  <ActivityCard
+                    merchant={activity?.merchant}
+                    transacted_at={activity?.transactedAt}
+                    amount={activity?.amount}
+                  />
+                );
+              })}
+            </>
           )}
         </div>
       </div>

@@ -20,9 +20,7 @@ const TabButton = ({
     >
       <div className="flex flex-row items-center justify-center">
         <div
-          className={`${
-            isActive ? "text-skin-primary" : "text-skin-base"
-          } mr-2`}
+          className={`${isActive ? "text-[#101010]" : "text-skin-base"} mr-2`}
         >
           {children}
         </div>
