@@ -1,25 +1,29 @@
 import React from "react";
 import { TailSpin } from "react-loader-spinner";
 
-type MainButonProps = {
+type ActionButtonProps = {
   title?: string;
   click?: () => void;
   isDisabled?: boolean;
   loading?: boolean;
+  titleColor?: string;
+  bgColor?: string;
 };
 
-const MainButton = ({
+const ActionButton = ({
   title,
   click,
+  titleColor,
+  bgColor,
   isDisabled = false,
   loading = false,
-}: MainButonProps) => {
+}: ActionButtonProps) => {
   return (
     <button
-      className={`rounded-full text-white font-primary font-bold tracking-widest w-full h-14 text-base ${
-        isDisabled
-          ? "focus:outline-none bg-skin-disabledBg"
-          : " bg-skin-primary"
+      className={`rounded-full focus:border-none focus:outline-none ${
+        titleColor ?? "text-white"
+      } font-primary font-bold tracking-widest w-full h-14 text-base ${
+        isDisabled ? "focus:outline-none bg-skin-disabledBg" : `${bgColor}`
       }`}
       disabled={isDisabled}
       onClick={loading ? () => {} : click}
@@ -43,4 +47,4 @@ const MainButton = ({
     </button>
   );
 };
-export default MainButton;
+export default ActionButton;

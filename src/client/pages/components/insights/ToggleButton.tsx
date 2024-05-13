@@ -15,14 +15,14 @@ export const ToggleButton = ({
   return (
     <div
       className={`flex flex-row justify-center items-center ${
-        isActive ? " bg-[rgb(155,176,247,0.3)] rounded-full" : "bg-transparent"
+        isActive ? " bg-[rgb(0,190,105,0.2)] rounded-full" : "bg-transparent"
       } px-4 py-1.5`}
       onClick={onClick}
     >
       <div
         className={`text-center ${
           isActive
-            ? "text-[#001D82] font-custom text-xxxs font-medium tracking-tab_text"
+            ? "text-[#101010] font-custom text-xxxs font-medium tracking-tab_text"
             : "text-skin-base font-custom text-xxxs font-medium tracking-tab_text"
         }`}
       >

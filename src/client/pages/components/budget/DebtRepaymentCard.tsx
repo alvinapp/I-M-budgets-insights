@@ -1,11 +1,10 @@
 import ProgressBar from "@ramonak/react-progress-bar";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
-import { string } from "prop-types";
-import React from "react";
 import { FiChevronRight } from "react-icons/fi";
 import AnimatedNumber from "../AnimatedNumber";
+import SegmentedProgressBar from "../SegmentedProgress";
 
-type CategoryViewCardProps = {
+type DebtRepaymentCardProps = {
   category?: string;
   icon?: string;
   iconBg?: string;
@@ -20,7 +19,7 @@ type CategoryViewCardProps = {
   caption?: string;
   onClick?: () => void;
 };
-export const CategoryViewCard = ({
+export const DebtRepaymentCard = ({
   icon,
   iconBg,
   category,
@@ -34,10 +33,11 @@ export const CategoryViewCard = ({
   fadedColor,
   caption,
   onClick,
-}: CategoryViewCardProps) => {
+}: DebtRepaymentCardProps) => {
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
+  const segmentendProgressPercentages: Array<number> = [25, 50, 75, 100];
   return (
     <div className="flex flex-row mb-3" onClick={onClick}>
       <div className="flex flex-col mr-2">
@@ -68,17 +68,16 @@ export const CategoryViewCard = ({
             </div>
           </div>
         </div>
-        <ProgressBar
-          completed={progressPercentage}
-          height="4px"
-          baseBgColor={`${baseBgColor}`}
-          bgColor={`${bgColor}`}
-          isLabelVisible={false}
+        <SegmentedProgressBar
+          percentage={0}
+          height={4}
+          progressColorTop={"#CB96OF"}
+          progressColorBottom={"#f2f2f2"}
         />
         <div className="flex flex-row mb-2.5 items-center"></div>
         <div className="flex flex-row items-center">
           <div
-            className={`font-primary text-sm tracking-wider ${
+            className={`font-primary text-sm ${
               primaryColor ?? "text-skin-base"
             } font-medium mr-1`}
           >
@@ -93,12 +92,12 @@ export const CategoryViewCard = ({
           </div>
           <div className="relative mr-1">
             <div
-              className={`font-primary text-sm tracking-wider ${
+              className={`font-primary text-sm ${
                 fadedColor ?? "text-skin-base"
-              }`}
+              } font-medium`}
             >
               {budgetAmount?.toLocaleString("en-us")}
-              <sup className="align-super -ml-1 text-[9px]">
+              <sup className=" align-super -ml-1 text-[9px]">
                 {currencySymbol ?? ""}
               </sup>
             </div>

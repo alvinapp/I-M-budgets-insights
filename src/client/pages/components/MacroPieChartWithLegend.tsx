@@ -28,7 +28,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
   peerValues,
   showComparison,
   showUnallocated,
-  isLoading
+  isLoading,
 }) => {
   const total =
     values.wants + values.essentials + values.savings + values.unallocated;
@@ -83,7 +83,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
       />
       <div className="flex flex-col justify-between space-y-2">
         <MacroPieChartLegend
-          color="linear-gradient(124.2deg, #4053D0 0%, #051AA3 100%)"
+          color="#00AB9E"
           text="Essentials"
           percentage={checkNAN(percentages.essentials)}
           showComparison={showComparison}
@@ -92,7 +92,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
           )}
         />
         <MacroPieChartLegend
-          color="linear-gradient(124.2deg, #8490E2 0%, #3B4381 100%)"
+          color="#345DAF"
           text="Wants"
           percentage={checkNAN(percentages.wants)}
           showComparison={showComparison}

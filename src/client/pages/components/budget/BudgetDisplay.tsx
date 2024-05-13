@@ -56,7 +56,6 @@ export const BudgetDisplay = ({
         completed={progressPercentage}
         height="1.0625rem"
         baseBgColor={`#E7E7E7`}
-        // bgColor={`#6F89A5`}
         bgColor={progressColor}
         isLabelVisible={false}
       />

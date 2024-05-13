@@ -102,11 +102,6 @@ module.exports = {
           danger: "var(--color-outline-danger)",
         },
       },
-      fontFamily: {
-        custom: "'NeueMontreal', sans-serif",
-        primary: "'NeueMontreal', sans-serif",
-        montserrat: "'Montserrat', sans-serif",
-      },
       spacing: {
         0.5: "0.125rem",
         2.5: "0.625rem",
@@ -151,6 +146,10 @@ module.exports = {
         knob: "0 2px 6px 0 #C3C3C3;",
         budgetButton:
           "inset 0 1px 0 0 rgba(255,255,255,0.1), 0 1px 8px -1px #C3C3C3",
+      },
+      fontFamily: {
+        custom: "'Hanken Grotesk'",
+        primary: "'Hanken Grotesk'",
       },
     },
     fontSize: {

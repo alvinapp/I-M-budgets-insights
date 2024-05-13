@@ -30,16 +30,16 @@ export const GeneralInfoCard = ({
             >
               <div className="">{icon}</div>
             </div>
-            <div className="font-primary text-base text-skin-base font-medium ml-4">
+            <div className="font-primary text-base text-skin-base font-bold ml-4">
               {title}
             </div>
           </div>
         </div>
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
-            <div className="font-custom font-medium text-base text-skin-base">
+            <div className="font-custom font-bold text-base text-skin-base">
               {caption}
-              <sup className="font-custom font-medium text-xxs text-skin-base align-super">
+              <sup className="font-custom font-bold text-xxs text-skin-base align-super">
                 {currencySymbol}
               </sup>
             </div>
@@ -50,7 +50,7 @@ export const GeneralInfoCard = ({
         </div>
       </div>
       <div className="flex flex-row mt-2 mx-1">
-        <div className="font-primary text-sm font-normal tracking-wide text-skin-base">
+        <div className="font-primary text-sm font-medium tracking-wide text-skin-base">
           {subtitle}
         </div>
       </div>

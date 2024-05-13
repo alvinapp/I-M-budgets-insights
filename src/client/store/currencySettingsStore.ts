@@ -1,6 +1,6 @@
 import create from "zustand";
 const useCurrencySettingsStore = create((set) => ({
-  currencySymbol: " ₦",
+  currencySymbol: " KES",
   kenyanCurrency: " ₦",
 }));
 export default useCurrencySettingsStore;
