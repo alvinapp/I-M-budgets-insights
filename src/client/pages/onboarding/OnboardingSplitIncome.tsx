@@ -30,7 +30,7 @@ const OnboardingSplitIncome = () => {
   const userStore = useUserStore((state: any) => state);
   const { currency, incomeSplit } = budgetSettingsStore;
   const [monthlyIncome, setMonthlyIncomeValue] = useState(
-    budgetSettingsStore.monthlyIncome
+    budgetSettingsStore.monthlyIncome || userStore.user.income
   );
   const split = reformatBudgetSplit(categoriesStore.macros?.budget_split ?? "");
   const [essentialsRatio, setEssentialsRatio] = useState(
@@ -139,11 +139,16 @@ const OnboardingSplitIncome = () => {
       await completeOnboarding({ completionTime: new Date(), configuration });
 
       // Redirect to success page
-      bottomSheetStore.setSuccessBottomSheet(true);
-      document
-        .getElementById("budget-container")
-        ?.classList.add("disable-interaction");
-      navigate("/onboard-success");
+      // bottomSheetStore.setSuccessBottomSheet(true);
+      // document
+      //   .getElementById("budget-container")
+      //   ?.classList.add("disable-interaction");
+      if (userStore.user.is_onboarded) {
+        navigate("/budget-settings");
+      } else {
+        navigate("/onboard-success");
+      }
+
     } catch (error) {
       console.error(error);
       // Handle the error
