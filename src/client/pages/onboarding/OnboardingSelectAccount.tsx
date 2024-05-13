@@ -53,7 +53,7 @@ const OnboardingSelectAccount = () => {
                     <AccountCard accountNumber="123456789" accountType="Online Savers-Lcy" isActive={true} />
                     <AccountCard accountNumber="123456789" accountType="Paygo-Lcy" isActive={false} />
                     <div className="h-1 w-[85%] bg-[#f5f5f5] mt-4 mb-4"></div>
-                    <AccountCard accountNumber="Sync your M-Pesa transactions" accountType="" backgroundColor="#5f9f31" isActive={false} />
+                    <AccountCard accountNumber="Sync your M-Pesa transactions" accountType="" isMpesa={true} isActive={false} />
                 </div>
                 <div className="fixed bottom-5 left-0 right-0 mx-3.5">
                     <MainButton
