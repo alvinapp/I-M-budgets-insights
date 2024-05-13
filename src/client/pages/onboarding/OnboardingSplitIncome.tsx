@@ -13,7 +13,6 @@ import { GoalMacroType, setMacro } from "client/api/goals";
 import SliderThumbComponent from "../components/SliderThumbComponent";
 import debounce from "lodash.debounce";
 import useBottomSheetStore from "client/store/bottomSheetStore";
-import userStore from "client/store/userStore";
 import useUserStore from "client/store/userStore";
 import { formatCurrency, reformatBudgetSplit } from "client/utils/Formatters";
 import useCategoriesStore from "client/store/categoriesStore";
@@ -27,7 +26,6 @@ const OnboardingSplitIncome = () => {
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
   const budgetSettingsStore = useBudgetSettingsStore();
   const categoriesStore = useCategoriesStore((state: any) => state);
-  const userStore = useUserStore((state: any) => state);
   const { currency, incomeSplit } = budgetSettingsStore;
   const [monthlyIncome, setMonthlyIncomeValue] = useState(
     budgetSettingsStore.monthlyIncome
@@ -152,17 +150,14 @@ const OnboardingSplitIncome = () => {
 
   const handleSliderChange = (newValue: number, type: string) => {
     const totalRatio = 100;
-    const fixedSavingsRatio = 45;  // Fixed savings ratio
+    const fixedSavingsRatio = 45; // Fixed savings ratio
 
     if (type === "savings") {
       console.error("Savings ratio is fixed and cannot be changed.");
       return; // Prevent any changes to savings
     }
 
-    const oldValue =
-      type === "essentials"
-        ? essentialsRatio
-        : wantsRatio;
+    const oldValue = type === "essentials" ? essentialsRatio : wantsRatio;
 
     const change = newValue - oldValue;
 
@@ -208,7 +203,6 @@ const OnboardingSplitIncome = () => {
     // Ensure savings ratio is always fixed at 45
     setSavingsRatio(fixedSavingsRatio);
   };
-
 
   // const handleSliderChange = (newValue: number, type: string) => {
   //   const totalRatio = 100;
@@ -321,25 +315,28 @@ const OnboardingSplitIncome = () => {
         <div className="rounded-full h-11 w-11 bg-skin-iconPrimary flex justify-center items-center mx-3.5">
           <FiPieChart color="#555466" />
         </div>
-        <div className="font-custom font-medium text-2xl text-skin-base mt-1.5 mx-3.5">
+        <div className="font-custom font-bold text-2xl text-skin-base mt-1.5 mx-3.5">
           Whoop! Here is your recommended budget split.
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
-          <div className="text-xs font-primary text-skin-base tracking-wide mt-6 font-regular mx-3.5">
-            We recommend keeping 50% of your take-home income for Essential expenses, then 30% for Wants, then about 20% toward Savings or Debt repayments.
+          <div className="text-xs font-primary text-skin-base tracking-wide mt-6 font-medium mx-3.5">
+            We recommend keeping 50% of your take-home income for Essential
+            expenses, then 30% for Wants, then about 20% toward Savings or Debt
+            repayments.
             <br></br>
           </div>
         </div>
         <div className="flex flex-col mt-12 mx-6">
           <div className="grid grid-cols-2 gap-4 w-full">
-            <div className="justify-self-start font-medium text-2xl text-skin-base">
+            <div className="justify-self-start font-bold text-2xl text-skin-base">
               Debt repayment
             </div>
-            <div className="justify-self-end font-medium text-2xl text-skin-base">
-              <div className="font-custom font-medium text-2xl text-skin-base">
-                {calculateIncomeAmount(savingsRatio)?.toLocaleString(
-                  "en-us"
-                )}<sup className="align-super -ml-1 text-xxxs">{currency ?? ""}</sup>
+            <div className="justify-self-end">
+              <div className="font-custom font-bold text-2xl text-skin-base">
+                {calculateIncomeAmount(savingsRatio)?.toLocaleString("en-us")}
+                <sup className="align-super -ml-1 text-xxxs">
+                  {currency ?? ""}
+                </sup>
               </div>
             </div>
             <div className="col-span-2">
@@ -367,23 +364,37 @@ const OnboardingSplitIncome = () => {
                 disabled={true}
               />
             </div>
-            <div className="justify-self-start text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+            <div
+              className="justify-self-start text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
               0
             </div>
-            <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+            <div
+              className="justify-self-end text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
               {formatCurrency(monthlyIncome)}
             </div>
           </div>
-          <div className="mt-4"><DebtInfo loanValue={calculateIncomeAmount(savingsRatio)} currency={currency} /></div>
+          <div className="mt-4">
+            <DebtInfo
+              loanValue={calculateIncomeAmount(savingsRatio)}
+              currency={currency}
+            />
+          </div>
           <div className="grid grid-cols-2 gap-4 w-full mt-6">
-            <div className="justify-self-start font-medium text-2xl text-skin-base">
+            <div className="justify-self-start font-bold text-2xl text-skin-base">
               Essentials
             </div>
-            <div className="justify-self-end font-medium text-2xl text-skin-base">
-              <div className="font-custom font-medium text-2xl text-skin-base">
+            <div className="justify-self-end font-bold">
+              <div className="font-custom text-2xl text-skin-base">
                 {calculateIncomeAmount(essentialsRatio)?.toLocaleString(
                   "en-us"
-                )}<sup className="align-super -ml-1 text-xxxs">{currency ?? ""}</sup>
+                )}
+                <sup className="align-super -ml-1 text-xxxs">
+                  {currency ?? ""}
+                </sup>
               </div>
             </div>
             <div className="col-span-2">
@@ -409,22 +420,29 @@ const OnboardingSplitIncome = () => {
                 onChange={(value) => handleSliderChange(value, "essentials")}
               />
             </div>
-            <div className="justify-self-start text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+            <div
+              className="justify-self-start text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
               0
             </div>
-            <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+            <div
+              className="justify-self-end text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
               {formatCurrency(monthlyIncome)}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 w-full mt-6 mb-32">
-            <div className="justify-self-start font-medium text-2xl text-skin-base">
+            <div className="justify-self-start font-bold text-2xl text-skin-base">
               Wants
             </div>
-            <div className="justify-self-end font-medium text-2xl text-skin-base">
-              <div className="font-custom font-medium text-2xl text-skin-base">
-                {calculateIncomeAmount(wantsRatio)?.toLocaleString(
-                  "en-us"
-                )}<sup className="align-super -ml-1 text-xxxs">{currency ?? ""}</sup>
+            <div className="justify-self-end font-bold">
+              <div className="font-custom text-2xl text-skin-base">
+                {calculateIncomeAmount(wantsRatio)?.toLocaleString("en-us")}
+                <sup className="align-super -ml-1 text-xxxs">
+                  {currency ?? ""}
+                </sup>
               </div>
             </div>
             <div className="col-span-2">
@@ -450,10 +468,16 @@ const OnboardingSplitIncome = () => {
                 onChange={(value) => handleSliderChange(value, "wants")}
               />
             </div>
-            <div className="justify-self-start text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+            <div
+              className="justify-self-start text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
               0
             </div>
-            <div className="justify-self-end text-xs text-skin-base" style={{ marginTop: "-12%" }}>
+            <div
+              className="justify-self-end text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
               {formatCurrency(monthlyIncome)}
             </div>
           </div>

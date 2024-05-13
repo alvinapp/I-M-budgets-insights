@@ -22,7 +22,7 @@ const ActionButton = ({
     <button
       className={`rounded-full focus:border-none focus:outline-none ${
         titleColor ?? "text-white"
-      } font-primary font-medium tracking-widest w-full h-14 text-sm ${
+      } font-primary font-bold tracking-widest w-full h-14 text-base ${
         isDisabled ? "focus:outline-none bg-skin-disabledBg" : `${bgColor}`
       }`}
       disabled={isDisabled}

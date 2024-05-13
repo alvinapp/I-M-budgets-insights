@@ -60,11 +60,11 @@ const OnboardingAddIncome = () => {
         <div className="rounded-full h-11 w-11 bg-skin-iconPrimary flex justify-center items-center mx-3.5">
           <FiBriefcase color="#101010" />
         </div>
-        <div className="font-custom font-medium text-2xl mt-1.5 mx-3.5 text-skin-base">
+        <div className="font-custom font-bold text-2xl mt-1.5 mx-3.5 text-skin-base">
           What's your monthly net income?
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
-          <div className="text-sm font-primary text-skin-base tracking-wide mt-6 font-normal mx-3.5">
+          <div className="text-sm font-primary text-skin-base tracking-wide mt-6 font-medium mx-3.5">
             We need to use this as a base calculation for your overall monthly
             budget. You can always modify later.
             <br></br>

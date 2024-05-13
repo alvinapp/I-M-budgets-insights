@@ -10,12 +10,12 @@ import getToken from "client/api/token";
 import { useConfigurationStore, IConfig } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import CustomLoader from "../components/Loader/CustomLoader";
 import { checkIfUserHasMicros } from "client/api/budget";
-import MonoConnect from "@mono.co/connect.js";
 import { getMonoPubKey, postCode } from "client/api/mono";
 import BackButton from "../components/BackButton";
+import ActionButton from "../components/ActionButton";
 
 const OnboardingStart = () => {
   const navigate = useNavigate();
@@ -41,12 +41,12 @@ const OnboardingStart = () => {
         setMonoPubKey(data.key);
         configuration.monoPubKey = data.key;
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
   useEffect(() => {
     if (!configurations.monoPubKey) {
       fetchMonoToken({ configuration: configurations, setMonoPubKey })
-        .then(() => { })
+        .then(() => {})
         .catch((error) => {
           console.error("Failed to fetch Mono public key:", error);
         });
@@ -129,24 +129,28 @@ const OnboardingStart = () => {
                 </div>
               }
             />
-            <div className="flex-grow h-px bg-skin-accent3"></div>
             <div className="flex flex-col mx-6 absolute left-0 right-0">
               <div className="flex flex-row justify-center mt-4">
                 <div className="w-96 h-96 bg-cover bg-center overflow-hidden">
-                  <img src={splashImage} className="w-full h-[90%]" alt="Splash" style={{ marginTop: '2rem' }} />
+                  <img
+                    src={splashImage}
+                    className="w-full h-[90%]"
+                    alt="Splash"
+                    style={{ marginTop: "2rem" }}
+                  />
                 </div>
               </div>
               <div className="mt-6">
-                <div className="flex flex-row justify-center font-custom text-xl text-start font-semibold tracking-title text-skin-base mr-10">
+                <div className="flex flex-row justify-center font-custom text-xl text-start font-bold tracking-title text-skin-base mr-10">
                   Start budgeting on I&M On the Go by adding your account
                 </div>
-                <div className="flex flex-row justify-center items center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-normal mr-8">
+                <div className="flex flex-row justify-center items center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-medium mr-8">
                   Add your main account and Mpesa wallet to effortlessly balance
                   your daily spending around your I&M savings and payment
                   schedules using our powerful new budgeting and insights
                   features.
                 </div>
-                <div className="flex flex-row items-center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-normal mb-40">
+                <div className="flex flex-row items-center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-medium mb-40">
                   In partnership with alvin
                 </div>
               </div>
@@ -154,10 +158,10 @@ const OnboardingStart = () => {
           </div>
           <div className="fixed bottom-4 left-0 right-0 mx-4 bg-skin-base">
             <div className="flex flex-col">
-              <div className="text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-normal ml-2">
+              <div className="text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-medium ml-2">
                 By tapping "Add my first account", I agree to I&M's
               </div>
-              <div className="text-skin-primary text-sm font-primary tracking-wide text-start font-normal ml-2 mb-2">
+              <div className="text-skin-primary text-sm font-primary tracking-wide text-start font-medium ml-2 mb-2">
                 Terms of Use
               </div>
               <MainButton
@@ -169,6 +173,16 @@ const OnboardingStart = () => {
                   // onClick();
                 }}
               />
+              <div className="mt-3">
+                <ActionButton
+                  bgColor="bg-[#f2f2f2]"
+                  titleColor="text-skin-base"
+                  title="Skip for now"
+                  click={() => {
+                    navigate("/onboard-add-income");
+                  }}
+                />
+              </div>
             </div>
           </div>
         </>

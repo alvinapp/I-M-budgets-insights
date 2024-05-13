@@ -16,12 +16,13 @@ const MainButton = ({
 }: MainButonProps) => {
   return (
     <button
-      className={`rounded-full text-white font-primary font-medium tracking-widest w-full h-14 text-lg ${isDisabled
+      className={`rounded-full text-white font-primary font-bold tracking-widest w-full h-14 text-base ${
+        isDisabled
           ? "focus:outline-none bg-skin-disabledBg"
-          : "bg-[#00beaf] shadow-button"
-        }`}
+          : " bg-skin-primary"
+      }`}
       disabled={isDisabled}
-      onClick={loading ? () => { } : click}
+      onClick={loading ? () => {} : click}
     >
       <div className="flex flex-row justify-center items-center">
         <div className={`${loading ? "mr-3" : ""}`}>{title}</div>
