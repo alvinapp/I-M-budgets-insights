@@ -135,7 +135,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
       <div className="flex flex-row justify-between items-center mt-4 mb-5 mx-2">
         <ActionButton
           title="Close"
-          bgColor="bg-[#f2f2f2]"
+          bgColor="bg-[#e7e7e7]"
           titleColor="bg-skin-base"
         />
         <div className="mx-2"></div>

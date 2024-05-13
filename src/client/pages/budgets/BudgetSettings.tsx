@@ -208,8 +208,8 @@ export const BudgetSettings = () => {
   );
 
   const allAddedCategoriesList = essentialsList.concat(wantsList);
-  const finalListCheckForEntries = allAddedCategoriesList.concat(savingsList);
-  const listCheckForEntries = finalListCheckForEntries.filter(
+  // const finalListCheckForEntries = allAddedCategoriesList.concat(savingsList);
+  const listCheckForEntries = allAddedCategoriesList.filter(
     (element) => element.amount > 0
   );
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
@@ -294,43 +294,37 @@ export const BudgetSettings = () => {
           />
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-col">
-            {savingsCategories &&
-            savingsCategories.length > 0 &&
-            !addSavings ? (
-              <>
-                <div className="flex flex-row justify-between items-center mb-4">
-                  <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
-                    Categories
-                  </div>
-                  <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
-                    Budget allocation
-                  </div>
+            <>
+              <div className="flex flex-row justify-between items-center mb-4">
+                <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                  Categories
                 </div>
-                <DebtViewCard
-                  amount={Math.round(
-                    Math.round(
-                      savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
-                    )
-                  )}
-                  icon=""
-                  goal="Credit card"
-                />
-                <DebtViewCard
-                  amount={Math.round(
-                    savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
-                  )}
-                  icon=""
-                  goal="Auto loan"
-                />
-                <DebtViewCard
-                  amount={Math.round(
-                    savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
-                  )}
-                  icon=""
-                  goal="Mortgage"
-                />
-              </>
-            ) : null}
+                <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                  Budget allocation
+                </div>
+              </div>
+              <DebtViewCard
+                amount={Math.round(
+                  Math.round(savingsBudgetAmount ? savingsBudgetAmount / 3 : 0)
+                )}
+                icon=""
+                goal="Credit card"
+              />
+              <DebtViewCard
+                amount={Math.round(
+                  savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
+                )}
+                icon=""
+                goal="Auto loan"
+              />
+              <DebtViewCard
+                amount={Math.round(
+                  savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
+                )}
+                icon=""
+                goal="Mortgage"
+              />
+            </>
           </div>
         </div>
         <div className="shadow-card px-4 pt-5 pb-3 rounded-lg">
