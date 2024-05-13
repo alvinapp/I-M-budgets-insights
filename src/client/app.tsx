@@ -25,6 +25,11 @@ const OnboardingSplitIncome = lazy(
 const OnboardingSuccess = lazy(
   () => import("./pages/onboarding/OnboardingSuccess")
 );
+
+const OnboardingSelectAccount = lazy(
+  () => import("./pages/onboarding/OnboardingSelectAccount")
+);
+
 const BudgetsView = lazy(() => import("./pages/budgets/BudgetsView"));
 
 const InsightsView = lazy(() => import("./pages/insights/InsightsView"));
@@ -54,6 +59,7 @@ const App = () => {
           >
             <Routes>
               <Route path="/" element={<OnboardingStart />} />
+              <Route path="/onboard-select-account" element={<OnboardingSelectAccount />} />
               <Route
                 path="/onboard-add-income"
                 element={<OnboardingAddIncome />}

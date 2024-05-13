@@ -3,7 +3,7 @@ import NavBar from "../components/NavBar";
 import NavBarTitle from "../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
 import CloseButton from "../components/CloseButton";
-import { FiBriefcase, FiPieChart } from "react-icons/fi";
+import { FiBriefcase, FiPieChart, FiCloud } from "react-icons/fi";
 import { BudgetDisplay } from "../components/budget/BudgetDisplay";
 import { useQuery } from "react-query";
 import { getCategories } from "client/api/categories";
@@ -236,6 +236,15 @@ export const BudgetSettings = () => {
         <div className="mb-3 mt-7">
           <GeneralInfoCard
             iconBg="bg-skin-iconPrimary"
+            icon={<FiCloud />}
+            title="Linked accounts"
+            subtitle="Track your spending easily across linked accounts and stay on top of your budget with insights."
+            caption={"2"}
+          />
+        </div>
+        <div className="mb-3">
+          <GeneralInfoCard
+            iconBg="bg-skin-iconPrimary"
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
@@ -259,32 +268,123 @@ export const BudgetSettings = () => {
           </div>
           <div className="flex-grow h-px bg-skin-accent3"></div>
         </div>
+        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-4">
+          <BudgetDisplay
+            title="Debt repayment"
+            budgetAmount={savingsBudgetAmount}
+            percentageOfBudgetCaption={`${savingsGoals[0]?.share ?? ""
+              }% of overall budget`}
+            unallocatedCaption="Unallocated"
+            allocatedCaption="Allocated"
+            unallocatedAmount={
+              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
+                ? Math.max(savingsBudgetAmount - allocatedSavings, 0)
+                : 0
+            }
+            allocatedAmount={allocatedSavings}
+            progressPercentage={
+              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
+                ? Math.min((allocatedSavings / savingsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
+                : 0
+            }
+            indicatorColor="bg-[#CB960F]"
+            progressColor="#CB960F"
+          />
+          <div className="border mt-4 mb-4.5"></div>
+          <div className="flex flex-col">
+            {savingsCategories &&
+              savingsCategories.length > 0 &&
+              !addSavings ? (
+              savingsCategories.map((category: any, i: number) => {
+                return (
+                  <>
+                    <div className="flex flex-row justify-between items-center mb-4">
+                      <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                        Goals
+                      </div>
+                    </div>
+                    <SavingsSettingCard
+                      goal="Create a goal"
+                      emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                      amount={savingsBudgetAmount}
+                      onClick={() => {
+                        savingsBottomSheetStore.setSavingsBottomSheet(true);
+                        updateSavingsMap(i, {
+                          amount: savingsBudgetAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id ?? "",
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }}
+                      edit={() => {
+                        setAddSavings(false);
+                        setAllocatedSavings(0);
+                      }}
+                    />
+                  </>
+                );
+              })
+            ) : (
+              <>
+                <div className="flex flex-row justify-between items-center mb-4">
+                  <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                    Categories
+                  </div>
+                  <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                    Budget allocation
+                  </div>
+                </div>
+                <EditSavingsViewCard
+                  amount={savingsBudgetAmount ? (savingsBudgetAmount / 3) : 0}
+                  icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                  goal="Credit card"
+                />
+                <EditSavingsViewCard
+                  amount={savingsBudgetAmount ? (savingsBudgetAmount / 3) : 0}
+                  icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                  goal="Auto loan"
+                />
+                <EditSavingsViewCard
+                  amount={savingsBudgetAmount ? (savingsBudgetAmount / 3) : 0}
+                  icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                  goal="Mortgage"
+                />
+              </>
+
+            )}
+          </div>
+        </div>
         <div className="shadow-card px-4 pt-5 pb-3 rounded-lg">
           <BudgetDisplay
             title="Essentials"
             budgetAmount={essentialBudgetAmount}
-            percentageOfBudgetCaption={`${
-              essentialGoals[0]?.share ?? ""
-            }% of overall budget`}
+            percentageOfBudgetCaption={`${essentialGoals[0]?.share ?? ""
+              }% of overall budget`}
             unallocatedCaption="Unallocated"
             unallocatedAmount={
               typeof parseInt(essentialBudgetAmount) === "number" &&
-              essentialBudgetAmount > 0
+                essentialBudgetAmount > 0
                 ? Math.max(essentialBudgetAmount - allocatedEssentials, 0)
                 : 0 // Ensure perc
             }
             allocatedAmount={allocatedEssentials}
             progressPercentage={
               typeof parseInt(essentialBudgetAmount) === "number" &&
-              essentialBudgetAmount > 0
+                essentialBudgetAmount > 0
                 ? Math.min(
-                    (allocatedEssentials / essentialBudgetAmount) * 100,
-                    100
-                  ) // Ensure percentage stays between 0 and 100
+                  (allocatedEssentials / essentialBudgetAmount) * 100,
+                  100
+                ) // Ensure percentage stays between 0 and 100
                 : 0
             }
-            indicatorColor="bg-[linear-gradient(159deg,#4053D0_0%,#051AA3_100%)]"
-            progressColor="#051AA3"
+            indicatorColor="bg-[#00AB9E]"
+            progressColor="#00AB9E"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-primary text-xs tracking-wider font-medium">
@@ -315,11 +415,11 @@ export const BudgetSettings = () => {
                     maxValue={Number.MAX_SAFE_INTEGER}
                     unallocatedAmount={
                       typeof parseInt(essentialBudgetAmount) === "number" &&
-                      essentialBudgetAmount > 0
+                        essentialBudgetAmount > 0
                         ? Math.max(
-                            essentialBudgetAmount - allocatedEssentials,
-                            0
-                          )
+                          essentialBudgetAmount - allocatedEssentials,
+                          0
+                        )
                         : 0
                     }
                     addValue={(e) => {
@@ -403,7 +503,7 @@ export const BudgetSettings = () => {
                         setAllocatedEssentials(
                           allocatedEssentials > 0
                             ? allocatedEssentials -
-                                categoriesStore.incrementalAmount
+                            categoriesStore.incrementalAmount
                             : 0
                         );
                         updateEssentialsMap(i, {
@@ -429,13 +529,12 @@ export const BudgetSettings = () => {
             )}
           </div>
         </div>
-        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg">
+        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 mb-40 rounded-lg">
           <BudgetDisplay
             title="Wants"
             budgetAmount={wantsBudgetAmount}
-            percentageOfBudgetCaption={`${
-              wantsGoals[0]?.share ?? ""
-            }% of overall budget`}
+            percentageOfBudgetCaption={`${wantsGoals[0]?.share ?? ""
+              }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
@@ -449,8 +548,8 @@ export const BudgetSettings = () => {
                 ? Math.min((allocatedWants / wantsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
                 : 0
             }
-            indicatorColor="bg-[linear-gradient(159deg,#8490E2_0%,#3B4381_100%)]"
-            progressColor="#3B4381"
+            indicatorColor="bg-[#345DAF]"
+            progressColor="#345DAF"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-primary text-xs tracking-wider font-medium">
@@ -469,25 +568,50 @@ export const BudgetSettings = () => {
           <div className="flex flex-col">
             {wantsCategories && wantsCategories.length > 0
               ? wantsCategories.map((category: Category, i: any) => {
-                  const isSelected = i === selectedWantsId;
-                  const data = wantsMapState.get(`data${i}`);
-                  return (
-                    <BudgetSettingCard
-                      key={i}
-                      maxValue={Number.MAX_SAFE_INTEGER}
-                      category={category?.name}
-                      emoji={category?.emoji}
-                      amount={data?.amount}
-                      selected={isSelected}
-                      unallocatedAmount={
-                        typeof wantsBudgetAmount === "number" ||
+                const isSelected = i === selectedWantsId;
+                const data = wantsMapState.get(`data${i}`);
+                return (
+                  <BudgetSettingCard
+                    key={i}
+                    maxValue={Number.MAX_SAFE_INTEGER}
+                    category={category?.name}
+                    emoji={category?.emoji}
+                    amount={data?.amount}
+                    selected={isSelected}
+                    unallocatedAmount={
+                      typeof wantsBudgetAmount === "number" ||
                         wantsBudgetAmount > 0
-                          ? Math.max(wantsBudgetAmount - allocatedWants, 0)
-                          : 0
-                      }
-                      addValue={(e) =>
+                        ? Math.max(wantsBudgetAmount - allocatedWants, 0)
+                        : 0
+                    }
+                    addValue={(e) =>
+                      updateWantsMap(i, {
+                        amount: e,
+                        contribution_amount: 0,
+                        percentage: 0,
+                        category_id: category?.id,
+                        name: category?.name,
+                        pseudo_name: category?.name + " " + category?.emoji,
+                        extern_id: category?.id,
+                        order: 0,
+                        contribution_at: "",
+                        is_contribute_customized: true,
+                      })
+                    }
+                    updateValue={(newValue) => {
+                      const oldValue = data?.amount || 0;
+                      const valueDifference = newValue - oldValue;
+
+                      setSelectedWantsId(i);
+                      const newAllocatedWants = Math.max(
+                        0,
+                        allocatedWants + valueDifference
+                      );
+
+                      if (newAllocatedWants <= wantsBudgetAmount) {
+                        setAllocatedWants(newAllocatedWants);
                         updateWantsMap(i, {
-                          amount: e,
+                          amount: newValue,
                           contribution_amount: 0,
                           percentage: 0,
                           category_id: category?.id,
@@ -497,137 +621,24 @@ export const BudgetSettings = () => {
                           order: 0,
                           contribution_at: "",
                           is_contribute_customized: true,
-                        })
+                        });
+                      } else {
+                        showCustomToast({ message: "Budget limit exceeded" });
                       }
-                      updateValue={(newValue) => {
-                        const oldValue = data?.amount || 0;
-                        const valueDifference = newValue - oldValue;
-
-                        setSelectedWantsId(i);
-                        const newAllocatedWants = Math.max(
-                          0,
-                          allocatedWants + valueDifference
-                        );
-
-                        if (newAllocatedWants <= wantsBudgetAmount) {
-                          setAllocatedWants(newAllocatedWants);
-                          updateWantsMap(i, {
-                            amount: newValue,
-                            contribution_amount: 0,
-                            percentage: 0,
-                            category_id: category?.id,
-                            name: category?.name,
-                            pseudo_name: category?.name + " " + category?.emoji,
-                            extern_id: category?.id,
-                            order: 0,
-                            contribution_at: "",
-                            is_contribute_customized: true,
-                          });
-                        } else {
-                          showCustomToast({ message: "Budget limit exceeded" });
-                        }
-                      }}
-                      increment={() => {
-                        setSelectedWantsId(i);
-                        const newAmount =
-                          data?.amount + categoriesStore.incrementalAmount;
-                        const totalAllocated =
-                          allocatedWants + categoriesStore.incrementalAmount;
-                        if (totalAllocated <= wantsBudgetAmount) {
-                          setAllocatedWants(totalAllocated);
-                          updateWantsMap(i, {
-                            amount: newAmount,
-                            contribution_amount: 0,
-                            percentage: 0,
-                            category_id: category?.id,
-                            name: category?.name,
-                            pseudo_name: category?.name + " " + category?.emoji,
-                            extern_id: category?.id,
-                            order: 0,
-                            contribution_at: "",
-                            is_contribute_customized: true,
-                          });
-                        } else {
-                          showCustomToast({ message: "Budget limit exceeded" });
-                        }
-                      }}
-                      decrement={() => {
-                        if (
-                          data?.amount - categoriesStore.incrementalAmount >=
-                          0
-                        ) {
-                          setSelectedWantsId(i);
-                          setAllocatedWants(
-                            allocatedWants - categoriesStore.incrementalAmount
-                          );
-                          updateWantsMap(i, {
-                            amount:
-                              data?.amount - categoriesStore.incrementalAmount,
-                            contribution_amount: 0,
-                            percentage: 0,
-                            category_id: category?.id,
-                            name: category?.name,
-                            pseudo_name: category?.name + " " + category?.emoji,
-                            extern_id: category?.id,
-                            order: 0,
-                            contribution_at: "",
-                            is_contribute_customized: true,
-                          });
-                        }
-                      }}
-                    />
-                  );
-                })
-              : null}
-          </div>
-        </div>
-        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-40">
-          <BudgetDisplay
-            title="Savings"
-            budgetAmount={savingsBudgetAmount}
-            percentageOfBudgetCaption={`${
-              savingsGoals[0]?.share ?? ""
-            }% of overall budget`}
-            unallocatedCaption="Unallocated"
-            allocatedCaption="Allocated"
-            unallocatedAmount={
-              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
-                ? Math.max(savingsBudgetAmount - allocatedSavings, 0)
-                : 0
-            }
-            allocatedAmount={allocatedSavings}
-            progressPercentage={
-              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
-                ? Math.min((allocatedSavings / savingsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
-                : 0
-            }
-            indicatorColor="bg-[#84C1B2]"
-            progressColor="#84C1B2"
-          />
-          <div className="border mt-4 mb-4.5"></div>
-          <div className="flex flex-col">
-            {savingsCategories &&
-            savingsCategories.length > 0 &&
-            !addSavings ? (
-              savingsCategories.map((category: any, i: number) => {
-                return (
-                  <>
-                    <div className="flex flex-row justify-between items-center mb-4">
-                      <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
-                        Goals
-                      </div>
-                    </div>
-                    <SavingsSettingCard
-                      goal="Create a goal"
-                      emoji="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
-                      amount={savingsBudgetAmount}
-                      onClick={() => {
-                        savingsBottomSheetStore.setSavingsBottomSheet(true);
-                        updateSavingsMap(i, {
-                          amount: savingsBudgetAmount,
+                    }}
+                    increment={() => {
+                      setSelectedWantsId(i);
+                      const newAmount =
+                        data?.amount + categoriesStore.incrementalAmount;
+                      const totalAllocated =
+                        allocatedWants + categoriesStore.incrementalAmount;
+                      if (totalAllocated <= wantsBudgetAmount) {
+                        setAllocatedWants(totalAllocated);
+                        updateWantsMap(i, {
+                          amount: newAmount,
                           contribution_amount: 0,
                           percentage: 0,
-                          category_id: category?.id ?? "",
+                          category_id: category?.id,
                           name: category?.name,
                           pseudo_name: category?.name + " " + category?.emoji,
                           extern_id: category?.id,
@@ -635,32 +646,38 @@ export const BudgetSettings = () => {
                           contribution_at: "",
                           is_contribute_customized: true,
                         });
-                      }}
-                      edit={() => {
-                        setAddSavings(false);
-                        setAllocatedSavings(0);
-                      }}
-                    />
-                  </>
+                      } else {
+                        showCustomToast({ message: "Budget limit exceeded" });
+                      }
+                    }}
+                    decrement={() => {
+                      if (
+                        data?.amount - categoriesStore.incrementalAmount >=
+                        0
+                      ) {
+                        setSelectedWantsId(i);
+                        setAllocatedWants(
+                          allocatedWants - categoriesStore.incrementalAmount
+                        );
+                        updateWantsMap(i, {
+                          amount:
+                            data?.amount - categoriesStore.incrementalAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }
+                    }}
+                  />
                 );
               })
-            ) : (
-              <>
-                <div className="flex flex-row justify-between items-center mb-4">
-                  <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
-                    Goals
-                  </div>
-                  <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
-                    Budget allocation
-                  </div>
-                </div>
-                <EditSavingsViewCard
-                  amount={savingsBudgetAmount ?? 0}
-                  icon="https://images.unsplash.com/photo-1508698308649-689249ec5455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY4MDcxNTg0OQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
-                  goal="Rainy day fund"
-                />
-              </>
-            )}
+              : null}
           </div>
         </div>
 
@@ -728,11 +745,11 @@ export const BudgetSettings = () => {
               targetAmount={essentialBudgetAmount * 3}
               progressPercentage={
                 typeof savingsBudgetAmount === "number" &&
-                savingsBudgetAmount > 0
+                  savingsBudgetAmount > 0
                   ? Math.min(
-                      (allocatedSavings / savingsBudgetAmount) * 100,
-                      100
-                    ) // Ensure percentage stays between 0 and 100
+                    (allocatedSavings / savingsBudgetAmount) * 100,
+                    100
+                  ) // Ensure percentage stays between 0 and 100
                   : 0
               }
               emoji="🎯"
@@ -746,7 +763,7 @@ export const BudgetSettings = () => {
         }
         defaultSnap={400}
       ></BottomSheet>
-      <BottomSheet
+      {/* <BottomSheet
         onDismiss={() => {
           bottomSheetStore?.setSuccessBottomSheet(false);
         }}
@@ -763,7 +780,7 @@ export const BudgetSettings = () => {
               ?.classList.remove("disable-interaction");
           }
         }}
-      ></BottomSheet>
+      ></BottomSheet> */}
     </div>
   );
 };

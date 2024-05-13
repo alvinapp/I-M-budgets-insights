@@ -198,8 +198,29 @@ input[type="number"] {
   border-radius: 4px;
 }
 .example-track-0 {
-  background: linear-gradient(124.2deg, #144cbc 0%, #0131a1 100%);
+  background: #cb960f;
 }
+
+.essential-track {
+  position: relative;
+  background: #cde0e7;
+  height: 0.25rem;
+  border-radius: 4px;
+}
+.essential-track-0 {
+  background: #00ab9e;
+}
+
+.wants-track {
+  position: relative;
+  background: #cde0e7;
+  height: 0.25rem;
+  border-radius: 4px;
+}
+.wants-track-0 {
+  background: #345daf;
+}
+
 .barCompleted {
   background: #85c17f;
 }
