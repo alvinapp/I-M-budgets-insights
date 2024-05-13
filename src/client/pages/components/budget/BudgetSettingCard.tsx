@@ -293,7 +293,7 @@ export const Modal: FC<ModalProps> = ({
                       Available:
                     </span>
                     <span className="font-primary text-sm ml-1 font-medium tracking-wide text-skin-base">
-                      {availableBudget}
+                      {availableBudget.toLocaleString("en")}
                     </span>
                   </div>
                 </div>

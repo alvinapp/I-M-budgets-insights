@@ -28,7 +28,7 @@ import SavingsGoalConfirmation from "./SavingsGoalConfirmation";
 import SuccessfullCreatedView from "../components/budget/SuccessfullCreatedView";
 import successIcon from "client/assets/images/success-icon.svg";
 import EditSavingsViewCard from "./edit-settings/EditSavingsViewCard";
-import { reformatBudgetSplit } from "client/utils/Formatters";
+import { checkNAN, reformatBudgetSplit } from "client/utils/Formatters";
 import DebtViewCard from "../components/DebtViewCard";
 
 export const BudgetSettings = () => {
@@ -307,17 +307,25 @@ export const BudgetSettings = () => {
                   </div>
                 </div>
                 <DebtViewCard
-                  amount={savingsBudgetAmount ? savingsBudgetAmount / 3 : 0}
+                  amount={Math.round(
+                    Math.round(
+                      savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
+                    )
+                  )}
                   icon=""
                   goal="Credit card"
                 />
                 <DebtViewCard
-                  amount={savingsBudgetAmount ? savingsBudgetAmount / 3 : 0}
+                  amount={Math.round(
+                    savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
+                  )}
                   icon=""
                   goal="Auto loan"
                 />
                 <DebtViewCard
-                  amount={savingsBudgetAmount ? savingsBudgetAmount / 3 : 0}
+                  amount={Math.round(
+                    savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
+                  )}
                   icon=""
                   goal="Mortgage"
                 />

@@ -9,6 +9,7 @@ interface AccountCardProps {
   accountNumber: string;
   accountType: string;
   isActive: boolean;
+  isMpesa?: boolean;
   backgroundColor?: string;
 }
 
@@ -16,6 +17,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
   accountNumber,
   accountType,
   isActive: initialActiveState,
+  isMpesa = false,
   backgroundColor,
 }) => {
   const [isActive, setIsActive] = useState(initialActiveState);
@@ -23,8 +25,10 @@ const AccountCard: React.FC<AccountCardProps> = ({
   // Toggle function to switch active state
   const toggleActive = () => {
     setIsActive(!isActive);
+    if (isMpesa && isActive) {
+      window.postMessage("requestPermission", "*");
+    }
   };
-
   const bgColor = backgroundColor ? `bg-[#5f9f31]` : "bg-[#012bc4]";
 
   return (

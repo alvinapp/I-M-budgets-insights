@@ -67,6 +67,7 @@ const OnboardingSelectAccount = () => {
               accountType=""
               backgroundColor="#5f9f31"
               isActive={false}
+              isMpesa={true}
             />
           </div>
           <div className="fixed bottom-5 left-0 right-0 mx-3.5">
