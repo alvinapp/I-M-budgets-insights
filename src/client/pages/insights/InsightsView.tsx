@@ -248,7 +248,7 @@ const InsightsView = () => {
             />
           ) : (
             <AvailableBudgetContainer
-              amount={6715992 - savingsTotal}
+              amount={6715992 - savingsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0}
               subtitle="Total debt"
               currencySymbol={currencySymbol}
             />
