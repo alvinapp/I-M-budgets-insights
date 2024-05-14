@@ -58,16 +58,14 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
           maximumFractionDigits: 2
         });
 
-        return `<div style="padding: 10px; background-color: #f4f9fb; border-radius: 8px; font-size: 14px;" class="custom-tooltip">
+        return `<div style="padding: 10px; background-color: #ffffff; border-radius: 8px; font-size: 14px;" class="custom-tooltip">
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                     <div style="display: flex; align-items: center;">
-                      <span style="height: 10px; width: 10px; background-color: #0099A6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                      <span style="color: #0099A6;margin-right: 5px;">Total debt:</span>
+                      <span style="height: 10px; width: 10px; background-color: #97449E; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
+                      <span style="color: #97449E;margin-right: 5px;">${formattedValue}</span>
                     </div>
-                    <span>${formattedValue}</span>
                   </div>
-                  <hr style="margin: 8px 0; border-top: 1px solid #90A4AE;" />
-                  <div style="padding-top: 5px; color: #101010; text-align: center;" class="title">${formattedDate}</div>
+                  <div style="padding-top: 5px; color: #101010; text-align: center;font-size: 12px;" class="title">${formattedDate}</div>
                 </div>`;
       }
     },
@@ -115,7 +113,7 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
       name: "Total debt",
       type: "line",
       data: savingsArray,
-      color: "#97449e",
+      color: "#97449E",
     }
   ]);
 
