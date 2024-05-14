@@ -270,7 +270,7 @@ const InsightsView = () => {
                 wantsArray={
                   insightsStoreState.insightsLoading ? [] : wantsArray
                 }
-                isLoading={insightsStoreState.insightsLoading}
+                isLoading={isLoading}
               />
               <div
                 className="space-x-1"
@@ -302,7 +302,7 @@ const InsightsView = () => {
                 savingsArray={
                   insightsStoreState.insightsLoading ? [] : savingsArray
                 }
-                isLoading={insightsStoreState.insightsLoading}
+                isLoading={isLoading}
               />
               <div
                 className="space-x-1"
