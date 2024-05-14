@@ -13,23 +13,23 @@ const RandomExpenditureComparisonCard: React.FC<
     <div className="flex flex-row items-start">
       <div className="flex flex-col">
         <div
-          className={`flex justify-center items-center rounded-full h-4.5 w-4.5  mr-2.5 bg-[#C3C3C3] ${percentage < 0
-            ? "border border-[#101010]"
-            : "border border-[#056489]"
+          className={`flex justify-center items-center rounded-full h-4.5 w-4.5  mr-2.5 ${percentage < 0
+            ? "border bg-[#ef556e] border-[#ee3e59]"
+            : "border bg-[#ddebd5] border-[#5f9d30]"
             }`}
         >
           {percentage < 0 ? (
-            <FiArrowDownRight color="#101010" size="0.75rem" />
+            <FiArrowDownRight color="#ee3e59" size="0.75rem" />
           ) : percentage == 0 ? (
-            <FiArrowRight color="#056489" size="0.75rem" />
+            null
           ) : (
-            <FiArrowUpRight color="#056489" size="0.75rem" />
+            <FiArrowUpRight color="#5f9d30" size="0.75rem" />
           )}
         </div>
       </div>
       <div className="flex flex-col">
         <div
-          className={`font-bold font-primary text-xs ${percentage < 0 ? "text-[#101010]" : "text-[#056489]"
+          className={`font-bold font-primary text-xs ${percentage < 0 ? "text-[#ee3e59]" : "text-[#5f9d30]"
             } tracking-widest`}
         >
           {`${percentage > 0 ? "+" : ""}`}

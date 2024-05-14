@@ -62,7 +62,6 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     background: "black",
     height: "30px",
     width: "60px",
-    fontFamlily: "Poppins",
     fontSize: "14px",
     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   };
@@ -87,7 +86,7 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
         <div className="vs-tooltip-progress-bar" style={{ backgroundColor }}>
           <div
             className="vs-tooltip-progress-bar-progress"
-            style={{ ...progressStyle, backgroundColor: "#6f89a5" }}
+            style={{ ...progressStyle, backgroundColor: "#4c4c4c" }}
           >
             <div className="vs-tooltip-progress-bar-circle" style={{
               width: `${myCircleSize}px`,
@@ -96,7 +95,7 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
           </div>
           <div
             className="vs-tooltip-progress-bar-progress2"
-            style={{ ...progressStyle2, backgroundColor: "#101010" }}
+            style={{ ...progressStyle2, backgroundColor: "#6786c3" }}
           >
             <div className="vs-tooltip-progress-bar-circle2"></div>
           </div>

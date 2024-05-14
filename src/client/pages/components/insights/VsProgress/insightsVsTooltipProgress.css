@@ -2,7 +2,7 @@
   position: relative;
   flex-grow: 1;
   height: 4px;
-  margin: 0 10px;
+  /* margin: 0 10px; */
   border-radius: 10px;
   background-color: #ccc;
 }
@@ -15,7 +15,7 @@
   transform: translateY(-50%);
   width: 10px;
   height: 10px;
-  background-color: #6f89a5;
+  background-color: #4c4c4c;
   border-radius: 50%;
   z-index: 3;
 }
@@ -28,7 +28,7 @@
   transform: translateY(-50%);
   width: 10px;
   height: 10px;
-  background-color: #101010;
+  background-color: #6786c3;
   border-radius: 50%;
   z-index: 3;
 }
