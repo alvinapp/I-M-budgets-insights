@@ -51,8 +51,8 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
         const formattedDate =
           w.config.series[0].data[dataPointIndex]?.x.length !== 7
-            ? format(w.config.series[0].data[dataPointIndex].x, "MMM dd, yyyy")
-            : format(w.config.series[0].data[dataPointIndex].x, "MMM, yyyy");
+            ? format(w.config.series[0].data[dataPointIndex].x, "MMM dd yyyy")
+            : format(w.config.series[0].data[dataPointIndex].x, "MMM yyyy");
 
         const essentialsValue = w.config.series[0].data[dataPointIndex]?.y;
         const wantsValue = w.config.series[1].data[dataPointIndex]?.y;

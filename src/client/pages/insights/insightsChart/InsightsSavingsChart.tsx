@@ -49,8 +49,8 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
         const dataPoint = w.config.series[seriesIndex].data[dataPointIndex];
         const formattedDate = dataPoint.x.length !== 7
-          ? format(new Date(dataPoint.x), "MMM dd, yyyy")
-          : format(new Date(dataPoint.x), "MMM, yyyy");
+          ? format(new Date(dataPoint.x), "MMM dd yyyy")
+          : format(new Date(dataPoint.x), "MMM yyyy");
 
         const essentialsValue = Number(dataPoint.y);
         const formattedValue = essentialsValue.toLocaleString("en-US", {
