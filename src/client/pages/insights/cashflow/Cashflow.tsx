@@ -186,8 +186,8 @@ const Cashflow = () => {
                   </div>
                   <AmountDisplay
                     amount={checkNAN(
-                      earnedData?.reduce((a: number, b: number) => a + b, 0) /
-                      earnedData.length
+                      earnedData.filter((value) => value !== 0).reduce((a, b) => a + b, 0) /
+                      (earnedData.filter((value) => value !== 0).length || 1) // Avoid division by zero
                     )}
                   />
                 </div>
@@ -197,8 +197,8 @@ const Cashflow = () => {
                   </div>
                   <AmountDisplay
                     amount={checkNAN(
-                      spentData?.reduce((a: number, b: number) => a + b, 0) /
-                      spentData.length
+                      spentData.filter((value) => value !== 0).reduce((a, b) => a + b, 0) /
+                      (spentData.filter((value) => value !== 0).length || 1) // Avoid division by zero
                     )}
                   />
                 </div>
