@@ -170,7 +170,7 @@ const Cashflow = () => {
               currencySymbol={currencySymbol}
             />
           </>
-        ) : totalEarned && totalSpent && totalEarned + totalSpent > 0 ? (
+        ) : (totalEarned !== undefined && totalSpent !== undefined) && ((totalEarned + totalSpent) !== 0) ? (
           <div>
             <TotalCashFlowView totalAmount={totalEarned + totalSpent} />
             <Graph earned={totalEarned} spent={totalSpent} />
@@ -212,7 +212,7 @@ const Cashflow = () => {
               currencySymbol={currencySymbol}
             />
           </div>
-        ) : (totalEarned && totalSpent && totalEarned + totalSpent) === 0 ? (
+        ) : (totalEarned !== undefined && totalSpent !== undefined) && ((totalEarned + totalSpent) === 0) ? (
           <div className="flex-grow flex items-center justify-center">
             <div
               className="font-medium font-primary text-tiny tracking-wide text-center mx-auto flex flex-col items-center justify-center"

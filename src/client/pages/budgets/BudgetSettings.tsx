@@ -324,7 +324,7 @@ export const BudgetSettings = () => {
                 goal="Mortgage"
               />
             </>
-            {savingsCategories &&
+            {/* {savingsCategories &&
               savingsCategories.length > 0 &&
               !addSavings ? (
               <>
@@ -360,7 +360,7 @@ export const BudgetSettings = () => {
                   goal="Mortgage"
                 />
               </>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
         <div className="shadow-card px-4 pt-5 pb-3 rounded-lg">
