@@ -255,6 +255,8 @@ const BudgetsView = () => {
     amount: 0,
     paid: 0,
     percentage: 0,
+    icon: "",
+    cover: "",
     loanDetails: {},
     recentActivities: {},
   };
@@ -387,8 +389,8 @@ const BudgetsView = () => {
           </div>
           {debtViewTabId === 0 ? (
             <div className="mt-6 flex flex-col">
-              {debt && debt.length > 0
-                ? debt.map((debt: any, i: any) => {
+              {allTimeDebt && allTimeDebt.length > 0
+                ? allTimeDebt.map((debt: any, i: any) => {
                     return (
                       <DebtRepaymentCard
                         key={i}
@@ -405,6 +407,7 @@ const BudgetsView = () => {
                         primaryColor="text-skin-base"
                         fadedColor="text-skin-subtitle"
                         caption="repaid"
+                        icon={debt?.icon}
                         onClick={() => {
                           openViewDebtSheet(true);
                           setDebtDetailsData({
@@ -413,6 +416,8 @@ const BudgetsView = () => {
                             amount: debt?.amount,
                             paid: debt?.paid,
                             percentage: debt?.percentage,
+                            icon: debt?.icon,
+                            cover: debt?.cover,
                             loanDetails: debt?.loanDetails,
                             recentActivities: debt?.recentActivity,
                           });
@@ -442,6 +447,7 @@ const BudgetsView = () => {
                         primaryColor="text-skin-base"
                         fadedColor="text-skin-subtitle"
                         caption="repaid"
+                        icon={debt?.icon}
                         onClick={() => {
                           openViewDebtSheet(true);
                           setDebtDetailsData({
@@ -450,6 +456,8 @@ const BudgetsView = () => {
                             amount: debt?.amount,
                             paid: debt?.paid,
                             percentage: debt?.percentage,
+                            icon: debt?.icon,
+                            cover: debt?.cover,
                             loanDetails: debt?.loanDetails,
                             recentActivities: debt?.recentActivity,
                           });
@@ -461,7 +469,7 @@ const BudgetsView = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
+        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
           <CategoryCardHeader
             title="Essentials"
             amount={checkNAN(
@@ -647,6 +655,7 @@ const BudgetsView = () => {
               outStandingDebt={debtDetailsData?.amount}
               progress={debtDetailsData?.percentage}
               name={debtDetailsData?.name}
+              cover={debtDetailsData?.cover}
               loanDetails={debtDetailsData?.loanDetails}
               recentActivities={debtDetailsData?.recentActivities}
               onClick={() => {

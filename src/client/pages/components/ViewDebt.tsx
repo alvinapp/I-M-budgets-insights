@@ -4,7 +4,6 @@ import { useQuery } from "react-query";
 import { fetchBudgetCategoriesTransactions } from "client/api/budget";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import TabFilter from "./TabFilter";
-import autoLoan from "../../assets/images/auto-loan.png";
 import {
   debtDetailsActivityTabs,
   debtOverviewTabs,
@@ -24,6 +23,7 @@ interface ViewDebtProps {
   endDate?: string;
   loanDetails: any;
   recentActivities: any;
+  cover: any;
   onClick?: () => void;
 }
 const ViewDebt: React.FC<ViewDebtProps> = ({
@@ -37,6 +37,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
   endDate,
   loanDetails,
   recentActivities,
+  cover,
   onClick,
 }) => {
   const config = useConfigurationStore(
@@ -63,7 +64,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
       <div className="flex flex-row rounded-b-lg rounded-t-3xl h-20 fixed top-0 left-0 right-0">
         <img
           className="object-fit h-20 w-full rounded-t-3xl rounded-b-lg"
-          src={autoLoan}
+          src={cover}
           alt=""
         />
       </div>
@@ -138,8 +139,6 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
           bgColor="bg-[#e7e7e7]"
           titleColor="bg-skin-base"
         />
-        <div className="mx-2"></div>
-        <ActionButton title="Pay now" bgColor="bg-[#CB960F]" />
       </div>
     </div>
   );

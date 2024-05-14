@@ -28,7 +28,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
   const ratioArray = ratios.split("/").map(Number);
   const currencyStore = useCurrencySettingsStore((state: any) => state);
   const currencySymbol = currencyStore.currencySymbol;
-  const progressString = ["Essentials spend", "Wants spend", "Saved"];
+  const progressString = ["Debt repaid", "Essentials spend", "Wants spend"];
 
   return (
     <div
@@ -46,15 +46,9 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           ) : (
             <MacroProgressBar
               flexValue={1}
-              bgColorBottom={
-                index === 0 ? "#E7EDF3" : index === 1 ? "#E7EDF3" : "#C8ECEF"
-              }
+              bgColorBottom={"#e7e7e7"}
               bgColorTop={
-                index === 0
-                  ? "#00AB9E"
-                  : index === 1
-                  ? "#345DAF"
-                  : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
+                index === 0 ? "#CB960F" : index === 1 ? "#00AB9E" : "#345DAF"
               }
               outsideLength={
                 progressPercentage[Object.keys(progressPercentage)[index]] ?? 0
@@ -64,7 +58,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           )}
           <div className="flex flex-col justify-end items-start mt-3">
             <div className="relative flex items-end">
-              <div className="font-custom font-medium text-base text-skin-base">
+              <div className="font-custom font-bold text-base text-skin-base">
                 <AnimatedNumber
                   target={
                     isLoading
@@ -86,7 +80,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                 </sup>
               </div>
             </div>
-            <div className="font-primary text-xs text-skin-base tracking-progress_label">
+            <div className="font-primary text-xs text-skin-base tracking-progress_label font-semibold">
               {progressString[index]}
             </div>
           </div>

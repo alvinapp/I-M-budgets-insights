@@ -27,8 +27,8 @@ const TabButton = ({
         <div
           className={`${
             isActive
-              ? "text-[#101010] font-custom text-sm font-medium tracking-tab_text"
-              : "text-skin-base font-custom text-sm font-medium tracking-tab_text"
+              ? "text-[#101010] font-custom text-sm font-bold tracking-tab_text"
+              : "text-skin-base font-custom text-sm font-bold tracking-tab_text"
           }`}
         >
           {label}

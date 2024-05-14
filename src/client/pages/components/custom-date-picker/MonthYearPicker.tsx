@@ -208,7 +208,7 @@ const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
         </IconContainer>
         <DatePickerDiv
           onClick={() => setIsModalOpen(true)}
-          className="font-custom font-medium text-xl text-skin-base tracking-title"
+          className="font-custom font-semibold text-xl text-skin-base tracking-title"
         >
           {`${format(dates.startDate, "MMMM")} ${format(
             dates.startDate,
@@ -218,10 +218,10 @@ const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
       </IconAndInputContainer>
       {isModalOpen && (
         <CalendarModal ref={modalRef}>
-          <div className="font-custom font-medium text-xxxs text-skin-base tracking-title">
+          <div className="font-custom font-semibold text-xxxs text-skin-base tracking-title">
             Select Month and Year to filter
           </div>
-          <div className="font-custom font-medium text-xl text-skin-base tracking-title mb-2">
+          <div className="font-custom font-semibold text-xl text-skin-base tracking-title mb-2">
             {modalTitle}
           </div>
           {viewMode === "month" ? (

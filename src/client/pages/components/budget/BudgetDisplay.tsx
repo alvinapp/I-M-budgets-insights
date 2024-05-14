@@ -32,21 +32,21 @@ export const BudgetDisplay = ({
     <div className="flex flex-col">
       <div className="flex flex-row justify-between items-center mb-6">
         <div className="flex flex-col">
-          <div className="font-custom font-medium text-xl text-skin-base tracking-title">
+          <div className="font-custom font-bold text-xl text-skin-base tracking-title">
             {title}
           </div>
         </div>
         <div className="flex flex-col justify-end items-end">
           <div className="flex flex-row">
-            <div className="font-custom font-medium text-lg text-skin-base">
+            <div className="font-custom font-bold text-lg text-skin-base">
               {budgetAmount?.toLocaleString("en-US")}
-              <sup className="font-custom font-medium text-xxxs text-skin-base align-super">
+              <sup className="font-custom text-xxxs text-skin-base align-super">
                 {currencySymbol}
               </sup>
             </div>
           </div>
           <div className="flex flex-row">
-            <div className="font-primary text-sm font-medium text-skin-subtitle tracking-wider">
+            <div className="font-primary text-sm font-semibold text-skin-subtitle tracking-wider">
               {percentageOfBudgetCaption}
             </div>
           </div>
@@ -64,15 +64,16 @@ export const BudgetDisplay = ({
           <div className="flex flex-row">
             <div className="flex flex-col mr-3 mt-1">
               <div
-                className={`rounded-full ${indicatorColor ?? "bg-[#0131a1]"
-                  }  h-4 w-4`}
+                className={`rounded-full ${
+                  indicatorColor ?? "bg-[#0131a1]"
+                }  h-4 w-4`}
               ></div>
             </div>
             <div className="flex flex-col">
               <div className="flex flex-row">
-                <div className="font-custom font-medium text-lg text-skin-base">
+                <div className="font-custom font-bold text-lg text-skin-base">
                   {allocatedAmount?.toLocaleString("en-US")}
-                  <sup className="font-custom font-medium text-xxs text-skin-base align-super">
+                  <sup className="font-custom text-xxs text-skin-base align-super">
                     {currencySymbol}
                   </sup>
                 </div>
@@ -93,9 +94,9 @@ export const BudgetDisplay = ({
             <div className="flex flex-col">
               <div className="flex flex-row">
                 <div className="relative">
-                  <div className="font-custom font-medium text-lg text-skin-base">
+                  <div className="font-custom font-bold text-lg text-skin-base">
                     {unallocatedAmount?.toLocaleString("en-US")}
-                    <sup className="font-custom font-medium text-xxs text-skin-base align-super">
+                    <sup className="font-custom text-xxs text-skin-base align-super">
                       {currencySymbol}
                     </sup>
                   </div>

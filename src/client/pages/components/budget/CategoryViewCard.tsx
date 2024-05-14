@@ -59,7 +59,7 @@ export const CategoryViewCard = ({
           </div>
           <div className="flex flex-col">
             <div className="relative">
-              <div className="font-primary text-sm text-skin-base font-medium">
+              <div className="font-primary text-sm text-skin-base font-semibold">
                 {amount?.toLocaleString("en-us")}
                 <sup className=" align-super -ml-1 text-[9px]">
                   {currencySymbol ?? ""}
