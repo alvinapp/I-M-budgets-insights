@@ -190,8 +190,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             )}&endDate=${format(
               insightsStoreState.insightsEndDate,
               "yyyy-MM-dd"
-            )}&accountName=${cashflowVariables.accountName}&dateFilter=${
-              cashflowVariables.dateFilter
+            )}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter
             }`
           )
         }
@@ -314,8 +313,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           )}&endDate=${format(
             insightsStoreState.insightsEndDate,
             "yyyy-MM-dd"
-          )}&accountName=${cashflowVariables.accountName}&dateFilter=${
-            cashflowVariables.dateFilter
+          )}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter
           }`
         )
       }
@@ -340,7 +338,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           <g transform={`translate(${radius}, ${radius})`}>
             {["moneyIn", "moneyOut"].map((type, index) => {
               const percentage = (values[type] / total) * 100;
-              const color = type === "moneyIn" ? "#71EBD7" : "#4C4C4C";
+              const color = type === "moneyIn" ? "#416f1f" : "#febb14";
 
               const startX =
                 normalizedRadius *
@@ -476,12 +474,12 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           </div>
           <div className="flex flex-row items-start mt-5">
             <PercentageItem
-              color="linear-gradient(180deg, #71EBD7 0%, #3ED1AE 100%)"
+              color="#416f1f"
               percentage={Number(moneyInPercentage)}
               label="Money in"
             />
             <PercentageItem
-              color="#4C4C4C"
+              color="#febb14"
               percentage={Number(moneyOutPercentage)}
               label="Money out"
             />

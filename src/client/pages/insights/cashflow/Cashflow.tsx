@@ -84,7 +84,7 @@ const Cashflow = () => {
       fetchDataFromServer();
     }, 500);
   }, [startDate, endDate, filteredAccount]);
-  const currencySymbol = "₦";
+  const currencySymbol = "KES";
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -145,7 +145,7 @@ const Cashflow = () => {
                   <AmountDisplay
                     amount={checkNAN(
                       earnedData?.reduce((a: number, b: number) => a + b, 0) /
-                        earnedData.length
+                      earnedData.length
                     )}
                   />
                 </div>
@@ -156,7 +156,7 @@ const Cashflow = () => {
                   <AmountDisplay
                     amount={checkNAN(
                       spentData?.reduce((a: number, b: number) => a + b, 0) /
-                        spentData.length
+                      spentData.length
                     )}
                   />
                 </div>
@@ -187,7 +187,7 @@ const Cashflow = () => {
                   <AmountDisplay
                     amount={checkNAN(
                       earnedData?.reduce((a: number, b: number) => a + b, 0) /
-                        earnedData.length
+                      earnedData.length
                     )}
                   />
                 </div>
@@ -198,7 +198,7 @@ const Cashflow = () => {
                   <AmountDisplay
                     amount={checkNAN(
                       spentData?.reduce((a: number, b: number) => a + b, 0) /
-                        spentData.length
+                      spentData.length
                     )}
                   />
                 </div>

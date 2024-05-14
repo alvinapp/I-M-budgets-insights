@@ -35,6 +35,7 @@ import useInsightsStore from "client/store/insightsStore";
 import { format, set } from "date-fns";
 import bankIcon from "../../assets/images/budgets-insights/bank.svg";
 import InsightsSavingsChart from "./insightsChart/InsightsSavingsChart";
+import DebtChart from "./DebtChart/DebtChart";
 
 const InsightsView = () => {
   const location = useLocation();
@@ -240,15 +241,15 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
             />
           ) : (
             <AvailableBudgetContainer
-              amount={savingsTotal}
-              subtitle="Current total savings"
+              amount={6715992 - savingsTotal}
+              subtitle="Total debt"
               currencySymbol={currencySymbol}
             />
           )}
@@ -312,10 +313,19 @@ const InsightsView = () => {
                   gap: "1.25rem",
                 }}
               >
-                <GraphLegend color="#0099A6" label="Savings" />
+                <GraphLegend color="#97449e" label="Total debt" />
               </div>
             </div>
           )}
+        </div>
+        <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
+          <div className="text-base text-skin-base font-medium tracking-title font-custom">
+            debt analysis snapshot
+          </div>
+          <div className="font-primary text-skin-base text-sm tracking-listtile_subtitle mt-1">
+            🌈 A brighter financial future ahead! You've cut down your debt significantly. Keep going!
+          </div>
+          <DebtChart mortgage={3000000} autoLoan={1500000} creditCard={2215992} totalDebt={6715992} />
         </div>
         <div className="flex flex-row">
           <CashFlowPieChart

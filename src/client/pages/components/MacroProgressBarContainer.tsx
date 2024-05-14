@@ -28,7 +28,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
   const ratioArray = ratios.split("/").map(Number);
   const currencyStore = useCurrencySettingsStore((state: any) => state);
   const currencySymbol = currencyStore.currencySymbol;
-  const progressString = ["Essentials spend", "Wants spend", "Saved"];
+  const progressString = ["Essentials spend", "Wants spend", "Debt repaid"];
 
   return (
     <div
@@ -46,15 +46,13 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           ) : (
             <MacroProgressBar
               flexValue={1}
-              bgColorBottom={
-                index === 0 ? "#E7EDF3" : index === 1 ? "#E7EDF3" : "#C8ECEF"
-              }
+              bgColorBottom={"#E7EDF3"}
               bgColorTop={
                 index === 0
                   ? "#00AB9E"
                   : index === 1
-                  ? "#345DAF"
-                  : "linear-gradient(124.2deg, #1BBFCD 0%, #0099A6 100%)"
+                    ? "#345DAF"
+                    : "#CB960F"
               }
               outsideLength={
                 progressPercentage[Object.keys(progressPercentage)[index]] ?? 0
@@ -70,8 +68,8 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                     isLoading
                       ? 0
                       : checkNAN(
-                          budgetAmount[Object.keys(budgetAmount)[index]] ?? 0
-                        )
+                        budgetAmount[Object.keys(budgetAmount)[index]] ?? 0
+                      )
                   }
                   duration={500}
                 />

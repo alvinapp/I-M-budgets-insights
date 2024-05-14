@@ -47,25 +47,29 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
     },
     tooltip: {
       custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-        const formattedDate =
-          w.config.series[0].data[dataPointIndex]?.x.length !== 7
-            ? format(w.config.series[0].data[dataPointIndex].x, "MMM dd, yyyy")
-            : format(w.config.series[0].data[dataPointIndex].x, "MMM, yyyy");
+        const dataPoint = w.config.series[seriesIndex].data[dataPointIndex];
+        const formattedDate = dataPoint.x.length !== 7
+          ? format(new Date(dataPoint.x), "MMM dd, yyyy")
+          : format(new Date(dataPoint.x), "MMM, yyyy");
 
-        const essentialsValue = w.config.series[0].data[dataPointIndex]?.y;
+        const essentialsValue = Number(dataPoint.y);
+        const formattedValue = essentialsValue.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        });
 
         return `<div style="padding: 10px; background-color: #f4f9fb; border-radius: 8px; font-size: 14px;" class="custom-tooltip">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <div style="display: flex; align-items: center;">
-                            <span style="height: 10px; width: 10px; background-color: #0099A6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #0099A6;margin-right: 5px;">Savings:</span>
-                        </div>
-                        <span> ${essentialsValue?.toFixed(2).toLocaleString("en")}</span>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center;">
+                      <span style="height: 10px; width: 10px; background-color: #0099A6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
+                      <span style="color: #0099A6;margin-right: 5px;">Total debt:</span>
                     </div>
-                    <hr style="margin: 8px 0; border-top: 1px solid #90A4AE;" />
-                    <div style="padding-top: 5px; color: #101010; text-align: center;" class="title">${formattedDate}</div>
+                    <span>${formattedValue}</span>
+                  </div>
+                  <hr style="margin: 8px 0; border-top: 1px solid #90A4AE;" />
+                  <div style="padding-top: 5px; color: #101010; text-align: center;" class="title">${formattedDate}</div>
                 </div>`;
-      },
+      }
     },
     xaxis: {
       type: "datetime",
@@ -81,6 +85,9 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
       axisTicks: {
         show: false,
       },
+      tooltip: {
+        enabled: false
+      }
     },
     yaxis: {
       labels: {
@@ -105,10 +112,10 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
 
   const [series, setSeries] = useState([
     {
-      name: "Savings spend",
+      name: "Total debt",
       type: "line",
       data: savingsArray,
-      color: "#0099A6",
+      color: "#97449e",
     }
   ]);
 
@@ -127,10 +134,17 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
     const totalSpend = calculateTotalSpend(
       updatedsavingsArray,
     );
+
+    //TODO: create a new array by getting the difference between each value of the element in the original array from 6715992
+    const newSavingsArray = updatedsavingsArray.map((point) => ({
+      x: point.x,
+      y: 6715992 - point.y, // Subtract each value from 6715992
+    }));
+
     setSeries([
       {
         ...series[0],
-        data: updatedsavingsArray,
+        data: newSavingsArray,
       }
     ]);
   }, [savingsArray, dataArrayLength]);

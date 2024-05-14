@@ -24,8 +24,13 @@ const InsightsVsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
 
   // Check if the period is exactly one month and matches the current month
   const isCurrentFullMonth =
-    startDate?.getDate() === startOfCurrentMonth.getDate() &&
-    endDate?.getDate() === endOfCurrentMonth.getDate();
+    startDate && endDate &&
+    startDate.getDate() === startOfCurrentMonth.getDate() &&
+    startDate.getMonth() === startOfCurrentMonth.getMonth() &&
+    startDate.getFullYear() === startOfCurrentMonth.getFullYear() &&
+    endDate.getDate() === endOfCurrentMonth.getDate() &&
+    endDate.getMonth() === endOfCurrentMonth.getMonth() &&
+    endDate.getFullYear() === endOfCurrentMonth.getFullYear();
 
   const progress = (currentDay / daysInMonth) * 100;
 

@@ -69,32 +69,29 @@ export const DebtRepaymentCard = ({
           </div>
         </div>
         <SegmentedProgressBar
-          percentage={0}
+          percentage={progressPercentage}
           height={4}
-          progressColorTop={"#CB96OF"}
+          progressColorTop={"#CB960F"}
           progressColorBottom={"#f2f2f2"}
         />
         <div className="flex flex-row mb-2.5 items-center"></div>
         <div className="flex flex-row items-center">
           <div
-            className={`font-primary text-sm ${
-              primaryColor ?? "text-skin-base"
-            } font-medium mr-1`}
+            className={`font-primary text-sm ${primaryColor ?? "text-skin-base"
+              } font-medium mr-1`}
           >
             <AnimatedNumber target={spentAmount ?? 0} duration={500} />
           </div>
           <div
-            className={`font-primary text-sm ${
-              fadedColor ?? "text-skin-base"
-            } font-medium mr-1`}
+            className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+              } font-medium mr-1`}
           >
             of
           </div>
           <div className="relative mr-1">
             <div
-              className={`font-primary text-sm ${
-                fadedColor ?? "text-skin-base"
-              } font-medium`}
+              className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+                } font-medium`}
             >
               {budgetAmount?.toLocaleString("en-us")}
               <sup className=" align-super -ml-1 text-[9px]">
@@ -103,9 +100,8 @@ export const DebtRepaymentCard = ({
             </div>
           </div>
           <div
-            className={`font-primary text-sm ${
-              fadedColor ?? "text-skin-base"
-            } font-medium`}
+            className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+              } font-medium`}
           >
             {caption ?? "spent"}
           </div>

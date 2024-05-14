@@ -38,6 +38,7 @@ export const CategoryViewCard = ({
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
+  const balance = Math.max(0, (amount ?? 0) - (spentAmount ?? 0));
   return (
     <div className="flex flex-row mb-3" onClick={onClick}>
       <div className="flex flex-col mr-2">
@@ -59,12 +60,12 @@ export const CategoryViewCard = ({
           </div>
           <div className="flex flex-col">
             <div className="relative">
-              <div className="font-primary text-sm text-skin-base font-medium">
-                {amount?.toLocaleString("en-us")}
+              {(balance > 0) && <div className="font-primary text-sm text-skin-base font-medium">
+                {balance?.toLocaleString("en-us")}
                 <sup className=" align-super -ml-1 text-[9px]">
                   {currencySymbol ?? ""}
                 </sup>
-              </div>
+              </div>}
             </div>
           </div>
         </div>
@@ -78,24 +79,21 @@ export const CategoryViewCard = ({
         <div className="flex flex-row mb-2.5 items-center"></div>
         <div className="flex flex-row items-center">
           <div
-            className={`font-primary text-sm tracking-wider ${
-              primaryColor ?? "text-skin-base"
-            } font-medium mr-1`}
+            className={`font-primary text-sm tracking-wider ${primaryColor ?? "text-skin-base"
+              } font-medium mr-1`}
           >
             <AnimatedNumber target={spentAmount ?? 0} duration={500} />
           </div>
           <div
-            className={`font-primary text-sm ${
-              fadedColor ?? "text-skin-base"
-            } font-medium mr-1`}
+            className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+              } font-medium mr-1`}
           >
             of
           </div>
           <div className="relative mr-1">
             <div
-              className={`font-primary text-sm tracking-wider ${
-                fadedColor ?? "text-skin-base"
-              }`}
+              className={`font-primary text-sm tracking-wider ${fadedColor ?? "text-skin-base"
+                }`}
             >
               {budgetAmount?.toLocaleString("en-us")}
               <sup className="align-super -ml-1 text-[9px]">
@@ -104,9 +102,8 @@ export const CategoryViewCard = ({
             </div>
           </div>
           <div
-            className={`font-primary text-sm ${
-              fadedColor ?? "text-skin-base"
-            } font-medium`}
+            className={`font-primary text-sm ${fadedColor ?? "text-skin-base"
+              } font-medium`}
           >
             {caption ?? "spent"}
           </div>

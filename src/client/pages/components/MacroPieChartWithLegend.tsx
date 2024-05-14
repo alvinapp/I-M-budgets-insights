@@ -83,7 +83,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
       />
       <div className="flex flex-col justify-between space-y-2">
         <MacroPieChartLegend
-          color="#00AB9E"
+          color="#01ab9e"
           text="Essentials"
           percentage={checkNAN(percentages.essentials)}
           showComparison={showComparison}
@@ -101,8 +101,8 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
           )}
         />
         <MacroPieChartLegend
-          color="linear-gradient(180deg, #71EBD7 0%, #3ED1AE 100%)"
-          text="Savings"
+          color="#e5a711"
+          text="Debt repayment"
           percentage={checkNAN(percentages.savings)}
           showComparison={showComparison}
           percentageChange={checkNAN(
@@ -110,7 +110,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
           )}
         />
         <MacroPieChartLegend
-          color="#C3C3C3"
+          color="#e7e7e7"
           text="Unallocated"
           percentage={checkNAN(percentages.unallocated)}
           showComparison={showComparison}

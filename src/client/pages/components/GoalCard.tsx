@@ -18,7 +18,7 @@
 //   onClick,
 //   is_active,
 // }: Goal) => {
-//   const currencySymbol = "₦";
+//   const currencySymbol = "KES";
 //   const configuration = useConfigurationStore(
 //     (state: any) => state.configuration
 //   ) as IConfig;

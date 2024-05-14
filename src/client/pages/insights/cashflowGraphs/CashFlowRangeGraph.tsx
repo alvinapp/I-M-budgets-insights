@@ -67,7 +67,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
             x: formattedDates[index] || '', // Provide a fallback if index is out of bounds
             y: value,
           })),
-          color: "#71EBD7",
+          color: "#416f1f",
         },
         {
           name: "Spent",
@@ -75,7 +75,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
             x: formattedDates[index] || '', // Provide a fallback if index is out of bounds
             y: value,
           })),
-          color: "#4C4C4C",
+          color: "#febb14",
         },
       ];
       setSeriesData(newSeries);

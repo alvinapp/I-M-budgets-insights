@@ -57,6 +57,18 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
         const essentialsValue = w.config.series[0].data[dataPointIndex]?.y;
         const wantsValue = w.config.series[1].data[dataPointIndex]?.y;
         const totalSpendValue = essentialsValue + wantsValue;
+        const formattedEssentialsValue = essentialsValue.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        });
+        const formattedWantsValue = wantsValue.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        })
+        const formattedTotalSpendValue = totalSpendValue.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        })
 
         return `<div style="padding: 10px; background-color: #f4f9fb; border-radius: 8px; font-size: 14px;" class="custom-tooltip">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -64,26 +76,36 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
                             <span style="height: 10px; width: 10px; background-color: #0131A1; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
                             <span style="color: #0131A1;margin-right: 5px;">Essentials:</span>
                         </div>
-                        <span> ${essentialsValue?.toFixed(2).toLocaleString("en")}</span>
+                        <span> ${formattedEssentialsValue}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                         <div style="display: flex; align-items: center;">
                             <span style="height: 10px; width: 10px; background-color: #9DB1C6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
                             <span style="color: #9DB1C6;margin-right: 5px;">Wants:</span>
                         </div>
-                        <span> ${wantsValue?.toFixed(2).toLocaleString("en")}</span>
+                        <span> ${formattedWantsValue}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center;">
                             <span style="height: 10px; width: 10px; background-color: #101010; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
                             <span style="color: #101010;margin-right: 5px;">Total:</span>
                         </div>
-                        <span> ${totalSpendValue?.toFixed(2).toLocaleString("en")}</span>
+                        <span> ${formattedTotalSpendValue}</span>
                     </div>
                     <hr style="margin: 8px 0; border-top: 1px solid #90A4AE;" />
                     <div style="padding-top: 5px; color: #101010; text-align: center;" class="title">${formattedDate}</div>
                 </div>`;
       },
+      x: {
+        show: true,
+        format: "dd MMM yyyy",
+        formatter: function (value, { series, seriesIndex, dataPointIndex, w }) {
+          return new Date(value).toDateString();
+        },
+      },
+      fixed: {
+        offsetX: -10,
+      }
     },
     xaxis: {
       type: "datetime",
@@ -99,6 +121,9 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
       axisTicks: {
         show: false,
       },
+      tooltip: {
+        enabled: false
+      }
     },
     yaxis: {
       labels: {
@@ -126,13 +151,13 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
       name: "Essentials spend",
       type: "line",
       data: essentialsArray,
-      color: "#0131A1",
+      color: "#00AB9E",
     },
     {
       name: "Wants spend",
       type: "line",
       data: wantsArray,
-      color: "#9DB1C6",
+      color: "#345DAF",
     },
     {
       name: "Total spend",
