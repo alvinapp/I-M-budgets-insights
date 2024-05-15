@@ -62,6 +62,7 @@ const EditCategory = () => {
         } else {
           editCategoryStore.setCategory(result?.category);
           editCategoryStore.setOpenEditCategorySheet(false);
+          editCategoryStore.setReloadCategories(!editCategoryStore.reloadCategory)
           showCustomToast({ message: "Category updated" });
         }
       }),
