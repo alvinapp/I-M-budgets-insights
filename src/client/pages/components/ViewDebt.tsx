@@ -65,7 +65,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
     <div className="flex flex-col">
       <div className="flex flex-row rounded-b-lg rounded-t-3xl fixed top-0 left-0 right-0 brightness-50">
         <img
-          className="object-fit h-auto w-full rounded-t-3xl rounded-b-lg"
+          className="h-auto w-full rounded-t-3xl rounded-b-lg"
           src={cover}
           alt=""
         />
@@ -153,8 +153,8 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
       <div className="flex flex-row justify-between items-center mt-4 mb-5 mx-2">
         <ActionButton
           title="Close"
-          bgColor="bg-[#e7e7e7]"
-          titleColor="bg-skin-base"
+          bgColor="bg-[#f2f2f2]"
+          titleColor="text-skin-base"
           click={onClick}
         />
       </div>

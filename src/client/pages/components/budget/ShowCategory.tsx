@@ -10,6 +10,7 @@ import { Category } from "client/models/Categories";
 import { showCustomToast } from "client/utils/Toast";
 
 import CategoryCard from "../../components/budget/CategoryCard";
+import ActionButton from "../ActionButton";
 
 const ShowCategories = () => {
   const displayCategories = useTransactionStore((state: any) => state);
@@ -20,12 +21,6 @@ const ShowCategories = () => {
 
   return (
     <div className="flex flex-col mx-3.5">
-      <div
-        className="flex flex-row justify-start mb-4"
-        onClick={() => displayCategories.setDisplayCategoriesSheet(false)}
-      >
-        <FiX size="1.5rem" color="#6f89a5" />
-      </div>
       <div className="flex flex-col">
         {categoriesStore.categories && categoriesStore.categories.length > 0
           ? categoriesStore.categories.map(
@@ -61,6 +56,16 @@ const ShowCategories = () => {
               }
             )
           : null}
+      </div>
+      <div className="my-3">
+        <ActionButton
+          title="Close"
+          bgColor="bg-[#f2f2f2]"
+          titleColor="text-skin-base"
+          click={() => {
+            displayCategories.setDisplayCategoriesSheet(false);
+          }}
+        />
       </div>
     </div>
   );

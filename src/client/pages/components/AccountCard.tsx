@@ -3,7 +3,6 @@ import { MdPhoneIphone } from "react-icons/md";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import cardImage from "client/assets/images/I&M-acs.png";
 import mpesaImage from "client/assets/images/M-pesa-ac.png";
-import { IoMdCard } from "react-icons/io";
 
 interface AccountCardProps {
   accountNumber: string;
@@ -27,11 +26,14 @@ const AccountCard: React.FC<AccountCardProps> = ({
     setIsActive(!isActive);
     if (isMpesa && !isActive) {
       if (window.flutter_inappwebview) {
-        window.flutter_inappwebview.callHandler('requestPermission').then(result => {
-          console.log("Response from Flutter: ", result);
-        }).catch(error => {
-          console.error("Error calling handler:", error);
-        });
+        window.flutter_inappwebview
+          .callHandler("requestPermission")
+          .then((result) => {
+            console.log("Response from Flutter: ", result);
+          })
+          .catch((error) => {
+            console.error("Error calling handler:", error);
+          });
       }
     }
   };
@@ -57,8 +59,9 @@ const AccountCard: React.FC<AccountCardProps> = ({
         </div>
       </div>
       <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center ${isActive ? "bg-[#00beaf] text-white" : "border border-black"
-          } mb-1`}
+        className={`w-8 h-8 rounded-full flex items-center justify-center ${
+          isActive ? "bg-[#00beaf] text-white" : "border border-black"
+        } mb-1`}
       >
         {isActive ? <IoCheckmarkSharp className="text-xl" /> : null}
       </div>

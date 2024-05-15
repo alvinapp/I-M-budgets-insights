@@ -5,13 +5,11 @@ interface AccountEditCardProps {
   label?: string;
   accountNumber?: string;
   onClick?: () => void;
-  backgroundColor?: string;
   type?: string;
 }
 const AccountEditCard: React.FC<AccountEditCardProps> = ({
   label,
   accountNumber,
-  backgroundColor,
   type,
 }) => {
   return (
@@ -27,7 +25,7 @@ const AccountEditCard: React.FC<AccountEditCardProps> = ({
             <div
               className={`w-4 h-4 rounded-full flex items-center justify-center bg-skin-iconSecondary text-white`}
             >
-              <img src={backgroundColor ? mpesaImage : cardImage} alt="plane" />
+              <img src={mpesaImage} alt="plane" />
             </div>
             <div className="font-custom text-sm text-skin-base font-medium ml-3">
               {accountNumber}

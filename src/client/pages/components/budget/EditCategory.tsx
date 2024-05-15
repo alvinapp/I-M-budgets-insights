@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import useTransactionStore from "client/store/transactionStore";
 import { applyAsterix, checkNAN, dateFormat } from "client/utils/Formatters";
 import useUserStore from "client/store/userStore";
-import { updateCategory } from "client/api/categories";
+import { getCategories, updateCategory } from "client/api/categories";
 import { showCustomToast } from "client/utils/Toast";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 
@@ -19,12 +19,27 @@ import ActionButton from "../ActionButton";
 import EditCategoryCard from "./EditCategoryCard";
 import MerchantEditCard from "./MerchantCategoryCard";
 import AccountEditCard from "./AccountEditCard";
+import useCategoriesStore from "client/store/categoriesStore";
 
 const EditCategory = () => {
   const editCategoryStore = useTransactionStore((state: any) => state);
   const categoryData = editCategoryStore.uncategorizedTransaction;
   const transactedAt = new Date(categoryData?.transacted_at);
   const userStore = useUserStore((state: any) => state);
+  const configuration = useConfigurationStore(
+    (state: any) => state.configuration
+  ) as IConfig;
+  const categoriesStore = useCategoriesStore((state: any) => state);
+  const { data: fetchedCategories } = useQuery(
+    "categories",
+    () =>
+      getCategories({ configuration: configuration }).then((result) => {
+        categoriesStore.setCategories(result);
+      }),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -74,9 +89,7 @@ const EditCategory = () => {
           type={userStore.user?.external_linked_accounts[0].type}
           accountNumber={
             userStore.user.external_linked_accounts.length > 0
-              ? `${checkNAN(
-                  userStore.user?.external_linked_accounts[0].account_number
-                )}`
+              ? `${checkNAN(254720000000)}`
               : ""
           }
         />
@@ -120,8 +133,8 @@ const EditCategory = () => {
       <div className="mt-3">
         <ActionButton
           title="Close"
-          bgColor="bg-[#e7e7e7]"
-          titleColor="bg-skin-base"
+          bgColor="bg-[#f2f2f2]"
+          titleColor="text-skin-base"
           click={() => {
             editCategoryStore.setDisplayCategoriesSheet(false);
           }}

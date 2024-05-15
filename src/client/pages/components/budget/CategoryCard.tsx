@@ -13,7 +13,7 @@ const CategoryCard = ({ category, onClick }: CategoryCardProp) => {
     if (!category)
       return (
         <div
-          className="rounded-full bg-icon_bg/20 w-9 h-9 flex justify-center items-center
+          className="rounded-full bg-icon_bg/20 w-8 h-8 flex justify-center items-center
       "
         >
           <img src={uncategorized} alt="" />
@@ -28,7 +28,7 @@ const CategoryCard = ({ category, onClick }: CategoryCardProp) => {
   };
 
   return (
-    <div className="flex flex-col mb-4" onClick={onClick}>
+    <div className="flex flex-col" onClick={onClick}>
       <div className="flex flex-row items-center">
         <div className="">
           <CategoryEmoji category={category} />
@@ -37,7 +37,6 @@ const CategoryCard = ({ category, onClick }: CategoryCardProp) => {
           {category?.name}
         </div>
       </div>
-      <div className="flex-grow h-px bg-skin-accent3"></div>
     </div>
   );
 };
