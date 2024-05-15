@@ -238,6 +238,7 @@ const BudgetsView = () => {
   );
   const macroStore = useMacrosStore((state: any) => state);
   const [viewBudgetSheet, openViewBudgetSheet] = useState(false);
+
   const [viewDebtSheet, openViewDebtSheet] = useState(false);
   const budgetDetails = {
     spentAmount: 0,
