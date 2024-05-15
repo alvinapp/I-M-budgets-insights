@@ -256,6 +256,8 @@ const BudgetsView = () => {
     paid: 0,
     debtBalance: 0,
     percentage: 0,
+    icon: "",
+    cover: "",
     loanDetails: {},
     recentActivities: {},
   };
@@ -390,82 +392,82 @@ const BudgetsView = () => {
             <div className="mt-6 flex flex-col">
               {allTimeDebt && allTimeDebt.length > 0
                 ? allTimeDebt.map((debt: any, i: any) => {
-                    return (
-                      <DebtRepaymentCard
-                        key={i}
-                        category={debt?.name}
-                        progressPercentage={
-                          isLoading ? 0 : checkNAN(debt?.percentage)
-                        }
-                        amount={debt?.amount}
-                        budgetAmount={debt?.amount}
-                        spentAmount={debt?.paid}
-                        iconBg="bg-skin-iconPrimary"
-                        baseBgColor="#E7EDF3"
-                        bgColor="#6F89A5"
-                        primaryColor="text-skin-base"
-                        fadedColor="text-skin-subtitle"
-                        caption="repaid"
-                        icon={debt?.icon}
-                        onClick={() => {
-                          openViewDebtSheet(true);
-                          setDebtDetailsData({
-                            id: debt?.id,
-                            name: debt?.name,
-                            amount: debt?.amount,
-                            paid: debt?.paid,
-                            debtBalance: debt?.debtBalance,
-                            percentage: debt?.percentage,
-                            icon: debt?.icon,
-                            cover: debt?.cover,
-                            loanDetails: debt?.loanDetails,
-                            recentActivities: debt?.recentActivity,
-                          });
-                        }}
-                      />
-                    );
-                  })
+                  return (
+                    <DebtRepaymentCard
+                      key={i}
+                      category={debt?.name}
+                      progressPercentage={
+                        isLoading ? 0 : checkNAN(debt?.percentage)
+                      }
+                      amount={debt?.amount}
+                      budgetAmount={debt?.amount}
+                      spentAmount={debt?.paid}
+                      iconBg="bg-skin-iconPrimary"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#6F89A5"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
+                      caption="repaid"
+                      icon={debt?.icon}
+                      onClick={() => {
+                        openViewDebtSheet(true);
+                        setDebtDetailsData({
+                          id: debt?.id,
+                          name: debt?.name,
+                          amount: debt?.amount,
+                          paid: debt?.paid,
+                          debtBalance: debt?.debtBalance,
+                          percentage: debt?.percentage,
+                          icon: debt?.icon,
+                          cover: debt?.cover,
+                          loanDetails: debt?.loanDetails,
+                          recentActivities: debt?.recentActivity,
+                        });
+                      }}
+                    />
+                  );
+                })
                 : null}
             </div>
           ) : (
             <div className="mt-6 flex flex-col">
               {allTimeDebt && debt.length > 0
                 ? allTimeDebt.map((debt: any, i: any) => {
-                    return (
-                      <DebtRepaymentCard
-                        key={i}
-                        category={debt?.name}
-                        progressPercentage={
-                          isLoading ? 0 : checkNAN(debt?.percentage)
-                        }
-                        amount={debt?.amount}
-                        budgetAmount={debt?.amount}
-                        spentAmount={debt?.paid}
-                        iconBg="bg-skin-iconPrimary"
-                        baseBgColor="#E7EDF3"
-                        bgColor="#6F89A5"
-                        primaryColor="text-skin-base"
-                        fadedColor="text-skin-subtitle"
-                        caption="repaid"
-                        icon={debt?.icon}
-                        onClick={() => {
-                          openViewDebtSheet(true);
-                          setDebtDetailsData({
-                            id: debt?.id,
-                            name: debt?.name,
-                            amount: debt?.amount,
-                            paid: debt?.paid,
-                            debtBalance: debt?.debtBalance,
-                            percentage: debt?.percentage,
-                            icon: debt?.icon,
-                            cover: debt?.cover,
-                            loanDetails: debt?.loanDetails,
-                            recentActivities: debt?.recentActivity,
-                          });
-                        }}
-                      />
-                    );
-                  })
+                  return (
+                    <DebtRepaymentCard
+                      key={i}
+                      category={debt?.name}
+                      progressPercentage={
+                        isLoading ? 0 : checkNAN(debt?.percentage)
+                      }
+                      amount={debt?.amount}
+                      budgetAmount={debt?.amount}
+                      spentAmount={debt?.paid}
+                      iconBg="bg-skin-iconPrimary"
+                      baseBgColor="#E7EDF3"
+                      bgColor="#6F89A5"
+                      primaryColor="text-skin-base"
+                      fadedColor="text-skin-subtitle"
+                      caption="repaid"
+                      icon={debt?.icon}
+                      onClick={() => {
+                        openViewDebtSheet(true);
+                        setDebtDetailsData({
+                          id: debt?.id,
+                          name: debt?.name,
+                          amount: debt?.amount,
+                          paid: debt?.paid,
+                          debtBalance: debt?.debtBalance,
+                          percentage: debt?.percentage,
+                          icon: debt?.icon,
+                          cover: debt?.cover,
+                          loanDetails: debt?.loanDetails,
+                          recentActivities: debt?.recentActivity,
+                        });
+                      }}
+                    />
+                  );
+                })
                 : null}
             </div>
           )}
