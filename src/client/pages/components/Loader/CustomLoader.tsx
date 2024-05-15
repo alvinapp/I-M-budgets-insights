@@ -6,7 +6,7 @@ const CustomLoader: React.FC = () => {
   return (
     <div className="spinnerWrap">
       <div className="spinner">
-        <img src={loaderSvg} alt="loader" id="loader-image" />
+        <img src={loaderSvg} alt="" id="loader-image" />
       </div>
     </div>
   );

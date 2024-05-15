@@ -44,7 +44,7 @@ export const DebtRepaymentCard = ({
         <div
           className={`rounded-full h-10 w-10 flex justify-center items-center ${iconBg}`}
         >
-          <div>{icon}</div>
+          <img src={icon} alt="" className="w-full h-auto" />
         </div>
       </div>
       <div className="flex flex-col w-full">
@@ -59,7 +59,7 @@ export const DebtRepaymentCard = ({
           </div>
           <div className="flex flex-col">
             <div className="relative">
-              <div className="font-primary text-sm text-skin-base font-medium">
+              <div className="font-primary text-sm text-skin-base font-semibold">
                 {amount?.toLocaleString("en-us")}
                 <sup className=" align-super -ml-1 text-[9px]">
                   {currencySymbol ?? ""}

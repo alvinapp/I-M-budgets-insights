@@ -24,6 +24,9 @@ import SavingsGoalConfirmation from "../SavingsGoalConfirmation";
 import SuccessfullCreatedView from "client/pages/components/budget/SuccessfullCreatedView";
 import successIcon from "client/assets/images/success-icon.svg";
 import EditSavingsViewCard from "./EditSavingsViewCard";
+import { allTimeDebt } from "client/utils/MockData";
+import DebtViewCard from "client/pages/components/DebtViewCard";
+import { checkNAN } from "client/utils/Formatters";
 
 const EditBudgetSettings = () => {
   const [savingsSuccess, setSavingsSuccess] = useState(false);
@@ -204,6 +207,9 @@ const EditBudgetSettings = () => {
   const [selectedSavingsGoal, setSelectedSavingsGoal] = useState({
     name: "",
   });
+  const totalDebt = allTimeDebt.reduce((accumulator, item) => {
+    return (accumulator += item.amount);
+  }, 0);
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -261,6 +267,47 @@ const EditBudgetSettings = () => {
             <FiPieChart size="1.5rem" color="#555466" />
           </div>
           <div className="flex-grow h-px bg-skin-accent3"></div>
+        </div>
+        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-4">
+          <BudgetDisplay
+            title="Debt repayment"
+            budgetAmount={totalDebt}
+            percentageOfBudgetCaption={`${
+              savingsGoals[0]?.share ?? ""
+            }% of overall budget`}
+            unallocatedCaption="Unallocated"
+            allocatedCaption="Allocated"
+            unallocatedAmount={0}
+            allocatedAmount={totalDebt}
+            progressPercentage={100}
+            indicatorColor="bg-[#CB960F]"
+            progressColor="#CB960F"
+          />
+          <div className="border mt-4 mb-4.5"></div>
+          <div className="flex flex-col">
+            <>
+              <div className="flex flex-row justify-between items-center mb-4">
+                <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                  Categories
+                </div>
+                <div className="text-sm tracking-wide font-medium text-skin-subtitle font-primary">
+                  Budget allocation
+                </div>
+              </div>
+              {allTimeDebt?.map((debt: any, index: number) => {
+                return (
+                  <DebtViewCard
+                    key={index}
+                    amount={checkNAN(
+                      Math.round(debt?.loanDetails.monthlyPayment)
+                    )}
+                    icon={debt?.icon}
+                    goal={debt?.name}
+                  />
+                );
+              })}
+            </>
+          </div>
         </div>
         <div className="shadow-card px-4 pt-5 pb-3 rounded-lg">
           <BudgetDisplay
@@ -525,7 +572,7 @@ const EditBudgetSettings = () => {
               : null}
           </div>
         </div>
-        <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-6">
+        {/* <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-6">
           <BudgetDisplay
             title="Savings"
             budgetAmount={savingsBudgetAmount ?? 0}
@@ -610,21 +657,6 @@ const EditBudgetSettings = () => {
               })
             )}
           </div>
-        </div>
-        {/* <div className="flex flex-row mt-18 justify-center items-center">
-          <div className="font-primary text-xs font-medium tracking-wide text-skin-neutral">
-            *Setup at least 3 categories
-          </div>
-        </div> */}
-        {/* <div className="mt-2">
-          <MainButton
-            title="All set"
-            // isDisabled={true}
-            loading={savingBudgetDetails}
-            click={() => {
-
-            }}
-          />
         </div> */}
         <BottomSheet
           onDismiss={() => {

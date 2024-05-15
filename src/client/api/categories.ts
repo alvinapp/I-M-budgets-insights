@@ -1,5 +1,5 @@
 import { IConfig } from "client/store/configuration";
-import { fetchData } from "./api";
+import { fetchData, postData } from "./api";
 import * as Sentry from "@sentry/browser";
 //Fetch all categories
 export const getCategories = async ({
@@ -18,5 +18,25 @@ export const getCategories = async ({
     Sentry.captureException(reason);
     console.debug(reason);
     return Promise.reject(reason);
+  }
+};
+
+export const updateCategory = async ({
+  configuration,
+  data,
+}: {
+  configuration: IConfig;
+  data: any;
+}) => {
+  try {
+    const result = postData({
+      endpoint: `/transactions/`,
+      data: data,
+      token: configuration!.token,
+    });
+
+    return result;
+  } catch (reason: any) {
+    Sentry.captureException(reason);
   }
 };

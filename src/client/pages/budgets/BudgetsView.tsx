@@ -255,6 +255,8 @@ const BudgetsView = () => {
     amount: 0,
     paid: 0,
     percentage: 0,
+    icon: "",
+    cover: "",
     loanDetails: {},
     recentActivities: {},
   };
@@ -387,39 +389,42 @@ const BudgetsView = () => {
           </div>
           {debtViewTabId === 0 ? (
             <div className="mt-6 flex flex-col">
-              {debt && debt.length > 0
-                ? debt.map((debt: any, i: any) => {
-                  return (
-                    <DebtRepaymentCard
-                      key={i}
-                      category={debt?.name}
-                      progressPercentage={
-                        isLoading ? 0 : checkNAN(debt?.percentage)
-                      }
-                      amount={debt?.amount}
-                      budgetAmount={debt?.amount}
-                      spentAmount={debt?.paid}
-                      iconBg="bg-skin-iconPrimary"
-                      baseBgColor="#E7EDF3"
-                      bgColor="#6F89A5"
-                      primaryColor="text-skin-base"
-                      fadedColor="text-skin-subtitle"
-                      caption="repaid"
-                      onClick={() => {
-                        openViewDebtSheet(true);
-                        setDebtDetailsData({
-                          id: debt?.id,
-                          name: debt?.name,
-                          amount: debt?.amount,
-                          paid: debt?.paid,
-                          percentage: debt?.percentage,
-                          loanDetails: debt?.loanDetails,
-                          recentActivities: debt?.recentActivity,
-                        });
-                      }}
-                    />
-                  );
-                })
+              {allTimeDebt && allTimeDebt.length > 0
+                ? allTimeDebt.map((debt: any, i: any) => {
+                    return (
+                      <DebtRepaymentCard
+                        key={i}
+                        category={debt?.name}
+                        progressPercentage={
+                          isLoading ? 0 : checkNAN(debt?.percentage)
+                        }
+                        amount={debt?.amount}
+                        budgetAmount={debt?.amount}
+                        spentAmount={debt?.paid}
+                        iconBg="bg-skin-iconPrimary"
+                        baseBgColor="#E7EDF3"
+                        bgColor="#6F89A5"
+                        primaryColor="text-skin-base"
+                        fadedColor="text-skin-subtitle"
+                        caption="repaid"
+                        icon={debt?.icon}
+                        onClick={() => {
+                          openViewDebtSheet(true);
+                          setDebtDetailsData({
+                            id: debt?.id,
+                            name: debt?.name,
+                            amount: debt?.amount,
+                            paid: debt?.paid,
+                            percentage: debt?.percentage,
+                            icon: debt?.icon,
+                            cover: debt?.cover,
+                            loanDetails: debt?.loanDetails,
+                            recentActivities: debt?.recentActivity,
+                          });
+                        }}
+                      />
+                    );
+                  })
                 : null}
             </div>
           ) : (
@@ -461,7 +466,7 @@ const BudgetsView = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
+        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
           <CategoryCardHeader
             title="Essentials"
             amount={checkNAN(
@@ -647,6 +652,7 @@ const BudgetsView = () => {
               outStandingDebt={debtDetailsData?.amount}
               progress={debtDetailsData?.percentage}
               name={debtDetailsData?.name}
+              cover={debtDetailsData?.cover}
               loanDetails={debtDetailsData?.loanDetails}
               recentActivities={debtDetailsData?.recentActivities}
               onClick={() => {

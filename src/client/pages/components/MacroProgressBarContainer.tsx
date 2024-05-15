@@ -62,7 +62,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
           )}
           <div className="flex flex-col justify-end items-start mt-3">
             <div className="relative flex items-end">
-              <div className="font-custom font-medium text-base text-skin-base">
+              <div className="font-custom font-bold text-base text-skin-base">
                 <AnimatedNumber
                   target={
                     isLoading
@@ -84,7 +84,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                 </sup>
               </div>
             </div>
-            <div className="font-primary text-xs text-skin-base tracking-progress_label">
+            <div className="font-primary text-xs text-skin-base tracking-progress_label font-semibold">
               {progressString[index]}
             </div>
           </div>

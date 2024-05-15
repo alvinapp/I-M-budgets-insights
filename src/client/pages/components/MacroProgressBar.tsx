@@ -40,7 +40,7 @@ const MacroProgressBar: React.FC<MacroProgressBarProps> = ({
   };
 
   return (
-    <div style={containerStyle} className="min-w-[100px]">
+    <div style={containerStyle} className="min-w-[100px] font-semibold">
       <div style={progressBarStyle} className="min-w-[100px]">
         <div style={innerContainerStyle}></div>
       </div>

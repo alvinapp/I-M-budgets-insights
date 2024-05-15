@@ -30,6 +30,7 @@ import successIcon from "client/assets/images/success-icon.svg";
 import EditSavingsViewCard from "./edit-settings/EditSavingsViewCard";
 import { checkNAN, reformatBudgetSplit } from "client/utils/Formatters";
 import DebtViewCard from "../components/DebtViewCard";
+import { allTimeDebt } from "client/utils/MockData";
 
 export const BudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -214,6 +215,9 @@ export const BudgetSettings = () => {
   );
   const bottomSheetStore = useBottomSheetStore((state: any) => state);
   const [savingsSuccess, setSavingsSuccess] = useState(false);
+  const totalDebt = allTimeDebt.reduce((accumulator, item) => {
+    return (accumulator += item.amount);
+  }, 0);
   useEffect(() => {
     if (bottomSheetStore?.successBottomSheet) {
       document
@@ -277,17 +281,9 @@ export const BudgetSettings = () => {
               }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
-            unallocatedAmount={
-              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
-                ? Math.max(savingsBudgetAmount - allocatedSavings, 0)
-                : 0
-            }
-            allocatedAmount={allocatedSavings}
-            progressPercentage={
-              typeof savingsBudgetAmount === "number" && savingsBudgetAmount > 0
-                ? Math.min((allocatedSavings / savingsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
-                : 0
-            }
+            unallocatedAmount={0}
+            allocatedAmount={totalDebt}
+            progressPercentage={100}
             indicatorColor="bg-[#CB960F]"
             progressColor="#CB960F"
           />
@@ -302,27 +298,18 @@ export const BudgetSettings = () => {
                   Budget allocation
                 </div>
               </div>
-              <DebtViewCard
-                amount={Math.round(
-                  Math.round(savingsBudgetAmount ? savingsBudgetAmount / 3 : 0)
-                )}
-                icon=""
-                goal="Credit card"
-              />
-              <DebtViewCard
-                amount={Math.round(
-                  savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
-                )}
-                icon=""
-                goal="Auto loan"
-              />
-              <DebtViewCard
-                amount={Math.round(
-                  savingsBudgetAmount ? savingsBudgetAmount / 3 : 0
-                )}
-                icon=""
-                goal="Mortgage"
-              />
+              {allTimeDebt?.map((debt: any, index: number) => {
+                return (
+                  <DebtViewCard
+                    key={index}
+                    amount={checkNAN(
+                      Math.round(debt?.loanDetails.monthlyPayment)
+                    )}
+                    icon={debt?.icon}
+                    goal={debt?.name}
+                  />
+                );
+              })}
             </>
             {/* {savingsCategories &&
               savingsCategories.length > 0 &&
@@ -390,7 +377,7 @@ export const BudgetSettings = () => {
             progressColor="#00AB9E"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
-            <div className="text-skin-base font-primary text-xs tracking-wider font-medium">
+            <div className="text-skin-base font-primary text-xs tracking-wider font-semibold">
               Add budgets to your Essentials below
             </div>
           </div>
@@ -416,6 +403,7 @@ export const BudgetSettings = () => {
                     amount={data?.amount}
                     selected={isSelected}
                     maxValue={Number.MAX_SAFE_INTEGER}
+                    actionButtonColor="#00AB9E"
                     unallocatedAmount={
                       typeof parseInt(essentialBudgetAmount) === "number" &&
                         essentialBudgetAmount > 0
@@ -555,7 +543,7 @@ export const BudgetSettings = () => {
             progressColor="#345DAF"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
-            <div className="text-skin-base font-primary text-xs tracking-wider font-medium">
+            <div className="text-skin-base font-primary text-xs tracking-wider font-semibold">
               Add budgets to your Wants below
             </div>
           </div>

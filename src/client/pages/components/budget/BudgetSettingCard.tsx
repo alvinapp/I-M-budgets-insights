@@ -15,6 +15,7 @@ type BudgetSettingCardProps = {
   maxValue: number;
   unallocatedAmount: number;
   updateValue?: (value: number) => void;
+  actionButtonColor?: string;
 };
 export const BudgetSettingCard = ({
   category,
@@ -27,6 +28,7 @@ export const BudgetSettingCard = ({
   maxValue,
   updateValue,
   unallocatedAmount,
+  actionButtonColor,
 }: BudgetSettingCardProps) => {
   const [inputValue, setInputValue] = useState(amount);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -106,7 +108,7 @@ export const BudgetSettingCard = ({
             {amount > 0 ? (
               <div className="flex flex-row items-center">
                 <FiMinus
-                  color="#042EBD"
+                  color={`${actionButtonColor ?? "#042EBD"}`}
                   size="1.2rem"
                   onClick={handleDecrement}
                 />
@@ -134,7 +136,11 @@ export const BudgetSettingCard = ({
             ) : (
               <div></div>
             )}
-            <FiPlus color="#042EBD" size="1.2rem" onClick={handleIncrement} />
+            <FiPlus
+              color={`${actionButtonColor ?? "#042EBD"}`}
+              size="1.2rem"
+              onClick={handleIncrement}
+            />
           </div>
         </div>
       </div>

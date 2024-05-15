@@ -31,7 +31,7 @@ export const CategoryCardHeader = ({
               />
             </div>
           </div>
-          <div className="font-primary text-xs font-medium tracking-wider text-skin-subtitle">
+          <div className="font-primary text-xs font-semibold tracking-wider text-skin-subtitle">
             {caption}
           </div>
         </div>

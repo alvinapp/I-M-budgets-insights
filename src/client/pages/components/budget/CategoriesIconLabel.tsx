@@ -20,7 +20,7 @@ export const CategoriesIconLabel = ({
         </div>
       </div>
       <div className="flex flex-col">
-        <div className="font-custom text-base font-medium text-skin-base tracking-title">
+        <div className="font-custom text-base font-bold text-skin-base tracking-title">
           {label}
         </div>
       </div>
