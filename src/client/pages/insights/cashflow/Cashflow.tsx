@@ -84,7 +84,7 @@ const Cashflow = () => {
       fetchDataFromServer();
     }, 500);
   }, [startDate, endDate, filteredAccount]);
-  const currencySymbol = "₦";
+  const currencySymbol = "KES";
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -145,7 +145,7 @@ const Cashflow = () => {
                   <AmountDisplay
                     amount={checkNAN(
                       earnedData?.reduce((a: number, b: number) => a + b, 0) /
-                        earnedData.length
+                      earnedData.length
                     )}
                   />
                 </div>
@@ -156,7 +156,7 @@ const Cashflow = () => {
                   <AmountDisplay
                     amount={checkNAN(
                       spentData?.reduce((a: number, b: number) => a + b, 0) /
-                        spentData.length
+                      spentData.length
                     )}
                   />
                 </div>
@@ -170,7 +170,7 @@ const Cashflow = () => {
               currencySymbol={currencySymbol}
             />
           </>
-        ) : totalEarned && totalSpent && totalEarned + totalSpent > 0 ? (
+        ) : (totalEarned !== undefined && totalSpent !== undefined) && ((totalEarned + totalSpent) !== 0) ? (
           <div>
             <TotalCashFlowView totalAmount={totalEarned + totalSpent} />
             <Graph earned={totalEarned} spent={totalSpent} />
@@ -186,8 +186,8 @@ const Cashflow = () => {
                   </div>
                   <AmountDisplay
                     amount={checkNAN(
-                      earnedData?.reduce((a: number, b: number) => a + b, 0) /
-                        earnedData.length
+                      earnedData.filter((value) => value !== 0).reduce((a, b) => a + b, 0) /
+                      (earnedData.filter((value) => value !== 0).length || 1) // Avoid division by zero
                     )}
                   />
                 </div>
@@ -197,8 +197,8 @@ const Cashflow = () => {
                   </div>
                   <AmountDisplay
                     amount={checkNAN(
-                      spentData?.reduce((a: number, b: number) => a + b, 0) /
-                        spentData.length
+                      spentData.filter((value) => value !== 0).reduce((a, b) => a + b, 0) /
+                      (spentData.filter((value) => value !== 0).length || 1) // Avoid division by zero
                     )}
                   />
                 </div>
@@ -212,7 +212,7 @@ const Cashflow = () => {
               currencySymbol={currencySymbol}
             />
           </div>
-        ) : (totalEarned && totalSpent && totalEarned + totalSpent) === 0 ? (
+        ) : (totalEarned !== undefined && totalSpent !== undefined) && ((totalEarned + totalSpent) === 0) ? (
           <div className="flex-grow flex items-center justify-center">
             <div
               className="font-medium font-primary text-tiny tracking-wide text-center mx-auto flex flex-col items-center justify-center"

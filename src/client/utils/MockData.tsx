@@ -167,7 +167,7 @@ export const savings = [
 ];
 export const insightsToggleTabs = [
   { id: 0, name: "Spend" },
-  { id: 1, name: "Save" },
+  { id: 1, name: "Debt" },
 ];
 export const budgetSpendTabs = [
   { id: 0, name: "My spend", icon: <FiActivity /> },

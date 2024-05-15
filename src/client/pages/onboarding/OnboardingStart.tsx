@@ -41,12 +41,12 @@ const OnboardingStart = () => {
         setMonoPubKey(data.key);
         configuration.monoPubKey = data.key;
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
   useEffect(() => {
     if (!configurations.monoPubKey) {
       fetchMonoToken({ configuration: configurations, setMonoPubKey })
-        .then(() => {})
+        .then(() => { })
         .catch((error) => {
           console.error("Failed to fetch Mono public key:", error);
         });
@@ -173,7 +173,7 @@ const OnboardingStart = () => {
                   // onClick();
                 }}
               />
-              <div className="mt-3">
+              {/* <div className="mt-3">
                 <ActionButton
                   bgColor="bg-[#f2f2f2]"
                   titleColor="text-skin-base"
@@ -182,7 +182,7 @@ const OnboardingStart = () => {
                     navigate("/onboard-add-income");
                   }}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </>

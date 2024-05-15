@@ -64,8 +64,8 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                     isLoading
                       ? 0
                       : checkNAN(
-                          budgetAmount[Object.keys(budgetAmount)[index]] ?? 0
-                        )
+                        budgetAmount[Object.keys(budgetAmount)[index]] ?? 0
+                      )
                   }
                   duration={500}
                 />

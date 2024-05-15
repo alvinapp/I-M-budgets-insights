@@ -260,14 +260,11 @@ export const OthersSpend = ({
               height: 10,
               marginTop: 10,
               borderRadius: 10,
-              background: "#101010",
+              background: "#4c4c4c",
               marginRight: 5,
             }}
           ></div>
-          <AmountView
-            caption="Other's avg spend"
-            amount={!isLoading ? totalPeerExpenditure : 0}
-          />
+          <AmountView caption="My spend" amount={!isLoading ? totalUserExpenditure : 0} />
         </div>
         <div className="flex flex-row items-start">
           <div
@@ -276,11 +273,14 @@ export const OthersSpend = ({
               height: 10,
               marginTop: 10,
               borderRadius: 10,
-              background: "#6f89a5",
+              background: "#6786c3",
               marginRight: 5,
             }}
           ></div>
-          <AmountView caption="My spend" amount={!isLoading ? totalUserExpenditure : 0} />
+          <AmountView
+            caption="Other's avg spend"
+            amount={!isLoading ? totalPeerExpenditure : 0}
+          />
         </div>
       </div>
       <div className="flex-grow h-px bg-skin-accent3 mt-9 mb-4.5"></div>

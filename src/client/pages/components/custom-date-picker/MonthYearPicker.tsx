@@ -238,7 +238,7 @@ const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
                     <Item
                       key={index}
                       onClick={() => handleMonthClick(month, isDisabled)}
-                      selected={month === selectedMonth}
+                      selected={month === format(dates.startDate, "MMM")}
                       disabled={isDisabled}
                     >
                       {month}

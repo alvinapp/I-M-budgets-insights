@@ -172,10 +172,10 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
   }
 
   const items = [
-    { percentage: (unallocated / total) * 100, color: "#C3C3C3" },
-    { percentage: (savings / total) * 100, color: "#71EBD7" },
-    { percentage: (wants / total) * 100, color: "#8490E2" },
-    { percentage: (essentials / total) * 100, color: "#4053D0" },
+    { percentage: (unallocated / total) * 100, color: "#e7e7e7" },
+    { percentage: (savings / total) * 100, color: "#e5a711" },
+    { percentage: (wants / total) * 100, color: "#354DAF" },
+    { percentage: (essentials / total) * 100, color: "#01ab9e" },
   ];
 
   return (

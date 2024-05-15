@@ -27,7 +27,7 @@ const useInsightsStore = create<InsightsStoreState>((set) => ({
   insightsEndDate: getDefaultEndDate(),
   insightsActiveInstitutionId: null,
   insightsLoading: false,
-  insightsActiveInstitutionName: "All institutions",
+  insightsActiveInstitutionName: "All accounts",
   insightsDateFilterName: "This month",
   insightsDateFilterId: "0",
   setInsightsLoading: (loading: boolean) => {

@@ -25,10 +25,17 @@ const AccountCard: React.FC<AccountCardProps> = ({
   // Toggle function to switch active state
   const toggleActive = () => {
     setIsActive(!isActive);
-    if (isMpesa && isActive) {
-      window.postMessage("requestPermission", "*");
+    if (isMpesa && !isActive) {
+      if (window.flutter_inappwebview) {
+        window.flutter_inappwebview.callHandler('requestPermission').then(result => {
+          console.log("Response from Flutter: ", result);
+        }).catch(error => {
+          console.error("Error calling handler:", error);
+        });
+      }
     }
   };
+
   const bgColor = backgroundColor ? `bg-[#5f9f31]` : "bg-[#012bc4]";
 
   return (
@@ -50,9 +57,8 @@ const AccountCard: React.FC<AccountCardProps> = ({
         </div>
       </div>
       <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center ${
-          isActive ? "bg-[#00beaf] text-white" : "border border-black"
-        } mb-1`}
+        className={`w-8 h-8 rounded-full flex items-center justify-center ${isActive ? "bg-[#00beaf] text-white" : "border border-black"
+          } mb-1`}
       >
         {isActive ? <IoCheckmarkSharp className="text-xl" /> : null}
       </div>
