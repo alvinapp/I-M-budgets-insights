@@ -9,6 +9,7 @@ type CategoryCardProp = {
   onClick?: () => void;
 };
 const CategoryCard = ({ category, onClick }: CategoryCardProp) => {
+  const isGoingOut = category?.name === "Going out";
   const CategoryEmoji = ({ category }: { category: Category }) => {
     if (!category)
       return (
@@ -22,7 +23,7 @@ const CategoryCard = ({ category, onClick }: CategoryCardProp) => {
 
     return (
       <div className="rounded-full w-10 h-10 flex justify-center bg-icon_bg/20 items-center">
-        <Emoji symbol={category.emoji} label={category.name} />
+        <Emoji symbol={isGoingOut ? "🤩" : category.emoji} label={isGoingOut ? "Entertainment" : category.name} />
       </div>
     );
   };
@@ -34,7 +35,7 @@ const CategoryCard = ({ category, onClick }: CategoryCardProp) => {
           <CategoryEmoji category={category} />
         </div>
         <div className="font-custom text-sm font-medium text-skin-base text-start text-ellipsis overflow-hidden whitespace-nowrap w-40">
-          {category?.name}
+          {isGoingOut ? "Entertainment" : category.name}
         </div>
       </div>
     </div>

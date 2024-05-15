@@ -10,6 +10,7 @@ const useTransactionStore = create((set) => ({
   filterLoading: false,
   filterLoaded: false,
   editCategorySheet: false,
+  reloadcategories: false,
   displayCategoriesSheet: false,
   uncategorizedTransaction: {},
   receipient: "",
@@ -133,5 +134,14 @@ const useTransactionStore = create((set) => ({
       return results;
     });
   },
+  setReloadCategories: (reload: boolean) => {
+    return set((state: any) => {
+      const results = {
+        reloadcategories: reload,
+      };
+
+      return results;
+    });
+  }
 }));
 export default useTransactionStore;
