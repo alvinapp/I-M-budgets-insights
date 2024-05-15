@@ -23,7 +23,7 @@ interface ViewDebtProps {
   endDate?: string;
   loanDetails: any;
   recentActivities: any;
-  cover: any;
+  cover?: any;
   onClick?: () => void;
 }
 const ViewDebt: React.FC<ViewDebtProps> = ({
