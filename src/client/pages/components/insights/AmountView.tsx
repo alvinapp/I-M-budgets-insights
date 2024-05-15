@@ -1,5 +1,4 @@
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
-import React from "react";
 import AnimatedNumber from "../AnimatedNumber";
 type AmountViewProps = {
   amount: number;

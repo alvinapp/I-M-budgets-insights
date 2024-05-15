@@ -11,6 +11,9 @@ import { BudgetTransaction } from "client/models/Budget";
 import TransactionCardSkeleton from "../components/BudgetTransactionCardSkeleton";
 import BudgetTransactionCardSkeleton from "../components/BudgetTransactionCardSkeleton";
 import { TransactionEmptyState } from "../components/EmptyState";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import EditCategory from "../components/budget/EditCategory";
+import useTransactionStore from "client/store/transactionStore";
 interface ViewBudgetProps {
   progress: number;
   spentAmount: number;
@@ -40,7 +43,7 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
   ) as IConfig;
   const [fetchingData, setFetchingData] = useState(false);
   const [transactions, setTransactions] = useState<BudgetTransaction[]>([]);
-
+  const transactionState = useTransactionStore((state: any) => state);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -65,7 +68,7 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
     <div className="flex flex-col">
       <div className="flex flex-row justify-center items-center mt-4 mb-8">
         <div className="mr-3">{emoji}</div>
-        <div className="font-custom font-medium text-xl tracking-title">
+        <div className="font-custom font-bold text-xl tracking-title">
           {category ?? ""}
         </div>
       </div>
@@ -89,8 +92,11 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
         bgColor={`${progreesBgColor ?? "#0131A1"}`}
         isLabelVisible={false}
       />
-      <div className="flex flex-col p-4 mt-4 rounded-lg shadow-card mx-4" style={{ maxHeight: "300px", overflowY: "auto" }}>
-        <div className="font-custom font-medium text-base tracking-title mb-3">
+      <div
+        className="flex flex-col p-4 mt-4 rounded-lg shadow-card mx-4"
+        style={{ maxHeight: "300px", overflowY: "auto" }}
+      >
+        <div className="font-custom font-semibol text-base tracking-title mb-3">
           Recent activity
         </div>
         {fetchingData ? (
@@ -101,7 +107,11 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
             })
         ) : transactions && transactions.length > 0 ? (
           transactions
-            .sort((a, b) => new Date(b.transacted_at).getTime() - new Date(a.transacted_at).getTime())
+            .sort(
+              (a, b) =>
+                new Date(b.transacted_at).getTime() -
+                new Date(a.transacted_at).getTime()
+            )
             .map((transaction: BudgetTransaction, index) => {
               return (
                 <BudgetTransactionCard
@@ -114,6 +124,13 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
                   category={transaction?.category}
                   transacted_at={transaction?.transacted_at}
                   type={transaction?.type}
+                  onClick={() => {
+                    transactionState.setUncategorizedTransaction(transaction);
+                    transactionState.setRecepient(transaction.merchant?.name);
+                    transactionState.setAccount(transaction.merchant?.name);
+                    transactionState.setCategory(transaction.merchant?.name);
+                    transactionState.setOpenEditCategorySheet(true);
+                  }}
                 />
               );
             })
@@ -129,6 +146,18 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
           <FiX color="#101010" size="1rem" />
         </div>
       </div>
+      <BottomSheet
+        className="backdrop-blur-bottomSheet"
+        onDismiss={() => {
+          transactionState.setOpenEditCategorySheet(false);
+        }}
+        open={transactionState.editCategorySheet}
+        style={{
+          borderRadius: 24,
+        }}
+        children={<EditCategory />}
+        defaultSnap={300}
+      ></BottomSheet>
     </div>
   );
 };

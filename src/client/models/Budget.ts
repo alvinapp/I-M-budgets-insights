@@ -8,6 +8,7 @@ export type BudgetTransaction = {
   category: Category;
   transacted_at: string;
   type: string;
+  onClick?: () => void;
 };
 
 type Merchant = {

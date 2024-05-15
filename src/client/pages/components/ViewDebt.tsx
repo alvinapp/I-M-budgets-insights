@@ -16,6 +16,7 @@ interface ViewDebtProps {
   progress: number;
   repaid: number;
   outStandingDebt: number;
+  outStandingBalance: number;
   progreesBgColor?: string;
   name?: string;
   microGoalId?: number;
@@ -30,6 +31,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
   progress,
   repaid,
   outStandingDebt,
+  outStandingBalance,
   progreesBgColor,
   name,
   microGoalId,
@@ -61,14 +63,14 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
   const [debtDetailsViewTabId, setDebtDetailsViewTabId] = useState(0);
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row rounded-b-lg rounded-t-3xl h-20 fixed top-0 left-0 right-0">
+      <div className="flex flex-row rounded-b-lg rounded-t-3xl fixed top-0 left-0 right-0 brightness-50">
         <img
-          className="object-fit h-20 w-full rounded-t-3xl rounded-b-lg"
+          className="object-fit h-auto w-full rounded-t-3xl rounded-b-lg"
           src={cover}
           alt=""
         />
       </div>
-      <div className="flex flex-row justify-center items-center absolute top-10 left-0 right-0 mx-4">
+      <div className="flex flex-row justify-center items-center absolute top-8 left-0 right-0 mx-4">
         <div className="font-custom font-medium text-lg tracking-title text-skin-white">
           {name ?? ""}
         </div>
@@ -81,18 +83,33 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
             onClick={(tab: any) => setDebtViewTabId(tab.id)}
           />
         </div>
-        <div className="flex flex-row justify-between items-center mx-3.5 mb-3 mt-4">
-          <AmountView
-            amount={repaid}
-            caption="Repaid so far"
-            flex="items-start"
-          />
-          <AmountView
-            amount={outStandingDebt}
-            caption="Outstanding monthly"
-            flex="items-end"
-          />
-        </div>
+        {debtViewTabId === 0 ? (
+          <div className="flex flex-row justify-between items-center mx-3.5 mb-3 mt-4">
+            <AmountView
+              amount={repaid}
+              caption="Repaid so far"
+              flex="items-start"
+            />
+            <AmountView
+              amount={outStandingDebt}
+              caption="Outstanding monthly"
+              flex="items-end"
+            />
+          </div>
+        ) : (
+          <div className="flex flex-row justify-between items-center mx-3.5 mb-3 mt-4">
+            <AmountView
+              amount={repaid}
+              caption="Repaid so far"
+              flex="items-start"
+            />
+            <AmountView
+              amount={outStandingBalance}
+              caption="Outstanding balance"
+              flex="items-end"
+            />
+          </div>
+        )}
         <div className="mx-3.5 mb-4">
           <SegmentedProgressBar
             percentage={0}
@@ -113,7 +130,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
             <LoanDetails
               monthlyPayment={loanDetails?.monthlyPayment}
               totalRepaid={loanDetails?.totalRepaid}
-              outStandingBalance={loanDetails?.outStandingBalance}
+              outStandingBalance={loanDetails?.outstandingBalance}
               annualInterestRate={loanDetails?.annualInterestRate}
               estimatedPayoffTime={loanDetails?.estimatedPayoffTime}
               nextPaymentDueDate={loanDetails?.nextPaymentDueDate}
@@ -138,6 +155,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
           title="Close"
           bgColor="bg-[#e7e7e7]"
           titleColor="bg-skin-base"
+          click={onClick}
         />
       </div>
     </div>

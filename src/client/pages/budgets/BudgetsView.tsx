@@ -254,6 +254,7 @@ const BudgetsView = () => {
     name: "",
     amount: 0,
     paid: 0,
+    debtBalance: 0,
     percentage: 0,
     loanDetails: {},
     recentActivities: {},
@@ -346,18 +347,18 @@ const BudgetsView = () => {
           <MacroProgressBarsContainer
             ratios={`33/33/33`}
             budgetAmount={{
-              wantsBudget: essentialTotalExpenses,
-              essentialsBudget: wantsTotalExpenses,
               savingsBudget: savingsTotalExpenses,
+              essentialsBudget: essentialTotalExpenses,
+              wantsBudget: wantsTotalExpenses,
             }}
             progressPercentage={{
-              wantsProgress:
-                checkNAN(essentialTotalExpenses / essentialTotalBudgetAmount) *
-                100,
-              essentialsProgress:
-                checkNAN(wantsTotalExpenses / wantsTotalBudgetAmount) * 100,
               savingsProgress:
                 checkNAN(savingsTotalExpenses / savingsTotalBudgetAmount) * 100,
+              wantsProgress:
+                checkNAN(wantsTotalExpenses / wantsTotalBudgetAmount) * 100,
+              essentialsProgress:
+                checkNAN(essentialTotalExpenses / essentialTotalBudgetAmount) *
+                100,
             }}
             isLoading={isLoading}
           />
@@ -387,76 +388,84 @@ const BudgetsView = () => {
           </div>
           {debtViewTabId === 0 ? (
             <div className="mt-6 flex flex-col">
-              {debt && debt.length > 0
-                ? debt.map((debt: any, i: any) => {
-                  return (
-                    <DebtRepaymentCard
-                      key={i}
-                      category={debt?.name}
-                      progressPercentage={
-                        isLoading ? 0 : checkNAN(debt?.percentage)
-                      }
-                      amount={debt?.amount}
-                      budgetAmount={debt?.amount}
-                      spentAmount={debt?.paid}
-                      iconBg="bg-skin-iconPrimary"
-                      baseBgColor="#E7EDF3"
-                      bgColor="#6F89A5"
-                      primaryColor="text-skin-base"
-                      fadedColor="text-skin-subtitle"
-                      caption="repaid"
-                      onClick={() => {
-                        openViewDebtSheet(true);
-                        setDebtDetailsData({
-                          id: debt?.id,
-                          name: debt?.name,
-                          amount: debt?.amount,
-                          paid: debt?.paid,
-                          percentage: debt?.percentage,
-                          loanDetails: debt?.loanDetails,
-                          recentActivities: debt?.recentActivity,
-                        });
-                      }}
-                    />
-                  );
-                })
+              {allTimeDebt && allTimeDebt.length > 0
+                ? allTimeDebt.map((debt: any, i: any) => {
+                    return (
+                      <DebtRepaymentCard
+                        key={i}
+                        category={debt?.name}
+                        progressPercentage={
+                          isLoading ? 0 : checkNAN(debt?.percentage)
+                        }
+                        amount={debt?.amount}
+                        budgetAmount={debt?.amount}
+                        spentAmount={debt?.paid}
+                        iconBg="bg-skin-iconPrimary"
+                        baseBgColor="#E7EDF3"
+                        bgColor="#6F89A5"
+                        primaryColor="text-skin-base"
+                        fadedColor="text-skin-subtitle"
+                        caption="repaid"
+                        icon={debt?.icon}
+                        onClick={() => {
+                          openViewDebtSheet(true);
+                          setDebtDetailsData({
+                            id: debt?.id,
+                            name: debt?.name,
+                            amount: debt?.amount,
+                            paid: debt?.paid,
+                            debtBalance: debt?.debtBalance,
+                            percentage: debt?.percentage,
+                            icon: debt?.icon,
+                            cover: debt?.cover,
+                            loanDetails: debt?.loanDetails,
+                            recentActivities: debt?.recentActivity,
+                          });
+                        }}
+                      />
+                    );
+                  })
                 : null}
             </div>
           ) : (
             <div className="mt-6 flex flex-col">
               {allTimeDebt && debt.length > 0
                 ? allTimeDebt.map((debt: any, i: any) => {
-                  return (
-                    <DebtRepaymentCard
-                      key={i}
-                      category={debt?.name}
-                      progressPercentage={
-                        isLoading ? 0 : checkNAN(debt?.percentage)
-                      }
-                      amount={debt?.amount}
-                      budgetAmount={debt?.amount}
-                      spentAmount={debt?.paid}
-                      iconBg="bg-skin-iconPrimary"
-                      baseBgColor="#E7EDF3"
-                      bgColor="#6F89A5"
-                      primaryColor="text-skin-base"
-                      fadedColor="text-skin-subtitle"
-                      caption="repaid"
-                      onClick={() => {
-                        openViewDebtSheet(true);
-                        setDebtDetailsData({
-                          id: debt?.id,
-                          name: debt?.name,
-                          amount: debt?.amount,
-                          paid: debt?.paid,
-                          percentage: debt?.percentage,
-                          loanDetails: debt?.loanDetails,
-                          recentActivities: debt?.recentActivity,
-                        });
-                      }}
-                    />
-                  );
-                })
+                    return (
+                      <DebtRepaymentCard
+                        key={i}
+                        category={debt?.name}
+                        progressPercentage={
+                          isLoading ? 0 : checkNAN(debt?.percentage)
+                        }
+                        amount={debt?.amount}
+                        budgetAmount={debt?.amount}
+                        spentAmount={debt?.paid}
+                        iconBg="bg-skin-iconPrimary"
+                        baseBgColor="#E7EDF3"
+                        bgColor="#6F89A5"
+                        primaryColor="text-skin-base"
+                        fadedColor="text-skin-subtitle"
+                        caption="repaid"
+                        icon={debt?.icon}
+                        onClick={() => {
+                          openViewDebtSheet(true);
+                          setDebtDetailsData({
+                            id: debt?.id,
+                            name: debt?.name,
+                            amount: debt?.amount,
+                            paid: debt?.paid,
+                            debtBalance: debt?.debtBalance,
+                            percentage: debt?.percentage,
+                            icon: debt?.icon,
+                            cover: debt?.cover,
+                            loanDetails: debt?.loanDetails,
+                            recentActivities: debt?.recentActivity,
+                          });
+                        }}
+                      />
+                    );
+                  })
                 : null}
             </div>
           )}
@@ -645,6 +654,7 @@ const BudgetsView = () => {
             <ViewDebt
               repaid={debtDetailsData?.paid}
               outStandingDebt={debtDetailsData?.amount}
+              outStandingBalance={debtDetailsData?.debtBalance}
               progress={debtDetailsData?.percentage}
               name={debtDetailsData?.name}
               loanDetails={debtDetailsData?.loanDetails}

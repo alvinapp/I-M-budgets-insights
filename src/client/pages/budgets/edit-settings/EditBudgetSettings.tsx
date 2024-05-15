@@ -271,7 +271,7 @@ const EditBudgetSettings = () => {
         <div className="shadow-card px-4 pt-5 pb-3 mt-4.5 rounded-lg mb-4">
           <BudgetDisplay
             title="Debt repayment"
-            budgetAmount={totalDebt}
+            budgetAmount={savingsBudgetAmount}
             percentageOfBudgetCaption={`${
               savingsGoals[0]?.share ?? ""
             }% of overall budget`}
