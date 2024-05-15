@@ -62,13 +62,11 @@ const EditCategory = () => {
         } else {
           editCategoryStore.setCategory(result?.category);
           editCategoryStore.setOpenEditCategorySheet(false);
-          editCategoryStore.setReloadCategories(!editCategoryStore.reloadCategory)
           showCustomToast({ message: "Category updated" });
         }
       }),
     { refetchOnWindowFocus: false, enabled: false }
   );
-  console.log("CategoryData", categoryData);
   return (
     <div className="flex flex-col mt-3 mb-6 mx-4">
       <TransactionAmountView
@@ -126,6 +124,7 @@ const EditCategory = () => {
                 showCustomToast({ message: "Please assign a category" });
               } else {
                 categoryUpdate();
+                editCategoryStore.setReloadCategories(!editCategoryStore.reloadcategories);
               }
             }}
           />
@@ -145,6 +144,7 @@ const EditCategory = () => {
         className="backdrop-blur-bottomSheet"
         onDismiss={() => {
           editCategoryStore.setDisplayCategoriesSheet(false);
+          editCategoryStore.setReloadCategories(!editCategoryStore.reloadcategories);
         }}
         open={editCategoryStore.displayCategoriesSheet}
         style={{
