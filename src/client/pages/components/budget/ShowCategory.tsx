@@ -24,37 +24,38 @@ const ShowCategories = () => {
       <div className="flex flex-col">
         {categoriesStore.categories && categoriesStore.categories.length > 0
           ? categoriesStore.categories.map(
-            (category: Category, index: number) => {
-              return (
-                <CategoryCard
-                  category={category}
-                  key={index}
-                  onClick={() => {
-                    updateCategory({
-                      configuration: config,
-                      data: {
-                        category: category?.name,
-                        transaction_id:
-                          displayCategories.uncategorizedTransaction?.id,
-                        notes: displayCategories.note,
-                      },
-                    }).then((result) => {
-                      if (result.errors) {
-                        showCustomToast({
-                          message:
-                            "Cannot update category at this moment, please try again after sometime",
-                        });
-                      } else {
-                        displayCategories.setCategory(result?.category);
-                        displayCategories.setDisplayCategoriesSheet(false);
-                        showCustomToast({ message: "Category updated" });
-                      }
-                    });
-                  }}
-                />
-              );
-            }
-          )
+              (category: Category, index: number) => {
+                return (
+                  <CategoryCard
+                    category={category}
+                    key={index}
+                    onClick={() => {
+                      updateCategory({
+                        configuration: config,
+                        data: {
+                          category: category?.name,
+                          transaction_id:
+                            displayCategories.uncategorizedTransaction?.id,
+                          notes: displayCategories.note,
+                        },
+                      }).then((result) => {
+                        if (result.errors) {
+                          showCustomToast({
+                            message:
+                              "Cannot update category at this moment, please try again after sometime",
+                          });
+                        } else {
+                          displayCategories.setCategory(result?.category);
+                          displayCategories.setDisplayCategoriesSheet(false);
+                          displayCategories.setOpenEditCategorySheet(false);
+                          showCustomToast({ message: "Category updated" });
+                        }
+                      });
+                    }}
+                  />
+                );
+              }
+            )
           : null}
       </div>
       <div className="my-3">

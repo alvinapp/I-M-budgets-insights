@@ -14,6 +14,7 @@ import { TransactionEmptyState } from "../components/EmptyState";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import EditCategory from "../components/budget/EditCategory";
 import useTransactionStore from "client/store/transactionStore";
+import ActionButton from "../components/ActionButton";
 interface ViewBudgetProps {
   progress: number;
   spentAmount: number;
@@ -138,13 +139,13 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
           <TransactionEmptyState label="No recent transactions registered!" />
         )}
       </div>
-      <div className="flex flex-row justify-center items-center mt-4 mb-5">
-        <div
-          className="rounded-full w-10 h-10 bg-[#E7E7E7] flex justify-center items-center"
-          onClick={onClick}
-        >
-          <FiX color="#101010" size="1rem" />
-        </div>
+      <div className="flex flex-row justify-center items-center mt-4 mb-5 mx-4">
+        <ActionButton
+          title="Close"
+          bgColor="bg-[#f2f2f2]"
+          titleColor="text-skin-base"
+          click={onClick}
+        />
       </div>
       <BottomSheet
         className="backdrop-blur-bottomSheet"
