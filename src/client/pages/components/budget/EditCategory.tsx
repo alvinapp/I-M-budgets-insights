@@ -4,7 +4,7 @@ import { BottomSheet } from "react-spring-bottom-sheet";
 import { useQuery } from "react-query";
 
 import useTransactionStore from "client/store/transactionStore";
-import { applyAsterix, dateFormat } from "client/utils/Formatters";
+import { applyAsterix, checkNAN, dateFormat } from "client/utils/Formatters";
 import useUserStore from "client/store/userStore";
 import { updateCategory } from "client/api/categories";
 import { showCustomToast } from "client/utils/Toast";
@@ -15,6 +15,10 @@ import { TextInput, TextInputWithPopup } from "../../components/Input";
 import MainButton from "../../components/MainButton";
 
 import ShowCategories from "../../components/budget/ShowCategory";
+import ActionButton from "../ActionButton";
+import EditCategoryCard from "./EditCategoryCard";
+import MerchantEditCard from "./MerchantCategoryCard";
+import AccountEditCard from "./AccountEditCard";
 
 const EditCategory = () => {
   const editCategoryStore = useTransactionStore((state: any) => state);
@@ -48,102 +52,80 @@ const EditCategory = () => {
       }),
     { refetchOnWindowFocus: false, enabled: false }
   );
-
+  console.log("CategoryData", categoryData);
   return (
     <div className="flex flex-col mt-3 mb-6 mx-4">
-      <div
-        className="flex flex-row justify-start mb-4"
-        onClick={() => editCategoryStore.setOpenEditCategorySheet(false)}
-      >
-        <FiX size="1.5rem" color="#6f89a5" />
-      </div>
       <TransactionAmountView
         amount={categoryData?.amount}
         transactedAt={dateFormat(transactedAt)}
       />
       <div className="mt-7">
-        <TextInputWithPopup
-          placeHolder="Assign a category"
+        <EditCategoryCard
           label="Transaction category"
-          value={
-            editCategoryStore.category ? editCategoryStore.category.name : ""
-          }
-          leadingIcon={<FiPlus size="1.375rem" />}
-          hasValue={!!editCategoryStore.category?.name}
+          categoryName={categoryData.category?.name}
           onClick={() => {
             editCategoryStore.setDisplayCategoriesSheet(true);
           }}
-          addValue={(e) => e}
-          clearInput={() => editCategoryStore.setCategory({})}
         />
       </div>
-      <div className="mt-4">
-        <TextInput
-          placeHolder=""
+      <div className="mt-3">
+        <AccountEditCard
           label="Account"
-          hasValue={false}
-          value={
+          type={userStore.user?.external_linked_accounts[0].type}
+          accountNumber={
             userStore.user.external_linked_accounts.length > 0
-              ? `${
-                  userStore.user?.external_linked_accounts[0].type
-                } ${applyAsterix({
-                  str: `${userStore.user?.external_linked_accounts[0].account_number}`,
-                  mask: "*",
-                  n: 1,
-                })}`
+              ? `${checkNAN(
+                  userStore.user?.external_linked_accounts[0].account_number
+                )}`
               : ""
           }
-          leadingIcon={<FiCheckCircle size="1.375rem" />}
-          addValue={(e) => {}}
-          clearInput={() => {}}
-          onClick={() => {}}
         />
       </div>
-      <div className="mt-4">
-        <TextInput
-          placeHolder=""
-          hasValue={false}
-          label="Payment recipient"
-          value={
+      <div className="mt-3">
+        <MerchantEditCard
+          label="Merchant"
+          merchant={
             editCategoryStore.receipient ? editCategoryStore.receipient : ""
           }
-          leadingIcon={<FiTag size="1.375rem" />}
-          addValue={(e) => {
-            editCategoryStore.setRecepient(e);
-          }}
-          clearInput={() => {
-            editCategoryStore.setRecepient("");
-          }}
-          onClick={() => {}}
         />
       </div>
-      <div className="mt-4">
+      <div className="mt-3 rounded shadow-card pt-4">
         <div
-          className={`font-poppins font-medium text-xs tracking-subtitle mb-2 text-skin-base`}
+          className={`font-custom font-semibold text-xs tracking-subtitle mb-2 text-skin-base ml-3.5`}
         >
           Note
         </div>
         <textarea
-          rows={8}
-          placeholder="(optional)"
-          className="border-skin-base w-full border rounded mb-3 focus:border-skin-base"
+          rows={6}
+          placeholder="Optional"
+          className="w-full focus:border-none focus:outline-none focus-visible:outline-none focus:ring-0 border-none outline-none"
           onChange={(e) => editCategoryStore.setNote(e.target.value)}
         />
-        {editCategoryStore.note.length > 1 ? (
-          <div className="mt-3">
-            <MainButton
-              loading={updatingCategory}
-              title="Save"
-              click={() => {
-                if (Object.keys(editCategoryStore.category).length === 0) {
-                  showCustomToast({ message: "Please assign a category" });
-                } else {
-                  categoryUpdate();
-                }
-              }}
-            />
-          </div>
-        ) : null}
+      </div>
+      {editCategoryStore.note.length > 1 ? (
+        <div className="mt-3">
+          <MainButton
+            loading={updatingCategory}
+            title="Save"
+            click={() => {
+              if (Object.keys(editCategoryStore.category).length === 0) {
+                showCustomToast({ message: "Please assign a category" });
+              } else {
+                categoryUpdate();
+              }
+            }}
+          />
+        </div>
+      ) : null}
+      <div className="mt-3">
+        <ActionButton
+          title="Close"
+          bgColor="bg-[#e7e7e7]"
+          titleColor="bg-skin-base"
+          click={() => {
+            editCategoryStore.setDisplayCategoriesSheet(false);
+          }}
+        />
       </div>
       <BottomSheet
         className="backdrop-blur-bottomSheet"

@@ -45,7 +45,8 @@ const ProgressBar = styled.div<{ duration: number; color: string }>`
     width: 0;
     background-color: ${({ color }) => color};
     border-radius: 10px;
-    animation: progressAnimation ${({ duration }) => duration}s linear forwards, ${({ duration }) => duration / 1.2}s infinite;
+    animation: progressAnimation ${({ duration }) => duration}s linear forwards,
+      ${({ duration }) => duration / 1.2}s infinite;
   }
 
   @keyframes progressAnimation {
@@ -56,51 +57,54 @@ const ProgressBar = styled.div<{ duration: number; color: string }>`
 `;
 
 const LinearProgress = ({
-    duration,
-    color,
-    messages,
+  duration,
+  color,
+  messages,
 }: {
-    duration: number;
-    color: string;
-    messages: string[];
+  duration: number;
+  color: string;
+  messages: string[];
 }) => {
-    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentMessageIndex((prevIndex) => {
-                if (prevIndex >= messages.length - 1) {
-                    clearInterval(interval);
-                    return -1;
-                }
-                return prevIndex + 1;
-            });
-        }, (duration * 1000) / messages.length);
-    }, [duration, messages.length]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMessageIndex((prevIndex) => {
+        if (prevIndex >= messages.length - 1) {
+          clearInterval(interval);
+          return -1;
+        }
+        return prevIndex + 1;
+      });
+    }, (duration * 1000) / messages.length);
+  }, [duration, messages.length]);
 
-    return (
-        <Container>
-            <ContentWrapper>
-                <ProgressBar duration={duration} color={color} />
-                <div className="w-full flex justify-center items-center flex-row gap-2" style={{ marginTop: "1rem" }}>
-                    <div
-                        className="font-poppins"
-                        style={{
-                            color: "#101010",
-                            textAlign: "center",
-                            // fontWeight: 500,
-                            // animation: `fadeInOut ${(duration * 1000) / messages.length / 1.2}ms infinite`,
-                        }}
-                    >
-                        {currentMessageIndex === -1
-                            ? "Processing your request"
-                            : messages[currentMessageIndex]}
-                    </div>
-                    <BallTriangle height={18} width={18} color={color} visible={true} />
-                </div>
-            </ContentWrapper>
-        </Container>
-    );
+  return (
+    <Container>
+      <ContentWrapper>
+        <ProgressBar duration={duration} color={color} />
+        <div
+          className="w-full flex justify-center items-center flex-row gap-2"
+          style={{ marginTop: "1rem" }}
+        >
+          <div
+            className="font-custom"
+            style={{
+              color: "#101010",
+              textAlign: "center",
+              // fontWeight: 500,
+              // animation: `fadeInOut ${(duration * 1000) / messages.length / 1.2}ms infinite`,
+            }}
+          >
+            {currentMessageIndex === -1
+              ? "Processing your request"
+              : messages[currentMessageIndex]}
+          </div>
+          <BallTriangle height={18} width={18} color={color} visible={true} />
+        </div>
+      </ContentWrapper>
+    </Container>
+  );
 };
 
 export default LinearProgress;

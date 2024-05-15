@@ -14,14 +14,14 @@ interface MacroProgressBarsContainerProps {
 const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
   ratios,
   budgetAmount = {
-    wantsBudget: 60000,
-    essentialsBudget: 69617,
     savingsBudget: 15660,
+    essentialsBudget: 69617,
+    wantsBudget: 60000,
   },
   progressPercentage = {
-    wantsProgress: 0,
-    essentialsProgress: 0,
     savingsProgress: 0,
+    essentialsProgress: 0,
+    wantsProgress: 0,
   },
   isLoading,
 }) => {

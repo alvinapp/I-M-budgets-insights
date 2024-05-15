@@ -33,7 +33,7 @@ const CategoryCard = ({ category, onClick }: CategoryCardProp) => {
         <div className="">
           <CategoryEmoji category={category} />
         </div>
-        <div className="font-poppins text-sm font-medium text-skin-base text-start text-ellipsis overflow-hidden whitespace-nowrap w-40">
+        <div className="font-custom text-sm font-medium text-skin-base text-start text-ellipsis overflow-hidden whitespace-nowrap w-40">
           {category?.name}
         </div>
       </div>

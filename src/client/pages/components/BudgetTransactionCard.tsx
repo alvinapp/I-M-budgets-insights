@@ -22,7 +22,10 @@ const CategoryEmoji = ({ category }: { category: Category }) => {
 
   return (
     <div className="rounded-full w-9 h-9 flex justify-center  bg-skin-secondary1WithOpacity items-center">
-      <Emoji symbol={isGoingOut ? "🤩" : category.emoji} label={isGoingOut ? "Entertainment" : category.name} />
+      <Emoji
+        symbol={isGoingOut ? "🤩" : category.emoji}
+        label={isGoingOut ? "Entertainment" : category.name}
+      />
     </div>
   );
 };
@@ -34,6 +37,7 @@ const BudgetTransactionCard = ({
   category,
   amount,
   type,
+  onClick,
 }: BudgetTransaction) => {
   const transactedAt = new Date(transacted_at);
   const { name } = merchant;
@@ -41,7 +45,7 @@ const BudgetTransactionCard = ({
   const currencyStore = useCurrencySettingsStore((state: any) => state);
 
   return (
-    <div className="bg-skin-base w-auto mb-3">
+    <div className="bg-skin-base w-auto mb-3" onClick={onClick}>
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
@@ -75,7 +79,7 @@ const BudgetTransactionCard = ({
           </div>
         </div>
         <div className="flex flex-col justify-start mb-2">
-          <div className="font-custom text-16 font-medium text-skin-base text-end">
+          <div className="font-custom text-16 font-semibold text-skin-base text-end">
             {/* <span>{checkIfDebitCredit(type)}</span> */}
             {Math.round(amount).toLocaleString("en-US")}
             <sup className="align-super -ml-1 text-xxxxxs">

@@ -1,5 +1,3 @@
-import { FiArrowUp, FiCheckCircle, FiInfo, FiTag } from "react-icons/fi";
-
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { checkNAN } from "client/utils/Formatters";
 
@@ -14,17 +12,17 @@ const BalanceView = ({ amount, transactedAt }: BalanceViewProps) => {
   const currency = useCurrencySettingsStore((state: any) => state);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-row items-center justify-start">
-        <div className="text-4xl text-skin-base font-medium font-workSans">
+    <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-col">
+        <div className="text-2xl text-skin-base font-bold font-custom">
           {transactionAmount}
-        </div>
-        <div className="text-lg text-skin-base font-bold font-workSans translate-x-1 -translate-y-2">
-          {currency.currencySymbol}
+          <sup className="align-super -ml-1 text-xxxxxs">
+            {currency.currencySymbol}
+          </sup>
         </div>
       </div>
-      <div className="flex flex-row items-center justify-start">
-        <div className="text-skin-subtitle text-center font-poppins text-xs font-medium tracking-wide ml-1">
+      <div className="flex flex-col">
+        <div className="text-skin-subtitle text-center font-custom text-xs font-medium tracking-wide ml-1">
           {transactedAt}
         </div>
       </div>

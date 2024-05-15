@@ -30,7 +30,7 @@ export const AddMonthlyIncomeInput = ({
       <div className="relative rounded-full p-3.5 bg-skin-input mx-2 flex flex-row justify-center items-center">
         <div>{currencySymbol}</div>
         <input
-          className="bg-transparent font-workSans text-xl tracking-title text-skin-base text-center font-semibold w-48 focus:border-none focus:outline-none"
+          className="bg-transparent font-custom text-xl tracking-title text-skin-base text-center font-semibold w-48 focus:border-none focus:outline-none"
           type="number"
           value={value}
           max={25}
@@ -86,7 +86,7 @@ export const TextInput = ({
     <div className="flex flex-col">
       <div className="flex flex-row">
         <div
-          className={`font-poppins font-medium text-xs tracking-subtitle mb-2 text-skin-base`}
+          className={`font-custom font-medium text-xs tracking-subtitle mb-2 text-skin-base`}
         >
           {label}
         </div>
@@ -107,7 +107,7 @@ export const TextInput = ({
             {leadingIcon}
           </div>
           <div
-            className={`font-medium font-poppins text-base tracking-progress_label flex flex-row justify-center items-center ${
+            className={`font-medium font-custom text-base tracking-progress_label flex flex-row justify-center items-center ${
               hasValue ? "text-skin-base" : "text-skin-inputDisabled"
             }`}
           >
@@ -185,73 +185,73 @@ export const TextInputWithPopup = ({
     event.stopPropagation();
     clearInput();
   };
-
+  const currency = useCurrencySettingsStore((state: any) => state);
   return (
-    <div className="flex flex-col" onClick={hasValue ? () => {} : onClick}>
+    <div
+      className={`rounded flex flex-col ${
+        hasValue ? "border border-1 border-skin-base py-2" : "shadow-card py-3"
+      }`}
+      onClick={hasValue ? () => {} : onClick}
+    >
       <div className="flex flex-row">
         <div
-          className={`font-poppins font-medium text-xs tracking-subtitle mb-2 text-skin-base`}
+          className={`font-custom font-medium text-xs tracking-subtitle mb-2 text-skin-base`}
         >
           {label}
         </div>
       </div>
-      <div className="flex flex-row relative">
+
+      <div className={`flex flex-row items-center  pl-3.5 w-screen`}>
         <div
-          className={`rounded flex flex-row items-center  pl-3.5 w-screen ${
-            hasValue
-              ? "border border-1 border-skin-base py-2"
-              : "shadow-input py-3"
+          className={`flex flex-col h-8 w-8 justify-center ${
+            hasValue ? "text-skin-primary" : "text-skin-inputDisabled"
           }`}
         >
-          <div
-            className={`flex flex-col h-8 w-8 justify-center ${
-              hasValue ? "text-skin-primary" : "text-skin-inputDisabled"
-            }`}
-          >
-            {leadingIcon}
-          </div>
-          <div
-            className={`font-medium font-poppins text-base tracking-progress_label flex flex-row justify-center items-center ${
-              hasValue ? "text-skin-base" : "text-skin-inputDisabled"
-            }`}
-          >
-            {hasCurrencySymbol ? (
-              <div className="translate-x-12">{hasValue ? "₦ " : ""}</div>
-            ) : (
-              <div></div>
-            )}
-            <input
-              disabled={hasValue ? false : true}
-              type={type}
-              placeholder={hasValue ? value : placeHolder}
-              value={value}
-              className={`w-64 outline-none text-center border-transparent focus:border-transparent focus:ring-0 placeholder-[#6f89a5]`}
-              onChange={(e) => {
-                addValue(e.target.value);
-              }}
-            />
-          </div>
-          {hasValue ? (
-            <button
-              className="rounded-full flex items-center bg-skin-secondary p-2 absolute right-2"
-              onClick={handleClearInput}
-            >
-              <FiX color="#4E6783" />
-            </button>
-          ) : isLoading ? (
-            <TailSpin
-              height="20"
-              width="20"
-              color="#056489"
-              ariaLabel="tail-spin-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
+          {leadingIcon}
+        </div>
+        <div
+          className={`font-medium font-custom text-base tracking-progress_label flex flex-row justify-center items-center ${
+            hasValue ? "text-skin-base" : "text-skin-inputDisabled"
+          }`}
+        >
+          {hasCurrencySymbol ? (
+            <div className="translate-x-12">
+              {hasValue ? `${currency.currencySymbol}` : ""}
+            </div>
           ) : (
             <div></div>
           )}
+          <input
+            disabled={hasValue ? false : true}
+            type={type}
+            placeholder={hasValue ? value : placeHolder}
+            value={value}
+            className={`w-64 outline-none text-center border-transparent focus:border-transparent focus:ring-0 placeholder-[#6f89a5]`}
+            onChange={(e) => {
+              addValue(e.target.value);
+            }}
+          />
         </div>
+        {hasValue ? (
+          <button
+            className="rounded-full flex items-center bg-skin-secondary p-2 absolute right-2"
+            onClick={handleClearInput}
+          >
+            <FiX color="#4E6783" />
+          </button>
+        ) : isLoading ? (
+          <TailSpin
+            height="20"
+            width="20"
+            color="#056489"
+            ariaLabel="tail-spin-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );

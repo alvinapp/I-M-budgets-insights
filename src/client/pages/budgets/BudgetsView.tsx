@@ -254,6 +254,7 @@ const BudgetsView = () => {
     name: "",
     amount: 0,
     paid: 0,
+    debtBalance: 0,
     percentage: 0,
     icon: "",
     cover: "",
@@ -348,18 +349,18 @@ const BudgetsView = () => {
           <MacroProgressBarsContainer
             ratios={`33/33/33`}
             budgetAmount={{
-              wantsBudget: essentialTotalExpenses,
-              essentialsBudget: wantsTotalExpenses,
               savingsBudget: savingsTotalExpenses,
+              essentialsBudget: essentialTotalExpenses,
+              wantsBudget: wantsTotalExpenses,
             }}
             progressPercentage={{
-              wantsProgress:
-                checkNAN(essentialTotalExpenses / essentialTotalBudgetAmount) *
-                100,
-              essentialsProgress:
-                checkNAN(wantsTotalExpenses / wantsTotalBudgetAmount) * 100,
               savingsProgress:
                 checkNAN(savingsTotalExpenses / savingsTotalBudgetAmount) * 100,
+              wantsProgress:
+                checkNAN(wantsTotalExpenses / wantsTotalBudgetAmount) * 100,
+              essentialsProgress:
+                checkNAN(essentialTotalExpenses / essentialTotalBudgetAmount) *
+                100,
             }}
             isLoading={isLoading}
           />
@@ -415,6 +416,7 @@ const BudgetsView = () => {
                             name: debt?.name,
                             amount: debt?.amount,
                             paid: debt?.paid,
+                            debtBalance: debt?.debtBalance,
                             percentage: debt?.percentage,
                             icon: debt?.icon,
                             cover: debt?.cover,
@@ -455,6 +457,7 @@ const BudgetsView = () => {
                             name: debt?.name,
                             amount: debt?.amount,
                             paid: debt?.paid,
+                            debtBalance: debt?.debtBalance,
                             percentage: debt?.percentage,
                             icon: debt?.icon,
                             cover: debt?.cover,
@@ -653,6 +656,7 @@ const BudgetsView = () => {
             <ViewDebt
               repaid={debtDetailsData?.paid}
               outStandingDebt={debtDetailsData?.amount}
+              outStandingBalance={debtDetailsData?.debtBalance}
               progress={debtDetailsData?.percentage}
               name={debtDetailsData?.name}
               cover={debtDetailsData?.cover}

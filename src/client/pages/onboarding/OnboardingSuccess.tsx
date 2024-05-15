@@ -61,11 +61,11 @@ const BookingSuccess = () => {
           />
         </div>
         <div className="mt-15 flex flex-row justify-center mx-4">
-          <div className="font-workSans text-skin-white text-xl text-center font-semibold">
+          <div className="font-custom text-skin-white text-xl text-center font-semibold">
             Great job, {user.first_name}!
           </div>
         </div>
-        <div className="text-xxxs font-poppins tracking-longtext text-skin-white text-center mt-4">
+        <div className="text-xxxs font-custom tracking-longtext text-skin-white text-center mt-4">
           This looks like a very balanced budget and a great roadmap for you to
           hit your financial goals. We'll notify you whenever you may be
           overspending in category so you can stay on track.
@@ -74,19 +74,30 @@ const BookingSuccess = () => {
       <div className="fixed bottom-0 left-0 right-0 flex flex-col justify-end items-center mx-3.5">
         {!loading ? (
           <>
-            <SuccessButton label="Maybe later" click={() => navigate("/budgets-view")} style={{
-              border: "1px solid #fff",
-              color: "#c9e0ea",
-              backgroundColor: "transparent",
-            }} />
-            <SuccessButton label="Add category budgets" click={() => navigate("/budget-settings")} style={{
-              marginTop: -8,
-            }} />
+            <SuccessButton
+              label="Maybe later"
+              click={() => navigate("/budgets-view")}
+              style={{
+                border: "1px solid #fff",
+                color: "#c9e0ea",
+                backgroundColor: "transparent",
+              }}
+            />
+            <SuccessButton
+              label="Add category budgets"
+              click={() => navigate("/budget-settings")}
+              style={{
+                marginTop: -8,
+              }}
+            />
           </>
         ) : (
-          <SuccessButton loading={true} style={{
-            backgroundColor: "#CDE0E7",
-          }} />
+          <SuccessButton
+            loading={true}
+            style={{
+              backgroundColor: "#CDE0E7",
+            }}
+          />
         )}
       </div>
     </div>

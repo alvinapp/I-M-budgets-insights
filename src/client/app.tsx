@@ -59,7 +59,10 @@ const App = () => {
           >
             <Routes>
               <Route path="/" element={<OnboardingStart />} />
-              <Route path="/onboard-select-account" element={<OnboardingSelectAccount />} />
+              <Route
+                path="/onboard-select-account"
+                element={<OnboardingSelectAccount />}
+              />
               <Route
                 path="/onboard-add-income"
                 element={<OnboardingAddIncome />}
