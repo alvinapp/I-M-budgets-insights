@@ -148,7 +148,7 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
         />
       </div>
       <BottomSheet
-        className="backdrop-blur-bottomSheet"
+        className=""
         onDismiss={() => {
           transactionState.setOpenEditCategorySheet(false);
         }}

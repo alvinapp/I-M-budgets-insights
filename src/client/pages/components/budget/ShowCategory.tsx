@@ -25,10 +25,13 @@ const ShowCategories = () => {
         {categoriesStore.categories && categoriesStore.categories.length > 0
           ? categoriesStore.categories.map(
               (category: Category, index: number) => {
+                const isActive =
+                  category.name === displayCategories.category.name;
                 return (
                   <CategoryCard
                     category={category}
                     key={index}
+                    activeCategory={isActive}
                     onClick={() => {
                       updateCategory({
                         configuration: config,
@@ -48,6 +51,7 @@ const ShowCategories = () => {
                           displayCategories.setCategory(result?.category);
                           displayCategories.setDisplayCategoriesSheet(false);
                           displayCategories.setOpenEditCategorySheet(false);
+                          displayCategories.setViewBudgetSheet(false);
                           showCustomToast({ message: "Category updated" });
                         }
                       });

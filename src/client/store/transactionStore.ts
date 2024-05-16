@@ -1,6 +1,7 @@
 import create from "zustand";
 
 import Transaction from "client/models/Transaction";
+import ViewBudget from "client/pages/budgets/ViewBudget";
 
 const useTransactionStore = create((set) => ({
   transactions: [],
@@ -17,12 +18,20 @@ const useTransactionStore = create((set) => ({
   category: {},
   account: "",
   note: "",
+  viewBudgetSheet: false,
+  setViewBudgetSheet: (open: boolean) => {
+    return set(() => {
+      const result = {
+        viewBudgetSheet: open,
+      };
+      return result;
+    });
+  },
   setNote: (n: any) => {
     return set((state: any) => {
       const result = {
         note: n,
       };
-
       return result;
     });
   },

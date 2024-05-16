@@ -78,6 +78,7 @@ const EditCategory = () => {
           label="Transaction category"
           categoryName={categoryData.category?.name}
           onClick={() => {
+            editCategoryStore.setCategory(categoryData?.category);
             editCategoryStore.setDisplayCategoriesSheet(true);
           }}
         />
@@ -136,12 +137,12 @@ const EditCategory = () => {
           bgColor="bg-[#f2f2f2]"
           titleColor="text-skin-base"
           click={() => {
-            editCategoryStore.setDisplayCategoriesSheet(false);
+            editCategoryStore.setOpenEditCategorySheet(false);
           }}
         />
       </div>
       <BottomSheet
-        className="backdrop-blur-bottomSheet"
+        className=""
         onDismiss={() => {
           editCategoryStore.setDisplayCategoriesSheet(false);
           editCategoryStore.setReloadCategories(!editCategoryStore.reloadcategories);

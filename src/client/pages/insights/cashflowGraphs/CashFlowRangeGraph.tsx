@@ -39,13 +39,17 @@ const CashFlowRangeGraph: React.FC<Props> = ({
           if (parts.length === 2) {
             const monthIndex =
               new Date(Date.parse(parts[0] + " 1, 2000")).getMonth() + 1;
-            formattedDate = `${parts[1]}-${monthIndex.toString().padStart(2, "0")}-01`;
+            formattedDate = `${parts[1]}-${monthIndex
+              .toString()
+              .padStart(2, "0")}-01`;
           } else if (parts.length === 3) {
             const monthIndex =
               new Date(Date.parse(parts[0] + " 1, 2000")).getMonth() + 1;
             const day = parts[1];
             const year = `20${parts[2]}`;
-            formattedDate = `${year}-${monthIndex.toString().padStart(2, "0")}-${day.padStart(2, "0")}`;
+            formattedDate = `${year}-${monthIndex
+              .toString()
+              .padStart(2, "0")}-${day.padStart(2, "0")}`;
           }
           return formattedDate;
         });
@@ -53,7 +57,6 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         setDataLoaded(true);
       } catch (e) {
         setError("Error: " + e);
-        console.log("xxxxxxxxxxxx", e);
       }
     }
   }, [earnedData, spentData, fullDataLabels]);
@@ -64,7 +67,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         {
           name: "Earned",
           data: earnedData.map((value, index) => ({
-            x: formattedDates[index] || '', // Provide a fallback if index is out of bounds
+            x: formattedDates[index] || "", // Provide a fallback if index is out of bounds
             y: value,
           })),
           color: "#416f1f",
@@ -72,7 +75,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         {
           name: "Spent",
           data: spentData.map((value, index) => ({
-            x: formattedDates[index] || '', // Provide a fallback if index is out of bounds
+            x: formattedDates[index] || "", // Provide a fallback if index is out of bounds
             y: value,
           })),
           color: "#febb14",
@@ -141,13 +144,19 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         }
         return `<div style="padding: 10px; background-color: #f4f9fb; border-radius: 8px;" class="custom-tooltip">
                         <div style="display: flex; align-items: center; color: #101010; text-align: right; font-weight: bold;">
-                            <span> + ${Number(earnedValue).toLocaleString("en-US", { maximumFractionDigits: 2, })}</span>
+                            <span> + ${Number(earnedValue).toLocaleString(
+                              "en-US",
+                              { maximumFractionDigits: 2 }
+                            )}</span>
                             <sup style="color: #101010; font-size: 10px; font-weight: bold;">
                                 ${currencySymbol}
                             </sup>
                         </div>
                         <div style="display: flex; align-items: center; color: #101010; text-align: right;font-weight: bold;">
-                            <span> - ${Number(spentValue).toLocaleString("en-US", { maximumFractionDigits: 2, })}</span>
+                            <span> - ${Number(spentValue).toLocaleString(
+                              "en-US",
+                              { maximumFractionDigits: 2 }
+                            )}</span>
                             <sup style="color: #101010; font-size: 10px; font-weight: bold;">
                                 ${currencySymbol}
                             </sup>
@@ -168,7 +177,12 @@ const CashFlowRangeGraph: React.FC<Props> = ({
 
   return dataLoaded ? (
     <div>
-      <ReactApexChart options={options} series={seriesData} type="bar" height={300} />
+      <ReactApexChart
+        options={options}
+        series={seriesData}
+        type="bar"
+        height={300}
+      />
     </div>
   ) : (
     <div className="shadow-card px-4 py-6 mb-3 rounded-lg mt-2 items-center">
@@ -184,7 +198,7 @@ const CashFlowRangeGraph: React.FC<Props> = ({
         }}
       />
     </div>
-  );;
+  );
 };
 
 export default CashFlowRangeGraph;
