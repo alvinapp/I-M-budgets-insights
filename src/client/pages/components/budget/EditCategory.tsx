@@ -67,7 +67,6 @@ const EditCategory = () => {
       }),
     { refetchOnWindowFocus: false, enabled: false }
   );
-  console.log("CategoryData", categoryData);
   return (
     <div className="flex flex-col mt-3 mb-6 mx-4">
       <TransactionAmountView
@@ -137,12 +136,13 @@ const EditCategory = () => {
           bgColor="bg-[#f2f2f2]"
           titleColor="text-skin-base"
           click={() => {
-            editCategoryStore.setDisplayCategoriesSheet(false);
+            console.log("Clicked");
+            editCategoryStore.setOpenEditCategorySheet(false);
           }}
         />
       </div>
       <BottomSheet
-        className="backdrop-blur-bottomSheet"
+        className=""
         onDismiss={() => {
           editCategoryStore.setDisplayCategoriesSheet(false);
         }}

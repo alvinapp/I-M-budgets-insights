@@ -14,7 +14,7 @@ const BalanceView = ({ amount, transactedAt }: BalanceViewProps) => {
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-col">
-        <div className="text-2xl text-skin-base font-bold font-custom">
+        <div className="text-2xl text-skin-base font-semibold font-custom">
           {transactionAmount}
           <sup className="align-super -ml-1 text-xxxxxs">
             {currency.currencySymbol}

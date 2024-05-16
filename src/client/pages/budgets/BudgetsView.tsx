@@ -47,6 +47,7 @@ import TabFilter from "../components/TabFilter";
 import { divide } from "lodash";
 import ViewDebt from "../components/ViewDebt";
 import LoanDetails from "../components/LoanDetails";
+import useTransactionStore from "client/store/transactionStore";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
@@ -268,6 +269,7 @@ const BudgetsView = () => {
   const totalDebt = debt.reduce((accumulator, item) => {
     return (accumulator += item.amount);
   }, 0);
+  const editCategoryStore = useTransactionStore((state: any) => state);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -510,7 +512,7 @@ const BudgetsView = () => {
                       primaryColor="text-skin-base"
                       fadedColor="text-skin-subtitle"
                       onClick={() => {
-                        openViewBudgetSheet(true);
+                        editCategoryStore.setViewBudgetSheet(true);
                         setBudgetDetailsData({
                           spentAmount: essential?.expenses,
                           totalBudgetAmount: essential?.amount,
@@ -583,7 +585,7 @@ const BudgetsView = () => {
                       primaryColor="text-skin-base"
                       fadedColor="text-skin-subtitle"
                       onClick={() => {
-                        openViewBudgetSheet(true);
+                        editCategoryStore.setViewBudgetSheet(true);
                         setBudgetDetailsData({
                           spentAmount: want?.expenses,
                           totalBudgetAmount: want?.amount,
@@ -625,9 +627,9 @@ const BudgetsView = () => {
         </div>
         <BottomSheet
           onDismiss={() => {
-            openViewBudgetSheet(false);
+            editCategoryStore.setViewBudgetSheet(false);
           }}
-          open={viewBudgetSheet}
+          open={editCategoryStore.viewBudgetSheet}
           style={{
             borderRadius: 24,
           }}
@@ -642,7 +644,7 @@ const BudgetsView = () => {
               startDate={budgetDetailsData?.startDate}
               endDate={budgetDetailsData?.endDate}
               onClick={() => {
-                openViewBudgetSheet(false);
+                editCategoryStore.setViewBudgetSheet(false);
               }}
             />
           }

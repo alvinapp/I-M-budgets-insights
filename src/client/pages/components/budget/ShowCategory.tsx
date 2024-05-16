@@ -51,6 +51,7 @@ const ShowCategories = () => {
                           displayCategories.setCategory(result?.category);
                           displayCategories.setDisplayCategoriesSheet(false);
                           displayCategories.setOpenEditCategorySheet(false);
+                          displayCategories.setViewBudgetSheet(false);
                           showCustomToast({ message: "Category updated" });
                         }
                       });
