@@ -15,6 +15,8 @@ const InsightsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
   endDate,
 }) => {
   const now = new Date();
+  const currentDay = now.getDate();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const endOfCurrentMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
@@ -34,8 +36,10 @@ const InsightsTooltipProgressBar: React.FC<TooltipProgressBarProps> = ({
     width: `${progressPercent}%`,
   };
 
+  const progress = (currentDay / daysInMonth) * 100;
+
   const tooltipStyle = {
-    left: `calc(${progressPercent}% - 2em)`, // Use progressPercent for tooltip position
+    left: `calc(${progress}% - 2em)`, // Use progressPercent for tooltip position
     transform: "scale(0.8)",
     background: "black",
     height: "30px",

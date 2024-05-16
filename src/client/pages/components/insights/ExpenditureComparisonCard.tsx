@@ -33,7 +33,7 @@ export const ExpenditureComparisonCard = ({
           {percentage == 0 ? null : <div className="flex flex-col">
             <div
               className={`flex justify-center items-center rounded-full h-4.5 w-4.5  mr-2.5 ${percentage < 0
-                ? "border bg-[#ef556e] border-[#ee3e59]"
+                ? "border bg-[#fcd9de] border-[#ee3e59]"
                 : "border bg-[#ddebd5] border-[#5f9d30]"
                 }`}
             >

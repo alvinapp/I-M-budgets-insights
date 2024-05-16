@@ -125,6 +125,7 @@ const EditCategory = () => {
                 showCustomToast({ message: "Please assign a category" });
               } else {
                 categoryUpdate();
+                editCategoryStore.setReloadCategories(!editCategoryStore.reloadcategories);
               }
             }}
           />
@@ -144,6 +145,7 @@ const EditCategory = () => {
         className=""
         onDismiss={() => {
           editCategoryStore.setDisplayCategoriesSheet(false);
+          editCategoryStore.setReloadCategories(!editCategoryStore.reloadcategories);
         }}
         open={editCategoryStore.displayCategoriesSheet}
         style={{

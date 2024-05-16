@@ -15,6 +15,7 @@ const CategoryCard = ({
   onClick,
   activeCategory,
 }: CategoryCardProp) => {
+  const isGoingOut = category?.name === "Going out";
   const CategoryEmoji = ({ category }: { category: Category }) => {
     if (!category)
       return (
@@ -28,7 +29,10 @@ const CategoryCard = ({
 
     return (
       <div className="rounded-full w-10 h-10 flex justify-center bg-icon_bg/20 items-center">
-        <Emoji symbol={category.emoji} label={category.name} />
+        <Emoji
+          symbol={isGoingOut ? "🤩" : category.emoji}
+          label={isGoingOut ? "Entertainment" : category.name}
+        />
       </div>
     );
   };

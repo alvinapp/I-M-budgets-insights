@@ -64,6 +64,7 @@ const BudgetsView = () => {
   const savingsBudgetAmount = savingsMacro?.amount;
   const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
   const insightsStoreState = useInsightsStore((state) => state);
+  const transactionState = useTransactionStore((state: any) => state);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -140,7 +141,7 @@ const BudgetsView = () => {
       setIsLoading(false);
     };
     fetchDataAndUpdateMacroGoals();
-  }, [config.token, startDate, endDate]);
+  }, [config.token, startDate, endDate, transactionState.reloadcategories]);
 
   useEffect(() => {
     enrichTransactions({
