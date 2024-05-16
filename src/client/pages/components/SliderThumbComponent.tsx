@@ -17,7 +17,6 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
   backgroundColor,
   props,
 }) => {
-  console.log("background color", backgroundColor);
   return (
     <div
       {...props}
@@ -44,11 +43,25 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
           alignItems: "center",
           margin: "-3px",
         }}
-      >{isLocked ?
-        <GoLock color="white" height={15} width={5} />
-        : <>
-          <FiMoreVertical color="white" height={15} width={5} style={{ marginRight: "-8px" }} />
-          <FiMoreVertical color="white" height={15} width={5} style={{ marginLeft: "1px" }} /></>}
+      >
+        {isLocked ? (
+          <GoLock color="white" height={15} width={5} />
+        ) : (
+          <>
+            <FiMoreVertical
+              color="white"
+              height={15}
+              width={5}
+              style={{ marginRight: "-8px" }}
+            />
+            <FiMoreVertical
+              color="white"
+              height={15}
+              width={5}
+              style={{ marginLeft: "1px" }}
+            />
+          </>
+        )}
       </div>
       <div
         style={{
@@ -59,37 +72,39 @@ const SliderThumbComponent: React.FC<SliderThumbComponentProps> = ({
           width: "fit-content",
         }}
       >
-        {showPercentage ? <div
-          style={{
-            background: "#101010",
-            color: "white",
-            padding: "4px",
-            borderRadius: "50%",
-            fontSize: "8px",
-            fontFamily: "Poppins",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "30px",
-            width: "30px",
-            position: "relative",
-          }}
-        >
-          {valueNow}%
+        {showPercentage ? (
           <div
             style={{
-              position: "absolute",
-              bottom: "-4px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: 0,
-              height: 0,
-              borderTop: "6px solid #101010",
-              borderRight: "6px solid transparent",
-              borderLeft: "6px solid transparent",
+              background: "#101010",
+              color: "white",
+              padding: "4px",
+              borderRadius: "50%",
+              fontSize: "8px",
+              fontFamily: "Poppins",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "30px",
+              width: "30px",
+              position: "relative",
             }}
-          />
-        </div> : null}
+          >
+            {valueNow}%
+            <div
+              style={{
+                position: "absolute",
+                bottom: "-4px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: 0,
+                height: 0,
+                borderTop: "6px solid #101010",
+                borderRight: "6px solid transparent",
+                borderLeft: "6px solid transparent",
+              }}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

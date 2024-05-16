@@ -136,7 +136,6 @@ const EditCategory = () => {
           bgColor="bg-[#f2f2f2]"
           titleColor="text-skin-base"
           click={() => {
-            console.log("Clicked");
             editCategoryStore.setOpenEditCategorySheet(false);
           }}
         />
