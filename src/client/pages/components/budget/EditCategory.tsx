@@ -79,6 +79,7 @@ const EditCategory = () => {
           label="Transaction category"
           categoryName={categoryData.category?.name}
           onClick={() => {
+            editCategoryStore.setCategory(categoryData?.category);
             editCategoryStore.setDisplayCategoriesSheet(true);
           }}
         />
