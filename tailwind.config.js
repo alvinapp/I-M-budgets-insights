@@ -126,6 +126,7 @@ module.exports = {
         tab_text: "0.00625em",
       },
       backgroundImage: {
+        successBg: "url('client/assets/images/budgets-insights/successbg.svg')",
         addIncomeBg:
           "url('client/assets/images/budgets-insights/addincomebg.svg')",
         splitBudgetBg:

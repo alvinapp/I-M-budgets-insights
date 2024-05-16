@@ -251,6 +251,7 @@ const BudgetsView = () => {
     startDate: formattedStartDate,
     endDate: formattedEndDate,
     microGoal: 0,
+    progressColor: "",
   };
   const debtDetails = {
     id: 0,
@@ -525,6 +526,7 @@ const BudgetsView = () => {
                           startDate: formattedStartDate,
                           endDate: formattedEndDate,
                           microGoal: essential?.id,
+                          progressColor: "#00AB9E",
                         });
                       }}
                     />
@@ -598,6 +600,7 @@ const BudgetsView = () => {
                           startDate: formattedStartDate,
                           endDate: formattedEndDate,
                           microGoal: want?.id,
+                          progressColor: "#345DAF",
                         });
                       }}
                     />
@@ -644,6 +647,7 @@ const BudgetsView = () => {
               microGoalId={budgetDetailsData.microGoal}
               startDate={budgetDetailsData?.startDate}
               endDate={budgetDetailsData?.endDate}
+              progreesBgColor={budgetDetailsData?.progressColor}
               onClick={() => {
                 editCategoryStore.setViewBudgetSheet(false);
               }}
