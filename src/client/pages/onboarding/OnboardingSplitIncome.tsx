@@ -325,10 +325,10 @@ const OnboardingSplitIncome = () => {
           Whoop! Here is your recommended budget split.
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
-          <div className="text-xs font-primary text-skin-base tracking-wide mt-6 font-medium mx-3.5">
-            We recommend keeping 50% of your take-home income for Essential
-            expenses, then 30% for Wants, then about 20% toward Savings or Debt
-            repayments.
+          <div className="text-sm font-primary text-skin-base tracking-wide mt-4 font-medium mx-3.5">
+            Here's a breakdown of how much you can spend on Essentials and Wants
+            while staying on track to becoming debt free. Feel free to edit
+            Essentials and Wants according to your lifestyle preference.
             <br></br>
           </div>
         </div>

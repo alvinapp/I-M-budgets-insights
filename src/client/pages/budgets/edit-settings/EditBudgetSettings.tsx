@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../../components/NavBar";
 import NavBarTitle from "../../components/NavBarTitle";
 import { useNavigate } from "react-router-dom";
-import { FiBriefcase, FiInfo, FiPieChart } from "react-icons/fi";
+import { FiBriefcase, FiCloud, FiInfo, FiPieChart } from "react-icons/fi";
 import { BudgetDisplay } from "../../components/budget/BudgetDisplay";
 import { useQuery } from "react-query";
 import { getCategories } from "client/api/categories";
@@ -210,6 +210,7 @@ const EditBudgetSettings = () => {
   const totalDebt = allTimeDebt.reduce((accumulator, item) => {
     return (accumulator += item.amount);
   }, 0);
+  const user = useUserStore((state: any) => state);
   return (
     <div className="h-screen w-screen">
       <NavBar
@@ -233,12 +234,21 @@ const EditBudgetSettings = () => {
         }
       />
       <div className="flex flex-col mx-3.5">
-        <div className="mb-3 mt-7">
+        <div className="mb-3 mt-5">
+          <GeneralInfoCard
+            iconBg="bg-skin-iconPrimary"
+            icon={<FiCloud />}
+            title="Linked accounts"
+            subtitle="Track your spending easily across linked accounts and stay on top of your budget with insights."
+            caption={"2"}
+          />
+        </div>
+        <div className="mb-3">
           <GeneralInfoCard
             iconBg="bg-skin-successWithOpacity"
             icon={<FiBriefcase />}
             title="Monthly net income"
-            subtitle="When set, this will be used as the base calculation for your overall budget split."
+            subtitle="This is used as the basis for calculating your overall budget split."
             caption={`${
               budgetSettingsStore.monthlyIncome !== 0
                 ? budgetSettingsStore.monthlyIncome.toString()
@@ -252,7 +262,7 @@ const EditBudgetSettings = () => {
           iconBg="bg-skin-secondary3WithOpacity"
           icon={<FiPieChart />}
           title="Budget split"
-          subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
+          subtitle="We recommend reserving 70% of your income after your monthly debt repayment commitments to Essentials then 30% for Wants. Tap here to edit."
           caption={`${categoriesStore.macros?.budget_split ?? ""}`}
           onClick={() => {
             if (categoriesStore.macros?.budget_split) {

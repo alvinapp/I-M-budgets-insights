@@ -65,8 +65,8 @@ const OnboardingAddIncome = () => {
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
           <div className="text-sm font-primary text-skin-base tracking-wide mt-6 font-medium mx-3.5">
-            We need to use this as a base calculation for your overall monthly
-            budget. You can always modify later.
+            We use your monthly net income as the basis for your overall monthly
+            budget. You can always edit this later from Settings.
             <br></br>
           </div>
         </div>

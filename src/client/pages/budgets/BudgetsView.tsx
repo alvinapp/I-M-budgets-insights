@@ -480,7 +480,7 @@ const BudgetsView = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-5">
+        <div className="flex flex-col rounded-lg shadow-card pt-6 pb-4 px-3.5 mt-3">
           <CategoryCardHeader
             title="Essentials"
             amount={checkNAN(

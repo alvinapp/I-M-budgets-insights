@@ -40,12 +40,12 @@ const OnboardingSelectAccount = () => {
               <FiCloud color="#101010" />
             </div>
             <div className="font-custom font-bold text-2xl mt-1.5 mx-3.5 text-skin-base">
-              Let's add your account
+              Let's add your first account
             </div>
             <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
               <div className="text-sm font-primary text-skin-base tracking-wide mt-6 font-medium mx-3.5">
-                Connect your account effortlessly to streamline your financial
-                management and gain spending insights
+                Sync your M-Pesa transactions to your I&M On The Go app or track
+                I&M card spending only to start
                 <br></br>
               </div>
             </div>

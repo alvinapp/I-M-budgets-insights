@@ -41,12 +41,12 @@ const OnboardingStart = () => {
         setMonoPubKey(data.key);
         configuration.monoPubKey = data.key;
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
   useEffect(() => {
     if (!configurations.monoPubKey) {
       fetchMonoToken({ configuration: configurations, setMonoPubKey })
-        .then(() => { })
+        .then(() => {})
         .catch((error) => {
           console.error("Failed to fetch Mono public key:", error);
         });
@@ -141,14 +141,15 @@ const OnboardingStart = () => {
                 </div>
               </div>
               <div className="mt-6">
-                <div className="flex flex-row justify-center font-custom text-xl text-start font-bold tracking-title text-skin-base mr-10">
-                  Start budgeting on I&M On the Go by adding your account
+                <div className="flex flex-row justify-center font-custom text-xl text-start font-bold tracking-title text-skin-base mr-3.5">
+                  Start tracking your card and M-Pesa spending here on the I&M
+                  On The Go app
                 </div>
                 <div className="flex flex-row justify-center items center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-medium mr-8">
-                  Add your main account and Mpesa wallet to effortlessly balance
-                  your daily spending around your I&M savings and payment
-                  schedules using our powerful new budgeting and insights
-                  features.
+                  Add your main account and M-Pesa wallet to effortlessly
+                  balance your daily spending around your I&M loan repayment and
+                  savings schedules using On The Go's new spend tracking
+                  feature.
                 </div>
                 <div className="flex flex-row items-center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-medium mb-40">
                   In partnership with alvin
