@@ -126,23 +126,25 @@ const BudgetsView = () => {
   };
   useEffect(() => {
     const fetchDataAndUpdateMacroGoals = async () => {
-      setIsLoading(true);
-      await Promise.all([
-        fetchData(
-          "essentials-budgets",
-          fetchBudgetCategories,
-          config,
-          formattedStartDate,
-          formattedEndDate,
-          categoryStore.setCategoryBudgets
-        ),
-        fetchMacroGoalsData(),
-      ]);
-      setIsLoading(false);
+      if (!transactionState.displayCategoriesSheet) {
+        setIsLoading(true);
+        await Promise.all([
+          fetchData(
+            "essentials-budgets",
+            fetchBudgetCategories,
+            config,
+            formattedStartDate,
+            formattedEndDate,
+            categoryStore.setCategoryBudgets
+          ),
+          fetchMacroGoalsData(),
+        ]);
+        setIsLoading(false);
+      }
     };
-    fetchDataAndUpdateMacroGoals();
-  }, [config.token, startDate, endDate, transactionState.reloadcategories]);
 
+    fetchDataAndUpdateMacroGoals();
+  }, [config.token, startDate, endDate, transactionState.displayCategoriesSheet]);
   useEffect(() => {
     enrichTransactions({
       configuration: config,
