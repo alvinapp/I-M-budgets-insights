@@ -112,7 +112,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
         )}
         <div className="mx-3.5 mb-4">
           <SegmentedProgressBar
-            percentage={0}
+            percentage={progress}
             height={4}
             progressColorTop={"#CB96OF"}
             progressColorBottom={"#f2f2f2"}
