@@ -42,6 +42,7 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
   cover,
   onClick,
 }) => {
+  console.log("progress", progress);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
@@ -112,9 +113,9 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
         )}
         <div className="mx-3.5 mb-4">
           <SegmentedProgressBar
-            percentage={0}
+            percentage={progress}
             height={4}
-            progressColorTop={"#CB96OF"}
+            progressColorTop={"#CB960F"}
             progressColorBottom={"#f2f2f2"}
           />
         </div>

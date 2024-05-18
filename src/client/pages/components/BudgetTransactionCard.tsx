@@ -80,7 +80,7 @@ const BudgetTransactionCard = ({
         </div>
         <div className="flex flex-col justify-start mb-2">
           <div className="font-custom text-16 font-semibold text-skin-base text-end">
-            {/* <span>{checkIfDebitCredit(type)}</span> */}
+            <span>{checkIfDebitCredit(type)}</span>
             {Math.round(amount).toLocaleString("en-US")}
             <sup className="align-super -ml-1 text-xxxxxs">
               {currencyStore.currencySymbol}

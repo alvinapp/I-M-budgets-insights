@@ -35,7 +35,6 @@ import useInsightsStore from "client/store/insightsStore";
 import { format, set } from "date-fns";
 import bankIcon from "../../assets/images/budgets-insights/bank.svg";
 import InsightsSavingsChart from "./insightsChart/InsightsSavingsChart";
-import DebtChart from "./DebtChart/DebtChart";
 
 const InsightsView = () => {
   const location = useLocation();
@@ -248,8 +247,8 @@ const InsightsView = () => {
             />
           ) : (
             <AvailableBudgetContainer
-              amount={6715992 - savingsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0}
-              subtitle="Total debt"
+              amount={savingsTotal}
+              subtitle="Current total savings"
               currencySymbol={currencySymbol}
             />
           )}
@@ -270,7 +269,7 @@ const InsightsView = () => {
                 wantsArray={
                   insightsStoreState.insightsLoading ? [] : wantsArray
                 }
-                isLoading={isLoading}
+                isLoading={insightsStoreState.insightsLoading}
               />
               <div
                 className="space-x-1"
@@ -282,7 +281,7 @@ const InsightsView = () => {
                 }}
               >
                 <GraphLegend color="#00AB9E" label="Essentials spend" />
-                <GraphLegend color="#345DAF" label="Wants spend" />
+                <GraphLegend color="#9DB1C6" label="Wants spend" />
                 <GraphLegend color="#101010" label="Total spend" />
               </div>
             </div>
@@ -302,7 +301,7 @@ const InsightsView = () => {
                 savingsArray={
                   insightsStoreState.insightsLoading ? [] : savingsArray
                 }
-                isLoading={isLoading}
+                isLoading={insightsStoreState.insightsLoading}
               />
               <div
                 className="space-x-1"
@@ -313,19 +312,10 @@ const InsightsView = () => {
                   gap: "1.25rem",
                 }}
               >
-                <GraphLegend color="#97449e" label="Total debt" />
+                <GraphLegend color="#0099A6" label="Savings" />
               </div>
             </div>
           )}
-        </div>
-        <div className="shadow-card px-4 py-6 mb-10 rounded-lg mt-3">
-          <div className="text-base text-skin-base font-medium tracking-title font-custom">
-            debt analysis snapshot
-          </div>
-          <div className="font-primary text-skin-base text-sm tracking-listtile_subtitle mt-1">
-            🌈 A brighter financial future ahead! You've cut down your debt significantly. Keep going!
-          </div>
-          <DebtChart mortgage={3000000} autoLoan={1500000} creditCard={2215992} totalDebt={6715992} />
         </div>
         <div className="flex flex-row">
           <CashFlowPieChart
@@ -429,6 +419,7 @@ interface Transaction {
   total_amount: number;
   transacted_at: string;
   macro_name: string;
+  type: string;
 }
 
 interface DataPoint {
@@ -449,11 +440,12 @@ function convertTransactionsToDataSeries(
     if (!dataSeries[transaction.macro_name]) {
       dataSeries[transaction.macro_name] = [];
     }
-
-    dataSeries[transaction.macro_name].push({
-      x: transaction.transacted_at,
-      y: transaction.total_amount,
-    });
+    if (transaction.type === 'debit') {
+      dataSeries[transaction.macro_name].push({
+        x: transaction.transacted_at,
+        y: transaction.total_amount,
+      });
+    }
   });
 
   return dataSeries;

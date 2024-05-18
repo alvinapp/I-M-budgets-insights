@@ -140,7 +140,7 @@ const Cashflow = () => {
                 </div>
                 <div className="flex flex-row">
                   <div className="font-medium font-primary text-tiny tracking-wide mb-2 mr-1">
-                    - You've made an average of
+                    - You've earned an average of
                   </div>
                   <AmountDisplay
                     amount={checkNAN(
@@ -182,7 +182,7 @@ const Cashflow = () => {
                 </div>
                 <div className="flex flex-row">
                   <div className="font-medium font-primary text-tiny tracking-wide mb-2 mr-1">
-                    - You've made an average of
+                    - You've earned an average of
                   </div>
                   <AmountDisplay
                     amount={checkNAN(
