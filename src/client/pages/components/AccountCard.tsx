@@ -60,7 +60,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
       </div>
       <div
         className={`w-8 h-8 rounded-full flex items-center justify-center ${
-          isActive ? "bg-[#00beaf] text-white" : "border border-black"
+          isActive ? "bg-[#00beaf] text-skin-white" : "border border-skin-base"
         } mb-1`}
       >
         {isActive ? <IoCheckmarkSharp className="text-xl" /> : null}

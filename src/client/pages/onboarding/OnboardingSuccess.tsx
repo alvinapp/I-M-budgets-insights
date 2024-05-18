@@ -65,7 +65,7 @@ const BookingSuccess = () => {
         <div className="text-xs font-custom tracking-longtext text-skin-white text-center mt-4">
           This looks like a very balanced budget and a great roadmap for you to
           hit your financial goals. We'll notify you whenever you may be
-          overspending in category so you can stay on track.
+          overspending in a category so you can stay on track.
         </div>
       </div>
       <div className="fixed bottom-12 left-0 right-0 flex flex-col justify-end items-center mx-3.5">

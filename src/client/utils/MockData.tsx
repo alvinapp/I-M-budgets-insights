@@ -490,9 +490,9 @@ export const allTimeDebt = [
     id: 0,
     name: "Credit card",
     amount: 10000,
-    paid: 10000,
+    paid: 7000,
     debtBalance: 100000,
-    percentage: 100,
+    percentage: 70,
     icon: credit,
     cover: creditCover,
     loanDetails: {
