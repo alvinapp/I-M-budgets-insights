@@ -495,6 +495,7 @@ const BudgetsView = () => {
           <div className="mt-6 flex flex-col">
             {essentialBudgets && essentialBudgets.length > 0
               ? essentialBudgets?.map((essential: any, i: any) => {
+                console.log(essential);
                 return (
                   <CategoryViewCard
                     key={i}
