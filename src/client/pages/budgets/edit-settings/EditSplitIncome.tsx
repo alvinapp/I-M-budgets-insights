@@ -12,8 +12,9 @@ import { setIncome, completeOnboarding } from "client/api/users";
 import { GoalMacroType, setMacro } from "client/api/goals";
 import SliderThumbComponent from "../../components/SliderThumbComponent";
 import debounce from "lodash.debounce";
-import { reformatBudgetSplit } from "client/utils/Formatters";
+import { formatCurrency, reformatBudgetSplit } from "client/utils/Formatters";
 import useCategoriesStore from "client/store/categoriesStore";
+import DebtInfo from "client/pages/components/DebtInfo";
 
 const EditSplitIncome = () => {
   const navigate = useNavigate();
@@ -228,7 +229,7 @@ const EditSplitIncome = () => {
   };
   const [changeBudgetSplit, setChangeBudgetSplit] = useState(false);
   return (
-    <div className="h-screen w-screen relative no-scrollbar">
+    <div className="h-screen w-screen relative">
       <NavBar
         children={
           <div className="flex flex-row items-center justify-between pt-6 pb-2 pr-6">
@@ -247,107 +248,23 @@ const EditSplitIncome = () => {
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
           <div className="text-sm font-primary text-skin-base tracking-wide mt-6 font-regular mx-3.5">
-            The best practice for budgeting is 50% of your income for
-            Essentials, 30% for Wants, then 20% for Savings. However, you can
-            personalize your budget split below.
+            Here's a breakdown of how much you can spend on Essentials and Wants
+            while staying on track to becoming debt free. Feel free to edit
+            Essentials and Wants according to your lifestyle preference.
             <br></br>
           </div>
         </div>
         <div className="flex flex-col mt-12 mx-6">
           <div className="grid grid-cols-2 gap-4 w-full">
-            <div className="justify-self-start font-medium text-2xl text-skin-base">
-              Essentials
+            <div className="justify-self-start font-bold text-2xl text-skin-base">
+              Debt repayment
             </div>
-            <div className="justify-self-end font-semibold">
-              <div className="relative">
-                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
+            <div className="justify-self-end">
+              <div className="font-custom font-bold text-2xl text-skin-base">
+                {calculateIncomeAmount(savingsRatio)?.toLocaleString("en-us")}
+                <sup className="align-super -ml-1 text-xxxs">
                   {currency ?? ""}
-                </div>
-                <div className="font-custom font-medium text-2xl text-skin-base">
-                  {calculateIncomeAmount(essentialsRatio)?.toLocaleString(
-                    "en-us"
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="col-span-2">
-              <ReactSlider
-                value={essentialsRatio}
-                className="horizontal-slider"
-                marks={generateSliderValues()}
-                markClassName="example-mark"
-                min={0}
-                max={100}
-                thumbClassName="example-thumb"
-                trackClassName="example-track"
-                renderThumb={(props, state) => (
-                  <SliderThumbComponent
-                    valueNow={state.valueNow}
-                    props={props}
-                    showPercentage={showPercentage}
-                  />
-                )}
-                onBeforeChange={() => setShowPercentage(true)}
-                onAfterChange={() => setShowPercentage(false)}
-                onChange={(value) => {
-                  handleSliderChange(value, "essentials");
-                  setChangeBudgetSplit(true);
-                }}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4 w-full mt-16">
-            <div className="justify-self-start font-medium text-2xl text-skin-base">
-              Wants
-            </div>
-            <div className="justify-self-end font-medium text-2xl text-skin-base">
-              <div className="relative">
-                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
-                  {currency ?? ""}
-                </div>
-                <div className="font-custom font-medium text-2xl text-skin-base">
-                  {calculateIncomeAmount(wantsRatio)?.toLocaleString("en-us")}
-                </div>
-              </div>
-            </div>
-            <div className="col-span-2">
-              <ReactSlider
-                value={wantsRatio}
-                className="horizontal-slider"
-                marks={generateSliderValues()}
-                markClassName="example-mark"
-                min={0}
-                max={100}
-                thumbClassName="example-thumb"
-                trackClassName="example-track"
-                renderThumb={(props, state) => (
-                  <SliderThumbComponent
-                    valueNow={state.valueNow}
-                    props={props}
-                    showPercentage={showPercentage}
-                  />
-                )}
-                onBeforeChange={() => setShowPercentage(true)}
-                onAfterChange={() => setShowPercentage(false)}
-                onChange={(value) => {
-                  handleSliderChange(value, "wants");
-                  setChangeBudgetSplit(true);
-                }}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4 w-full mt-16 mb-32">
-            <div className="justify-self-start font-medium text-2xl text-skin-base">
-              Savings
-            </div>
-            <div className="justify-self-end font-medium text-2xl text-skin-base">
-              <div className="relative">
-                <div className="absolute -right-2.5 top-0 font-custom font-medium text-xs text-skin-base">
-                  {currency ?? ""}
-                </div>
-                <div className="font-custom font-medium text-2xl text-skin-base">
-                  {calculateIncomeAmount(savingsRatio)?.toLocaleString("en-us")}
-                </div>
+                </sup>
               </div>
             </div>
             <div className="col-span-2">
@@ -365,6 +282,8 @@ const EditSplitIncome = () => {
                     valueNow={state.valueNow}
                     props={props}
                     showPercentage={showPercentage}
+                    backgroundColor="#CB960F"
+                    isLocked={true}
                   />
                 )}
                 onBeforeChange={() => setShowPercentage(true)}
@@ -373,41 +292,164 @@ const EditSplitIncome = () => {
                   handleSliderChange(value, "savings");
                   setChangeBudgetSplit(true);
                 }}
+                disabled={true}
               />
+            </div>
+            <div
+              className="justify-self-start text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
+              0
+            </div>
+            <div
+              className="justify-self-end text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
+              {formatCurrency(monthlyIncome)}
+            </div>
+          </div>
+          <div className="mt-4">
+            <DebtInfo
+              loanValue={calculateIncomeAmount(savingsRatio)}
+              currency={currency}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4 w-full mt-6">
+            <div className="justify-self-start font-bold text-2xl text-skin-base">
+              Essentials
+            </div>
+            <div className="justify-self-end font-bold">
+              <div className="font-custom text-2xl text-skin-base">
+                {calculateIncomeAmount(essentialsRatio)?.toLocaleString(
+                  "en-us"
+                )}
+                <sup className="align-super -ml-1 text-xxxs">
+                  {currency ?? ""}
+                </sup>
+              </div>
+            </div>
+            <div className="col-span-2">
+              <ReactSlider
+                value={essentialsRatio}
+                className="horizontal-slider"
+                marks={generateSliderValues()}
+                markClassName="example-mark"
+                min={0}
+                max={100}
+                thumbClassName="example-thumb"
+                trackClassName="essential-track"
+                renderThumb={(props, state) => (
+                  <SliderThumbComponent
+                    valueNow={state.valueNow}
+                    props={props}
+                    showPercentage={showPercentage}
+                    backgroundColor="#00AB9E"
+                  />
+                )}
+                onBeforeChange={() => setShowPercentage(true)}
+                onAfterChange={() => setShowPercentage(false)}
+                onChange={(value) => {
+                  handleSliderChange(value, "essentials");
+                  setChangeBudgetSplit(true);
+                }}
+              />
+            </div>
+            <div
+              className="justify-self-start text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
+              0
+            </div>
+            <div
+              className="justify-self-end text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
+              {formatCurrency(monthlyIncome)}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 w-full mt-6 mb-32">
+            <div className="justify-self-start font-bold text-2xl text-skin-base">
+              Wants
+            </div>
+            <div className="justify-self-end font-bold">
+              <div className="font-custom text-2xl text-skin-base">
+                {calculateIncomeAmount(wantsRatio)?.toLocaleString("en-us")}
+                <sup className="align-super -ml-1 text-xxxs">
+                  {currency ?? ""}
+                </sup>
+              </div>
+            </div>
+            <div className="col-span-2">
+              <ReactSlider
+                value={wantsRatio}
+                className="horizontal-slider"
+                marks={generateSliderValues()}
+                markClassName="example-mark"
+                min={0}
+                max={100}
+                thumbClassName="example-thumb"
+                trackClassName="wants-track"
+                renderThumb={(props, state) => (
+                  <SliderThumbComponent
+                    valueNow={state.valueNow}
+                    props={props}
+                    showPercentage={showPercentage}
+                    backgroundColor="#345DAF"
+                  />
+                )}
+                onBeforeChange={() => setShowPercentage(true)}
+                onAfterChange={() => setShowPercentage(false)}
+                onChange={(value) => {
+                  handleSliderChange(value, "wants");
+                  setChangeBudgetSplit(true);
+                }}
+              />
+            </div>
+            <div
+              className="justify-self-start text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
+              0
+            </div>
+            <div
+              className="justify-self-end text-xs text-skin-subtitle font-semibold"
+              style={{ marginTop: "-12%" }}
+            >
+              {formatCurrency(monthlyIncome)}
             </div>
           </div>
         </div>
-      </div>
-      <div className="fixed bottom-5 left-0 right-0 mx-3.5 text-sm z-10">
-        {changeBudgetSplit ? (
-          <MainButton
-            title="Save"
-            isDisabled={false}
-            // loading={}
-            click={() => {
-              budgetSettingsStore.setIncomeSplit({
-                essentials: essentialsRatio,
-                wants: wantsRatio,
-                savings: savingsRatio,
-              });
-              postAllMacros();
-            }}
-          />
-        ) : (
-          <MainButton
-            title="Save"
-            isDisabled={true}
-            // loading={}
-            click={() => {
-              budgetSettingsStore.setIncomeSplit({
-                essentials: essentialsRatio,
-                wants: wantsRatio,
-                savings: savingsRatio,
-              });
-              postAllMacros();
-            }}
-          />
-        )}
+        <div className="fixed bottom-5 left-0 right-0 mx-3.5 text-sm z-10">
+          {changeBudgetSplit ? (
+            <MainButton
+              title="Save"
+              isDisabled={false}
+              // loading={}
+              click={() => {
+                budgetSettingsStore.setIncomeSplit({
+                  essentials: essentialsRatio,
+                  wants: wantsRatio,
+                  savings: savingsRatio,
+                });
+                postAllMacros();
+              }}
+            />
+          ) : (
+            <MainButton
+              title="Save"
+              isDisabled={true}
+              // loading={}
+              click={() => {
+                budgetSettingsStore.setIncomeSplit({
+                  essentials: essentialsRatio,
+                  wants: wantsRatio,
+                  savings: savingsRatio,
+                });
+                postAllMacros();
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

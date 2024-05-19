@@ -326,9 +326,9 @@ const OnboardingSplitIncome = () => {
         </div>
         <div className="bg-addIncomeBg bg-cover bg-no-repeat h-36 bg-right">
           <div className="text-sm font-primary text-skin-base tracking-wide mt-4 font-medium mx-3.5">
-            Here's a breakdown of how much you can spend on Essentials and Wants
-            while staying on track to becoming debt free. Feel free to edit
-            Essentials and Wants according to your lifestyle preference.
+            The best practice for budgeting is 50% of your income for
+            Essentials, 30% for Wants, then 20% for Savings. However, you can
+            personalize your budget split below.
             <br></br>
           </div>
         </div>
