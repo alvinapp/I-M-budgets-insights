@@ -30,7 +30,11 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
       label: "Essentials",
     },
     { percentage: (wants / total) * 100, color: "#6786c3", label: "Wants" },
-    { percentage: (savings / total) * 100, color: "#CB960F", label: "Debt repayment" },
+    {
+      percentage: (savings / total) * 100,
+      color: "#CB960F",
+      label: "Debt repayment",
+    },
   ];
 
   let cumulativePercentage = 0;
@@ -54,13 +58,13 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
             (normalizedRadius + 15) *
             Math.cos(
               (2 * Math.PI * (cumulativePercentage + item.percentage / 2.5)) /
-              100
+                100
             );
           const controlPointY =
             (normalizedRadius + 15) *
             Math.sin(
               (2 * Math.PI * (cumulativePercentage + item.percentage / 2.5)) /
-              100
+                100
             );
 
           const labelX =
@@ -106,13 +110,13 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
                 strokeWidth={strokeWidth}
                 strokeLinecap="round"
               />
-              <path
+              {/* <path
                 d={`M ${middleX} ${middleY} Q ${controlPointX} ${controlPointY}, ${labelX} ${labelY}`}
                 stroke="#ffffff"
                 strokeOpacity={0.5}
-                strokeWidth="2"
+                strokeWidth=""
                 fill="none"
-              />
+              /> */}
               <foreignObject
                 x={labelX - 30}
                 y={labelY - 20}
@@ -160,7 +164,10 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
             }}
           >
             <img src={macroBudget} alt="icon" className="w-6 h-6" />
-            <div style={{ color: "white" }} className="font-primary text-sm tracking-wide mt-2 text-white font-medium">
+            <div
+              style={{ color: "white" }}
+              className="font-primary text-sm tracking-wide mt-2 text-white font-medium"
+            >
               <span>Overall budget split</span>
             </div>
           </div>

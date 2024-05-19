@@ -35,7 +35,7 @@ const BookingSuccess = () => {
     timer > 0 && setTimeout(timeOutCallback, 5000);
     if (timer === 0) {
       setLoading(false);
-      navigate("/budget-settings");
+      // navigate("/budget-settings");
     }
   }, [timer, timeOutCallback]);
   const chartDimensions = 230;
