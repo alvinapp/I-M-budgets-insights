@@ -114,8 +114,8 @@ const EditSplitIncome = () => {
       type === "essentials"
         ? essentialsRatio
         : type === "wants"
-          ? wantsRatio
-          : savingsRatio;
+        ? wantsRatio
+        : savingsRatio;
     const change = newValue - oldValue;
 
     if (newValue === totalRatio) {

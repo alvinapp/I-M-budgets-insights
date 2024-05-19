@@ -241,6 +241,9 @@ const EditBudgetSettings = () => {
             title="Linked accounts"
             subtitle="Track your spending easily across linked accounts and stay on top of your budget with insights."
             caption={"2"}
+            onClick={() => {
+              navigate("/linked-accounts");
+            }}
           />
         </div>
         <div className="mb-3">

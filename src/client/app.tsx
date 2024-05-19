@@ -10,6 +10,7 @@ import { BudgetSettings } from "./pages/budgets/BudgetSettings";
 import ViewInfo from "./pages/budgets/ViewInfo";
 import { EmptyBudgetSettings } from "./pages/budgets/edit-settings/EmptyBudgetSettings";
 import CustomLoader from "./pages/components/Loader/CustomLoader";
+import ViewLinkedAccounts from "./pages/budgets/ViewLinkedAccounts";
 
 declare var AppConfig: AppConfig;
 
@@ -85,6 +86,7 @@ const App = () => {
               <Route path="/edit-split-income" element={<EditSplitIncome />} />
               <Route path="/empty-budgets" element={<EmptyBudgetSettings />} />
               <Route path="/cashflow" element={<CashFlow />} />
+              <Route path="/linked-accounts" element={<ViewLinkedAccounts />} />
             </Routes>
           </Suspense>
           <ToastContainer />
