@@ -218,6 +218,12 @@ export const BudgetSettings = () => {
   const totalDebt = allTimeDebt.reduce((accumulator, item) => {
     return (accumulator += item.amount);
   }, 0);
+  const user = useUserStore((state: any) => state);
+  const linkedAccounts = user.user.external_linked_accounts.find(
+    (element: any) => element?.name === "M-Pesa"
+  );
+  const finalLinkedAccounts = [linkedAccounts];
+  const numberOfLinkedAccounts = finalLinkedAccounts.length ?? 0;
   useEffect(() => {
     if (bottomSheetStore?.successBottomSheet) {
       document
@@ -244,7 +250,11 @@ export const BudgetSettings = () => {
             icon={<FiCloud />}
             title="Linked accounts"
             subtitle="Track your spending easily across linked accounts and stay on top of your budget with insights."
-            caption={"2"}
+            caption={`${
+              typeof numberOfLinkedAccounts === "undefined"
+                ? ""
+                : checkNAN(numberOfLinkedAccounts)
+            }`}
             onClick={() => {
               navigate("/linked-accounts");
             }}

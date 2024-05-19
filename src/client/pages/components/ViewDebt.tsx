@@ -42,7 +42,6 @@ const ViewDebt: React.FC<ViewDebtProps> = ({
   cover,
   onClick,
 }) => {
-  console.log("progress", progress);
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
