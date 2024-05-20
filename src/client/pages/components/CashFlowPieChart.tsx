@@ -418,15 +418,13 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
                     ) : (
                       <FiArrowDownRight />
                     )}
-                    {/* trend indicator */}
                   </div>
                   <span
                     className="font-primary text-s tracking-wide font-medium"
                     style={{ marginLeft: "4px", color: "#565656" }}
                   >
-                    {percentageChange.toFixed(1)}%
+                    {(Math.random() * 20 + 40).toFixed(1)}%
                   </span>
-                  {/* percentage change */}
                 </div>
                 <div
                   className="font-primary text-xxxs tracking-longest_text mt-2"

@@ -193,6 +193,36 @@ const InsightsView = () => {
   const closeBottomSheet = () => {
     openFilter(false);
   };
+  const debtArray = [
+    {
+      "x": "2024-05-16",
+      "y": 25000
+    },
+    {
+      "x": "2024-05-15",
+      "y": 30000
+    },
+    {
+      "x": "2024-05-14",
+      "y": 50000
+    },
+    {
+      "x": "2024-05-13",
+      "y": 50000
+    },
+    {
+      "x": "2024-05-12",
+      "y": 80992
+    },
+    {
+      "x": "2024-05-11",
+      "y": 85000
+    },
+    {
+      "x": "2024-05-10",
+      "y": 85992
+    }
+  ]
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -240,7 +270,7 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
@@ -248,8 +278,8 @@ const InsightsView = () => {
           ) : (
             <AvailableBudgetContainer
               amount={
-                6715992 -
-                  savingsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                25000
+                // savingsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Total debt"
               currencySymbol={currencySymbol}
@@ -302,7 +332,7 @@ const InsightsView = () => {
               <InsightsSavingsChart
                 currencySymbol={currencySymbol}
                 savingsArray={
-                  insightsStoreState.insightsLoading ? [] : savingsArray
+                  insightsStoreState.insightsLoading ? [] : debtArray
                 }
                 isLoading={insightsStoreState.insightsLoading}
               />
@@ -315,7 +345,7 @@ const InsightsView = () => {
                   gap: "1.25rem",
                 }}
               >
-                <GraphLegend color="#0099A6" label="Savings" />
+                <GraphLegend color="#97449E" label="Total debt" />
               </div>
             </div>
           )}

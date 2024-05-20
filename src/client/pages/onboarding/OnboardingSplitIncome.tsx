@@ -33,13 +33,13 @@ const OnboardingSplitIncome = () => {
   );
   const split = reformatBudgetSplit(categoriesStore.macros?.budget_split ?? "");
   const [essentialsRatio, setEssentialsRatio] = useState(
-    split ? parseInt(split[0]) : incomeSplit.essentials
+    split ? parseInt(split[0]) : 30
   );
   const [wantsRatio, setWantsRatio] = useState(
-    split ? parseInt(split[1]) : incomeSplit.wants
+    split ? parseInt(split[1]) : 25
   );
   const [savingsRatio, setSavingsRatio] = useState(
-    split ? parseInt(split[2]) : incomeSplit.savings
+    split ? parseInt(split[2]) : 45
   );
   const [showPercentage, setShowPercentage] = useState(false);
   const [debouncedRatio, setDebouncedRatio] = useState({

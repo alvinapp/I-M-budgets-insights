@@ -216,7 +216,7 @@ export const OthersSpend = ({
       return;
     }
 
-    let message = "Calculating your budget spending against your peers, please wait...";
+    let message = "Calculating your spending trends compared to otherslike you, please wait...";
     if (percentageDifference !== null) {
       if (Math.abs(percentageDifference) <= 15) {
         message = "🎉 Nice! You're spending on par with others like you per category.";
@@ -240,7 +240,7 @@ export const OthersSpend = ({
       <div className="flex flex-row">
         <div className="font-primary text-skin-base text-sm tracking-listtile_subtitle">
           {isLoading
-            ? "Calculating your budget spending against your peers, please wait..."
+            ? "Calculating your spending trends compared to otherslike you, please wait..."
             : spendingMessage || "Ready to view spending insights!"}
         </div>
       </div>

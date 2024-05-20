@@ -83,15 +83,13 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
       axisTicks: {
         show: false,
       },
-      tooltip: {
-        enabled: false
-      }
     },
     yaxis: {
       labels: {
         formatter: (value) => `${formatNumber(value)} `,
         offsetX: -5,
       },
+      min: 0,
     },
     legend: {
       show: false,
@@ -110,7 +108,7 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
 
   const [series, setSeries] = useState([
     {
-      name: "Total debt",
+      name: "Savings spend",
       type: "line",
       data: savingsArray,
       color: "#97449E",
@@ -132,17 +130,10 @@ const InsightsSavingsChart: React.FC<InsightsSavingsChartProps> = ({
     const totalSpend = calculateTotalSpend(
       updatedsavingsArray,
     );
-
-    //TODO: create a new array by getting the difference between each value of the element in the original array from 6715992
-    const newSavingsArray = updatedsavingsArray.map((point) => ({
-      x: point.x,
-      y: 6715992 - point.y, // Subtract each value from 6715992
-    }));
-
     setSeries([
       {
         ...series[0],
-        data: newSavingsArray,
+        data: updatedsavingsArray,
       }
     ]);
   }, [savingsArray, dataArrayLength]);
@@ -241,11 +232,6 @@ function alignMonthDataArrays(
 
   // Determine the range of dates
   const allMonths = [...savings].map((dp) => dp.x);
-  if (allMonths.length === 1) {
-    const previousMonth = new Date(allMonths[0]);
-    previousMonth.setMonth(previousMonth.getMonth() - 1);
-    allMonths.unshift(previousMonth.toISOString().substring(0, 7));
-  }
   const earliestMonth = Math.min(
     ...allMonths.map((ym) => new Date(ym).getTime())
   );
@@ -294,10 +280,6 @@ function alignDayDataArrays(savings: DataPoint[],): [number, DataPoint[]] {
 
   // Parsing all dates directly
   const allDates = savings.map(dp => parseDateString(dp.x));
-
-  if (allDates.length === 1) {
-    allDates.unshift(new Date(allDates[0].getTime() - (24 * 60 * 60 * 1000)));
-  }
 
   const alignArray = (array: DataPoint[], dates: Date[], monthly: boolean): DataPoint[] => {
     const result: DataPoint[] = [];

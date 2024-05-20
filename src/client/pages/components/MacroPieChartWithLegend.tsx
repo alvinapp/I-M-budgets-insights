@@ -100,7 +100,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
             peerPercentageDifferences.wants.toFixed(2)
           )}
         />
-        <MacroPieChartLegend
+        {/* <MacroPieChartLegend
           color="#e5a711"
           text="Debt repayment"
           percentage={checkNAN(percentages.savings)}
@@ -108,7 +108,7 @@ const MacroPieChartWithLegend: React.FC<MacroPieChartWithLegendProps> = ({
           percentageChange={checkNAN(
             peerPercentageDifferences.savings.toFixed(2)
           )}
-        />
+        /> */}
         <MacroPieChartLegend
           color="#e7e7e7"
           text="Unallocated"
