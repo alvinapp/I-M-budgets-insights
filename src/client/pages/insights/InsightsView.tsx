@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NavBarTitle from "../components/NavBarTitle";
 import BackButton from "../components/BackButton";
 import NavBar from "../components/NavBar";
@@ -10,9 +10,8 @@ import { budgetSpendTabs, insightsToggleTabs } from "client/utils/MockData";
 import TabFilter from "../components/TabFilter";
 import { MySpend } from "../components/insights/MySpend";
 import { OthersSpend } from "../components/insights/OthersSpend";
-import SavingsBarGraph from "../components/SavingsBarGraph";
 import CashFlowPieChart from "../components/CashFlowPieChart";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { enrichTransactions, getCashFlow } from "client/api/transactions";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
@@ -32,13 +31,11 @@ import CashFlowFilterButton from "../components/insights/CashFlowFilterButton";
 import InsightsExpenditureChart from "./insightsChart/InsightsExpenditureChart";
 import GraphLegend from "../components/GraphLegend";
 import useInsightsStore from "client/store/insightsStore";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import bankIcon from "../../assets/images/budgets-insights/bank.svg";
 import InsightsSavingsChart from "./insightsChart/InsightsSavingsChart";
 
 const InsightsView = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const insightsStoreState = useInsightsStore((state) => state);
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
@@ -195,34 +192,34 @@ const InsightsView = () => {
   };
   const debtArray = [
     {
-      "x": "2024-05-16",
-      "y": 25000
+      x: "2024-05-16",
+      y: 25000,
     },
     {
-      "x": "2024-05-15",
-      "y": 30000
+      x: "2024-05-15",
+      y: 30000,
     },
     {
-      "x": "2024-05-14",
-      "y": 50000
+      x: "2024-05-14",
+      y: 50000,
     },
     {
-      "x": "2024-05-13",
-      "y": 50000
+      x: "2024-05-13",
+      y: 50000,
     },
     {
-      "x": "2024-05-12",
-      "y": 80992
+      x: "2024-05-12",
+      y: 80992,
     },
     {
-      "x": "2024-05-11",
-      "y": 85000
+      x: "2024-05-11",
+      y: 85000,
     },
     {
-      "x": "2024-05-10",
-      "y": 85992
-    }
-  ]
+      x: "2024-05-10",
+      y: 85992,
+    },
+  ];
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col mr-3.5">
@@ -270,7 +267,7 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
@@ -482,7 +479,7 @@ function convertTransactionsToDataSeries(
     if (!dataSeries[transaction.macro_name]) {
       dataSeries[transaction.macro_name] = [];
     }
-    if (transaction.type === 'debit') {
+    if (transaction.type === "debit") {
       dataSeries[transaction.macro_name].push({
         x: transaction.transacted_at,
         y: transaction.total_amount,

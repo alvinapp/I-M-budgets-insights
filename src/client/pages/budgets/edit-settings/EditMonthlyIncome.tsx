@@ -8,7 +8,7 @@ import NavBar from "../../components/NavBar";
 import ArrowBackButton from "../../components/ArrowBack";
 import MonthlyIncomeInput from "../../components/onboarding/MonthlyIncomeInput";
 import { IConfig, useConfigurationStore } from "client/store/configuration";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { postData } from "client/api/api";
 import useUserStore from "client/store/userStore";
 

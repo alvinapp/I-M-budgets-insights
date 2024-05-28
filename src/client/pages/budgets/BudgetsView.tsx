@@ -27,7 +27,6 @@ import { getMacros } from "client/api/macros";
 import settings from "client/assets/images/budgets-insights/Settings.svg";
 import { AddBudgetCard } from "../components/budget/AddBudgetCard";
 import useMacrosStore from "client/store/macroGoalStore";
-import useMicroGoalsStore from "client/store/microGoalStore";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import ViewBudget from "./ViewBudget";
 import {
@@ -38,15 +37,12 @@ import {
   subMonths,
 } from "date-fns";
 import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
-import ViewSavingsBudget from "./ViewSavingsBudget";
 import { enrichTransactions } from "client/api/transactions";
 import useInsightsStore from "client/store/insightsStore";
 import { DebtRepaymentCard } from "../components/budget/DebtRepaymentCard";
 import { allTimeDebt, debt, debtOverviewTabs } from "client/utils/MockData";
 import TabFilter from "../components/TabFilter";
-import { divide } from "lodash";
 import ViewDebt from "../components/ViewDebt";
-import LoanDetails from "../components/LoanDetails";
 import useTransactionStore from "client/store/transactionStore";
 const BudgetsView = () => {
   const navigate = useNavigate();
@@ -57,12 +53,10 @@ const BudgetsView = () => {
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
   const macroData = macroGoalStore.macroGoals ?? [];
   const essentialMacro = macroData[0];
-  const wantsMacro = macroData[1];
   const savingsMacro = macroData[2];
   const essentialBudgetAmount = essentialMacro?.amount;
   const wantsBudgetAmount = essentialMacro?.amount;
   const savingsBudgetAmount = savingsMacro?.amount;
-  const setMicroGoals = useMicroGoalsStore((state) => state.setMicroGoals);
   const insightsStoreState = useInsightsStore((state) => state);
   const transactionState = useTransactionStore((state: any) => state);
   const config = useConfigurationStore(
@@ -109,7 +103,7 @@ const BudgetsView = () => {
         formattedEndDate,
         categoryStore.setCategoryBudgets
       ),
-    { enabled: !!config.token }
+    { enabled: !!config.token, refetchOnWindowFocus: false }
   );
 
   const fetchMacroGoalsData = async () => {

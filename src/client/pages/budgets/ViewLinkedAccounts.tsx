@@ -1,5 +1,5 @@
 import useUserStore from "client/store/userStore";
-import React, { useState } from "react";
+import { useState } from "react";
 import NavBar from "../components/NavBar";
 import BackButton from "../components/BackButton";
 import NavBarTitle from "../components/NavBarTitle";

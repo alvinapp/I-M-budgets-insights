@@ -8,7 +8,6 @@ import NavBar from "../../components/NavBar";
 import ArrowBackButton from "../../components/ArrowBack";
 import ReactSlider from "react-slider";
 import { useConfigurationStore, IConfig } from "client/store/configuration";
-import { setIncome, completeOnboarding } from "client/api/users";
 import { GoalMacroType, setMacro } from "client/api/goals";
 import SliderThumbComponent from "../../components/SliderThumbComponent";
 import debounce from "lodash.debounce";
