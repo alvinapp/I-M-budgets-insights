@@ -1,4 +1,3 @@
-import React from "react";
 import settings from "client/assets/images/savings/settings.svg";
 type SettingsButtonProps = {
   onClick?: () => void;

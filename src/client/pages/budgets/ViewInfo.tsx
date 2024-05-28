@@ -1,43 +1,14 @@
 import { FiChevronsDown } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "react-query";
 
+import splashImage from "../../assets/images/money-in-one-app.svg";
 import CloseButton from "../components/CloseButton";
 import MainButton from "../components/MainButton";
 import NavBar from "../components/NavBar";
 import NavBarTitle from "../components/NavBarTitle";
-import splashImage from "../../assets/images/money-in-one-app.svg";
-import getToken from "client/api/token";
-import { useConfigurationStore, IConfig } from "client/store/configuration";
-import useUserStore from "client/store/userStore";
-import { showCustomToast } from "client/utils/Toast";
 
 const ViewInfo = () => {
   const navigate = useNavigate();
-
-  const configurations = useConfigurationStore(
-    (state: any) => state.configuration
-  ) as IConfig;
-  const setToken = useConfigurationStore((state: any) => state.setToken);
-  const setUser = useUserStore((state) => state.setUser);
-
-  // const authenticateUser = async () => {
-  //     const response = await getToken(configurations);
-  //     if (response?.user) {
-  //         if (response?.user.is_onboarded) {
-  //             navigate("/budgets-view");
-  //         }
-  //         setUser(response.user);
-  //         setToken(response.token);
-  //     } else {
-  //         navigate("/");
-  //         showCustomToast({ message: "The sdk key is invalid" });
-  //     }
-  // };
-
-  // const { data } = useQuery(["token"], () => authenticateUser, {
-  //     refetchOnWindowFocus: false,
-  // });
 
   return (
     <div className="h-screen w-screen relative no-scrollbar">

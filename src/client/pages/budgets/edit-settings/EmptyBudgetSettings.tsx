@@ -1,29 +1,23 @@
-import React, { useEffect, useState } from "react";
-import ArrowBackButton from "../../components/ArrowBack";
+import { fetchMacros, saveBudget } from "client/api/budget";
+import { getCategories } from "client/api/categories";
+import getToken from "client/api/token";
+import { Category } from "client/models/Categories";
+import BackButton from "client/pages/components/BackButton";
+import useCategoriesStore from "client/store/categoriesStore";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import useUserStore from "client/store/userStore";
+import { showCustomToast } from "client/utils/Toast";
+import { useState } from "react";
+import { FiBriefcase, FiPieChart } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import NavBarTitle from "../../components/NavBarTitle";
-import { useNavigate } from "react-router-dom";
-import CloseButton from "../../components/CloseButton";
-import { FiBriefcase, FiPieChart } from "react-icons/fi";
 import { BudgetDisplay } from "../../components/budget/BudgetDisplay";
-import { useQuery } from "react-query";
-import { getCategories } from "client/api/categories";
-import { IConfig, useConfigurationStore } from "client/store/configuration";
-import useCategoriesStore from "client/store/categoriesStore";
-import { Category } from "client/models/Categories";
 import { BudgetSettingCard } from "../../components/budget/BudgetSettingCard";
-import MainButton from "../../components/MainButton";
 import { GeneralInfoCard } from "../../components/budget/GeneralInfoCard";
-import useCurrencySettingsStore from "client/store/currencySettingsStore";
-import { fetchMacros, saveBudget } from "client/api/budget";
-import getToken from "client/api/token";
-import { showCustomToast } from "client/utils/Toast";
-import useUserStore from "client/store/userStore";
-import { error } from "console";
-import { config } from "process";
 import { SavingsSettingCard } from "../../components/budget/SavingsSettingCard";
-import { element } from "prop-types";
-import BackButton from "client/pages/components/BackButton";
 
 export const EmptyBudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -210,10 +204,11 @@ export const EmptyBudgetSettings = () => {
             icon={<FiBriefcase />}
             title="Monthly net income"
             subtitle="When set, this will be used as the base calculation for your overall budget split."
-            caption={`${typeof userStore.user.income === undefined
+            caption={`${
+              typeof userStore.user.income === undefined
                 ? ""
                 : userStore.user.income
-              }`}
+            }`}
             currencySymbol={currencySymbol}
             onClick={() => navigate("/edit-monthly-income")}
           />
@@ -223,10 +218,11 @@ export const EmptyBudgetSettings = () => {
           icon={<FiPieChart />}
           title="Budget split"
           subtitle="We recommend a budget split of 50/30/20 for Essentials, Wants and Savings. Tap to edit your preferred limits."
-          caption={`${typeof categoriesStore.macros?.budget_split
+          caption={`${
+            typeof categoriesStore.macros?.budget_split
               ? categoriesStore.macros?.budget_split
               : ""
-            }`}
+          }`}
           onClick={() => navigate("/onboard-split-income")}
         />
         <div className="mb-4 mt-5 flex flex-row items-center justify-center px-3.5">
@@ -240,8 +236,9 @@ export const EmptyBudgetSettings = () => {
           <BudgetDisplay
             title="Essentials"
             budgetAmount={essentialBudgetAmount}
-            percentageOfBudgetCaption={`${essentialGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              essentialGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={essentialBudgetAmount - allocatedEssentials}
@@ -320,7 +317,7 @@ export const EmptyBudgetSettings = () => {
                       setAllocatedEssentials(
                         allocatedEssentials > 0
                           ? allocatedEssentials -
-                          categoriesStore.incrementalAmount
+                              categoriesStore.incrementalAmount
                           : 0
                       );
                       updateEssentialsMap(i, {
@@ -349,8 +346,9 @@ export const EmptyBudgetSettings = () => {
           <BudgetDisplay
             title="Wants"
             budgetAmount={wantsBudgetAmount}
-            percentageOfBudgetCaption={`${wantsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              wantsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={wantsBudgetAmount - allocatedWants}
@@ -374,74 +372,72 @@ export const EmptyBudgetSettings = () => {
           <div className="flex flex-col">
             {wantsCategories && wantsCategories.length > 0
               ? wantsCategories.map((category: Category, i: any) => {
-                const isSelected = i === selectedWantsId;
-                const data = wantsMapState.get(`data${i}`);
-                return (
-                  <BudgetSettingCard
-                    key={i}
-                    maxValue={Number.MAX_SAFE_INTEGER}
-                    category={category?.name}
-                    emoji={category?.emoji}
-                    amount={data?.amount}
-                    unallocatedAmount={
-                      wantsBudgetAmount - allocatedWants
-                    }
-                    selected={isSelected}
-                    addValue={(e) =>
-                      updateWantsMap(i, {
-                        amount: e,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      })
-                    }
-                    increment={() => {
-                      setSelectedWantsId(i);
-                      setAllocatedWants(
-                        allocatedWants + categoriesStore.incrementalAmount
-                      );
-                      updateWantsMap(i, {
-                        amount:
-                          data?.amount + categoriesStore.incrementalAmount,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      });
-                    }}
-                    decrement={() => {
-                      setSelectedWantsId(i);
-                      setAllocatedWants(
-                        allocatedWants - categoriesStore.incrementalAmount
-                      );
-                      updateWantsMap(i, {
-                        amount:
-                          data?.amount - categoriesStore.incrementalAmount,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      });
-                    }}
-                  />
-                );
-              })
+                  const isSelected = i === selectedWantsId;
+                  const data = wantsMapState.get(`data${i}`);
+                  return (
+                    <BudgetSettingCard
+                      key={i}
+                      maxValue={Number.MAX_SAFE_INTEGER}
+                      category={category?.name}
+                      emoji={category?.emoji}
+                      amount={data?.amount}
+                      unallocatedAmount={wantsBudgetAmount - allocatedWants}
+                      selected={isSelected}
+                      addValue={(e) =>
+                        updateWantsMap(i, {
+                          amount: e,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        })
+                      }
+                      increment={() => {
+                        setSelectedWantsId(i);
+                        setAllocatedWants(
+                          allocatedWants + categoriesStore.incrementalAmount
+                        );
+                        updateWantsMap(i, {
+                          amount:
+                            data?.amount + categoriesStore.incrementalAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }}
+                      decrement={() => {
+                        setSelectedWantsId(i);
+                        setAllocatedWants(
+                          allocatedWants - categoriesStore.incrementalAmount
+                        );
+                        updateWantsMap(i, {
+                          amount:
+                            data?.amount - categoriesStore.incrementalAmount,
+                          contribution_amount: 0,
+                          percentage: 0,
+                          category_id: category?.id,
+                          name: category?.name,
+                          pseudo_name: category?.name + " " + category?.emoji,
+                          extern_id: category?.id,
+                          order: 0,
+                          contribution_at: "",
+                          is_contribute_customized: true,
+                        });
+                      }}
+                    />
+                  );
+                })
               : null}
           </div>
         </div>
@@ -449,8 +445,9 @@ export const EmptyBudgetSettings = () => {
           <BudgetDisplay
             title="Savings"
             budgetAmount={savingsBudgetAmount}
-            percentageOfBudgetCaption={`${savingsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              savingsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={savingsBudgetAmount - allocatedSavings}
@@ -469,37 +466,37 @@ export const EmptyBudgetSettings = () => {
           <div className="flex flex-col">
             {savingsCategories && savingsCategories.length > 0
               ? savingsCategories.map((category: any) => {
-                return (
-                  <SavingsSettingCard
-                    isAdded={addSavings}
-                    goal="Create a goal"
-                    emoji="🎯"
-                    amount={savingsBudgetAmount}
-                    onClick={() => {
-                      setAddSavings(true);
-                      setAllocatedSavings(savingsBudgetAmount);
-                      setSavingsList([
-                        {
-                          amount: savingsBudgetAmount,
-                          contribution_amount: 0,
-                          percentage: 0,
-                          category_id: category?.id,
-                          name: category?.name,
-                          pseudo_name: category?.name + " " + category?.emoji,
-                          extern_id: category?.id,
-                          order: 0,
-                          contribution_at: "",
-                          is_contribute_customized: true,
-                        },
-                      ]);
-                    }}
-                    edit={() => {
-                      setAddSavings(false);
-                      setAllocatedSavings(0);
-                    }}
-                  />
-                );
-              })
+                  return (
+                    <SavingsSettingCard
+                      isAdded={addSavings}
+                      goal="Create a goal"
+                      emoji="🎯"
+                      amount={savingsBudgetAmount}
+                      onClick={() => {
+                        setAddSavings(true);
+                        setAllocatedSavings(savingsBudgetAmount);
+                        setSavingsList([
+                          {
+                            amount: savingsBudgetAmount,
+                            contribution_amount: 0,
+                            percentage: 0,
+                            category_id: category?.id,
+                            name: category?.name,
+                            pseudo_name: category?.name + " " + category?.emoji,
+                            extern_id: category?.id,
+                            order: 0,
+                            contribution_at: "",
+                            is_contribute_customized: true,
+                          },
+                        ]);
+                      }}
+                      edit={() => {
+                        setAddSavings(false);
+                        setAllocatedSavings(0);
+                      }}
+                    />
+                  );
+                })
               : null}
           </div>
         </div>

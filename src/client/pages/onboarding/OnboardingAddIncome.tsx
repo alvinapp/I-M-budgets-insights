@@ -2,15 +2,15 @@ import { useState } from "react";
 import { FiBriefcase } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
+import { postData } from "client/api/api";
 import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import { setDefaultIncomeValue } from "client/utils/Formatters";
+import { useQuery } from "react-query";
+import ArrowBackButton from "../components/ArrowBack";
 import MainButton from "../components/MainButton";
 import NavBar from "../components/NavBar";
-import ArrowBackButton from "../components/ArrowBack";
 import MonthlyIncomeInput from "../components/onboarding/MonthlyIncomeInput";
-import { IConfig, useConfigurationStore } from "client/store/configuration";
-import { useMutation, useQuery } from "react-query";
-import { postData } from "client/api/api";
-import { setDefaultIncomeValue } from "client/utils/Formatters";
 
 const OnboardingAddIncome = () => {
   const navigate = useNavigate();

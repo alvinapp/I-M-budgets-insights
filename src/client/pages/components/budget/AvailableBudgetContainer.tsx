@@ -1,4 +1,3 @@
-import React from "react";
 import AnimatedNumber from "../AnimatedNumber";
 type AvailableBudgetContainerProps = {
   amount?: number;

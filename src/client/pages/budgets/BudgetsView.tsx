@@ -1,49 +1,51 @@
-import React, { useEffect, useMemo, useState } from "react";
-import NavBar from "../components/NavBar";
-import NavBarTitle from "../components/NavBarTitle";
-import { useNavigate } from "react-router-dom";
-import { FiPieChart } from "react-icons/fi";
-import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
-import { AvailableBudgetContainer } from "../components/budget/AvailableBudgetContainer";
-import useCurrencySettingsStore from "client/store/currencySettingsStore";
-import { InsightsButton } from "../components/budget/InsightsButton";
-import { CategoriesIconLabel } from "../components/budget/CategoriesIconLabel";
-import { CategoryCardHeader } from "../components/budget/CategoryCardHeader";
-import { CategoryViewCard } from "../components/budget/CategoryViewCard";
-import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
-import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
-import { useQuery } from "react-query";
 import { fetchBudgetCategories } from "client/api/budget";
-import { IConfig, useConfigurationStore } from "client/store/configuration";
+import { getMacros } from "client/api/macros";
+import { enrichTransactions } from "client/api/transactions";
+import settings from "client/assets/images/budgets-insights/Settings.svg";
+import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
 import useCategoriesStore from "client/store/categoriesStore";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import useInsightsStore from "client/store/insightsStore";
+import {
+  default as useMacroGoalsStore,
+  default as useMacrosStore,
+} from "client/store/macroGoalStore";
+import useTransactionStore from "client/store/transactionStore";
 import {
   calculateSpending,
   calculateTotalMacroBudget,
   checkNAN,
   fetchData,
 } from "client/utils/Formatters";
-import useMacroGoalsStore from "client/store/macroGoalStore";
-import { getMacros } from "client/api/macros";
-import settings from "client/assets/images/budgets-insights/Settings.svg";
-import { AddBudgetCard } from "../components/budget/AddBudgetCard";
-import useMacrosStore from "client/store/macroGoalStore";
-import { BottomSheet } from "react-spring-bottom-sheet";
-import ViewBudget from "./ViewBudget";
+import { allTimeDebt, debt, debtOverviewTabs } from "client/utils/MockData";
 import {
-  startOfMonth,
+  addMonths,
   endOfMonth,
   format,
-  addMonths,
+  startOfMonth,
   subMonths,
 } from "date-fns";
-import useActivePeriodRangeStore from "client/store/activePeriodRangeStore";
-import { enrichTransactions } from "client/api/transactions";
-import useInsightsStore from "client/store/insightsStore";
-import { DebtRepaymentCard } from "../components/budget/DebtRepaymentCard";
-import { allTimeDebt, debt, debtOverviewTabs } from "client/utils/MockData";
+import React, { useEffect, useMemo, useState } from "react";
+import { FiPieChart } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import MacroProgressBarsContainer from "../components/MacroProgressBarContainer";
+import NavBar from "../components/NavBar";
+import NavBarTitle from "../components/NavBarTitle";
 import TabFilter from "../components/TabFilter";
+import TooltipProgressBar from "../components/ToolTipProgressBar/ToolTipProgressBar";
 import ViewDebt from "../components/ViewDebt";
-import useTransactionStore from "client/store/transactionStore";
+import { AddBudgetCard } from "../components/budget/AddBudgetCard";
+import { AvailableBudgetContainer } from "../components/budget/AvailableBudgetContainer";
+import { CategoriesIconLabel } from "../components/budget/CategoriesIconLabel";
+import { CategoryCardHeader } from "../components/budget/CategoryCardHeader";
+import { CategoryViewCard } from "../components/budget/CategoryViewCard";
+import { DebtRepaymentCard } from "../components/budget/DebtRepaymentCard";
+import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
+import { InsightsButton } from "../components/budget/InsightsButton";
+import ViewBudget from "./ViewBudget";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(

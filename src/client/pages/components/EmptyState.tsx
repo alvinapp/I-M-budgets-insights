@@ -1,5 +1,3 @@
-import React from "react";
-import emptyTransaction from "client/assets/images/empty-transaction.svg";
 import noTransactions from "client/assets/images/budgets-insights/no-transactions.svg";
 type TransactionEmptyStateProps = {
   label?: string;

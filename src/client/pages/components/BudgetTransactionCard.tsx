@@ -1,13 +1,9 @@
-import { Emoji } from "client/pages/components/Emoji";
-import Transaction from "client/models/Transaction";
-import { Category } from "client/models/Categories";
-import { accountLogo } from "client/utils/AccountLogo";
-import { checkIfDebitCredit, dateFormat } from "client/utils/Formatters";
-import useAccountStore from "client/store/accountStore";
-import Accounts from "client/models/Accounts";
 import uncategorized from "client/assets/images/uncategorized.svg";
 import { BudgetTransaction } from "client/models/Budget";
+import { Category } from "client/models/Categories";
+import { Emoji } from "client/pages/components/Emoji";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import { checkIfDebitCredit, dateFormat } from "client/utils/Formatters";
 const CategoryEmoji = ({ category }: { category: Category }) => {
   const isGoingOut = category.name === "Going out";
   if (!category)
@@ -31,7 +27,6 @@ const CategoryEmoji = ({ category }: { category: Category }) => {
 };
 
 const BudgetTransactionCard = ({
-  id,
   merchant,
   transacted_at,
   category,
@@ -41,7 +36,6 @@ const BudgetTransactionCard = ({
 }: BudgetTransaction) => {
   const transactedAt = new Date(transacted_at);
   const { name } = merchant;
-  const accounts = useAccountStore((state: any) => state.accounts) as Accounts;
   const currencyStore = useCurrencySettingsStore((state: any) => state);
 
   return (
@@ -59,16 +53,6 @@ const BudgetTransactionCard = ({
               >
                 {name}
               </div>
-              {/* <div
-                className={`font-custom text-xs font-medium ${
-                  category === null
-                    ? "text-gray_light font-medium"
-                    : "text-caption"
-                } tracking-wide text-start`}
-                id="al-transaction-card--category-name"
-              >
-                {category === null ? "Uncategorized" : category.name}
-              </div> */}
               <div
                 className="font-custom text-xs font-medium text-skin-subtitle text-start tracking-wider"
                 id="al-transaction-card--date"

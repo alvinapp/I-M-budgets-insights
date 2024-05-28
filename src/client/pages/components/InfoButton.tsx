@@ -1,6 +1,3 @@
-import React from "react";
-import { FiInfo } from "react-icons/fi";
-import info from "client/assets/images/info.svg";
 type InfoButtonProps = {
   onClick?: () => void;
 };

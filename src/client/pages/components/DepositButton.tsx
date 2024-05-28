@@ -1,6 +1,7 @@
-import React from "react";
-import depositIcon from "client/assets/images/savings/deposit.webp";
-import warningDepositIcon from "client/assets/images/savings/deposit.webp";
+import {
+  default as depositIcon,
+  default as warningDepositIcon,
+} from "client/assets/images/savings/deposit.webp";
 type DepositButtonProps = {
   warning?: boolean;
 };

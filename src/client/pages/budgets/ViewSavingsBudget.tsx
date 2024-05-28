@@ -1,17 +1,15 @@
-import React, { useState } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
-import { AmountView } from "../components/insights/AmountView";
+import { fetchBudgetCategoriesTransactions } from "client/api/budget";
+import { BudgetTransaction } from "client/models/Budget";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import React, { useState } from "react";
 import { FiInfo, FiX } from "react-icons/fi";
 import { useQuery } from "react-query";
-import { fetchBudgetCategoriesTransactions } from "client/api/budget";
-import { IConfig, useConfigurationStore } from "client/store/configuration";
-import { Transaction } from "@sentry/browser";
+import flag from "../../assets/images/flag.png";
 import BudgetTransactionCard from "../components/BudgetTransactionCard";
-import { BudgetTransaction } from "client/models/Budget";
-import TransactionCardSkeleton from "../components/BudgetTransactionCardSkeleton";
 import BudgetTransactionCardSkeleton from "../components/BudgetTransactionCardSkeleton";
 import { TransactionEmptyState } from "../components/EmptyState";
-import flag from "../../assets/images/flag.png";
+import { AmountView } from "../components/insights/AmountView";
 interface ViewSavingsBudgetProps {
   progress: number;
   savedAmount: number;

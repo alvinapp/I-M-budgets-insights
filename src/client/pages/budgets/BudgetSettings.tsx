@@ -1,36 +1,33 @@
-import React, { useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
-import NavBarTitle from "../components/NavBarTitle";
-import { useNavigate } from "react-router-dom";
-import CloseButton from "../components/CloseButton";
-import { FiBriefcase, FiPieChart, FiCloud } from "react-icons/fi";
-import { BudgetDisplay } from "../components/budget/BudgetDisplay";
-import { useQuery } from "react-query";
-import { getCategories } from "client/api/categories";
-import { IConfig, useConfigurationStore } from "client/store/configuration";
-import useCategoriesStore from "client/store/categoriesStore";
-import { Category } from "client/models/Categories";
-import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
-import MainButton from "../components/MainButton";
-import { GeneralInfoCard } from "../components/budget/GeneralInfoCard";
-import useCurrencySettingsStore from "client/store/currencySettingsStore";
 import { fetchMacros, saveBudget } from "client/api/budget";
+import { getCategories } from "client/api/categories";
 import getToken from "client/api/token";
-import { showCustomToast } from "client/utils/Toast";
-import useUserStore from "client/store/userStore";
-import { SavingsSettingCard } from "../components/budget/SavingsSettingCard";
-import { BottomSheet } from "react-spring-bottom-sheet";
-import OnboardingSuccess from "../onboarding/OnboardingSuccess";
+import successIcon from "client/assets/images/success-icon.svg";
+import { Category } from "client/models/Categories";
 import useBottomSheetStore, {
   useBudgetSavingsSheetStore,
 } from "client/store/bottomSheetStore";
-import SavingsGoalConfirmation from "./SavingsGoalConfirmation";
-import SuccessfullCreatedView from "../components/budget/SuccessfullCreatedView";
-import successIcon from "client/assets/images/success-icon.svg";
-import EditSavingsViewCard from "./edit-settings/EditSavingsViewCard";
-import { checkNAN, reformatBudgetSplit } from "client/utils/Formatters";
-import DebtViewCard from "../components/DebtViewCard";
+import useCategoriesStore from "client/store/categoriesStore";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import useUserStore from "client/store/userStore";
+import { checkNAN } from "client/utils/Formatters";
 import { allTimeDebt } from "client/utils/MockData";
+import { showCustomToast } from "client/utils/Toast";
+import { useEffect, useState } from "react";
+import { FiBriefcase, FiCloud, FiPieChart } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import CloseButton from "../components/CloseButton";
+import DebtViewCard from "../components/DebtViewCard";
+import MainButton from "../components/MainButton";
+import NavBar from "../components/NavBar";
+import NavBarTitle from "../components/NavBarTitle";
+import { BudgetDisplay } from "../components/budget/BudgetDisplay";
+import { BudgetSettingCard } from "../components/budget/BudgetSettingCard";
+import { GeneralInfoCard } from "../components/budget/GeneralInfoCard";
+import SuccessfullCreatedView from "../components/budget/SuccessfullCreatedView";
+import SavingsGoalConfirmation from "./SavingsGoalConfirmation";
 
 export const BudgetSettings = () => {
   const configurations = useConfigurationStore(
@@ -250,10 +247,11 @@ export const BudgetSettings = () => {
             icon={<FiCloud />}
             title="Linked accounts"
             subtitle="Track your spending easily across linked accounts and stay on top of your budget with insights."
-            caption={`${typeof numberOfLinkedAccounts === "undefined"
-              ? ""
-              : checkNAN(numberOfLinkedAccounts)
-              }`}
+            caption={`${
+              typeof numberOfLinkedAccounts === "undefined"
+                ? ""
+                : checkNAN(numberOfLinkedAccounts)
+            }`}
             onClick={() => {
               navigate("/linked-accounts");
             }}
@@ -289,8 +287,9 @@ export const BudgetSettings = () => {
           <BudgetDisplay
             title="Debt repayment"
             budgetAmount={savingsBudgetAmount}
-            percentageOfBudgetCaption={`${savingsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              savingsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={0}
@@ -366,23 +365,24 @@ export const BudgetSettings = () => {
           <BudgetDisplay
             title="Essentials"
             budgetAmount={essentialBudgetAmount}
-            percentageOfBudgetCaption={`${essentialGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              essentialGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             unallocatedAmount={
               typeof parseInt(essentialBudgetAmount) === "number" &&
-                essentialBudgetAmount > 0
+              essentialBudgetAmount > 0
                 ? Math.max(essentialBudgetAmount - allocatedEssentials, 0)
                 : 0 // Ensure perc
             }
             allocatedAmount={allocatedEssentials}
             progressPercentage={
               typeof parseInt(essentialBudgetAmount) === "number" &&
-                essentialBudgetAmount > 0
+              essentialBudgetAmount > 0
                 ? Math.min(
-                  (allocatedEssentials / essentialBudgetAmount) * 100,
-                  100
-                ) // Ensure percentage stays between 0 and 100
+                    (allocatedEssentials / essentialBudgetAmount) * 100,
+                    100
+                  ) // Ensure percentage stays between 0 and 100
                 : 0
             }
             indicatorColor="bg-[#00AB9E]"
@@ -418,11 +418,11 @@ export const BudgetSettings = () => {
                     actionButtonColor="#00AB9E"
                     unallocatedAmount={
                       typeof parseInt(essentialBudgetAmount) === "number" &&
-                        essentialBudgetAmount > 0
+                      essentialBudgetAmount > 0
                         ? Math.max(
-                          essentialBudgetAmount - allocatedEssentials,
-                          0
-                        )
+                            essentialBudgetAmount - allocatedEssentials,
+                            0
+                          )
                         : 0
                     }
                     addValue={(e) => {
@@ -506,7 +506,7 @@ export const BudgetSettings = () => {
                         setAllocatedEssentials(
                           allocatedEssentials > 0
                             ? allocatedEssentials -
-                            categoriesStore.incrementalAmount
+                                categoriesStore.incrementalAmount
                             : 0
                         );
                         updateEssentialsMap(i, {
@@ -536,8 +536,9 @@ export const BudgetSettings = () => {
           <BudgetDisplay
             title="Wants"
             budgetAmount={wantsBudgetAmount}
-            percentageOfBudgetCaption={`${wantsGoals[0]?.share ?? ""
-              }% of overall budget`}
+            percentageOfBudgetCaption={`${
+              wantsGoals[0]?.share ?? ""
+            }% of overall budget`}
             unallocatedCaption="Unallocated"
             allocatedCaption="Allocated"
             unallocatedAmount={
@@ -571,52 +572,35 @@ export const BudgetSettings = () => {
           <div className="flex flex-col">
             {wantsCategories && wantsCategories.length > 0
               ? wantsCategories.map((category: Category, i: any) => {
-                const isSelected = i === selectedWantsId;
-                const data = wantsMapState.get(`data${i}`);
-                const isGoingOut = category?.name === "Going out";
-                const isGambling = category?.name === "Gambling";
-                return (
-                  <BudgetSettingCard
-                    key={i}
-                    maxValue={Number.MAX_SAFE_INTEGER}
-                    category={isGoingOut ? "Entertainment" : isGambling ? "High Risk Investment" : category?.name}
-                    emoji={isGoingOut ? "🤩" : isGambling ? "💸" : category?.emoji}
-                    amount={data?.amount}
-                    selected={isSelected}
-                    unallocatedAmount={
-                      typeof wantsBudgetAmount === "number" ||
+                  const isSelected = i === selectedWantsId;
+                  const data = wantsMapState.get(`data${i}`);
+                  const isGoingOut = category?.name === "Going out";
+                  const isGambling = category?.name === "Gambling";
+                  return (
+                    <BudgetSettingCard
+                      key={i}
+                      maxValue={Number.MAX_SAFE_INTEGER}
+                      category={
+                        isGoingOut
+                          ? "Entertainment"
+                          : isGambling
+                          ? "High Risk Investment"
+                          : category?.name
+                      }
+                      emoji={
+                        isGoingOut ? "🤩" : isGambling ? "💸" : category?.emoji
+                      }
+                      amount={data?.amount}
+                      selected={isSelected}
+                      unallocatedAmount={
+                        typeof wantsBudgetAmount === "number" ||
                         wantsBudgetAmount > 0
-                        ? Math.max(wantsBudgetAmount - allocatedWants, 0)
-                        : 0
-                    }
-                    addValue={(e) =>
-                      updateWantsMap(i, {
-                        amount: e,
-                        contribution_amount: 0,
-                        percentage: 0,
-                        category_id: category?.id,
-                        name: category?.name,
-                        pseudo_name: category?.name + " " + category?.emoji,
-                        extern_id: category?.id,
-                        order: 0,
-                        contribution_at: "",
-                        is_contribute_customized: true,
-                      })
-                    }
-                    updateValue={(newValue) => {
-                      const oldValue = data?.amount || 0;
-                      const valueDifference = newValue - oldValue;
-
-                      setSelectedWantsId(i);
-                      const newAllocatedWants = Math.max(
-                        0,
-                        allocatedWants + valueDifference
-                      );
-
-                      if (newAllocatedWants <= wantsBudgetAmount) {
-                        setAllocatedWants(newAllocatedWants);
+                          ? Math.max(wantsBudgetAmount - allocatedWants, 0)
+                          : 0
+                      }
+                      addValue={(e) =>
                         updateWantsMap(i, {
-                          amount: newValue,
+                          amount: e,
                           contribution_amount: 0,
                           percentage: 0,
                           category_id: category?.id,
@@ -626,62 +610,87 @@ export const BudgetSettings = () => {
                           order: 0,
                           contribution_at: "",
                           is_contribute_customized: true,
-                        });
-                      } else {
-                        showCustomToast({ message: "Budget limit exceeded" });
+                        })
                       }
-                    }}
-                    increment={() => {
-                      setSelectedWantsId(i);
-                      const newAmount =
-                        data?.amount + categoriesStore.incrementalAmount;
-                      const totalAllocated =
-                        allocatedWants + categoriesStore.incrementalAmount;
-                      if (totalAllocated <= wantsBudgetAmount) {
-                        setAllocatedWants(totalAllocated);
-                        updateWantsMap(i, {
-                          amount: newAmount,
-                          contribution_amount: 0,
-                          percentage: 0,
-                          category_id: category?.id,
-                          name: category?.name,
-                          pseudo_name: category?.name + " " + category?.emoji,
-                          extern_id: category?.id,
-                          order: 0,
-                          contribution_at: "",
-                          is_contribute_customized: true,
-                        });
-                      } else {
-                        showCustomToast({ message: "Budget limit exceeded" });
-                      }
-                    }}
-                    decrement={() => {
-                      if (
-                        data?.amount - categoriesStore.incrementalAmount >=
-                        0
-                      ) {
+                      updateValue={(newValue) => {
+                        const oldValue = data?.amount || 0;
+                        const valueDifference = newValue - oldValue;
+
                         setSelectedWantsId(i);
-                        setAllocatedWants(
-                          allocatedWants - categoriesStore.incrementalAmount
+                        const newAllocatedWants = Math.max(
+                          0,
+                          allocatedWants + valueDifference
                         );
-                        updateWantsMap(i, {
-                          amount:
-                            data?.amount - categoriesStore.incrementalAmount,
-                          contribution_amount: 0,
-                          percentage: 0,
-                          category_id: category?.id,
-                          name: category?.name,
-                          pseudo_name: category?.name + " " + category?.emoji,
-                          extern_id: category?.id,
-                          order: 0,
-                          contribution_at: "",
-                          is_contribute_customized: true,
-                        });
-                      }
-                    }}
-                  />
-                );
-              })
+
+                        if (newAllocatedWants <= wantsBudgetAmount) {
+                          setAllocatedWants(newAllocatedWants);
+                          updateWantsMap(i, {
+                            amount: newValue,
+                            contribution_amount: 0,
+                            percentage: 0,
+                            category_id: category?.id,
+                            name: category?.name,
+                            pseudo_name: category?.name + " " + category?.emoji,
+                            extern_id: category?.id,
+                            order: 0,
+                            contribution_at: "",
+                            is_contribute_customized: true,
+                          });
+                        } else {
+                          showCustomToast({ message: "Budget limit exceeded" });
+                        }
+                      }}
+                      increment={() => {
+                        setSelectedWantsId(i);
+                        const newAmount =
+                          data?.amount + categoriesStore.incrementalAmount;
+                        const totalAllocated =
+                          allocatedWants + categoriesStore.incrementalAmount;
+                        if (totalAllocated <= wantsBudgetAmount) {
+                          setAllocatedWants(totalAllocated);
+                          updateWantsMap(i, {
+                            amount: newAmount,
+                            contribution_amount: 0,
+                            percentage: 0,
+                            category_id: category?.id,
+                            name: category?.name,
+                            pseudo_name: category?.name + " " + category?.emoji,
+                            extern_id: category?.id,
+                            order: 0,
+                            contribution_at: "",
+                            is_contribute_customized: true,
+                          });
+                        } else {
+                          showCustomToast({ message: "Budget limit exceeded" });
+                        }
+                      }}
+                      decrement={() => {
+                        if (
+                          data?.amount - categoriesStore.incrementalAmount >=
+                          0
+                        ) {
+                          setSelectedWantsId(i);
+                          setAllocatedWants(
+                            allocatedWants - categoriesStore.incrementalAmount
+                          );
+                          updateWantsMap(i, {
+                            amount:
+                              data?.amount - categoriesStore.incrementalAmount,
+                            contribution_amount: 0,
+                            percentage: 0,
+                            category_id: category?.id,
+                            name: category?.name,
+                            pseudo_name: category?.name + " " + category?.emoji,
+                            extern_id: category?.id,
+                            order: 0,
+                            contribution_at: "",
+                            is_contribute_customized: true,
+                          });
+                        }
+                      }}
+                    />
+                  );
+                })
               : null}
           </div>
         </div>
@@ -750,11 +759,11 @@ export const BudgetSettings = () => {
               targetAmount={essentialBudgetAmount * 3}
               progressPercentage={
                 typeof savingsBudgetAmount === "number" &&
-                  savingsBudgetAmount > 0
+                savingsBudgetAmount > 0
                   ? Math.min(
-                    (allocatedSavings / savingsBudgetAmount) * 100,
-                    100
-                  ) // Ensure percentage stays between 0 and 100
+                      (allocatedSavings / savingsBudgetAmount) * 100,
+                      100
+                    ) // Ensure percentage stays between 0 and 100
                   : 0
               }
               emoji="🎯"

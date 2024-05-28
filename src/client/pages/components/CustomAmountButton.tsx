@@ -1,4 +1,3 @@
-import React from "react";
 type CustomAmountButtonProps = {
   onClick?: () => void;
 };

@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
-import { AmountView } from "../components/insights/AmountView";
-import { FiX } from "react-icons/fi";
-import { useQuery } from "react-query";
 import { fetchBudgetCategoriesTransactions } from "client/api/budget";
-import { IConfig, useConfigurationStore } from "client/store/configuration";
-import { Transaction } from "@sentry/browser";
-import BudgetTransactionCard from "../components/BudgetTransactionCard";
 import { BudgetTransaction } from "client/models/Budget";
-import TransactionCardSkeleton from "../components/BudgetTransactionCardSkeleton";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
+import useTransactionStore from "client/store/transactionStore";
+import React, { useEffect, useState } from "react";
+import { BottomSheet } from "react-spring-bottom-sheet";
+import ActionButton from "../components/ActionButton";
+import BudgetTransactionCard from "../components/BudgetTransactionCard";
 import BudgetTransactionCardSkeleton from "../components/BudgetTransactionCardSkeleton";
 import { TransactionEmptyState } from "../components/EmptyState";
-import { BottomSheet } from "react-spring-bottom-sheet";
 import EditCategory from "../components/budget/EditCategory";
-import useTransactionStore from "client/store/transactionStore";
-import ActionButton from "../components/ActionButton";
+import { AmountView } from "../components/insights/AmountView";
 interface ViewBudgetProps {
   progress: number;
   spentAmount: number;

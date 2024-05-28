@@ -1,5 +1,4 @@
-import React from "react";
-import { FiArrowLeft, FiChevronLeft } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 type ArrowBackButtonProps = {
   onClick?: () => void;
   background?: string;

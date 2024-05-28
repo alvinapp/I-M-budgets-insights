@@ -1,4 +1,3 @@
-import { checkNAN } from "client/utils/Formatters";
 import { Amount } from "client/pages/components/Amount";
 type BalanceViewProps = {
   balance?: number;

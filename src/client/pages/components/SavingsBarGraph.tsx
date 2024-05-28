@@ -22,7 +22,6 @@ const SavingsBarGraph: React.FC<BarGraphProps> = ({
   const graphHeight = 200;
   const maxLimit = Math.max(savingsTarget, budgetLimit);
   const scaleFactor = (graphHeight - 70) / maxLimit;
-  const barSpacing = graphWidth * 0.2;
   const [curentMonthName, setCurrentMonthName] = useState<string>();
   const [previousMonthName, setPreviousMonthName] = useState<string>();
 

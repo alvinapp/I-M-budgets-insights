@@ -2,21 +2,21 @@ import { useEffect, useRef, useState } from "react";
 import { FiPieChart } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
-import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
-import MainButton from "../components/MainButton";
-import NavBar from "../components/NavBar";
-import ArrowBackButton from "../components/ArrowBack";
-import ReactSlider from "react-slider";
-import { useConfigurationStore, IConfig } from "client/store/configuration";
-import { setIncome, completeOnboarding } from "client/api/users";
 import { GoalMacroType, setMacro } from "client/api/goals";
-import SliderThumbComponent from "../components/SliderThumbComponent";
-import debounce from "lodash.debounce";
+import { completeOnboarding, setIncome } from "client/api/users";
 import useBottomSheetStore from "client/store/bottomSheetStore";
+import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
+import useCategoriesStore from "client/store/categoriesStore";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
 import { formatCurrency, reformatBudgetSplit } from "client/utils/Formatters";
-import useCategoriesStore from "client/store/categoriesStore";
+import debounce from "lodash.debounce";
+import ReactSlider from "react-slider";
+import ArrowBackButton from "../components/ArrowBack";
 import DebtInfo from "../components/DebtInfo";
+import MainButton from "../components/MainButton";
+import NavBar from "../components/NavBar";
+import SliderThumbComponent from "../components/SliderThumbComponent";
 
 const OnboardingSplitIncome = () => {
   const navigate = useNavigate();
@@ -35,9 +35,7 @@ const OnboardingSplitIncome = () => {
   const [essentialsRatio, setEssentialsRatio] = useState(
     split ? parseInt(split[0]) : 30
   );
-  const [wantsRatio, setWantsRatio] = useState(
-    split ? parseInt(split[1]) : 25
-  );
+  const [wantsRatio, setWantsRatio] = useState(split ? parseInt(split[1]) : 25);
   const [savingsRatio, setSavingsRatio] = useState(
     split ? parseInt(split[2]) : 45
   );
@@ -137,12 +135,6 @@ const OnboardingSplitIncome = () => {
 
       await completeOnboarding({ completionTime: new Date(), configuration });
 
-      // Redirect to success page
-      // bottomSheetStore.setSuccessBottomSheet(true);
-      // document
-      //   .getElementById("budget-container")
-      //   ?.classList.add("disable-interaction");
-
       if (userStore.user.is_onboarded) {
         navigate("/budget-settings");
       } else {
@@ -209,103 +201,6 @@ const OnboardingSplitIncome = () => {
     // Ensure savings ratio is always fixed at 45
     setSavingsRatio(fixedSavingsRatio);
   };
-
-  // const handleSliderChange = (newValue: number, type: string) => {
-  //   const totalRatio = 100;
-  //   const fixedSavingsRatio = 45;
-
-  //   const oldValue =
-  //     type === "essentials"
-  //       ? essentialsRatio
-  //       : type === "wants"
-  //         ? wantsRatio
-  //         : fixedSavingsRatio;
-
-  //   if (type === "savings") {
-  //     console.error("Savings ratio is fixed and cannot be changed.");
-  //     return; // Prevent any changes to savings
-  //   }
-
-  //   const change = newValue - oldValue;
-
-  //   if (newValue === totalRatio) {
-  //     switch (type) {
-  //       case "essentials":
-  //         setWantsRatio(0);
-  //         break;
-  //       case "wants":
-  //         setEssentialsRatio(0);
-  //         break;
-  //     }
-  //     setSavingsRatio(fixedSavingsRatio);
-  //     return;
-  //   }
-
-  //   if (oldValue === totalRatio) {
-  //     const remainingRatio = totalRatio - fixedSavingsRatio;
-  //     const primaryRatio = remainingRatio * 0.7;
-  //     const secondaryRatio = remainingRatio * 0.3;
-  //     switch (type) {
-  //       case "essentials":
-  //         setWantsRatio(primaryRatio);
-  //         break;
-  //       case "wants":
-  //         setEssentialsRatio(primaryRatio);
-  //         break;
-  //     }
-  //     setSavingsRatio(fixedSavingsRatio);
-  //     return;
-  //   }
-
-  //   const allocateChange = (
-  //     primaryType: string,
-  //     secondaryType: string,
-  //     change: number
-  //   ) => {
-  //     const remainingRatio = totalRatio - fixedSavingsRatio;
-  //     const primaryChange = (remainingRatio * change / (oldValue + change)) * 0.7;
-  //     const secondaryChange = change - primaryChange;
-
-  //     switch (primaryType) {
-  //       case "essentials":
-  //         setEssentialsRatio(Math.max(essentialsRatio + primaryChange, 0));
-  //         break;
-  //       case "wants":
-  //         setWantsRatio(Math.max(wantsRatio + primaryChange, 0));
-  //         break;
-  //     }
-
-  //     switch (secondaryType) {
-  //       case "essentials":
-  //         setEssentialsRatio(Math.max(essentialsRatio + secondaryChange, 0));
-  //         break;
-  //       case "wants":
-  //         setWantsRatio(Math.max(wantsRatio + secondaryChange, 0));
-  //         break;
-  //     }
-  //   };
-
-  //   switch (type) {
-  //     case "essentials":
-  //       if (change > 0) {
-  //         allocateChange("wants", "savings", -change);
-  //       } else {
-  //         allocateChange("savings", "wants", -change);
-  //       }
-  //       setEssentialsRatio(newValue);
-  //       break;
-  //     case "wants":
-  //       if (change > 0) {
-  //         allocateChange("essentials", "savings", -change);
-  //       } else {
-  //         allocateChange("savings", "essentials", -change);
-  //       }
-  //       setWantsRatio(newValue);
-  //       break;
-  //   }
-  //   setSavingsRatio(fixedSavingsRatio); // Ensure savings ratio is always fixed
-  // };
-
   return (
     <div className="flex flex-col">
       <NavBar

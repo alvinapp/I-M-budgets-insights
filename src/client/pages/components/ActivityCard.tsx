@@ -1,6 +1,3 @@
-import useAccountStore from "client/store/accountStore";
-import Accounts from "client/models/Accounts";
-import uncategorized from "client/assets/images/uncategorized.svg";
 import useCurrencySettingsStore from "client/store/currencySettingsStore";
 interface ActivityCardProps {
   id?: number;
@@ -17,7 +14,6 @@ const ActivityCard = ({
   amount,
   emoji,
 }: ActivityCardProps) => {
-  const accounts = useAccountStore((state: any) => state.accounts) as Accounts;
   const currencyStore = useCurrencySettingsStore((state: any) => state);
 
   return (

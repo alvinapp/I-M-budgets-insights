@@ -22,16 +22,12 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({
   budgetLimit,
   currentMonthDate,
 }) => {
-  const monthNameOffset = 20;
   const [graphWidth, setGraphWidth] = useState(window.innerWidth - 23);
   const graphHeight = 200;
-  const graphEffectiveHeight = graphHeight - monthNameOffset;
   const expenseLimit =
     currentMonth.essentials.expenseLimit + currentMonth.wants.expenseLimit;
   const maxLimit = Math.max(expenseLimit, budgetLimit);
   const scaleFactor = (graphHeight - 70) / maxLimit;
-  const barSpacing = graphWidth * 0.2;
-  const absoluteMaxHeight = budgetLimit + 100;
   const [curentMonthName, setCurrentMonthName] = useState<string>();
   const [previousMonthName, setPreviousMonthName] = useState<string>();
 
@@ -150,9 +146,11 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({
               ry="5"
             />
             <polygon
-              points={`${x + 23},${tooltipPosY + tooltipHeight + 5 + yOffset} ${x + 19
-                },${tooltipPosY + tooltipHeight + yOffset} ${x + 27},${tooltipPosY + tooltipHeight + yOffset
-                }`}
+              points={`${x + 23},${tooltipPosY + tooltipHeight + 5 + yOffset} ${
+                x + 19
+              },${tooltipPosY + tooltipHeight + yOffset} ${x + 27},${
+                tooltipPosY + tooltipHeight + yOffset
+              }`}
               fill="#101a25"
               stroke="#101a25"
               strokeWidth="1"
@@ -376,8 +374,9 @@ export const ChangeIndicator: React.FC<Props> = ({
 
       {/* Conditionally render the arrow icon */}
       <g
-        transform={`translate(${graphWidth - 157 - xOffset}, ${graphHeight - 87
-          }) scale(1.5)`}
+        transform={`translate(${graphWidth - 157 - xOffset}, ${
+          graphHeight - 87
+        }) scale(1.5)`}
       >
         {isIncrease ? (
           <FiArrowUpRight color="#565656" strokeWidth="1" />

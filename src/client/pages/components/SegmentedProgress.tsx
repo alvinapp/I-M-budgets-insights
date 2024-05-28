@@ -1,7 +1,6 @@
 import React from "react";
 
 import styled from "styled-components";
-import MacroProgressBar from "./MacroProgressBar";
 import SegmentedBar from "./SegmentendBar";
 
 interface SegmentedProgressBarProps {

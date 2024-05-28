@@ -1,17 +1,16 @@
+import useCashflowVariablesStore from "client/store/cashFlowStore";
+import useCurrencySettingsStore from "client/store/currencySettingsStore";
+import useInsightsStore from "client/store/insightsStore";
+import { format } from "date-fns";
 import React from "react";
 import {
   FiArrowDownRight,
   FiArrowUpRight,
   FiChevronRight,
 } from "react-icons/fi";
-import PercentageItem from "./PercentageItem";
-import { checkNAN } from "client/utils/Formatters";
 import { useNavigate } from "react-router";
-import useCurrencySettingsStore from "client/store/currencySettingsStore";
-import useCashflowVariablesStore from "client/store/cashFlowStore";
 import AnimatedNumber from "./AnimatedNumber";
-import useInsightsStore from "client/store/insightsStore";
-import { format } from "date-fns";
+import PercentageItem from "./PercentageItem";
 
 interface CashFlowPieChartProps {
   dimensions: number;
@@ -45,7 +44,6 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
   const radius = dimensions / 2;
   const strokeWidth = doughnutThickness;
   const normalizedRadius = radius - strokeWidth * 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
 
   let cumulativePercentage = 0;
   const currencyStore = useCurrencySettingsStore((state: any) => state);
@@ -190,7 +188,8 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             )}&endDate=${format(
               insightsStoreState.insightsEndDate,
               "yyyy-MM-dd"
-            )}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter
+            )}&accountName=${cashflowVariables.accountName}&dateFilter=${
+              cashflowVariables.dateFilter
             }`
           )
         }
@@ -313,7 +312,8 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           )}&endDate=${format(
             insightsStoreState.insightsEndDate,
             "yyyy-MM-dd"
-          )}&accountName=${cashflowVariables.accountName}&dateFilter=${cashflowVariables.dateFilter
+          )}&accountName=${cashflowVariables.accountName}&dateFilter=${
+            cashflowVariables.dateFilter
           }`
         )
       }

@@ -1,21 +1,19 @@
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 
-import CloseButton from "../components/CloseButton";
-import MainButton from "../components/MainButton";
-import NavBar from "../components/NavBar";
-import NavBarTitle from "../components/NavBarTitle";
-import splashImage from "../../assets/images/onboarding-graphic.png";
+import { checkIfUserHasMicros } from "client/api/budget";
+import { getMonoPubKey } from "client/api/mono";
 import getToken from "client/api/token";
-import { useConfigurationStore, IConfig } from "client/store/configuration";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
 import { useEffect, useState } from "react";
-import CustomLoader from "../components/Loader/CustomLoader";
-import { checkIfUserHasMicros } from "client/api/budget";
-import { getMonoPubKey, postCode } from "client/api/mono";
+import splashImage from "../../assets/images/onboarding-graphic.png";
 import BackButton from "../components/BackButton";
-import ActionButton from "../components/ActionButton";
+import CustomLoader from "../components/Loader/CustomLoader";
+import MainButton from "../components/MainButton";
+import NavBar from "../components/NavBar";
+import NavBarTitle from "../components/NavBarTitle";
 
 const OnboardingStart = () => {
   const navigate = useNavigate();

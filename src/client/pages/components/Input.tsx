@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FiMinus, FiPlus, FiX } from "react-icons/fi";
 import { TailSpin } from "react-loader-spinner";
 

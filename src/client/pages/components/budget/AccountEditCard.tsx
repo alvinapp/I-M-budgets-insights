@@ -1,6 +1,5 @@
-import React from "react";
-import cardImage from "client/assets/images/I&M-acs.png";
 import mpesaImage from "client/assets/images/M-pesa-ac.png";
+import React from "react";
 interface AccountEditCardProps {
   label?: string;
   accountNumber?: string;

@@ -1,14 +1,13 @@
-import { useState } from "react";
-import bank from "../../assets/images/bank.svg";
-import FilterButton from "../components/FilterButton";
 import Account from "client/models/Account";
-import { FiCalendar } from "react-icons/fi";
-import MainButton from "../components/MainButton";
-import { dateFilters } from "client/utils/MockData";
 import useInsightsStore from "client/store/insightsStore";
-import CustomDateRangePicker from "../components/custom-date-picker/CustomerDateRangePicker";
+import { dateFilters } from "client/utils/MockData";
 import { format } from "date-fns";
+import { useState } from "react";
+import { FiCalendar } from "react-icons/fi";
 import bankIcon from "../../assets/images/budgets-insights/bank.svg";
+import FilterButton from "../components/FilterButton";
+import MainButton from "../components/MainButton";
+import CustomDateRangePicker from "../components/custom-date-picker/CustomerDateRangePicker";
 interface InsightsFiltersProps {
   accounts: any; // replace 'any' with the actual type
   activeAccount: any; // replace 'any' with the actual type
@@ -22,10 +21,6 @@ const InsightsFilters = ({
   closeBottomSheet,
 }: InsightsFiltersProps) => {
   const insightsStore = useInsightsStore.getState();
-  const [activeDateFilter, setActiveDateFilter] = useState({
-    id: insightsStore.insightsDateFilterId,
-    name: insightsStore.insightsDateFilterName,
-  });
   const [update, setUpdate] = useState(false);
   const [activeAccountName, setActiveAccountName] = useState(
     activeAccount?.name

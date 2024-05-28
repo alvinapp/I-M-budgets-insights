@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Clouds from "client/assets/json_lottie/clouds.json";
-import { BallTriangle } from "react-loader-spinner";
-import { IConfig, useConfigurationStore } from "client/store/configuration";
-import BudgetSplitChart from "../components/onboarding/BudgetSplitChart";
-import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
 import cloud1 from "client/assets/images/budgets-insights/cloud1.svg";
 import cloud2 from "client/assets/images/budgets-insights/cloud2.svg";
+import Clouds from "client/assets/json_lottie/clouds.json";
+import { useBudgetSettingsStore } from "client/store/budgetSettingsStore";
+import { IConfig, useConfigurationStore } from "client/store/configuration";
 import useUserStore from "client/store/userStore";
+import { useCallback, useEffect, useState } from "react";
+import { BallTriangle } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
+import BudgetSplitChart from "../components/onboarding/BudgetSplitChart";
 const BookingSuccess = () => {
   const navigate = useNavigate();
 

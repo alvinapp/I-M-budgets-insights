@@ -1,5 +1,3 @@
-import React from "react";
-
 type NavBarTitleProps = {
   title?: string;
   titleColor?: string;

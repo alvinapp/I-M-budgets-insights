@@ -1,8 +1,7 @@
+import { checkNAN } from "client/utils/Formatters";
 import React from "react";
 import MacroPieChart from "./MacroPieChart";
 import MacroPieChartLegend from "./MacroPieChartLegend";
-import { checkNAN } from "client/utils/Formatters";
-import { essentials } from "client/utils/MockData";
 
 interface Values {
   wants: number;

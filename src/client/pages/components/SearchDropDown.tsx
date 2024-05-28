@@ -1,5 +1,4 @@
 import { capitalize } from "client/utils/Formatters";
-import React from "react";
 import { FiCheck } from "react-icons/fi";
 
 type SearchDropDownProps = {

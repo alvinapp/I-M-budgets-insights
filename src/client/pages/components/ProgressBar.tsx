@@ -1,7 +1,6 @@
-import React from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
-import yellowFlag from "../../assets/images/savings/yellow-flag.svg";
 import { FiPause } from "react-icons/fi";
+import yellowFlag from "../../assets/images/savings/yellow-flag.svg";
 type CustomProgessBar = {
   progressPercentage: number;
   isActive?: boolean;
