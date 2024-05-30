@@ -53,12 +53,6 @@ const BudgetsView = () => {
   );
   const categoryStore = useCategoriesStore((state: any) => state);
   const macroGoalStore = useMacroGoalsStore((state: any) => state);
-  const macroData = macroGoalStore.macroGoals ?? [];
-  const essentialMacro = macroData[0];
-  const savingsMacro = macroData[2];
-  const essentialBudgetAmount = essentialMacro?.amount;
-  const wantsBudgetAmount = essentialMacro?.amount;
-  const savingsBudgetAmount = savingsMacro?.amount;
   const insightsStoreState = useInsightsStore((state) => state);
   const transactionState = useTransactionStore((state: any) => state);
   const config = useConfigurationStore(
@@ -108,18 +102,6 @@ const BudgetsView = () => {
     { enabled: !!config.token, refetchOnWindowFocus: false }
   );
 
-  const fetchMacroGoalsData = async () => {
-    try {
-      const { data } = await getMacros({
-        configuration: config,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      });
-      const result =
-        data?.map((item: { goals: any }) => item.goals).flat() || [];
-      macroGoalStore.setMacros(result);
-    } catch (error) {}
-  };
   useEffect(() => {
     const fetchDataAndUpdateMacroGoals = async () => {
       if (!transactionState.displayCategoriesSheet) {
@@ -133,7 +115,6 @@ const BudgetsView = () => {
             formattedEndDate,
             categoryStore.setCategoryBudgets
           ),
-          fetchMacroGoalsData(),
         ]);
         setIsLoading(false);
       }
@@ -540,8 +521,10 @@ const BudgetsView = () => {
           <div className="flex flex-col">
             {essentialBudgets?.length !==
               categoryStore.categoryBudgets[0]?.data.length &&
-            calculateTotalMacroBudget(essentialBudgets, essentialBudgetAmount) >
-              0 ? (
+            calculateTotalMacroBudget(
+              essentialBudgets,
+              essentialTotalBudgetAmount
+            ) > 0 ? (
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
@@ -614,7 +597,8 @@ const BudgetsView = () => {
           <div className="flex flex-col">
             {wantsBudgets?.length !==
               categoryStore.categoryBudgets[1]?.data.length &&
-            calculateTotalMacroBudget(wantsBudgets, wantsBudgetAmount) > 0 ? (
+            calculateTotalMacroBudget(wantsBudgets, wantsTotalBudgetAmount) >
+              0 ? (
               <>
                 <div className="flex-grow h-px bg-skin-accent3 my-3"></div>
                 <AddBudgetCard
