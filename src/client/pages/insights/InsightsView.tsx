@@ -65,17 +65,17 @@ const InsightsView = () => {
   const savingsTotalBudgetAmount =
     categoryStore.categoryBudgets[2]?.total_amount;
   const previousEssentialTotalExpenses =
-    macroGoalStore.macroGoals[0].range_expense.last_month_total;
+    categoryStore.categoryBudgets[0].range_expense.last_month_total;
   const essentialTotalExpenses =
-    macroGoalStore.macroGoals[0].range_expense.this_month_total;
+    categoryStore.categoryBudgets[0].range_expense.this_month_total;
   const wantsTotalExpenses =
-    macroGoalStore.macroGoals[1].range_expense.this_month_total;
+    categoryStore.categoryBudgets[1].range_expense.this_month_total;
   const previousWantsTotalExpenses =
-    macroGoalStore.macroGoals[1].range_expense.last_month_total;
+    categoryStore.categoryBudgets[1].range_expense.last_month_total;
   const savingsTotalExpenses =
-    macroGoalStore.macroGoals[2].range_expense.this_month_total;
+    categoryStore.categoryBudgets[2].range_expense.this_month_total;
   const previousSavingsTotalExpenses =
-    macroGoalStore.macroGoals[2].range_expense.last_month_total;
+    categoryStore.categoryBudgets[2].range_expense.last_month_total;
 
   const totalBudgetAmount =
     essentialTotalBudgetAmount +
@@ -267,7 +267,7 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
