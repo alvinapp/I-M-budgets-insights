@@ -93,33 +93,6 @@ const BudgetsView = () => {
       `/insights-view?startDate=${formattedInsightsStartDate}&endDate=${formattedInsightsEndDate}`
     );
   };
-
-  const { isFetching: fetchingEssentialsBudget } = useQuery(
-    "essentials-budgets",
-    () =>
-      fetchData(
-        "essentials-budgets",
-        fetchBudgetCategories,
-        config,
-        formattedStartDate,
-        formattedEndDate,
-        categoryStore.setCategoryBudgets
-      ),
-    { enabled: !!config.token, refetchOnWindowFocus: false }
-  );
-
-  const fetchMacroGoalsData = async () => {
-    try {
-      const { data } = await getMacros({
-        configuration: config,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      });
-      const result =
-        data?.map((item: { goals: any }) => item.goals).flat() || [];
-      macroGoalStore.setMacros(result);
-    } catch (error) { }
-  };
   useEffect(() => {
     const fetchDataAndUpdateMacroGoals = async () => {
       if (!transactionState.displayCategoriesSheet) {
@@ -133,7 +106,6 @@ const BudgetsView = () => {
             formattedEndDate,
             categoryStore.setCategoryBudgets
           ),
-          fetchMacroGoalsData(),
         ]);
         setIsLoading(false);
       }

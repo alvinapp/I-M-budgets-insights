@@ -327,7 +327,34 @@ export const fetchData = async (
   } catch (error) {}
 };
 
-// Set default income value based on country and currency
+export function debounce<T extends (...args: any[]) => Promise<any>>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => Promise<any> {
+  let timeout: NodeJS.Timeout | null = null;
+  let resolveQueue: ((value: any) => void)[] = [];
+
+  return function (...args: Parameters<T>): Promise<any> {
+    return new Promise((resolve) => {
+      resolveQueue.push(resolve);
+
+      const later = () => {
+        clearTimeout(timeout!);
+        timeout = null;
+        func(...args).then((result) => {
+          resolveQueue.forEach((res) => res(result));
+          resolveQueue = [];
+        });
+      };
+
+      if (timeout !== null) {
+        clearTimeout(timeout);
+      }
+
+      timeout = setTimeout(later, wait);
+    });
+  };
+}
 
 export const setDefaultIncomeValue = (currency: string) => {
   const defaultValues = {
