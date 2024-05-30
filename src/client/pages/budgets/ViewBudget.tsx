@@ -21,6 +21,7 @@ interface ViewBudgetProps {
   microGoalId?: number;
   startDate?: string;
   endDate?: string;
+  goalTransactions?: any[];
   onClick?: () => void;
 }
 const ViewBudget: React.FC<ViewBudgetProps> = ({
@@ -33,34 +34,36 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
   microGoalId,
   startDate,
   endDate,
+  goalTransactions,
   onClick,
 }) => {
   const config = useConfigurationStore(
     (state: any) => state.configuration
   ) as IConfig;
+  // console.log("goalTransactions", goalTransactions);
   const [fetchingData, setFetchingData] = useState(false);
   const [transactions, setTransactions] = useState<BudgetTransaction[]>([]);
   const transactionState = useTransactionStore((state: any) => state);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setFetchingData(true);
-        const res = await fetchBudgetCategoriesTransactions({
-          configuration: config,
-          start_date: startDate,
-          end_date: endDate,
-          microgoalId: microGoalId,
-        });
-        setTransactions(res?.transactions);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setFetchingData(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setFetchingData(true);
+  //       const res = await fetchBudgetCategoriesTransactions({
+  //         configuration: config,
+  //         start_date: startDate,
+  //         end_date: endDate,
+  //         microgoalId: microGoalId,
+  //       });
+  //       setTransactions(res?.transactions);
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       setFetchingData(false);
+  //     }
+  //   };
 
-    fetchData();
-  }, [config, startDate, endDate, microGoalId]);
+  //   fetchData();
+  // }, [config, startDate, endDate, microGoalId]);
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-center items-center mt-4 mb-8">
@@ -102,8 +105,8 @@ const ViewBudget: React.FC<ViewBudgetProps> = ({
             .map((_, i) => {
               return <BudgetTransactionCardSkeleton key={i} />;
             })
-        ) : transactions && transactions.length > 0 ? (
-          transactions
+        ) : goalTransactions && goalTransactions.length > 0 ? (
+          goalTransactions
             .sort(
               (a, b) =>
                 new Date(b.transacted_at).getTime() -

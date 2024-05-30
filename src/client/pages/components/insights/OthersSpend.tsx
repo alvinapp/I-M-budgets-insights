@@ -320,12 +320,17 @@ export const OthersSpend = ({
         {expenditureCompareList && expenditureCompareList.length > 0
           ? expenditureCompareList.map((expenditure, i: number) => {
             const isGoingOut = expenditure?.name === "Going out";
+            const isGambling = expenditure?.name === "Gambling";
+            const isEmergencyFund = expenditure?.name === "Emergency fund";
+            if (isEmergencyFund) {
+              return null;
+            }
             return (
               <React.Fragment key={i}>
                 <ExpenditureComparisonCard
-                  icon={isGoingOut ? "🤩" : expenditure.emoji}
+                  icon={isGoingOut ? "🤩" : isGambling ? "💸" : expenditure?.emoji}
                   key={i}
-                  category={isGoingOut ? "Entertainment" : expenditure.name}
+                  category={isGoingOut ? "Entertainment" : isGambling ? "High Risk Investment" : expenditure?.name}
                   percentage={!isLoading ? expenditure.percentage : 0}
                 />
               </React.Fragment>
