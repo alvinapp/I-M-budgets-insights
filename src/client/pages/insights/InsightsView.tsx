@@ -267,7 +267,7 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
@@ -293,12 +293,8 @@ const InsightsView = () => {
             <div className="flex flex-col w-full justify-center">
               <InsightsExpenditureChart
                 currencySymbol={currencySymbol}
-                essentialsArray={
-                  isLoading ? [] : essentialsArray
-                }
-                wantsArray={
-                  isLoading ? [] : wantsArray
-                }
+                essentialsArray={isLoading ? [] : essentialsArray}
+                wantsArray={isLoading ? [] : wantsArray}
                 isLoading={isLoading}
               />
               <div
@@ -328,9 +324,7 @@ const InsightsView = () => {
             <div className="flex flex-col w-full justify-center">
               <InsightsSavingsChart
                 currencySymbol={currencySymbol}
-                savingsArray={
-                  isLoading ? [] : debtArray
-                }
+                savingsArray={isLoading ? [] : debtArray}
                 isLoading={isLoading}
               />
               <div
@@ -361,18 +355,10 @@ const InsightsView = () => {
             dimensions={190}
             doughnutThickness={14}
             values={{
-              moneyIn: isLoading
-                ? 0
-                : cashFlowData?.total_credit || 0,
-              moneyOut: isLoading
-                ? 0
-                : cashFlowData?.total_debit || 0,
+              moneyIn: isLoading ? 0 : cashFlowData?.total_credit || 0,
+              moneyOut: isLoading ? 0 : cashFlowData?.total_debit || 0,
             }}
-            percentageChange={
-              isLoading
-                ? 0
-                : cashFlowData?.total_change || 0
-            }
+            percentageChange={isLoading ? 0 : cashFlowData?.total_change || 0}
             isLoading={isLoading}
           />
         </div>
