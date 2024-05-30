@@ -118,13 +118,21 @@ const BudgetsView = () => {
     endDate,
     transactionState.displayCategoriesSheet,
   ]);
-  useEffect(() => {
-    enrichTransactions({
-      configuration: config,
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-    });
-  }, [config.token, startDate, endDate]);
+  const useEnrichTransactions = (config: IConfig, startDate: string, endDate: string) => {
+    return useQuery(
+      ['enrichTransactions', config.token, startDate, endDate],
+      () => enrichTransactions({
+        configuration: config,
+        start_date: startDate,
+        end_date: endDate,
+      }),
+      {
+        enabled: !!config.token && !!startDate && !!endDate,
+        refetchOnWindowFocus: false
+      }
+    );
+  };
+  const { isFetching: isFetchingTransactions } = useEnrichTransactions(config, formattedStartDate, formattedEndDate);
 
   const {
     essentialTotalBudgetAmount,
