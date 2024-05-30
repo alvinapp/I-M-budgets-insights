@@ -294,12 +294,12 @@ const InsightsView = () => {
               <InsightsExpenditureChart
                 currencySymbol={currencySymbol}
                 essentialsArray={
-                  insightsStoreState.insightsLoading ? [] : essentialsArray
+                  isLoading ? [] : essentialsArray
                 }
                 wantsArray={
-                  insightsStoreState.insightsLoading ? [] : wantsArray
+                  isLoading ? [] : wantsArray
                 }
-                isLoading={insightsStoreState.insightsLoading}
+                isLoading={isLoading}
               />
               <div
                 className="space-x-1"
@@ -329,9 +329,9 @@ const InsightsView = () => {
               <InsightsSavingsChart
                 currencySymbol={currencySymbol}
                 savingsArray={
-                  insightsStoreState.insightsLoading ? [] : debtArray
+                  isLoading ? [] : debtArray
                 }
-                isLoading={insightsStoreState.insightsLoading}
+                isLoading={isLoading}
               />
               <div
                 className="space-x-1"
@@ -361,15 +361,15 @@ const InsightsView = () => {
             dimensions={190}
             doughnutThickness={14}
             values={{
-              moneyIn: insightsStoreState.insightsLoading
+              moneyIn: isLoading
                 ? 0
                 : cashFlowData?.total_credit || 0,
-              moneyOut: insightsStoreState.insightsLoading
+              moneyOut: isLoading
                 ? 0
                 : cashFlowData?.total_debit || 0,
             }}
             percentageChange={
-              insightsStoreState.insightsLoading
+              isLoading
                 ? 0
                 : cashFlowData?.total_change || 0
             }
