@@ -1,6 +1,8 @@
 import { IConfig } from "client/store/configuration";
 import { fetchData, postData } from "./api";
 import * as Sentry from "@sentry/browser";
+import { debounce } from "client/utils/Formatters";
+
 //save category budgets
 export const saveBudget = async ({
   configuration,
@@ -24,7 +26,7 @@ export const saveBudget = async ({
   }
 };
 
-export const fetchBudgetCategories = async ({
+const fetchBudgetCategories = async ({
   configuration,
   start_date,
   end_date,
@@ -35,19 +37,17 @@ export const fetchBudgetCategories = async ({
 }) => {
   try {
     let res;
-    if (start_date && end_date) {
-      res = await fetchData({
-        endpoint: `/goals/batch_micros/?start_date=${start_date}&end_date=${end_date}`,
-        token: configuration.token,
-        publicKey: configuration.publicKey,
-      });
-    } else {
-      res = await fetchData({
-        endpoint: `/goals/batch_micros/`,
-        token: configuration.token,
-        publicKey: configuration.publicKey,
-      });
-    }
+    const endpoint =
+      start_date && end_date
+        ? `/goals/batch_micros/?start_date=${start_date}&end_date=${end_date}`
+        : `/goals/batch_micros/`;
+
+    res = await fetchData({
+      endpoint,
+      token: configuration.token,
+      publicKey: configuration.publicKey,
+    });
+
     return res;
   } catch (reason: any) {
     Sentry.captureException(reason);
@@ -56,11 +56,11 @@ export const fetchBudgetCategories = async ({
   }
 };
 
-export const fetchMacros = async ({
-  configuration,
-}: {
-  configuration: IConfig;
-}) => {
+const debouncedFetchBudgetCategories = debounce(fetchBudgetCategories, 5000);
+
+export { debouncedFetchBudgetCategories as fetchBudgetCategories };
+
+const fetchMacros = async ({ configuration }: { configuration: IConfig }) => {
   try {
     const res = await fetchData({
       endpoint: `/goals/macros/`,
@@ -75,7 +75,11 @@ export const fetchMacros = async ({
   }
 };
 
-export const fetchBudgetCategoriesTransactions = async ({
+const debouncedFetchMacros = debounce(fetchMacros, 5000);
+
+export { debouncedFetchMacros as fetchMacros };
+
+const fetchBudgetCategoriesTransactions = async ({
   configuration,
   start_date,
   end_date,
@@ -100,7 +104,14 @@ export const fetchBudgetCategoriesTransactions = async ({
   }
 };
 
-export const checkIfUserHasMicros = async ({
+const debouncedFetchBudgetCategoriesTransactions = debounce(
+  fetchBudgetCategoriesTransactions,
+  5000
+);
+
+export { debouncedFetchBudgetCategoriesTransactions as fetchBudgetCategoriesTransactions };
+
+const checkIfUserHasMicros = async ({
   configuration,
   token,
 }: {
@@ -120,3 +131,7 @@ export const checkIfUserHasMicros = async ({
     return Promise.reject(reason);
   }
 };
+
+const debouncedCheckIfUserHasMicros = debounce(checkIfUserHasMicros, 5000);
+
+export { debouncedCheckIfUserHasMicros as checkIfUserHasMicros };

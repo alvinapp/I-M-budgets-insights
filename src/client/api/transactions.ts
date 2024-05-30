@@ -1,8 +1,9 @@
 import { IConfig } from "client/store/configuration";
 import { fetchData, postData } from "./api";
 import * as Sentry from "@sentry/browser";
+import { debounce } from "client/utils/Formatters";
 //Fetch all transactions
-export const getCashFlow = async ({
+const getCashFlow = async ({
   configuration,
   start_date,
   end_date,
@@ -35,7 +36,11 @@ export const getCashFlow = async ({
   }
 };
 
-export const getMicroDetailsViewData = async ({
+const debouncedGetCashFlow = debounce(getCashFlow, 5000);
+
+export { debouncedGetCashFlow as getCashFlow };
+
+const getMicroDetailsViewData = async ({
   configuration,
   linkedAccountId,
   startDate,
@@ -65,7 +70,14 @@ export const getMicroDetailsViewData = async ({
   }
 };
 
-export const enrichTransactions = async ({
+const debouncedGetMicroDetailsViewData = debounce(
+  getMicroDetailsViewData,
+  5000
+);
+
+export { debouncedGetMicroDetailsViewData as getMicroDetailsViewData };
+
+const enrichTransactions = async ({
   configuration,
   start_date,
   end_date,
@@ -96,3 +108,7 @@ export const enrichTransactions = async ({
     return Promise.reject(reason);
   }
 };
+
+const debouncedEnrichTransactions = debounce(enrichTransactions, 5000);
+
+export { debouncedEnrichTransactions as enrichTransactions };
