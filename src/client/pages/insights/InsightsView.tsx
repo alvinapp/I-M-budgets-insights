@@ -311,7 +311,7 @@ const InsightsView = () => {
                 }}
               >
                 <GraphLegend color="#00AB9E" label="Essentials spend" />
-                <GraphLegend color="#9DB1C6" label="Wants spend" />
+                <GraphLegend color="#345DAF" label="Wants spend" />
                 <GraphLegend color="#101010" label="Total spend" />
               </div>
             </div>
