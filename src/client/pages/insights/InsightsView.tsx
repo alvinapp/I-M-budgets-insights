@@ -65,17 +65,17 @@ const InsightsView = () => {
   const savingsTotalBudgetAmount =
     categoryStore.categoryBudgets[2]?.total_amount;
   const previousEssentialTotalExpenses =
-    macroGoalStore.macroGoals[0].range_expense.last_month_total;
+    categoryStore.categoryBudgets[0].range_expense.last_month_total;
   const essentialTotalExpenses =
-    macroGoalStore.macroGoals[0].range_expense.this_month_total;
+    categoryStore.categoryBudgets[0].range_expense.this_month_total;
   const wantsTotalExpenses =
-    macroGoalStore.macroGoals[1].range_expense.this_month_total;
+    categoryStore.categoryBudgets[1].range_expense.this_month_total;
   const previousWantsTotalExpenses =
-    macroGoalStore.macroGoals[1].range_expense.last_month_total;
+    categoryStore.categoryBudgets[1].range_expense.last_month_total;
   const savingsTotalExpenses =
-    macroGoalStore.macroGoals[2].range_expense.this_month_total;
+    categoryStore.categoryBudgets[2].range_expense.this_month_total;
   const previousSavingsTotalExpenses =
-    macroGoalStore.macroGoals[2].range_expense.last_month_total;
+    categoryStore.categoryBudgets[2].range_expense.last_month_total;
 
   const totalBudgetAmount =
     essentialTotalBudgetAmount +
@@ -293,13 +293,9 @@ const InsightsView = () => {
             <div className="flex flex-col w-full justify-center">
               <InsightsExpenditureChart
                 currencySymbol={currencySymbol}
-                essentialsArray={
-                  insightsStoreState.insightsLoading ? [] : essentialsArray
-                }
-                wantsArray={
-                  insightsStoreState.insightsLoading ? [] : wantsArray
-                }
-                isLoading={insightsStoreState.insightsLoading}
+                essentialsArray={isLoading ? [] : essentialsArray}
+                wantsArray={isLoading ? [] : wantsArray}
+                isLoading={isLoading}
               />
               <div
                 className="space-x-1"
@@ -328,10 +324,8 @@ const InsightsView = () => {
             <div className="flex flex-col w-full justify-center">
               <InsightsSavingsChart
                 currencySymbol={currencySymbol}
-                savingsArray={
-                  insightsStoreState.insightsLoading ? [] : debtArray
-                }
-                isLoading={insightsStoreState.insightsLoading}
+                savingsArray={isLoading ? [] : debtArray}
+                isLoading={isLoading}
               />
               <div
                 className="space-x-1"
@@ -361,18 +355,10 @@ const InsightsView = () => {
             dimensions={190}
             doughnutThickness={14}
             values={{
-              moneyIn: insightsStoreState.insightsLoading
-                ? 0
-                : cashFlowData?.total_credit || 0,
-              moneyOut: insightsStoreState.insightsLoading
-                ? 0
-                : cashFlowData?.total_debit || 0,
+              moneyIn: isLoading ? 0 : cashFlowData?.total_credit || 0,
+              moneyOut: isLoading ? 0 : cashFlowData?.total_debit || 0,
             }}
-            percentageChange={
-              insightsStoreState.insightsLoading
-                ? 0
-                : cashFlowData?.total_change || 0
-            }
+            percentageChange={isLoading ? 0 : cashFlowData?.total_change || 0}
             isLoading={isLoading}
           />
         </div>

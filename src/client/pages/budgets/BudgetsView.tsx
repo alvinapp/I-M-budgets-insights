@@ -87,21 +87,6 @@ const BudgetsView = () => {
       `/insights-view?startDate=${formattedInsightsStartDate}&endDate=${formattedInsightsEndDate}`
     );
   };
-
-  const { isFetching: fetchingEssentialsBudget } = useQuery(
-    "essentials-budgets",
-    () =>
-      fetchData(
-        "essentials-budgets",
-        fetchBudgetCategories,
-        config,
-        formattedStartDate,
-        formattedEndDate,
-        categoryStore.setCategoryBudgets
-      ),
-    { enabled: !!config.token, refetchOnWindowFocus: false }
-  );
-
   useEffect(() => {
     const fetchDataAndUpdateMacroGoals = async () => {
       if (!transactionState.displayCategoriesSheet) {
@@ -127,13 +112,30 @@ const BudgetsView = () => {
     endDate,
     transactionState.displayCategoriesSheet,
   ]);
-  useEffect(() => {
-    enrichTransactions({
-      configuration: config,
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-    });
-  }, [config.token, startDate, endDate]);
+  const useEnrichTransactions = (
+    config: IConfig,
+    startDate: string,
+    endDate: string
+  ) => {
+    return useQuery(
+      ["enrichTransactions", config.token, startDate, endDate],
+      () =>
+        enrichTransactions({
+          configuration: config,
+          start_date: startDate,
+          end_date: endDate,
+        }),
+      {
+        enabled: !!config.token && !!startDate && !!endDate,
+        refetchOnWindowFocus: false,
+      }
+    );
+  };
+  const { isFetching: isFetchingTransactions } = useEnrichTransactions(
+    config,
+    formattedStartDate,
+    formattedEndDate
+  );
 
   const {
     essentialTotalBudgetAmount,
@@ -236,6 +238,7 @@ const BudgetsView = () => {
     endDate: formattedEndDate,
     microGoal: 0,
     progressColor: "",
+    transactions: [],
   };
   const debtDetails = {
     id: 0,
@@ -511,6 +514,7 @@ const BudgetsView = () => {
                           endDate: formattedEndDate,
                           microGoal: essential?.id,
                           progressColor: "#00AB9E",
+                          transactions: essential?.transactions,
                         });
                       }}
                     />
@@ -555,16 +559,29 @@ const BudgetsView = () => {
             {wantsBudgets && wantsBudgets.length > 0
               ? wantsBudgets.map((want: any, i: any) => {
                   const isGoingOut = want?.name === "Going out";
+                  const isGambling = want?.name === "Gambling";
                   return (
                     <CategoryViewCard
                       key={i}
-                      category={isGoingOut ? "Entertainment" : want?.name}
+                      category={
+                        isGoingOut
+                          ? "Entertainment"
+                          : isGambling
+                          ? "High Risk Investment"
+                          : want?.name
+                      }
                       progressPercentage={
                         isLoading
                           ? 0
                           : checkNAN((want?.expenses / want?.amount) * 100)
                       }
-                      icon={isGoingOut ? "🤩" : want.category?.emoji}
+                      icon={
+                        isGoingOut
+                          ? "🤩"
+                          : isGambling
+                          ? "💸"
+                          : want.category?.emoji
+                      }
                       amount={want?.amount}
                       budgetAmount={want?.amount}
                       spentAmount={isLoading ? 0 : want?.expenses}
@@ -581,12 +598,21 @@ const BudgetsView = () => {
                           progress: checkNAN(
                             (want?.expenses / want?.amount) * 100
                           ),
-                          category: isGoingOut ? "Entertainment" : want?.name,
-                          emoji: isGoingOut ? "🤩" : want.category?.emoji,
+                          category: isGoingOut
+                            ? "Entertainment"
+                            : isGambling
+                            ? "High Risk Investment"
+                            : want?.name,
+                          emoji: isGoingOut
+                            ? "🤩"
+                            : isGambling
+                            ? "💸"
+                            : want.category?.emoji,
                           startDate: formattedStartDate,
                           endDate: formattedEndDate,
                           microGoal: want?.id,
                           progressColor: "#345DAF",
+                          transactions: want?.transactions,
                         });
                       }}
                     />
@@ -635,6 +661,7 @@ const BudgetsView = () => {
               startDate={budgetDetailsData?.startDate}
               endDate={budgetDetailsData?.endDate}
               progreesBgColor={budgetDetailsData?.progressColor}
+              goalTransactions={budgetDetailsData?.transactions || []}
               onClick={() => {
                 editCategoryStore.setViewBudgetSheet(false);
               }}
