@@ -56,7 +56,7 @@ const fetchBudgetCategories = async ({
   }
 };
 
-const debouncedFetchBudgetCategories = debounce(fetchBudgetCategories, 5000);
+const debouncedFetchBudgetCategories = debounce(fetchBudgetCategories, 200);
 
 export { debouncedFetchBudgetCategories as fetchBudgetCategories };
 
@@ -75,7 +75,7 @@ const fetchMacros = async ({ configuration }: { configuration: IConfig }) => {
   }
 };
 
-const debouncedFetchMacros = debounce(fetchMacros, 5000);
+const debouncedFetchMacros = debounce(fetchMacros, 200);
 
 export { debouncedFetchMacros as fetchMacros };
 
@@ -106,7 +106,7 @@ const fetchBudgetCategoriesTransactions = async ({
 
 const debouncedFetchBudgetCategoriesTransactions = debounce(
   fetchBudgetCategoriesTransactions,
-  5000
+  200
 );
 
 export { debouncedFetchBudgetCategoriesTransactions as fetchBudgetCategoriesTransactions };
@@ -132,6 +132,6 @@ const checkIfUserHasMicros = async ({
   }
 };
 
-const debouncedCheckIfUserHasMicros = debounce(checkIfUserHasMicros, 5000);
+const debouncedCheckIfUserHasMicros = debounce(checkIfUserHasMicros, 200);
 
 export { debouncedCheckIfUserHasMicros as checkIfUserHasMicros };
