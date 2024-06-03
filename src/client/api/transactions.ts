@@ -36,7 +36,7 @@ const getCashFlow = async ({
   }
 };
 
-const debouncedGetCashFlow = debounce(getCashFlow, 5000);
+const debouncedGetCashFlow = debounce(getCashFlow, 300);
 
 export { debouncedGetCashFlow as getCashFlow };
 
@@ -109,6 +109,6 @@ const enrichTransactions = async ({
   }
 };
 
-const debouncedEnrichTransactions = debounce(enrichTransactions, 5000);
+const debouncedEnrichTransactions = debounce(enrichTransactions, 300);
 
 export { debouncedEnrichTransactions as enrichTransactions };

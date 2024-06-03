@@ -56,7 +56,7 @@ const fetchBudgetCategories = async ({
   }
 };
 
-const debouncedFetchBudgetCategories = debounce(fetchBudgetCategories, 5000);
+const debouncedFetchBudgetCategories = debounce(fetchBudgetCategories, 300);
 
 export { debouncedFetchBudgetCategories as fetchBudgetCategories };
 
@@ -132,6 +132,6 @@ const checkIfUserHasMicros = async ({
   }
 };
 
-const debouncedCheckIfUserHasMicros = debounce(checkIfUserHasMicros, 5000);
+const debouncedCheckIfUserHasMicros = debounce(checkIfUserHasMicros, 300);
 
 export { debouncedCheckIfUserHasMicros as checkIfUserHasMicros };
