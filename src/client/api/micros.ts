@@ -1,5 +1,5 @@
 import { IConfig } from "client/store/configuration";
-import { fetchData } from "./api"; // Assuming this function exists
+import { fetchData, postData } from "./api"; // Assuming this function exists
 import * as Sentry from "@sentry/browser";
 
 export interface MicroGoalTotal {
@@ -75,7 +75,6 @@ export const fetchBudgetCategories = async ({
   }
 };
 
-
 export const fetchMicrosPercentile = async ({
   configuration,
   start_date,
@@ -101,6 +100,27 @@ export const fetchMicrosPercentile = async ({
       });
     }
     return res;
+  } catch (reason: any) {
+    Sentry.captureException(reason);
+    console.debug(reason);
+    return Promise.reject(reason);
+  }
+};
+export const fetchLoanRepaymentAdjustments = async ({
+  configuration,
+  data,
+}: {
+  configuration: IConfig;
+  data: any;
+}) => {
+  try {
+    const response = await postData({
+      endpoint: `/goals/preview_adjust_micros/`,
+      token: configuration.token,
+      publicKey: configuration.publicKey,
+      data: data,
+    });
+    return response;
   } catch (reason: any) {
     Sentry.captureException(reason);
     console.debug(reason);

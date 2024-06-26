@@ -11,6 +11,7 @@ import ViewInfo from "./pages/budgets/ViewInfo";
 import { EmptyBudgetSettings } from "./pages/budgets/edit-settings/EmptyBudgetSettings";
 import CustomLoader from "./pages/components/Loader/CustomLoader";
 import ViewLinkedAccounts from "./pages/budgets/ViewLinkedAccounts";
+import LoanRepaymentPrompt from "./pages/budgets/edit-settings/LoanRepaymentPrompt";
 
 declare var AppConfig: AppConfig;
 

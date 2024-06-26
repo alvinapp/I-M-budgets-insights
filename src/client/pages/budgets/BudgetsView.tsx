@@ -46,13 +46,17 @@ import { DebtRepaymentCard } from "../components/budget/DebtRepaymentCard";
 import { HorizontalDateToggle } from "../components/budget/HorizontalDateToggle";
 import { InsightsButton } from "../components/budget/InsightsButton";
 import ViewBudget from "./ViewBudget";
+import { LoanRepaymentCategoryCard } from "../components/LoanRepaymentCategoryCard";
+import LoanRepaymentPrompt from "./edit-settings/LoanRepaymentPrompt";
+import useBottomSheetStore, {
+  useLoanRepaymentPromptStore,
+} from "client/store/bottomSheetStore";
 const BudgetsView = () => {
   const navigate = useNavigate();
   const currencySymbol = useCurrencySettingsStore(
     (state: any) => state.currencySymbol
   );
   const categoryStore = useCategoriesStore((state: any) => state);
-  const macroGoalStore = useMacroGoalsStore((state: any) => state);
   const insightsStoreState = useInsightsStore((state) => state);
   const transactionState = useTransactionStore((state: any) => state);
   const config = useConfigurationStore(
@@ -259,6 +263,7 @@ const BudgetsView = () => {
     return (accumulator += item.amount);
   }, 0);
   const editCategoryStore = useTransactionStore((state: any) => state);
+  const bottomSheet = useLoanRepaymentPromptStore((state: any) => state);
   return (
     <div className="h-screen w-screen">
       <div className="px-3.5 flex flex-col">
@@ -692,6 +697,15 @@ const BudgetsView = () => {
               }}
             />
           }
+          defaultSnap={400}
+        ></BottomSheet>
+        <BottomSheet
+          className="loanRepaymentPrompt overflow-y-auto"
+          onDismiss={() => {
+            bottomSheet.setRepaymentLoanPromptSheet(false);
+          }}
+          open={bottomSheet.repaymentLoanPrompt}
+          children={<LoanRepaymentPrompt />}
           defaultSnap={400}
         ></BottomSheet>
       </div>

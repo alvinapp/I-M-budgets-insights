@@ -294,6 +294,16 @@ input[type="number"] {
   border-top-right-radius: 1.5rem;
 }
 
+.loanRepaymentPrompt [data-rsbs-overlay] {
+  margin-bottom: 0rem;
+  margin-left: 0rem;
+  margin-right: 0rem;
+  border-bottom-left-radius: 0rem;
+  border-bottom-right-radius: 0rem;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+}
+
 [ball-testid] > svg {
   color: #101010;
 }

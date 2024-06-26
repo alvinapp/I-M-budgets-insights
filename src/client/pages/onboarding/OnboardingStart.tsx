@@ -50,29 +50,7 @@ const OnboardingStart = () => {
         });
     }
   }, [configurations.monoPubKey, configurations.country, setMonoPubKey]);
-  // const monoConnect = useMemo(() => {
-  //   if (!configurations.monoPubKey && !configurations.token) {
-  //     return null;
-  //   }
-  //   const monoInstance = new MonoConnect({
-  //     onClose: () => {},
-  //     onLoad: () => {},
-  //     onSuccess: ({ code }: any) => {
-  //       postCode(configurations, code, configurations.country ?? "Nigeria");
-  //       navigate("/onboard-add-income");
-  //     },
-  //     key: configurations.monoPubKey,
-  //   });
-  //   monoInstance.setup();
 
-  //   return monoInstance;
-  // }, [configurations.monoPubKey, configurations.token]);
-
-  // const onClick = () => {
-  //   if (monoConnect) {
-  //     monoConnect.open();
-  //   }
-  // };
   const setUser = useUserStore((state) => state.setUser);
   // add loading
   const [loading, setLoading] = useState(false);

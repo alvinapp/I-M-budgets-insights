@@ -31,7 +31,7 @@ const ViewLinkedAccounts = () => {
             <NavBarTitle title="Linked accounts" />
             <div
               className="h-6 w-6 rounded-full flex items-center justify-center"
-              onClick={() => navigate("/view-info")}
+              // onClick={() => navigate("/view-info")}
             >
               {/* <FiInfo color="#101010" size="1.5rem" /> */}
             </div>

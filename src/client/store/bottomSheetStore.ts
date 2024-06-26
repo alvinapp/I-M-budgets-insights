@@ -47,3 +47,15 @@ export const useBudgetSavingsSheetStore = create((set) => ({
     });
   },
 }));
+
+export const useLoanRepaymentPromptStore = create((set) => ({
+  repaymentLoanPrompt: true,
+  setRepaymentLoanPromptSheet: (open: boolean) => {
+    return set(() => {
+      const result = {
+        repaymentLoanPrompt: open,
+      };
+      return result;
+    });
+  },
+}));

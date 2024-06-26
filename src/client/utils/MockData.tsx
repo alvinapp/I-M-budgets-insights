@@ -565,3 +565,42 @@ export const allTimeDebt = [
     ],
   },
 ];
+
+export const loanRepaymentDebt = [
+  {
+    id: 0,
+    name: "Credit card",
+    amount: 10000,
+    paid: 5000,
+    change: 5000,
+    debtBalance: 5327857,
+    percentageChange: 100,
+    percentage: 25,
+    icon: mortgage,
+    cover: mortGageCover,
+  },
+  {
+    id: 1,
+    name: "Auto loan",
+    amount: 15000,
+    paid: 0,
+    change: 10000,
+    debtBalance: 5327857,
+    percentageChange: 50,
+    percentage: 25,
+    icon: mortgage,
+    cover: mortGageCover,
+  },
+  {
+    id: 2,
+    name: "Mortgage",
+    amount: 25000,
+    paid: 10000,
+    change: -10000,
+    debtBalance: 5327857,
+    percentageChange: 0,
+    percentage: 25,
+    icon: mortgage,
+    cover: mortGageCover,
+  },
+];
