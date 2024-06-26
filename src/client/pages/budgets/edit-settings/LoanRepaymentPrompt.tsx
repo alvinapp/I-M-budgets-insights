@@ -176,7 +176,6 @@ const LoanRepaymentPrompt = () => {
           operation: "decrease",
         },
       }).then((result: any) => {
-        console.log("LOAN REPAYMENT CATEGORIES", result);
         categoriesStore.setLoanCategoryBudgets(result);
       }),
     { refetchOnWindowFocus: false }
