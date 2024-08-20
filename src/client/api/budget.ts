@@ -75,7 +75,7 @@ const fetchMacros = async ({ configuration }: { configuration: IConfig }) => {
   }
 };
 
-const debouncedFetchMacros = debounce(fetchMacros, 5000);
+const debouncedFetchMacros = debounce(fetchMacros, 300);
 
 export { debouncedFetchMacros as fetchMacros };
 
@@ -106,7 +106,7 @@ const fetchBudgetCategoriesTransactions = async ({
 
 const debouncedFetchBudgetCategoriesTransactions = debounce(
   fetchBudgetCategoriesTransactions,
-  5000
+  300
 );
 
 export { debouncedFetchBudgetCategoriesTransactions as fetchBudgetCategoriesTransactions };

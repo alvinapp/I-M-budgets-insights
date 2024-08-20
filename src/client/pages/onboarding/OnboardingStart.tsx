@@ -9,6 +9,7 @@ import useUserStore from "client/store/userStore";
 import { showCustomToast } from "client/utils/Toast";
 import { useEffect, useState } from "react";
 import splashImage from "../../assets/images/onboarding-graphic.png";
+import LaunchCard from "../../assets/images/launch_card.svg";
 import BackButton from "../components/BackButton";
 import CustomLoader from "../components/Loader/CustomLoader";
 import MainButton from "../components/MainButton";
@@ -39,12 +40,12 @@ const OnboardingStart = () => {
         setMonoPubKey(data.key);
         configuration.monoPubKey = data.key;
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
   useEffect(() => {
     if (!configurations.monoPubKey) {
       fetchMonoToken({ configuration: configurations, setMonoPubKey })
-        .then(() => {})
+        .then(() => { })
         .catch((error) => {
           console.error("Failed to fetch Mono public key:", error);
         });
@@ -123,31 +124,25 @@ const OnboardingStart = () => {
                 <div className="flex flex-row items-center justify-between pt-5">
                   <BackButton onClick={() => navigate(-1)} />
                   <NavBarTitle title="" />
-                  <div className="h-6 w-6 rounded-full"></div>
                 </div>
               }
             />
-            <div className="flex flex-col mx-6 absolute left-0 right-0">
-              <div className="flex flex-row justify-center mt-4">
-                <div className="w-96 h-96 bg-cover bg-center overflow-hidden">
+            <div className="flex flex-col absolute left-0 right-0">
+              <div className="flex flex-row justify-center">
+                <div className="w-full h-90 bg-cover bg-center overflow-hidden">
                   <img
-                    src={splashImage}
-                    className="w-full h-[90%]"
+                    src={LaunchCard}
+                    className="w-[100%] h-[100%]"
                     alt="Splash"
-                    style={{ marginTop: "2rem" }}
                   />
                 </div>
               </div>
-              <div className="mt-6">
+              <div className="mt-1 mx-6">
                 <div className="flex flex-row justify-center font-custom text-xl text-start font-bold tracking-title text-skin-base mr-3.5">
-                  Start tracking your card and M-Pesa spending here on the I&M
-                  On The Go app
+                  Start tracking your card and M-Pesa spending here on PesaPap
                 </div>
                 <div className="flex flex-row justify-center items center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-medium mr-8">
-                  Add your main account and M-Pesa wallet to effortlessly
-                  balance your daily spending around your I&M loan repayment and
-                  savings schedules using On The Go's new spend tracking
-                  feature.
+                  Add your main account and M-pesa wallet to effortlessly balance your daily spending around your Family Bank’s savings and payment schedules using our powerful new budgeting and insights features.
                 </div>
                 <div className="flex flex-row items-center text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-medium mb-40">
                   In partnership with alvin
@@ -158,11 +153,11 @@ const OnboardingStart = () => {
           <div className="fixed bottom-4 left-0 right-0 mx-4 bg-skin-base">
             <div className="flex flex-col">
               <div className="text-sm font-primary tracking-wide text-start text-skin-base mt-3 font-medium ml-2">
-                By tapping "Add my first account", I agree to I&M's
+                By tapping “Add my first account”, I agree to Family Bank’s <span className="text-skin-primary text-sm font-primary tracking-wide text-start font-medium mb-2">Terms of Use</span>
               </div>
-              <div className="text-skin-primary text-sm font-primary tracking-wide text-start font-medium ml-2 mb-2">
+              {/* <div className="text-skin-primary text-sm font-primary tracking-wide text-start font-medium ml-2 mb-2">
                 Terms of Use
-              </div>
+              </div> */}
               <MainButton
                 isDisabled={!configurations.monoPubKey && !configurations.token}
                 // title="Link account"

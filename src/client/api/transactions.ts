@@ -70,10 +70,7 @@ const getMicroDetailsViewData = async ({
   }
 };
 
-const debouncedGetMicroDetailsViewData = debounce(
-  getMicroDetailsViewData,
-  5000
-);
+const debouncedGetMicroDetailsViewData = debounce(getMicroDetailsViewData, 300);
 
 export { debouncedGetMicroDetailsViewData as getMicroDetailsViewData };
 
