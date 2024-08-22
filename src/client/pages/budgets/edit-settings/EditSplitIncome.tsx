@@ -281,7 +281,7 @@ const EditSplitIncome = () => {
                     valueNow={state.valueNow}
                     props={props}
                     showPercentage={showPercentage}
-                    backgroundColor="#CB960F"
+                    backgroundColor="#036AB3"
                     isLocked={true}
                   />
                 )}
@@ -342,7 +342,7 @@ const EditSplitIncome = () => {
                     valueNow={state.valueNow}
                     props={props}
                     showPercentage={showPercentage}
-                    backgroundColor="#00AB9E"
+                    backgroundColor="#009FDC"
                   />
                 )}
                 onBeforeChange={() => setShowPercentage(true)}
@@ -393,7 +393,7 @@ const EditSplitIncome = () => {
                     valueNow={state.valueNow}
                     props={props}
                     showPercentage={showPercentage}
-                    backgroundColor="#345DAF"
+                    backgroundColor="#354AA6"
                   />
                 )}
                 onBeforeChange={() => setShowPercentage(true)}

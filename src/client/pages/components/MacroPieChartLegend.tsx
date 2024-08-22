@@ -23,7 +23,7 @@ const MacroPieChartLegend: React.FC<MacroPieChartLegendProps> = ({
   }
   return (
     <div
-      className="flex flex-row items-start justify-start space-x-1.5"
+      className="flex flex-row items-center justify-start space-x-1.5"
       style={{
         width: "fit-content",
       }}

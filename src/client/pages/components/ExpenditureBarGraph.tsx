@@ -310,7 +310,7 @@ const ExpenditureBarGraph: React.FC<BarGraphProps> = ({
       >
         <GraphLegend color="#0131A1" label="Essentials spend" />
         <GraphLegend color="#9DB1C6" label="Wants spend" />
-        <GraphLegend color="#101010" label="Total spend" />
+        <GraphLegend color="#036AB3" label="Debt repayment" />
       </div>
     </div>
   );

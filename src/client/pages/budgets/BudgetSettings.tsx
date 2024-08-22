@@ -295,8 +295,8 @@ export const BudgetSettings = () => {
             unallocatedAmount={0}
             allocatedAmount={savingsBudgetAmount}
             progressPercentage={100}
-            indicatorColor="bg-[#CB960F]"
-            progressColor="#CB960F"
+            indicatorColor="bg-[#036AB3]"
+            progressColor="#036AB3"
           />
           <div className="border mt-4 mb-4.5"></div>
           <div className="flex flex-col">
@@ -385,8 +385,8 @@ export const BudgetSettings = () => {
                   ) // Ensure percentage stays between 0 and 100
                 : 0
             }
-            indicatorColor="bg-[#00AB9E]"
-            progressColor="#00AB9E"
+            indicatorColor="bg-[#009FDC]"
+            progressColor="#009FDC"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-primary text-xs tracking-wider font-semibold">
@@ -415,7 +415,7 @@ export const BudgetSettings = () => {
                     amount={data?.amount}
                     selected={isSelected}
                     maxValue={Number.MAX_SAFE_INTEGER}
-                    actionButtonColor="#00AB9E"
+                    actionButtonColor="#009FDC"
                     unallocatedAmount={
                       typeof parseInt(essentialBudgetAmount) === "number" &&
                       essentialBudgetAmount > 0
@@ -552,8 +552,8 @@ export const BudgetSettings = () => {
                 ? Math.min((allocatedWants / wantsBudgetAmount) * 100, 100) // Ensure percentage stays between 0 and 100
                 : 0
             }
-            indicatorColor="bg-[#345DAF]"
-            progressColor="#345DAF"
+            indicatorColor="bg-[#354AA6]"
+            progressColor="#354AA6"
           />
           <div className="flex flex-row items-center justify-center mt-6 mb-4">
             <div className="text-skin-base font-primary text-xs tracking-wider font-semibold">

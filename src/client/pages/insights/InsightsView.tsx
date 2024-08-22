@@ -267,7 +267,7 @@ const InsightsView = () => {
             <AvailableBudgetContainer
               amount={
                 essentialsData.reduce((a: number, b: any) => a + b.y, 0) +
-                wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
+                  wantsData.reduce((a: number, b: any) => a + b.y, 0) ?? 0
               }
               subtitle="Current total spending"
               currencySymbol={currencySymbol}
@@ -293,12 +293,8 @@ const InsightsView = () => {
             <div className="flex flex-col w-full justify-center">
               <InsightsExpenditureChart
                 currencySymbol={currencySymbol}
-                essentialsArray={
-                  isLoading ? [] : essentialsArray
-                }
-                wantsArray={
-                  isLoading ? [] : wantsArray
-                }
+                essentialsArray={isLoading ? [] : essentialsArray}
+                wantsArray={isLoading ? [] : wantsArray}
                 isLoading={isLoading}
               />
               <div
@@ -310,9 +306,9 @@ const InsightsView = () => {
                   gap: "1.25rem",
                 }}
               >
-                <GraphLegend color="#00AB9E" label="Essentials spend" />
-                <GraphLegend color="#345DAF" label="Wants spend" />
-                <GraphLegend color="#101010" label="Total spend" />
+                <GraphLegend color="#009FDC" label="Essentials spend" />
+                <GraphLegend color="#354AA6" label="Wants spend" />
+                <GraphLegend color="#036AB3" label="Debt repayment" />
               </div>
             </div>
           ) : (
@@ -328,9 +324,7 @@ const InsightsView = () => {
             <div className="flex flex-col w-full justify-center">
               <InsightsSavingsChart
                 currencySymbol={currencySymbol}
-                savingsArray={
-                  isLoading ? [] : debtArray
-                }
+                savingsArray={isLoading ? [] : debtArray}
                 isLoading={isLoading}
               />
               <div
@@ -342,7 +336,7 @@ const InsightsView = () => {
                   gap: "1.25rem",
                 }}
               >
-                <GraphLegend color="#97449E" label="Total debt" />
+                <GraphLegend color="#036AB3" label="Total debt" />
               </div>
             </div>
           )}
@@ -361,18 +355,10 @@ const InsightsView = () => {
             dimensions={190}
             doughnutThickness={14}
             values={{
-              moneyIn: isLoading
-                ? 0
-                : cashFlowData?.total_credit || 0,
-              moneyOut: isLoading
-                ? 0
-                : cashFlowData?.total_debit || 0,
+              moneyIn: isLoading ? 0 : cashFlowData?.total_credit || 0,
+              moneyOut: isLoading ? 0 : cashFlowData?.total_debit || 0,
             }}
-            percentageChange={
-              isLoading
-                ? 0
-                : cashFlowData?.total_change || 0
-            }
+            percentageChange={isLoading ? 0 : cashFlowData?.total_change || 0}
             isLoading={isLoading}
           />
         </div>

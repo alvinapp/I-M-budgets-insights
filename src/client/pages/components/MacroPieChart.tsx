@@ -43,10 +43,14 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
     `;
     return (
       <div>
-        <svg height={dimensions} width={dimensions} style={{
-          animation: "smoothRotate 2s linear infinite",
-          transformOrigin: "center center",
-        }}>
+        <svg
+          height={dimensions}
+          width={dimensions}
+          style={{
+            animation: "smoothRotate 2s linear infinite",
+            transformOrigin: "center center",
+          }}
+        >
           <g transform={`translate(${radius}, ${radius})`}>
             {emptyItems.map((item, index) => {
               if (item.percentage === 0) return null; // Skip rendering for 0% segments
@@ -173,9 +177,9 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
 
   const items = [
     { percentage: (unallocated / total) * 100, color: "#e7e7e7" },
-    { percentage: (savings / total) * 100, color: "#e5a711" },
-    { percentage: (wants / total) * 100, color: "#354DAF" },
-    { percentage: (essentials / total) * 100, color: "#01ab9e" },
+    { percentage: (savings / total) * 100, color: "#036AB3" },
+    { percentage: (wants / total) * 100, color: "#354AA6" },
+    { percentage: (essentials / total) * 100, color: "#009FDC" },
   ];
 
   return (
@@ -253,4 +257,4 @@ const MacroPieChart: React.FC<MacroPieChartProps> = ({
   );
 };
 
-export default MacroPieChart
+export default MacroPieChart;

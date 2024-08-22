@@ -48,7 +48,7 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
               flexValue={1}
               bgColorBottom={"#e7e7e7"}
               bgColorTop={
-                index === 0 ? "#CB960F" : index === 1 ? "#00AB9E" : "#345DAF"
+                index === 0 ? "#036AB3" : index === 1 ? "#009FDC" : "#354AA6"
               }
               outsideLength={
                 progressPercentage[Object.keys(progressPercentage)[index]] ?? 0
@@ -64,8 +64,8 @@ const MacroProgressBarsContainer: React.FC<MacroProgressBarsContainerProps> = ({
                     isLoading
                       ? 0
                       : checkNAN(
-                        budgetAmount[Object.keys(budgetAmount)[index]] ?? 0
-                      )
+                          budgetAmount[Object.keys(budgetAmount)[index]] ?? 0
+                        )
                   }
                   duration={500}
                 />

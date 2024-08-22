@@ -32,7 +32,7 @@ const BudgetSplitChart: React.FC<BudgetSplitChartProps> = ({
     { percentage: (wants / total) * 100, color: "#6786c3", label: "Wants" },
     {
       percentage: (savings / total) * 100,
-      color: "#CB960F",
+      color: "#036AB3",
       label: "Debt repayment",
     },
   ];

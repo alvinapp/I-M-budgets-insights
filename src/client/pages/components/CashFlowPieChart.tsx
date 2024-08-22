@@ -157,14 +157,10 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             </div>
             <div className="flex flex-row items-start mt-5">
               {/* Empty PercentageItem */}
-              <PercentageItem
-                color="linear-gradient(180deg, #71EBD7 0%, #3ED1AE 100%)"
-                percentage={0}
-                label="Money in"
-              />
+              <PercentageItem color="#2676B8" percentage={0} label="Money in" />
               {/* Empty PercentageItem */}
               <PercentageItem
-                color="#4C4C4C"
+                color="#009FDC"
                 percentage={0}
                 label="Money out"
               />
@@ -283,14 +279,10 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
             </div>
             <div className="flex flex-row items-start mt-5">
               {/* Empty PercentageItem */}
-              <PercentageItem
-                color="linear-gradient(180deg, #71EBD7 0%, #3ED1AE 100%)"
-                percentage={0}
-                label="Money in"
-              />
+              <PercentageItem color="#2676B8" percentage={0} label="Money in" />
               {/* Empty PercentageItem */}
               <PercentageItem
-                color="#4C4C4C"
+                color="#009FDC"
                 percentage={0}
                 label="Money out"
               />
@@ -472,12 +464,12 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           </div>
           <div className="flex flex-row items-start mt-5">
             <PercentageItem
-              color="#416f1f"
+              color="#2676B8"
               percentage={Number(moneyInPercentage)}
               label="Money in"
             />
             <PercentageItem
-              color="#febb14"
+              color="#009FDC"
               percentage={Number(moneyOutPercentage)}
               label="Money out"
             />

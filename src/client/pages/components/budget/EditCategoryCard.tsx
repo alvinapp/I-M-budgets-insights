@@ -26,7 +26,7 @@ const EditCategoryCard: React.FC<EditCategoryCardProps> = ({
           categoryName
         ) : (
           <>
-            <FiPlus color="#00BEAF" />
+            <FiPlus color="#2676B8" />
             <div className="ml-2">Assign category</div>
           </>
         )}

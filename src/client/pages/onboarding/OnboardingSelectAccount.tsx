@@ -24,7 +24,7 @@ const OnboardingSelectAccount = () => {
   return (
     <div className="h-screen w-screen relative no-scrollbar">
       {isLoading ? (
-        <LoadingScreen messages={messages} duration={3} color="#00beaf" />
+        <LoadingScreen messages={messages} duration={3} color="#2676B8" />
       ) : (
         <>
           <NavBar

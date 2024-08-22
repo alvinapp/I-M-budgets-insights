@@ -57,30 +57,36 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
         const essentialsValue = w.config.series[0].data[dataPointIndex]?.y;
         const wantsValue = w.config.series[1].data[dataPointIndex]?.y;
         const totalSpendValue = essentialsValue + wantsValue;
-        const formattedEssentialsValue = essentialsValue.toLocaleString("en-US", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2
-        });
+        const formattedEssentialsValue = essentialsValue.toLocaleString(
+          "en-US",
+          {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          }
+        );
         const formattedWantsValue = wantsValue.toLocaleString("en-US", {
           minimumFractionDigits: 0,
-          maximumFractionDigits: 2
-        })
-        const formattedTotalSpendValue = totalSpendValue.toLocaleString("en-US", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2
-        })
+          maximumFractionDigits: 2,
+        });
+        const formattedTotalSpendValue = totalSpendValue.toLocaleString(
+          "en-US",
+          {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          }
+        );
 
         return `<div style="padding: 10px; background-color: #ffffff; border-radius: 8px; font-size: 14px;" class="custom-tooltip">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                         <div style="display: flex; align-items: center;">
-                            <span style="height: 10px; width: 10px; background-color: #00AB9E; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #00AB9E;margin-right: 5px;">${formattedEssentialsValue}</span>
+                            <span style="height: 10px; width: 10px; background-color: #009FDC; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
+                            <span style="color: #009FDC;margin-right: 5px;">${formattedEssentialsValue}</span>
                         </div>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                         <div style="display: flex; align-items: center;">
-                            <span style="height: 10px; width: 10px; background-color: #345DAF; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-                            <span style="color: #345DAF;margin-right: 5px;">${formattedWantsValue}</span>
+                            <span style="height: 10px; width: 10px; background-color: #354AA6; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
+                            <span style="color: #354AA6;margin-right: 5px;">${formattedWantsValue}</span>
                         </div>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -95,13 +101,16 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
       x: {
         show: true,
         format: "dd MMM yyyy",
-        formatter: function (value, { series, seriesIndex, dataPointIndex, w }) {
+        formatter: function (
+          value,
+          { series, seriesIndex, dataPointIndex, w }
+        ) {
           return new Date(value).toDateString();
         },
       },
       fixed: {
         offsetX: -10,
-      }
+      },
     },
     xaxis: {
       type: "datetime",
@@ -118,8 +127,8 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
         show: false,
       },
       tooltip: {
-        enabled: false
-      }
+        enabled: false,
+      },
     },
     yaxis: {
       labels: {
@@ -147,19 +156,19 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
       name: "Essentials spend",
       type: "line",
       data: essentialsArray,
-      color: "#00AB9E",
+      color: "#009FDC",
     },
     {
       name: "Wants spend",
       type: "line",
       data: wantsArray,
-      color: "#345DAF",
+      color: "#354AA6",
     },
     {
-      name: "Total spend",
+      name: "Debt repayment",
       type: "line",
       data: calculateTotalSpend(essentialsArray, wantsArray),
-      color: "#101010",
+      color: "#036AB3",
     },
   ]);
 
@@ -167,10 +176,8 @@ const InsightsExpenditureChart: React.FC<InsightsExpenditureChartProps> = ({
     if (!essentialsArray.length && !wantsArray.length) {
       return;
     }
-    const [arrayLength, updatedEssentialsArray, updatedWantsArray] = alignDataArrays(
-      essentialsArray,
-      wantsArray
-    );
+    const [arrayLength, updatedEssentialsArray, updatedWantsArray] =
+      alignDataArrays(essentialsArray, wantsArray);
 
     if (arrayLength && dataArrayLength !== arrayLength) {
       setDataArrayLength(arrayLength);
@@ -342,33 +349,43 @@ function alignMonthDataArrays(
   ];
 }
 
-function alignDayDataArrays(essentials: DataPoint[], wants: DataPoint[]): [number, DataPoint[], DataPoint[]] {
+function alignDayDataArrays(
+  essentials: DataPoint[],
+  wants: DataPoint[]
+): [number, DataPoint[], DataPoint[]] {
   if (essentials.length === 0 && wants.length === 0) {
     return [0, [], []];
   }
 
   const isMonthly = essentials.concat(wants).every((dp) => dp.x.length === 7);
-  const parseDateString = (dateStr: string): Date => new Date(dateStr + (dateStr.length === 7 ? "-01" : ""));
+  const parseDateString = (dateStr: string): Date =>
+    new Date(dateStr + (dateStr.length === 7 ? "-01" : ""));
 
   // Parsing all dates directly
-  const allDates = essentials.concat(wants).map(dp => parseDateString(dp.x));
+  const allDates = essentials.concat(wants).map((dp) => parseDateString(dp.x));
 
   if (allDates.length === 1) {
-    allDates.unshift(new Date(allDates[0].getTime() - (24 * 60 * 60 * 1000)));
+    allDates.unshift(new Date(allDates[0].getTime() - 24 * 60 * 60 * 1000));
   }
 
-  const alignArray = (array: DataPoint[], dates: Date[], monthly: boolean): DataPoint[] => {
+  const alignArray = (
+    array: DataPoint[],
+    dates: Date[],
+    monthly: boolean
+  ): DataPoint[] => {
     const result: DataPoint[] = [];
     const dateMap = new Map();
 
     // Fill map with all relevant dates
-    dates.forEach(date => {
-      const dateKey = monthly ? date.toISOString().substring(0, 7) : date.toISOString().substring(0, 10);
+    dates.forEach((date) => {
+      const dateKey = monthly
+        ? date.toISOString().substring(0, 7)
+        : date.toISOString().substring(0, 10);
       dateMap.set(dateKey, { x: dateKey, y: 0 }); // Initialize all dates with 0
     });
 
     // Set actual values from the data
-    array.forEach(dp => {
+    array.forEach((dp) => {
       const key = monthly ? dp.x.substring(0, 7) : dp.x.substring(0, 10);
       if (dateMap.has(key)) {
         dateMap.set(key, { x: key, y: dp.y });
@@ -377,15 +394,19 @@ function alignDayDataArrays(essentials: DataPoint[], wants: DataPoint[]): [numbe
 
     // Carry forward the last known value if any dates were initialized to 0
     let lastValue = 0;
-    dates.sort((a, b) => a.getTime() - b.getTime()).forEach(date => {
-      const dateKey = monthly ? date.toISOString().substring(0, 7) : date.toISOString().substring(0, 10);
-      const currentValue = dateMap.get(dateKey);
-      if (currentValue.y === 0 && lastValue !== 0) {
-        dateMap.set(dateKey, { x: dateKey, y: lastValue });
-      } else {
-        lastValue = currentValue.y;
-      }
-    });
+    dates
+      .sort((a, b) => a.getTime() - b.getTime())
+      .forEach((date) => {
+        const dateKey = monthly
+          ? date.toISOString().substring(0, 7)
+          : date.toISOString().substring(0, 10);
+        const currentValue = dateMap.get(dateKey);
+        if (currentValue.y === 0 && lastValue !== 0) {
+          dateMap.set(dateKey, { x: dateKey, y: lastValue });
+        } else {
+          lastValue = currentValue.y;
+        }
+      });
 
     // Convert map to sorted array
     result.push(...dateMap.values());

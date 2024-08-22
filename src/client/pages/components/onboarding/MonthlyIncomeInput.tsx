@@ -18,10 +18,10 @@ export const MonthlyIncomeInput = ({
   return (
     <div className="flex flex-row items-center">
       <div
-        className="flex justify-center items-center p-3.5 rounded-full border border-1 border-[#00beaf]"
+        className="flex justify-center items-center p-3.5 rounded-full border border-1 border-[#2676B8]"
         onClick={() => onChange(Math.max(0, value - 1))}
       >
-        <FiMinus color="#00beaf" />
+        <FiMinus color="#2676B8" />
       </div>
       <div className="relative px-2 flex flex-row justify-center items-center">
         <CurrencyInput
@@ -41,10 +41,10 @@ export const MonthlyIncomeInput = ({
         </div>
       </div>
       <div
-        className="flex justify-center items-center rounded-full p-4 border border-1 border-[#00beaf]"
+        className="flex justify-center items-center rounded-full p-4 border border-1 border-[#2676B8]"
         onClick={() => onChange(Math.min(value + 1, maxValue))}
       >
-        <FiPlus color="#00beaf" />
+        <FiPlus color="#2676B8" />
       </div>
     </div>
   );

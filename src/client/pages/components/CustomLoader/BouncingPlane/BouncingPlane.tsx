@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import './BouncingPlane.css';
-import planeBackground from 'client/assets/images/Thumbs-up.png';
-import planePNG from 'client/assets/images/successHand.svg';
+import React, { useEffect, useRef } from "react";
+import "./BouncingPlane.css";
+import planeBackground from "client/assets/images/family-thumb.svg";
+import planePNG from "client/assets/images/successHand.svg";
 
 const BouncingPlane = () => {
   const planeRef = useRef<HTMLImageElement>(null);
@@ -10,25 +10,27 @@ const BouncingPlane = () => {
     const plane = planeRef.current;
     const animate = () => {
       if (plane) {
-        plane.style.animation = 'bouncing 1s infinite';
+        plane.style.animation = "bouncing 1s infinite";
       }
     };
     animate();
   }, []);
 
   return (
-    <div className="plane-container">
-      <img
-        src={planeBackground}
-        alt="plane background"
-        className="plane-background"
-      />
-      <img
+    <div className="">
+      <div className="h-[15rem] w-[15rem] ">
+        <img
+          src={planeBackground}
+          alt="plane background"
+          className="h-auto w-full"
+        />
+      </div>
+      {/* <img
         ref={planeRef}
         src={planePNG}
         alt="plane"
         className="bouncing-plane"
-      />
+      /> */}
     </div>
   );
 };

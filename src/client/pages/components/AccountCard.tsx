@@ -3,7 +3,7 @@ import { MdPhoneIphone } from "react-icons/md";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import cardImage from "client/assets/images/I&M-acs.png";
 import mpesaImage from "client/assets/images/M-pesa-ac.png";
-
+import familyBank from "client/assets/images/family-icon.png";
 interface AccountCardProps {
   accountNumber: string;
   accountType: string;
@@ -49,7 +49,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
         <div
           className={`w-8 h-8 rounded-full flex items-center justify-center ${bgColor} text-white mx-2 mb-1`}
         >
-          <img src={backgroundColor ? mpesaImage : cardImage} alt="plane" />
+          <img src={backgroundColor ? mpesaImage : familyBank} alt="plane" />
         </div>
         <div>
           <div className="text-base font-primary">{accountNumber}</div>
@@ -60,7 +60,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
       </div>
       <div
         className={`w-8 h-8 rounded-full flex items-center justify-center ${
-          isActive ? "bg-[#00beaf] text-skin-white" : "border border-skin-base"
+          isActive ? "bg-[#2676B8] text-skin-white" : "border border-skin-base"
         } mb-1`}
       >
         {isActive ? <IoCheckmarkSharp className="text-xl" /> : null}
