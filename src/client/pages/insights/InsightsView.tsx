@@ -95,6 +95,14 @@ const InsightsView = () => {
   const [savingsData, setSavingsData] = useState<any[]>([]);
   const [savingsArray, setSavingsArray] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // get the absolute number of months between two dates insightsStoreState.insightsStartDate and insightsStoreState.insightsEndDate
+  const monthsDifference = Math.abs(
+    insightsStoreState.insightsEndDate.getMonth() -
+      insightsStoreState.insightsStartDate.getMonth() +
+      12 * (insightsStoreState.insightsEndDate.getFullYear() -
+        insightsStoreState.insightsStartDate.getFullYear())
+  ) + 1;
   useEffect(() => {
     const fetchCashFlowData = async () => {
       setIsLoading(true);
@@ -381,7 +389,7 @@ const InsightsView = () => {
                 wantsSpend={wantsTotal ?? 0}
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
-                unallocatedSpend={totalBudgetAmount - totalExpenses}
+                unallocatedSpend={((userStore.user.income * monthsDifference) - totalBudgetAmount)}
                 startDate={
                   format(insightsStoreState.insightsStartDate, "yyyy-MM-dd") ??
                   undefined
