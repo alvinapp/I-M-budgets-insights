@@ -381,7 +381,7 @@ const InsightsView = () => {
                 wantsSpend={wantsTotal ?? 0}
                 savingsSpend={savingsTotal ?? 0}
                 essentialsSpend={essentialsTotal ?? 0}
-                unallocatedSpend={userStore.user.income - totalBudgetAmount}
+                unallocatedSpend={totalBudgetAmount - totalExpenses}
                 startDate={
                   format(insightsStoreState.insightsStartDate, "yyyy-MM-dd") ??
                   undefined
