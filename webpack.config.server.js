@@ -31,7 +31,7 @@ const webPackConfig = (env) => {
     },
     output: {
       filename: "[name].js",
-      path: resolve(__dirname, "dist", config["ENVIRONMENT"] || "development"),
+      path: resolve(__dirname, "dist"),
       library: "[name]",
       libraryTarget: "umd",
       libraryExport: "default",
