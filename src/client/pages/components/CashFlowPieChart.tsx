@@ -330,7 +330,7 @@ const CashFlowPieChart: React.FC<CashFlowPieChartProps> = ({
           <g transform={`translate(${radius}, ${radius})`}>
             {["moneyIn", "moneyOut"].map((type, index) => {
               const percentage = (values[type] / total) * 100;
-              const color = type === "moneyIn" ? "#416f1f" : "#febb14";
+              const color = type === "moneyIn" ? "#2676B8" : "#009FDC";
 
               const startX =
                 normalizedRadius *

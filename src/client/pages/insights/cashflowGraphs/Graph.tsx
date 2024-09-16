@@ -43,7 +43,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
           className="bar"
           style={{
             height: `${checkNAN(earnedHeight)}%`,
-            background: "#416f1f",
+            background: "#2676B8",
           }}
         >
           <div className={`barValue${showEarnedValue ? " show" : ""}`}>
@@ -52,7 +52,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
         </div>
         <div
           className="bar"
-          style={{ height: `${checkNAN(spentHeight)}%`, background: "#febb10" }}
+          style={{ height: `${checkNAN(spentHeight)}%`, background: "#009FDC" }}
         >
           <div className={`barValue${showSpentValue ? " show" : ""}`}>
             - <AnimatedNumber target={Math.abs(parseInt((spent).toFixed(0)))} duration={500} />
@@ -63,7 +63,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
         <div className="font-primary text-xs text-skin-subtitle font-medium tracking-subtitle">
           <span
             style={{
-              background: "#416f1f",
+              background: "#2676B8",
             }}
           ></span>{" "}
           Total earned
@@ -72,7 +72,7 @@ const Graph: FC<Props> = ({ earned, spent }) => {
           style={{ marginLeft: "1rem" }}
           className="font-primary text-xs text-skin-subtitle font-medium tracking-subtitle"
         >
-          <span style={{ background: "#febb10" }}></span> Total spent
+          <span style={{ background: "#009FDC" }}></span> Total spent
         </div>
       </div>
     </div>
